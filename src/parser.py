@@ -28,7 +28,24 @@ tokens = (
 	'SL',		#symbol literals
 	'WAC',		#white spaces and comments
 	'XML',		#XML
-	
+	'BITAND',
+	'BITOR',
+	'BITXOR',
+	'BITNEG',
+	'BITLSHIFT',
+	'BITRSHIFT',
+	'BITRSFILL',    #bit right shift fill operator
+	'EQUALASS',
+	'ADDASS',
+	'SUBASS',
+	'MULASS',
+	'MODASS',
+	'DIVASS',
+	'BITLEFTASS',
+	'BITRIGHTASS',
+	'BITANDASS',
+	'BITORASS',
+	'BITXORASS',
 )
 
 t_DIGIT = r'[0-9]'
@@ -46,14 +63,31 @@ t_GE = r'>='
 t_LT = r'<'
 t_LE = r'<='
 t_INT = r'[+-]?([0-9])+'
-t_FLOAT = r'([+-])?[0-9]+(\.[0-9]+)?'
-t_BITWISE = r'([])'
+t_FLOAT = r'([+-])?[0-9]+[.]([0-9]+)?'
 t_LPARAN = r'\('
 t_RPARAN = r'\)'
 t_LSQRB = r'\['
 t_RSQRB = r'\]'
 t_BLOCKOPEN = r'\{'
 t_BLOCKCLOSE = r'\}'
+t_BITAND = r'&'
+t_BITOR = r'\|'
+t_BITXOR = r'\^'
+t_BITNEG = r'~'
+t_BITLSHIFT = r'<<'
+t_BITRSHIFT = r'>>'
+t_BITRSFILL = r'>>>'
+t_EQUALASS = r'='
+t_ADDASS = r'\+='
+t_SUBASS = r'-='
+t_MULASS = r'\*='
+t_MODASS = r'%='
+t_DIVASS = r'/='
+t_BITLEFTASS = r'<<='
+t_BITRIGHTASS = r'>>='
+t_BITANDASS = r'&='
+t_BITORASS = r'\|='
+t_BITXORASS = r'\^='
 
 
 # Error handling rule
@@ -65,7 +99,7 @@ def t_error(t):
 lexer = lex.lex()
 
 # Test it out
-data = '''+10-9><>=<=-5.8'''
+data = '''+10-9><>=<=-5+=-=+=^^=>>>'''
 
 # Give the lexer some input
 lexer.input(data)
