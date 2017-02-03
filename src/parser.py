@@ -43,8 +43,6 @@ reserved = {
 	'null' : 'R_NULL',
 	'\u21D2' : 'R_IMPLIES',
 	'\u2190' : 'R_LEFTARROW',
-	'_' : 'R_UNDERSCORE',
-	':' : 'R_COLON',
 	'=>' : 'R_IMPLIES1',
 	'<-' : 'R_LEFTARROW1',
 	'<:' : 'R_OBSCURE',
@@ -119,6 +117,8 @@ tokens =list(reserved.values()) +  [
 	'DOUBLEQUOTE',
 	'SINGLEQUOTE',
 	'BACKSLASH',
+	'COLON',
+	'SEMICOLON',
 ]
 digit            = r'([0-9])'
 nondigit         = r'([_A-Za-z])'
@@ -176,7 +176,8 @@ t_CARRIAGERETN = r'\r'
 t_DOUBLEQUOTE = r'\"'
 t_SINGLEQUOTE = r'\''
 t_BACKSLASH = r'\\'
-
+t_COLON = r':'
+t_SEMICOLON = r';'
 # Error handling rule
 def t_error(t):
 	print("Illegal character '%s'" % t.value[0])
@@ -186,7 +187,7 @@ def t_error(t):
 lexer = lex.lex()
 
 # Test it out
-data = '''+10-9"><>=<="'-5.8'+-/%==!=&&\||!\rwhile\tnew\n=>'''
+data = '''+10-9"><>=<="'-5.8'+-/%==!=&&;\||!\rwhile:\tnew\n=>'''
 # Give the lexer some input
 lexer.input(data)
 
