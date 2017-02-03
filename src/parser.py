@@ -1,7 +1,49 @@
 import ply.lex as lex
 from ply.lex import TOKEN
 
-tokens = (
+reserved = {
+	'abstract' : 'ABSTRACT',
+	'do'  : 'DO',
+	'finally' : 'FINALLY',
+	'import' : 'IMPORT',
+	'object' : 'OBJECT',
+	'override' : 'OVERRIDE',
+	'package' : 'PACKAGE',
+	'private' : 'PRIVATE',
+	'protected' : 'PROTECTED',
+	'return' : 'RETURN',
+	'sealed' : 'SEALED',
+ 	'super' : 'SUPER',
+	'this' : 'THIS',
+	'throw' : 'THROW',
+	'trait' : 'TRAIT',
+	'try' : 'TRY',
+	'true' : 'TRUE',
+	'type' : 'TYPE', 
+	'val' : 'VAL', 
+	'var' : 'VAR', 
+	'while' : 'WHILE',  
+	'with' : 'WITH',
+	'yield' : 'YIELD',
+	'case' :'CASE',
+	'catch' : 'CATCH',
+	'class' : 'CLASS',
+	'def' : 'DEF',
+ 	'else' : 'ELSE',
+ 	'extends' : 'EXTENDS',
+ 	'false' : 'FALSE', 
+	'final' : 'FINAL',
+ 	'for' : 'FOR',
+	'forSome' : 'FORSOME',
+	'if' : 'IF',
+	'implicit' : 'IMPLICIT',
+ 	'lazy' : 'LAZY',
+	'match' : 'MATCH',
+	'new' : 'NEW', 
+	'null' : 'NULL',
+}
+
+tokens =list(reserved.values()) +  [
 	'INT',
 	'FLOAT',
 	'STRINTG',
@@ -29,7 +71,7 @@ tokens = (
 	'OR',
 	'NOT',
 	
-)
+]
 
 t_DIGIT = r'[0-9]'
 t_CHAR = r'[a-zA-Z]'
@@ -46,8 +88,7 @@ t_GE = r'>='
 t_LT = r'<'
 t_LE = r'<='
 t_INT = r'[+-]?([0-9])+'
-t_FLOAT = r'([+-])?[0-9]+(\.[0-9]+)?'
-t_BITWISE = r'([])'
+t_FLOAT = r'([+-])?[0-9]+\.([0-9]+)?'
 t_LPARAN = r'\('
 t_RPARAN = r'\)'
 t_LSQRB = r'\['
@@ -62,7 +103,7 @@ t_MODULUS = r'%'
 t_EQUAL = r'=='
 t_NOTEQUAL = r'!='
 t_AND = r'&&'
-t_OR = r'||'
+t_OR = r'\|\|'
 t_NOT = r'!'
 
 # Error handling rule
@@ -74,7 +115,7 @@ def t_error(t):
 lexer = lex.lex()
 
 # Test it out
-data = '''+10-9><>=<=-5.8'''
+data = '''+10-9><>=<=-5.8+-/%==!=&&||! while new'''
 
 # Give the lexer some input
 lexer.input(data)
