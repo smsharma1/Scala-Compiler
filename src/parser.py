@@ -106,7 +106,7 @@ t_MODULUS = r'%'
 t_EQUAL = r'=='
 t_NOTEQUAL = r'!='
 t_AND = r'&&'
-t_OR = r'||'
+t_OR = r'\|'
 t_NOT = r'!'
 
 # Error handling rule
@@ -118,7 +118,7 @@ def t_error(t):
 lexer = lex.lex()
 
 # Test it out
-data = '''+10-9><>=<=-5+=-=+=^^=>>>'''
+data = '''+10-9><>=<=-5+=-=+=^^=>>>|||!==+='''
 
 # Give the lexer some input
 lexer.input(data)
