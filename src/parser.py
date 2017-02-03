@@ -41,6 +41,7 @@ reserved = {
 	'match' : 'MATCH',
 	'new' : 'NEW', 
 	'null' : 'NULL',
+
 }
 
 tokens =list(reserved.values()) +  [
@@ -58,7 +59,7 @@ tokens =list(reserved.values()) +  [
 	'LT',           #Less than
 	'LE',           #Less than equal
 	'DIGIT',        #Digit
-    	'CHAR',         #Character
+	'CHAR',         #Character
 	'ID',           #Identifirs
 	'NL',	        #Newline
 	'ILT',	        #Integer literals
@@ -98,6 +99,14 @@ tokens =list(reserved.values()) +  [
 	'AND',
 	'OR',
 	'NOT',
+	'STARTQUOTE',
+	'ENDQUOTE',
+	'DOUBLEQUOTE',
+	'DOT',
+	'SEMICOLON',
+	'COMMA',
+	'SPACE',
+	'EXTRASPACE',
 ]
 t_DIGIT = r'[0-9]'
 t_CHAR = r'[a-zA-Z]'
@@ -108,6 +117,10 @@ identifier = r'(' + nondigit + r'(' + digit + r'|' + nondigit + r')*)'
 @TOKEN(identifier)
 def t_ID(t):
 	return t
+
+def t_comment(t):
+	r'(?://[^\n]*|/\*(?:(?!\*/).)*\*/)'
+	pass
 
 t_GT = r'>'
 t_GE = r'>='
@@ -147,9 +160,10 @@ t_MODULUS = r'%'
 t_EQUAL = r'=='
 t_NOTEQUAL = r'!='
 t_AND = r'&&'
-<<<<<<< HEAD
 t_OR = r'\|\|'
 t_NOT = r'!'
+t_NL = r'\n'
+t_ignore  = ' \t'
 
 # Error handling rule
 def t_error(t):
@@ -160,7 +174,10 @@ def t_error(t):
 lexer = lex.lex()
 
 # Test it out
-data = '''+10-9><>=<=-5.8+-/%==!=&&||! while new'''
+data = '''+10-9><>=<=-5.8+-/%==!=&&||! while /*af sfsfaf asdfasf
+fuckname af dfs fdadf af adf sf dasf
+sd fasf a asf jlasdlf lasdfalsfj ejf aljfljsdljsufnclajfje
+/* */ if'''
 # Give the lexer some input
 lexer.input(data)
 
