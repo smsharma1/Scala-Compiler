@@ -41,6 +41,31 @@ reserved = {
 	'match' : 'MATCH',
 	'new' : 'NEW', 
 	'null' : 'NULL',
+	'\u21D2' : 'IMPLIES',
+	'\u2190' : 'LEFTARROW',
+	'_' : 'UNDERSCORE',
+	':' : 'COLON',
+	'=>' : 'IMPLIES',
+	'<-' : 'LEFTARROW',
+	'<:' : 'OBSCURE',
+	'#' : 'HASH',
+	'@' : 'ATTHERATE',
+	'<%' : 'OBSCURE1',
+	'>:' : 'OBSCURE2',
+	'Byte' : 'BYTE',
+	'Short' : 'SHORT',
+	'Int' : 'INT',
+	'Long' : 'LONG',
+	'Float' : 'FLOAT',
+	'Double' : 'DOUBLE',
+	'Char' : 'CHAR',
+	'String' : 'STRING',
+	'Boolean' : 'BOOLEAN',
+	'Unit' : 'UNIT',
+	'Null' : 'NULL',
+	'Nothing' : 'NOTHING',
+	'Any' : 'ANY',
+	'AnyRef' : 'ANYREF'
 }
 
 tokens =list(reserved.values()) +  [
@@ -160,7 +185,7 @@ def t_error(t):
 lexer = lex.lex()
 
 # Test it out
-data = '''+10-9><>=<=-5.8+-/%==!=&&||! while new'''
+data = '''+10-9><>=<=-5.8+-/%==!=&&||! while new =>'''
 # Give the lexer some input
 lexer.input(data)
 
