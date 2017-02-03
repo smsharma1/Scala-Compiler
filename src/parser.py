@@ -1,6 +1,15 @@
 import ply.lex as lex
 
 tokens = (
+	'INT',
+	'FLOAT',
+	'STRINTG',
+	'LPARAN',
+	'RPARAN',
+	'GE',
+	'G',
+	'LE',
+	'L',
 	'ID',           #Identifirs
 	'NL',	        #Newline
 	'ILT',	        #Integer literals
