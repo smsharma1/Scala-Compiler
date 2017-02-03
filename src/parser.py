@@ -107,6 +107,7 @@ nondigit         = r'([_A-Za-z])'
 identifier = r'(' + nondigit + r'(' + digit + r'|' + nondigit + r')*)'
 @TOKEN(identifier)
 def t_ID(t):
+	t.type = reserved.get(t.value,'ID')    # Check for reserved words
 	return t
 
 t_GT = r'>'
@@ -147,7 +148,6 @@ t_MODULUS = r'%'
 t_EQUAL = r'=='
 t_NOTEQUAL = r'!='
 t_AND = r'&&'
-<<<<<<< HEAD
 t_OR = r'\|\|'
 t_NOT = r'!'
 
