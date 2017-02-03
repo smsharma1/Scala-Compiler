@@ -46,6 +46,16 @@ tokens = (
 	'BITANDASS',
 	'BITORASS',
 	'BITXORASS',
+	'PLUS',
+	'MINUS',
+	'MULTIPLICATION',
+	'DIVISION',
+	'MODULUS',
+	'EQUAL',
+	'NOTEQUAL',
+	'AND',
+	'OR',
+	'NOT',
 )
 
 t_DIGIT = r'[0-9]'
@@ -88,7 +98,16 @@ t_BITRIGHTASS = r'>>='
 t_BITANDASS = r'&='
 t_BITORASS = r'\|='
 t_BITXORASS = r'\^='
-
+t_PLUS = r'\+'
+t_MINUS = r'-'
+t_MULTIPLICATION = r'\*'
+t_DIVISION = r'/'
+t_MODULUS = r'%'
+t_EQUAL = r'=='
+t_NOTEQUAL = r'!='
+t_AND = r'&&'
+t_OR = r'||'
+t_NOT = r'!'
 
 # Error handling rule
 def t_error(t):
