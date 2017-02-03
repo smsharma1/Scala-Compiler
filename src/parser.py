@@ -10,6 +10,7 @@ tokens = (
 	'G',
 	'LE',
 	'L',
+	'DIGITS',
 	'ID',           #Identifirs
 	'NL',	        #Newline
 	'ILT',	        #Integer literals
@@ -23,4 +24,6 @@ tokens = (
 	'WAC',		#white spaces and comments
 	'XML',		#XML
 )
+
+t_DIGITS = [0-9]+
 
