@@ -2,52 +2,73 @@ import ply.lex as lex
 from ply.lex import TOKEN
 
 reserved = {
-	'abstract' : 'ABSTRACT',
-	'do'  : 'DO',
-	'finally' : 'FINALLY',
-	'import' : 'IMPORT',
-	'object' : 'OBJECT',
-	'override' : 'OVERRIDE',
-	'package' : 'PACKAGE',
-	'private' : 'PRIVATE',
-	'protected' : 'PROTECTED',
-	'return' : 'RETURN',
-	'sealed' : 'SEALED',
- 	'super' : 'SUPER',
-	'this' : 'THIS',
-	'throw' : 'THROW',
-	'trait' : 'TRAIT',
-	'try' : 'TRY',
-	'true' : 'TRUE',
-	'type' : 'TYPE', 
-	'val' : 'VAL', 
-	'var' : 'VAR', 
-	'while' : 'WHILE',  
-	'with' : 'WITH',
-	'yield' : 'YIELD',
-	'case' :'CASE',
-	'catch' : 'CATCH',
-	'class' : 'CLASS',
-	'def' : 'DEF',
- 	'else' : 'ELSE',
- 	'extends' : 'EXTENDS',
- 	'false' : 'FALSE', 
-	'final' : 'FINAL',
- 	'for' : 'FOR',
-	'forSome' : 'FORSOME',
-	'if' : 'IF',
-	'implicit' : 'IMPLICIT',
- 	'lazy' : 'LAZY',
-	'match' : 'MATCH',
-	'new' : 'NEW', 
-	'null' : 'NULL',
-
+	'abstract' : 'R_ABSTRACT',
+	'do'  : 'R_DO',
+	'finally' : 'R_FINALLY',
+	'import' : 'R_IMPORT',
+	'object' : 'R_OBJECT',
+	'override' : 'R_OVERRIDE',
+	'package' : 'R_PACKAGE',
+	'private' : 'R_PRIVATE',
+	'protected' : 'R_PROTECTED',
+	'return' : 'R_RETURN',
+	'sealed' : 'R_SEALED',
+ 	'super' : 'R_SUPER',
+	'this' : 'R_THIS',
+	'throw' : 'R_THROW',
+	'trait' : 'R_TRAIT',
+	'try' : 'R_TRY',
+	'true' : 'R_TRUE',
+	'type' : 'R_TYPE', 
+	'val' : 'R_VAL', 
+	'var' : 'R_VAR', 
+	'while' : 'R_WHILE',  
+	'with' : 'R_WITH',
+	'yield' : 'R_YIELD',
+	'case' :'R_CASE',
+	'catch' : 'R_CATCH',
+	'class' : 'R_CLASS',
+	'def' : 'R_DEF',
+ 	'else' : 'R_ELSE',
+ 	'extends' : 'R_EXTENDS',
+ 	'false' : 'R_FALSE', 
+	'final' : 'R_FINAL',
+ 	'for' : 'R_FOR',
+	'forSome' : 'R_FORSOME',
+	'if' : 'R_IF',
+	'implicit' : 'R_IMPLICIT',
+ 	'lazy' : 'R_LAZY',
+	'match' : 'R_MATCH',
+	'new' : 'R_NEW', 
+	'null' : 'R_NULL',
+	'\u21D2' : 'R_IMPLIES',
+	'\u2190' : 'R_LEFTARROW',
+	'=>' : 'R_IMPLIES1',
+	'<-' : 'R_LEFTARROW1',
+	'<:' : 'R_OBSCURE',
+	'#' : 'R_HASH',
+	'@' : 'R_ATTHERATE',
+	'<%' : 'R_OBSCURE1',
+	'>:' : 'R_OBSCURE2',
+	'Byte' : 'R_BYTE',
+	'Short' : 'R_SHORT',
+	'Int' : 'R_INT',
+	'Long' : 'R_LONG',
+	'Float' : 'R_FLOAT',
+	'Double' : 'R_DOUBLE',
+	'Char' : 'R_CHAR',
+	'String' : 'R_STRING',
+	'Boolean' : 'R_BOOLEAN',
+	'Unit' : 'R_UNIT',
+	'Null' : 'R_NULL1',
+	'Nothing' : 'R_NOTHING',
+	'Any' : 'R_ANY',
+	'AnyRef' : 'R_ANYREF'
 }
 
 tokens =list(reserved.values()) +  [
 	'INT',
 	'FLOAT',
-	'STRINTG',
 	'LPARAN',
 	'RPARAN',
 	'LSQRB',
@@ -59,18 +80,7 @@ tokens =list(reserved.values()) +  [
 	'LT',           #Less than
 	'LE',           #Less than equal
 	'DIGIT',        #Digit
-	'CHAR',         #Character
-	'ID',           #Identifirs
-	'NL',	        #Newline
-	'ILT',	        #Integer literals
-	'FLT',          #floating
-	'BLT',		#boolean
-	'SLT',		#String
-	'MSLT',		#multiline string
-	'ES',		#escape sequence
-	'SL',		#symbol literals
-	'WAC',		#white spaces and comments
-	'XML',		#XML
+    	'ID',
 	'BITAND',
 	'BITOR',
 	'BITXOR',
@@ -101,26 +111,36 @@ tokens =list(reserved.values()) +  [
 	'NOT',
 	'STARTQUOTE',
 	'ENDQUOTE',
-	'DOUBLEQUOTE',
 	'DOT',
 	'SEMICOLON',
 	'COMMA',
-	'SPACE',
-	'EXTRASPACE',
+	'BACKSPACE',
+	'HORITAB',
+	'LINEFEED',
+	'FORMFEED',
+	'CARRIAGERETN',
+	'DOUBLEQUOTE',
+	'SINGLEQUOTE',
+	'BACKSLASH',
+	'COLON',
+	'SEMICOLON',
+	'COMMENT'
 ]
-t_DIGIT = r'[0-9]'
-t_CHAR = r'[a-zA-Z]'
+
+def t_COMMENT(t):
+	r'(/\*(.|\n)*?\*/)|(//.*)'
+	pass
 
 digit            = r'([0-9])'
 nondigit         = r'([_A-Za-z])'
 identifier = r'(' + nondigit + r'(' + digit + r'|' + nondigit + r')*)'
+
 @TOKEN(identifier)
 def t_ID(t):
+	t.type = reserved.get(t.value,'ID')    # Check for reserved words
 	return t
 
-def t_comment(t):
-	r'(?://[^\n]*|/\*(?:(?!\*/).)*\*/)'
-	pass
+
 
 t_GT = r'>'
 t_GE = r'>='
@@ -162,8 +182,17 @@ t_NOTEQUAL = r'!='
 t_AND = r'&&'
 t_OR = r'\|\|'
 t_NOT = r'!'
-t_NL = r'\n'
 t_ignore  = ' \t'
+t_BACKSPACE = r'\\b'
+t_HORITAB = r'\t'
+t_LINEFEED = r'\n'
+t_FORMFEED = r'\f'
+t_CARRIAGERETN = r'\r'
+t_DOUBLEQUOTE = r'\"'
+t_SINGLEQUOTE = r'\''
+t_BACKSLASH = r'\\'
+t_COLON = r':'
+t_SEMICOLON = r';'
 
 # Error handling rule
 def t_error(t):
@@ -174,10 +203,12 @@ def t_error(t):
 lexer = lex.lex()
 
 # Test it out
-data = '''+10-9><>=<=-5.8+-/%==!=&&||! while /*af sfsfaf asdfasf
+
+data = '''+10-9><>=<=-5.8+-/%==!=&&||! while af sfsfaf asdfasf
 fuckname af dfs fdadf af adf sf dasf
-sd fasf a asf jlasdlf lasdfalsfj ejf aljfljsdljsufnclajfje
-/* */ if'''
+//sd fasf a asf jlasdlf lasdfalsfj ejf aljfljsdljsufnclajfje
+if'''
+
 # Give the lexer some input
 lexer.input(data)
 
