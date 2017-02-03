@@ -60,6 +60,34 @@ tokens =list(reserved.values()) +  [
 	'DIGIT',        #Digit
     	'CHAR',         #Character
 	'ID',           #Identifirs
+	'NL',	        #Newline
+	'ILT',	        #Integer literals
+	'FLT',          #floating
+	'BLT',		#boolean
+	'SLT',		#String
+	'MSLT',		#multiline string
+	'ES',		#escape sequence
+	'SL',		#symbol literals
+	'WAC',		#white spaces and comments
+	'XML',		#XML
+	'BITAND',
+	'BITOR',
+	'BITXOR',
+	'BITNEG',
+	'BITLSHIFT',
+	'BITRSHIFT',
+	'BITRSFILL',    #bit right shift fill operator
+	'EQUALASS',
+	'ADDASS',
+	'SUBASS',
+	'MULASS',
+	'MODASS',
+	'DIVASS',
+	'BITLEFTASS',
+	'BITRIGHTASS',
+	'BITANDASS',
+	'BITORASS',
+	'BITXORASS',
 	'PLUS',
 	'MINUS',
 	'MULTIPLICATION',
@@ -70,9 +98,7 @@ tokens =list(reserved.values()) +  [
 	'AND',
 	'OR',
 	'NOT',
-	
 ]
-
 t_DIGIT = r'[0-9]'
 t_CHAR = r'[a-zA-Z]'
 
@@ -95,6 +121,24 @@ t_LSQRB = r'\['
 t_RSQRB = r'\]'
 t_BLOCKOPEN = r'\{'
 t_BLOCKCLOSE = r'\}'
+t_BITAND = r'&'
+t_BITOR = r'\|'
+t_BITXOR = r'\^'
+t_BITNEG = r'~'
+t_BITLSHIFT = r'<<'
+t_BITRSHIFT = r'>>'
+t_BITRSFILL = r'>>>'
+t_EQUALASS = r'='
+t_ADDASS = r'\+='
+t_SUBASS = r'-='
+t_MULASS = r'\*='
+t_MODASS = r'%='
+t_DIVASS = r'/='
+t_BITLEFTASS = r'<<='
+t_BITRIGHTASS = r'>>='
+t_BITANDASS = r'&='
+t_BITORASS = r'\|='
+t_BITXORASS = r'\^='
 t_PLUS = r'\+'
 t_MINUS = r'-'
 t_MULTIPLICATION = r'\*'
@@ -103,6 +147,7 @@ t_MODULUS = r'%'
 t_EQUAL = r'=='
 t_NOTEQUAL = r'!='
 t_AND = r'&&'
+<<<<<<< HEAD
 t_OR = r'\|\|'
 t_NOT = r'!'
 
@@ -116,7 +161,6 @@ lexer = lex.lex()
 
 # Test it out
 data = '''+10-9><>=<=-5.8+-/%==!=&&||! while new'''
-
 # Give the lexer some input
 lexer.input(data)
 
