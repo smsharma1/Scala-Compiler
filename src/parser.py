@@ -16,18 +16,18 @@ tokens = (
 	'LT',           #Less than
 	'LE',           #Less than equal
 	'DIGIT',        #Digit
-    'CHAR',         #Character
+    	'CHAR',         #Character
 	'ID',           #Identifirs
-	'NL',	        #Newline
-	'ILT',	        #Integer literals
-	'FLT',          #floating
-	'BLT',		#boolean
-	'SLT',		#String
-	'MSLT',		#multiline string
-	'ES',		#escape sequence
-	'SL',		#symbol literals
-	'WAC',		#white spaces and comments
-	'XML',		#XML
+	'PLUS',
+	'MINUS',
+	'MULTIPLICATION',
+	'DIVISION',
+	'MODULUS',
+	'EQUAL',
+	'NOTEQUAL',
+	'AND',
+	'OR',
+	'NOT',
 	
 )
 
@@ -54,7 +54,16 @@ t_LSQRB = r'\['
 t_RSQRB = r'\]'
 t_BLOCKOPEN = r'\{'
 t_BLOCKCLOSE = r'\}'
-
+t_PLUS = r'\+'
+t_MINUS = r'-'
+t_MULTIPLICATION = r'\*'
+t_DIVISION = r'/'
+t_MODULUS = r'%'
+t_EQUAL = r'=='
+t_NOTEQUAL = r'!='
+t_AND = r'&&'
+t_OR = r'||'
+t_NOT = r'!'
 
 # Error handling rule
 def t_error(t):
