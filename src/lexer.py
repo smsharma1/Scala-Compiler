@@ -69,6 +69,8 @@ reserved = {
 tokens =list(reserved.values()) +  [
 	'INT',
 	'FLOAT',
+	'STRING',
+	'CHAR',
 	'LPARAN',
 	'RPARAN',
 	'LSQRB',
@@ -123,11 +125,8 @@ tokens =list(reserved.values()) +  [
 	'SINGLEQUOTE',
 	'BACKSLASH',
 	'COLON',
-	'SEMICOLON',
 	'COMMENT',
 	'COLOR',
-	'DOT',
-	'COMMA',
 ]
 
 def t_COMMENT(t):
@@ -143,14 +142,22 @@ def t_ID(t):
 	t.type = reserved.get(t.value,'ID')    # Check for reserved words
 	return t
 
-
-
 t_GT = r'>'
 t_GE = r'>='
 t_LT = r'<'
 t_LE = r'<='
 t_INT = r'[+-]?([0-9])+'
-t_FLOAT = r'([+-])?[0-9]+\.([0-9]+)?'
+t_FLOAT = r'([+-])?[0-9]+\.([0-9]+([Ee]?[+-][0-9]+)?)?'
+def t_CHAR(t):
+	r'\'.\''
+	t.value = t.value[1:-1]
+	return t
+
+def t_STRING(t):
+	r'\"(\\.|[^\\"])*\"'
+	t.value = t.value[1:-1]
+	return t
+
 t_LPARAN = r'\('
 t_RPARAN = r'\)'
 t_LSQRB = r'\['
@@ -199,6 +206,7 @@ t_SEMICOLON = r';'
 t_COLOR = r'\#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})'
 t_DOT = r'\.'
 t_COMMA = r'\,'
+
 
 # Error handling rule
 def t_error(t):
@@ -273,7 +281,8 @@ data = '''object addressbook {
     println(page)
   }
 }'''
-
+data = "10.5E-5"
+data = "\"Rahul is intelligent\""
 # Give the lexer some input
 lexer.input(data)
 
