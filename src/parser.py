@@ -50,8 +50,15 @@ def p_factor_expr(p):
 def p_error(p):
     print("Syntax error in input!")
 
+<<<<<<< HEAD
 # Build the parser
 parser = yacc.yacc()
+=======
+data = '''+10-9><>=<=-5.8+-/%==!=&&||! /*while af sfsfaf asdfasf
+fuckname af dfs fdadf af adf sf dasf
+//sd fasf a asf jlasdlf lasdfalsfj ejf aljfljsdljsufnclajfje
+if*/'''
+>>>>>>> be481dc05cd6c6b090534987f7e4d6c9627d961e
 
 while True:
    try:
