@@ -5,9 +5,9 @@ _tabversion = '3.8'
 
 _lr_method = 'LALR'
 
-_lr_signature = '8226F5672BE3A32DE3272C53AC61E2FE'
+_lr_signature = '29BD94BD5FE066CEAD322ADAFA15858C'
     
-_lr_action_items = {'STRING':([0,],[2,]),'INT':([0,],[3,]),'FLOAT':([0,],[4,]),'CHAR':([0,],[5,]),'ID':([0,],[6,]),'$end':([1,2,3,4,5,6,],[0,-3,-1,-2,-4,-5,]),}
+_lr_action_items = {'ID':([0,3,],[2,2,]),'DOT':([2,],[3,]),'$end':([1,2,4,],[0,-1,-2,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'literals':([0,],[1,]),}
+_lr_goto_items = {'QualId':([0,3,],[1,4,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -25,21 +25,11 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> literals","S'",1,None,None,None),
-  ('literals -> INT','literals',1,'p_literals','parser.py',27),
-  ('literals -> FLOAT','literals',1,'p_literals','parser.py',28),
-  ('literals -> STRING','literals',1,'p_literals','parser.py',29),
-  ('literals -> CHAR','literals',1,'p_literals','parser.py',30),
-  ('literals -> ID','literals',1,'p_literals','parser.py',31),
-  ('QualId -> ID','QualId',1,'p_QualId','parser.py',38),
-  ('QualId -> ID DOT QualId','QualId',3,'p_QualId','parser.py',39),
-  ('Ids -> ID','Ids',1,'p_Ids','parser.py',46),
-  ('Ids -> ID COMMA Ids','Ids',3,'p_Ids','parser.py',47),
-  ('Path -> StableId','Path',1,'p_Path','parser.py',54),
-  ('Path -> ID DOT R_THIS','Path',3,'p_Path','parser.py',55),
-  ('Path -> R_THIS','Path',1,'p_Path','parser.py',56),
-  ('StableId -> ID','StableId',1,'p_StableId','parser.py',66),
-  ('StableId -> Path DOT ID','StableId',3,'p_StableId','parser.py',67),
-  ('StableId -> R_SUPER DOT ID','StableId',3,'p_StableId','parser.py',68),
-  ('StableId -> ID DOT R_SUPER DOT ID','StableId',5,'p_StableId','parser.py',69),
+  ("S' -> QualId","S'",1,None,None,None),
+  ('QualId -> ID','QualId',1,'p_QualId','parser.py',27),
+  ('QualId -> ID DOT QualId','QualId',3,'p_QualId','parser.py',28),
+  ('literals -> INT','literals',1,'p_literals','parser.py',36),
+  ('literals -> FLOAT','literals',1,'p_literals','parser.py',37),
+  ('literals -> STRING','literals',1,'p_literals','parser.py',38),
+  ('literals -> CHAR','literals',1,'p_literals','parser.py',39),
 ]
