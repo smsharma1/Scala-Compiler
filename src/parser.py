@@ -79,7 +79,6 @@ tokens =list(reserved.values()) +  [
 	'GE',           #Grearer than equal
 	'LT',           #Less than
 	'LE',           #Less than equal
-	'DIGIT',        #Digit
     	'ID',
 	'BITAND',
 	'BITOR',
