@@ -16,6 +16,7 @@ tokens = (
    'LPAREN',
    'RPAREN',
    'ID',
+   'COLOR',
 )
 
 # Regular expression rules for simple tokens
@@ -26,6 +27,7 @@ t_DIVIDE  = r'/'
 t_LPAREN  = r'\('
 t_RPAREN  = r'\)'
 DIGIT = r'[0-9]'
+t_COLOR = r'\#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})'
 
 digit            = r'([0-9])'
 nondigit         = r'([_A-Za-z])'
@@ -61,7 +63,7 @@ lexer = lex.lex()
 # Test it out
 data = '''
 3 + 4 * 10
-  + -20 *2 + shubham 
+  + -20 *2 + #abcabc
 '''
 
 # Give the lexer some input
