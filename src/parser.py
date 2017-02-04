@@ -204,10 +204,10 @@ lexer = lex.lex()
 
 # Test it out
 
-data = '''+10-9><>=<=-5.8+-/%==!=&&||! while af sfsfaf asdfasf
+data = '''+10-9><>=<=-5.8+-/%==!=&&||! /*while af sfsfaf asdfasf
 fuckname af dfs fdadf af adf sf dasf
 //sd fasf a asf jlasdlf lasdfalsfj ejf aljfljsdljsufnclajfje
-if'''
+if*/'''
 
 # Give the lexer some input
 lexer.input(data)
