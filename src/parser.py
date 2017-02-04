@@ -15,7 +15,7 @@ class Node:
          self.leaf = leaf
 
 def p_literals(p):
-    '''literals : INT | FLOAT | STRING | CHAR'''
+    '''literals : INT | LONG | FLOAT | STRING | CHAR'''
     p[0] = p[1]
 
 def p_expression_minus(p):

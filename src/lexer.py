@@ -68,7 +68,10 @@ reserved = {
 
 tokens =list(reserved.values()) +  [
 	'INT',
+	'LONG',
 	'FLOAT',
+	'STRING',
+	'CHAR',
 	'LPARAN',
 	'RPARAN',
 	'LSQRB',
@@ -199,6 +202,8 @@ t_SEMICOLON = r';'
 t_COLOR = r'\#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})'
 t_DOT = r'\.'
 t_COMMA = r'\,'
+
+
 
 # Error handling rule
 def t_error(t):
