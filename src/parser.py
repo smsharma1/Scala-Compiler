@@ -1094,10 +1094,14 @@ def p_ExprsComma01(p):
 
 def p_Exprs(p):
 	'Exprs : Expr  CommaExpr0more'
-
+	p[0] = Node("Exprs", [p[1], p[2]],[]).name
 def p_CommaExpr0more(p):
 	'''CommaExpr0more : CommaExpr0more COMMA Expr
 					| empty'''
+	if "Exprs" in p[1]:
+		p[0] = Node("CommaExpr0more", [p[1],p[3]],[p[2]]).name
+	else:
+		p[0] = Node("CommaExpr0more", [p[1]]).name
 
 def p_SimpleExpr1(p):
 	'''SimpleExpr1 : Literal
@@ -1109,6 +1113,24 @@ def p_SimpleExpr1(p):
 				| SimpleExpr TypeArgs
 				| SimpleExpr1 ArgumentExprs
 				| XmlExpr'''
+	if "Literal" in p[1]:
+		p[0] = Node("SimpleExpr1", [p[1]],[]).name
+	elif "Path" in p[1]:
+		p[0] = Node("SimpleExpr1", [p[1]],[]).name
+	elif "Exprs" in p[2]:
+		p[0] = Node("SimpleExpr1", [p[2]],[p[1], p[3]]).name
+	elif "id" in p[3]:
+		p[0] = Node("SimpleExpr1", [p[1], p[3]],[p[2]]).name
+	elif "TypeArgs" in p[2]:
+		p[0] = Node("SimpleExpr1", [p[1], p[2]],[]).name
+	elif "ArgumentExprs" in p[1]:
+		p[0] = Node("SimpleExpr1", [p[1], p[2]],[]).name
+	elif "XmlExpr" in p[1]:
+		p[0] = Node("SimpleExpr1", [p[1]],[]).name
+	elif len(p)==2:
+		p[0] = Node("SimpleExpr1", [p[1], p[2]],[]).name
+	else:
+		p[0] = Node("SimpleExpr1", [],[p[1]]).name
 
 def p_SimpleExpr(p):
 	'''SimpleExpr : R_NEW ClassTemplate
@@ -1116,6 +1138,16 @@ def p_SimpleExpr(p):
 				| BlockExpr
 				| SimpleExpr1 
 				| SimpleExpr1 UNDERSCORE'''
+	if "ClassTemplate" in p[2]:
+		p[0] = Node("SimpleExpr", [p[2]],[p[1]]).name
+	elif "TemplateBody" in p[2]:
+		p[0] = Node("SimpleExpr", [p[2]],[p[1]]).name
+	elif "BlockExpr" in p[2]:
+		p[0] = Node("SimpleExpr", [p[1]],[]).name
+	elif len(p)==2:
+		p[0] = Node("SimpleExpr", [p[1]],[p[2]]).name
+	else
+		p[0] = Node("SimpleExpr", [p[1]],[]).name
 
 def p_PrefixExpr(p):
 	'''PrefixExpr : MINUS SimpleExpr
@@ -1123,18 +1155,34 @@ def p_PrefixExpr(p):
 				| BITNEG SimpleExpr
 				| SimpleExpr
 				| NOT SimpleExpr'''
+	if "SimpleExpr" in p[2]:
+		p[0] = Node("PrefixExpr", [p[2]],[p[1]]).name
+	else
+		p[0] = Node("PrefixExpr", [p[1]],[]).name
 
 def p_InfixExpr(p):
 	'''InfixExpr : PrefixExpr
 				| InfixExpr id nl01 InfixExpr'''
+	if "InfixExpr" in p[1]:
+		p[0] = Node("InfixExpr", [p[1], p[2], p[3], p[4]],[]).name
+	else
+		p[0] = Node("InfixExpr", [p[1]],[]).name
 
 def p_PostfixExpr(p):
 	'''PostfixExpr : InfixExpr
 				| InfixExpr id nl01'''
+	if "id" in p[2]:
+		p[0] = Node("PostfixExpr", [p[1], p[2], p[3]],[]).name
+	else
+		p[0] = Node("PostfixExpr", [p[1]],[]).name	
 
 def p_semi01(p):
 	'''semi01 : semi
 			| empty'''
+	if "semi" in p[1]:
+		p[0] = Node("semi01", [p[1]],[]).name
+	else
+		p[0] = Node("semi01", [p[1]],[]).name
 
 def p_Expr1(p):
 	'''Expr1 : R_IF LPARAN Expr RPARAN nl0more Expr
@@ -1201,7 +1249,7 @@ def p_SimpleType(p):
 		   		  | StableId
 		          | Path DOT R_TYPE
 		          | LPARAN Types RPARAN'''
-				  
+
 def p_AnnotType(p):
 	'AnnotType : SimpleType Annotation0more'
 
