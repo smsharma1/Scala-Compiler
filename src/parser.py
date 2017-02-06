@@ -53,9 +53,10 @@ def p_TopStat1(p):
 				| Annotation nl
 				| TopStat1 Annotation 
 				| TopStat1 Annotation nl'''
+
 def p_Modifier0more(p):
-	'''TopStat2 : empty 
-				| TopStat2 Modifier'''
+	'''Modifier0more : empty 
+				| Modifier0more Modifier'''
 
 #look for semi
 def p_TopStatSeq(p):
@@ -368,6 +369,10 @@ def p_ClassParams01(p):
 def p_ClassParamClauses(p):
 	'ClassParamClauses : ClassParamClause0more Temp01'
 
+def p_ClassParamClause0more(p):
+	'''ClassParamClause0more : ClassParamClause0more ClassParamClause
+								| empty'''
+
 def p_Temp01(p):
 	'''Temp01 : nl01 LPARAN R_IMPLICIT ClassParams RPARAN
 			| empty'''
@@ -397,6 +402,204 @@ def p_ParamClause(p):
 def p_Params01(p):
 	'''Params01 : empty
 			| Params'''
+
+def p_ParamClauses(p):
+	'ParamClauses : ParamClause0more Temp02'
+
+def p_ParamClause0more(p):
+	'''ParamClause0more : empty
+					| ParamClause0more ParamClause'''
+
+def p_Temp02(p):
+	'''Temp02 : nl01 LPARAN R_IMPLICIT Params RPARAN
+			| empty'''
+
+def p_TypeParam(p): 
+	'''TypeParam : id  TypeParamClause01  Obscure2Type01 ObscureType01 ObscureType0more ColonType0more	
+				| UNDERSCORE TypeParamClause01  Obscure2Type01 ObscureType01 ObscureType0more ColonType0more'''
+
+def p_ObscureType0more(p):
+	'''ObscureType0more : empty
+						| ObscureType0more R_OBSCURE Type'''
+
+def p_ColonType0more(p):
+	'''ColonType0more : empty
+					| ColonType0more COLON Type'''
+
+def p_VariantTypeParam(p):
+	'''VariantTypeParam : Annotation0more TypeParam
+					| Annotation0more PLUS TypeParam
+					| Annotation0more MINUS TypeParam'''
+
+def p_FunTypeParamClause(p):
+	'FunTypeParamClause : LSQRB TypeParam CommaTypeParam0more RSQRB'
+
+def p_CommaTypeParam0more(p):
+	'''CommaParam0more : empty
+					| CommaTypeParam0more COMMA TypeParam'''
+
+def p_TypeParamClause(p):
+	'TypeParamClause : LSQRB VariantTypeParam CommaVariantTypeParam0more RSQRB'
+
+def p_CommaVariantTypeParam0more(p):
+	'''CommaVariantTypeParam0more : empty
+							| CommaVariantTypeParam0more COMMA VariantTypeParam''' 
+
+#look reference there is ambiguity 
+def p_Patterns(p):
+	'Patterns : Pattern CommaPatterns01'
+
+def p_CommaPatterns01(p):
+	'''CommaPatterns01 : empty
+					| COMMA Patterns'''
+
+#look reference
+
+def p_SimplePattern(p):
+	'''SimplePattern : UNDERSCORE
+					| varid
+					| Literal
+					| StableID
+					| StableId LPARAN Patterns01 RPARAN
+					| StableId LPARAN PatternsComma01 varidUnderscore01 UNDERSCORE MULTIPLICATION RPARAN
+					| LPARAN Patterns01 RPARAN
+					| XmlPattern'''
+def p_Patterns01(p):
+	'''Patterns01 : empty
+				| Patterns'''
+
+def p_PatternsComma01(p):
+	'''PatternsComma01 : empty
+				| Patterns COMMA'''
+
+def p_varidUnderscore01(p):
+	'''varidUnderscore01 : empty
+				| varid  UNDERSCORE'''
+
+def p_Pattern3(p):
+	'''Pattern3 : SimplePattern
+			| SimplePattern idnl01SimplePattern0more'''
+
+def p_idnl01SimplePattern0more(p):
+	'''idnl01SimplePattern0more : empty
+				| idnl01SimplePattern0more id nl01 SimplePattern'''
+
+def p_Pattern2(p):
+	'''Pattern2 : varid AttheratePattern301
+		| Pattern3'''
+
+def p_AttheratePattern301(p):
+	'''AttheratePattern301 : empty
+				| ATTHERATE Pattern3''' 
+
+def p_Pattern1(p):
+	'''Pattern1 : varid COLON TypePat
+				| UNDERSCORE COLON TypePat
+				| Pattern2'''
+
+def p_Pattern(p):
+	'Pattern : Pattern1  BitorPattern10more'
+
+def p_BitorPattern10more(p):
+	'''BitorPattern10more : BitorPattern10more BITOR Pattern1
+						| empty'''
+
+def p_Guard(p):
+	'Guard : R_IF PostfixExpr'
+
+def p_CaseClause(p):
+	'CaseClause : R_CASE Pattern Guard01 R_IMPLIES1 Block'
+
+def p_Guard01(p):
+	'''Guard01 : Guard
+			| empty'''
+
+def p_CaseClauses(p):
+	'CaseClauses : CaseClause CaseClause0more'
+
+def p_CaseClause0more(p):
+	'''CaseClause0more : empty
+					| CaseClause0more CaseClause'''
+
+def p_Generator(p):
+	'Generator : Pattern1 R_LEFTARROW1 Expr Guard01'
+
+def p_Enumerator(p):
+	'''Enumerator : Generator
+				| Guard
+				| Pattern1 EQUALASS Expr''' 
+
+def p_Enumerators(p):
+	'Enumerators ::= Generator semiEnumerator0more'
+
+def p_semiEnumerator0more(p):
+	'''semiEnumerator0more : empty
+						| semiEnumerator0more semi Enumerator'''
+def p_ResultExpr(p):
+	'''ResultExpr : Expr1
+				| Bindings R_IMPLIES1 Block
+				| UNDERSCORE COLON CompoundType R_IMPLIES1 Block
+				|  R_IMPLICIT id  COLON CompoundType R_IMPLIES1 Block
+				| id  COLON CompoundType R_IMPLIES1 Block'''
+
+#check Import	
+def p_BlockStat(p):
+	'''BlockStat : Import
+				| Annotation0more  Def
+				| Annotation0more R_IMPLICIT Def
+				| Annotation0more  R_LAZY Def
+				| Annotation0more LocalModifier0more TmplDef
+				| Expr1
+				| empty'''
+
+def p_LocalModifier0more(p):
+	'''LocalModifier0more : empty
+						| LocalModifier0more LocalModifier'''
+
+def p_Block(p):
+	'Block : BlockStatsemi0more ResultExpr01'
+
+def p_ResultExpr01(p):
+	'''ResultExpr01 : empty	
+					| ResultExpr'''
+
+def p_BlockStatsemi0more(p):
+	'''BlockStatsemi0more : BlockStatsemi0more BlockStat semi
+							| empty'''
+
+def p_BlockExpr(p):
+	'''BlockExpr : BLOCKOPEN CaseClauses BLOCKCLOSE
+				| BLOCKOPEN Block BLOCKCLOSE'''
+
+def p_ArgumentExprs(p):
+	'''ArgumentExprs : LPARAN Exprs RPARAN
+					| LPARAN RPARAN
+					| LPARAN ExprsComma01 PostfixExpr COLON UNDERSCORE MULTIPLICATION RPARAN
+					| nl01 BlockExpr'''
+
+def p_ExprsComma01(p):
+	'''ExprsComma01 : empty
+					| Exprs COMMA'''
+
+
+def p_
+def p_
+def p_
+def p_
+def p_
+def p_
+def p_
+def p_
+def p_
+def p_
+def p_
+def p_
+def p_
+def p_
+def p_
+def p_
+def p_
+def p_
 
 
 def p_Ids(p):
