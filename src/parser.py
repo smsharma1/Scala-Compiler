@@ -39,7 +39,8 @@ def p_TopStat(p):
 	'''TopStat : Import 
 				| Packaging
 				| PackageObject
-			    | TopStat1 TopStat2 TmplDef '''
+			    | TopStat1 Modifier0more TmplDef
+				| empty '''
 
 def p_TopStat1(p):
 	'''TopStat1 : empty
@@ -47,9 +48,8 @@ def p_TopStat1(p):
 				| Annotation nl
 				| TopStat1 Annotation 
 				| TopStat1 Annotation nl'''
-def p_TopStat2(p):
+def p_Modifier0more(p):
 	'''TopStat2 : empty 
-				| Modifier
 				| TopStat2 Modifier'''
 
 #look for semi
@@ -254,7 +254,22 @@ def p_ImportSelectors(p):
 def p_ImportselectorComma0more(p):
 	'''ImportselectorComma0more : empty
 							| ImportselectorComma0more ImportSelector COMMA'''
-							 
+def p_ImportExpr(p):
+	'''ImportExpr : StableId DOT id
+				| StableId DOT UNDERSCORE
+				| StableId DOT ImportSelectors'''
+
+def p_Import(p):
+	'Import : R_IMPORT ImportExpr CommaImportExpr0more'
+
+def p_CommaImportExpr0more(p):
+	'''CommaImportExpr0more : empty
+						| CommaImportExpr0more COMMA ImportExpr'''
+
+def p_SelfType(p):
+	'''SelfType : id ColonType01 R_IMPLIES1
+			| R_THIS COLON Type R_IMPLIES1'''
+
 
 
 
