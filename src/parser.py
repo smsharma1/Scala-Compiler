@@ -28,18 +28,6 @@ class Node:
 		for ch in self.children:
 			graph.add_edge(pydot.Edge(self.name, ch))
 
-def p_QualId(p):
-	'''QualId : ID 
-		| ID DOT QualId'''
-	print "p[0] : ",p[0]
-	if(len(p) == 2):
-		p[0] = Node("QualId" , [], [p[1]] ).name
-		print "in if"
-	else:
-		print p[3]
-		p[0] = Node("QualId", [p[3]], [p[2], p[1]]).name
-		print "in else"
-
 def p_CompilationUnit(p):
 	'''CompilationUnit : TopStatSeq 
 	|	R_PACKAGE QualId semi CompilationUnit ''' 
@@ -54,7 +42,7 @@ def p_PackageObject(p):
 
 def p_Packaging(p):
 	'''Packaging : R_PACKAGE QualId 
-	| R_PACKAGE QualId n1 
+	| R_PACKAGE QualId nl
 	| Packaging TopStatSeq '''
 	if len(p)==4:
 		p[0] = Node("Packaging", [p[2],p[3]],[p[1]]).name
@@ -67,7 +55,7 @@ def p_TopStat(p):
 	'''TopStat : Import 
 				| Packaging
 				| PackageObject
-			    | TopStat1 TopStat2 TmplDef
+				| TopStat1 Modifier0more TmplDef
 				| empty '''
 	if len(p)==4:
 		p[0] = Node("TopStat", [p[2],p[3],p[4]],[]).name
@@ -145,7 +133,7 @@ def p_ConstrExpr(p):
 		p[0] = Node("ConstrExpr", [p[1]],[]).name
 
 def p_EarlyDef(p):
-	'EarlyDef : TopStat1 TopStat2 PatVarDef'
+	'EarlyDef : TopStat1 Modifier0more PatVarDef'
 	p[0] = Node("EarlyDef", [p[1], p[2], p[3]],[]).name
 
 def p_EarlyDefs(p):
@@ -255,11 +243,11 @@ def p_ClassTemplateOpt(p):
 		p[0] = Node("ClassTemplateOpt", [p[1]],[]).name
 
 def p_ObjectDef(p):
-	'ObjectDef : ID ClassTemplateOpt'
+	'ObjectDef : id ClassTemplateOpt'
 	p[0] = Node("ObjectDef", [p[2]], [p[1]]).name
 
 def p_TraitDef(p):
-	'TraitDef : ID TypeParamClause01 TraitTemplateOpt'
+	'TraitDef : id TypeParamClause01 TraitTemplateOpt'
 	p[0] = Node("TraitDef", [p[2], p[3]], [p[1]]).name
 
 def p_TypeParamClause01(p):
@@ -268,7 +256,7 @@ def p_TypeParamClause01(p):
 	p[0] = Node("TypeParamClause01", [p[1]], []).name
 
 def p_ClassDef(p):
-	'ClassDef : ID TypeParamClause01 ConstrAnnotation01 AccessModifier01 ClassParamClauses ClassTemplateOpt'
+	'ClassDef : id TypeParamClause01 ConstrAnnotation01 AccessModifier01 ClassParamClauses ClassTemplateOpt'
 	p[0] = Node("ClassDef", [p[2], p[3], p[4], p[5], p[5]], [p[1]]).name
 
 def p_AccessModifier01(p):
@@ -301,7 +289,7 @@ def p_Case01(p):
 		p[0] = Node("Case01", [p[1]], []).name
 
 def p_TypeDef(p):
-	'TypeDef : ID TypeParamClause01 EQUALASS Type'
+	'TypeDef : id TypeParamClause01 EQUALASS Type'
 	p[0] = Node("TypeDef", [p[2], p[4]], [p[1], p[3]]).name
 
 
@@ -358,7 +346,7 @@ def  p_CommaPattern20more(p):
 		p[0] = Node("CommaPatter20more", [p[1]], []).name
 
 def p_Def(p):
-	'''Def : ParVarDef
+	'''Def : PatVarDef
 		| R_DEF FunDef
 		| R_TYPE nl0more TypeDef
 		| TmplDef'''
@@ -366,7 +354,7 @@ def p_Def(p):
 		p[0] = Node("Def", [p[2],p[3]],[p[1]]).name
 	elif len(p)==3:
 		p[0] = Node("Def", [p[2]], [p[1]]).name
-	elif "ParVarDef" in p[1]:
+	elif "PatVarDef" in p[1]:
 		p[0] = Node("Def", [p[1]], []).name
 	else:
 		p[0] = Node("Def", [p[1]],[]).name
@@ -802,12 +790,12 @@ def p_FunTypeParamClause(p):
 	p[0] = Node("FunTypeParamClause", [p[2], p[3]],[p[1], p[4]]).name
 
 def p_CommaTypeParam0more(p):
-	'''CommaParam0more : empty
+	'''CommaTypeParam0more : empty
 					| CommaTypeParam0more COMMA TypeParam'''
 	if len(p)==4:
-		p[0] = Node("CommaParam0more", [p[1], p[3]],[p[2]]).name
+		p[0] = Node("CommaTypeParam0more", [p[1], p[3]],[p[2]]).name
 	else:
-		p[0] = Node("CommaParam0more", [p[1]],[]).name
+		p[0] = Node("CommaTypeParam0more", [p[1]],[]).name
 
 def p_TypeParamClause(p):
 	'TypeParamClause : LSQRB VariantTypeParam CommaVariantTypeParam0more RSQRB'
@@ -841,16 +829,16 @@ def p_SimplePattern(p):
 					| StableId
 					| StableId LPARAN Patterns01 RPARAN
 					| StableId LPARAN PatternsComma01 varidUnderscore01 UNDERSCORE MULTIPLICATION RPARAN
-					| LPARAN Patterns01 RPARAN
-					| XmlPattern'''
+					| LPARAN Patterns01 RPARAN'''
+					# | XmlPattern'''
 	if len(p)==8:
 		p[0] = Node("SimplePattern", [p[1], p[3], p[4]],[p[2], p[5], p[6], p[7]]).name
 	elif len(p)==5:
 		p[0] = Node("SimplePattern", [p[1], p[3]],[p[2], p[4]]).name
 	elif len(p)==4:
 		p[0] = Node("SimplePattern", [p[2]],[p[1], p[3]]).name
-	elif "XmlPattern" in p[1]:
-		p[0] = Node("SimplePattern", [p[1]],[]).name
+	# elif "XmlPattern" in p[1]:
+	# 	p[0] = Node("SimplePattern", [p[1]],[]).name
 	elif "StableID" in p[1]:
 		p[0] = Node("SimplePattern", [p[1]],[]).name
 	elif "Literal" in p[1]:
@@ -910,7 +898,7 @@ def p_Pattern2(p):
 
 def p_AttheratePattern301(p):
 	'''AttheratePattern301 : empty
-				| ATTHERATE Pattern3''' 
+				| R_ATTHERATE Pattern3''' 
 	if len(p)==3:
 		p[0] = Node("AttheratePattern301", [p[2]],[p[1]]).name
 	else:
@@ -1111,8 +1099,8 @@ def p_SimpleExpr1(p):
 				| LPARAN  RPARAN
 				| SimpleExpr DOT id
 				| SimpleExpr TypeArgs
-				| SimpleExpr1 ArgumentExprs
-				| XmlExpr'''
+				| SimpleExpr1 ArgumentExprs'''
+				# | XmlExpr'''
 	if "Literal" in p[1]:
 		p[0] = Node("SimpleExpr1", [p[1]],[]).name
 	elif "Path" in p[1]:
@@ -1125,8 +1113,8 @@ def p_SimpleExpr1(p):
 		p[0] = Node("SimpleExpr1", [p[1], p[2]],[]).name
 	elif "ArgumentExprs" in p[1]:
 		p[0] = Node("SimpleExpr1", [p[1], p[2]],[]).name
-	elif "XmlExpr" in p[1]:
-		p[0] = Node("SimpleExpr1", [p[1]],[]).name
+	# elif "XmlExpr" in p[1]:
+	# 	p[0] = Node("SimpleExpr1", [p[1]],[]).name
 	elif len(p)==2:
 		p[0] = Node("SimpleExpr1", [p[1], p[2]],[]).name
 	else:
@@ -1204,37 +1192,37 @@ def p_Expr1(p):
 		  | id EQUALASS Expr
 		  | SimpleExpr1 ArgumentExprs EQUALASS Expr
 		  | PostfixExpr
-          | PostfixExpr Ascription
-          | PostfixExpr R_MATCH OPENBLOCK CaseClauses CLOSEBLOCK'''
-	if 'R_IF' in p[1] and len(p) == 7:
+		  | PostfixExpr Ascription
+		  | PostfixExpr R_MATCH BLOCKOPEN CaseClauses BLOCKCLOSE'''
+	if 'if' in p[1] and len(p) == 7:
 		p[0] = Node('Expr1',[p[3],p[5],p[6]],[p[1],p[2],p[4]]).name
-	elif 'R_IF' in p[1] and len(p) == 10:
+	elif 'if' in p[1] and len(p) == 10:
 		p[0] = Node('Expr1',[p[3],p[5],p[6],p[7],p[9]],[p[1],p[2],p[4],p[8]]).name
-	elif 'R_WHILE' in p[1]:
+	elif 'while' in p[1]:
 		p[0] = Node('Expr1',[p[3],p[5],p[6]],[p[1],p[2],p[4]]).name
-	elif 'R_TRY' in p[1] and len(p) == 5:
+	elif 'try' in p[1] and len(p) == 5:
 		p[0] = Node('Expr1',[p[3]],[p[1],p[2],p[4]]).name
-	elif 'R_TRY' in p[1] and len(p) == 9:
+	elif 'try' in p[1] and len(p) == 9:
 		p[0] = Node('Expr1',[p[3],p[7]],[p[1],p[2],p[4],p[5],p[6],p[8]]).name
-	elif 'R_TRY' in p[1] and len(p) == 7:
+	elif 'try' in p[1] and len(p) == 7:
 		p[0] = Node('Expr1',[p[3],p[6]],[p[1],p[2],p[4],p[5]]).name
-	elif 'R_TRY' in p[1]:
+	elif 'try' in p[1]:
 		p[0] = Node('Expr1',[p[3],p[7],p[10]],[p[1],p[2],p[4],p[5],p[6],p[8],p[9]]).name
-	elif 'R_DO' in p[1]:
+	elif 'do' in p[1]:
 		p[0] = Node('Expr1',[p[2],p[3],p[6]],[p[1],p[4],p[5],p[7]]).name
-	elif 'R_FOR' in p[1] and len(p) == 8 and 'LPARAN' in p[2]:
+	elif 'for' in p[1] and len(p) == 8 and 'LPARAN' in p[2]:
 		p[0] = Node('Expr1',[p[3],p[5],p[7]],[p[1],p[2],p[4],p[6]]).name
-	elif 'R_FOR' in p[1] and len(p) == 8 and 'BLOCKOPEN' in p[2]:
+	elif 'for' in p[1] and len(p) == 8 and 'BLOCKOPEN' in p[2]:
 		p[0] = Node('Expr1',[p[3],p[5],p[7]],[p[1],p[2],p[4],p[6]]).name
-	elif 'R_FOR' in p[1] and len(p) == 7 and 'LPARAN' in p[2]:
-		p[0] = Node('Expr1',[p[3],p[5],p[6]],[p[1],p[2],p[4]).name
-	elif 'R_FOR' in p[1] and len(p) == 7 and 'BLOCKOPEN' in p[2]:
-		p[0] = Node('Expr1',[p[3],p[5],p[6]],[p[1],p[2],p[4]).name
-	elif 'R_THROW' in p[1]:
+	elif 'for' in p[1] and len(p) == 7 and 'LPARAN' in p[2]:
+		p[0] = Node('Expr1',[p[3],p[5],p[6]],[p[1],p[2],p[4]]).name
+	elif 'for' in p[1] and len(p) == 7 and 'BLOCKOPEN' in p[2]:
+		p[0] = Node('Expr1',[p[3],p[5],p[6]],[p[1],p[2],p[4]]).name
+	elif 'throw' in p[1]:
 		p[0] = Node('Expr1',[p[2]],[p[1]]).name
-	elif 'R_RETURN' in p[1] and len(p) == 2:
+	elif 'return' in p[1] and len(p) == 2:
 		p[0] = Node('Expr1',[],[p[1]]).name
-	elif 'R_RETURN' in p[1] :
+	elif 'return' in p[1] :
 		p[0] = Node('Expr1',[p[2]],[p[1]]).name
 	elif 'SimpleExpr' in p[1] and len(p)==6:
 		p[0] = Node('Expr1',[p[1],p[3],p[5]],[p[2],p[4]]).name
@@ -1242,9 +1230,9 @@ def p_Expr1(p):
 		p[0] = Node('Expr1',[p[1],p[2],p[4]],[p[3]]).name
 	elif 'id' in p[1]:
 		p[0] = Node('Expr1',[p[1],p[3]],[p[2]]).name
-    elif 'PostfixExpr' in p[1] and len(p)==2:
+	elif 'PostfixExpr' in p[1] and len(p)==2:
 		p[0] = Node('Expr1',[p[1]],[]).name
-    elif 'PostfixExpr' in p[1] and len(p)==3:
+	elif 'PostfixExpr' in p[1] and len(p)==3:
 		p[0] = Node('Expr1',[p[1],p[2]],[]).name
 	elif 'PostfixExpr' in p[1] and len(p)==6:
 		p[0] = Node('Expr1',[p[1],p[4]],[p[2],p[3],p[5]]).name
@@ -1272,7 +1260,7 @@ def p_Ascription(p):
 				| COLON UNDERSCORE MULTIPLICATION'''
 	if len(p) == 3:
 		p[0] = Node('Ascription',[p[2]],[p[1]]).name
-	elif 'MULTIPLICATION' in p[3]:
+	elif '*' in p[3]:
 		p[0] = Node('Ascription',[p[2]],[p[1],p[3]]).name
 	else :
 		p[0] = Node('Ascription',[p[2],p[3]],[p[1]]).name
@@ -1321,15 +1309,15 @@ def p_SimpleType(p):
 	'''SimpleType : SimpleType TypeArgs
 		   		  | SimpleType R_HASH id
 		   		  | StableId
-		          | Path DOT R_TYPE
-		          | LPARAN Types RPARAN'''
+				  | Path DOT R_TYPE
+				  | LPARAN Types RPARAN'''
 	if len(p) == 2:
 		p[0] = Node('SimpleType',[p[1]],[]).name
 	elif len(p) == 3:
 		p[0] = Node('SimpleType',[p[1],p[2]],[]).name
 	elif 'id' in p[3]:
 		p[0] = Node('SimpleType',[p[1],p[3]],[p[2]]).name
-	elif 'DOT' in p[2]:
+	elif '.' in p[2]:
 		p[0] = Node('SimpleType',[p[1],p[3]],[p[2]]).name
 	else:
 		p[0] = Node('SimpleType',[p[2]],[p[1],p[3]]).name
@@ -1340,8 +1328,8 @@ def p_AnnotType(p):
 
 
 def p_CompoundType(p):
-	'''CompoundType : AnnotType withAnnotType0more 
-				| AnnotType withAnnotType0more Refinement
+	'''CompoundType : AnnotType WithAnnotType0more 
+				| AnnotType WithAnnotType0more Refinement
 				| Refinement'''
 	if len(p) ==2:
 		p[0] = Node('CompoundType',[p[1]],[]).name	
@@ -1361,18 +1349,18 @@ def p_idnl01CompoundType0more(p):
 		p[0] = Node('idnl01CompoundType0more',[p[1]],[]).name
 	else:
 		p[0] = Node('idnl01CompoundType0more',[p[1],p[2],p[3],p[4]],[]).name
-    
+	
 
 def p_ExistentialDcl(p):
 	'''ExistentialDcl : R_TYPE TypeDcl
 					| R_VAL ValDcl'''
-	if 'R_TYPE' in p[1]:
+	if 'type' in p[1]:
 		p[0] = Node('ExistentialDcl',[p[2]],[p[1]]).name
 	else:
 		p[0] = Node('ExistentialDcl',[p[2]],[p[1]]).name
 
 def p_ExistentialClause(p):
-	'ExistentialClause : R_FORSOME OPENBLOCK ExistentialDcl semiExistentialDcl0more CLOSEBLOCK'
+	'ExistentialClause : R_FORSOME BLOCKOPEN ExistentialDcl semiExistentialDcl0more BLOCKCLOSE'
 	p[0] = Node('ExistentialClause',[p[3],p[4]],[p[1],p[2],p[5]]).name
 
 def p_semiExistentialDcl0more(p):
@@ -1440,12 +1428,12 @@ def p_Path(p):
 	'''Path : StableId
 		| id DOT R_THIS
 		|  R_THIS'''
-		if 'StableId' in p[1]:
-			p[0] = Node('Path',[p[1]],[]).name
-		elif 'R_THIS' in p[1]:
-			p[0] = Node('Path',[],[p[1]]).name
-		else:
-			p[0] = Node('Path',[p[1]],[p[2],p[3]]).name
+	if 'StableId' in p[1]:
+		p[0] = Node('Path',[p[1]],[]).name
+	elif 'this' in p[1]:
+		p[0] = Node('Path',[],[p[1]]).name
+	else:
+		p[0] = Node('Path',[p[1]],[p[2],p[3]]).name
 
 def p_ids(p):
 	'ids : id commaid0more'
@@ -1471,17 +1459,39 @@ def p_Dotid0more(p):
 	else:
 		p[0] = Node('Dotid0more',[p[1]],[]).name
 
-def p_literals(p):
-	'''literals : INT 
+def p_Literal(p):
+	'''Literal : INT 
 		| FLOAT 
 		| STRING 
 		| CHAR
 		| R_NULL'''
-	p[0] = Node('literals',[],[p[1]]).name
+	print("Inliteral")
+	p[0] = Node('Literal',[],[p[1]]).name
+
+def p_semi(p):
+	'''semi : SEMICOLON
+			| nl nl0more'''
+	if len(p) == 2:
+		p[0] = Node('semi',[p[1],p[2]],[]).name
+	else:
+		p[0] = Node('semi',[],[p[1]]).name
+def p_nl(p):
+	'nl : LINEFEED'
+	p[0] = Node('nl',[],[p[1]]).name
+
+def p_id(p):
+	'id : ID'
+	print("hello")
+	p[0] = Node('id',[],[p[1]]).name
+
+def p_varid(p):
+	'varid : ID'
+	print("hello1")
+	p[0] = Node('varid',[],[p[1]]).name
 
 def p_empty(p):
-    'empty :'
-    pass
+	'empty :'
+	pass
 parser = yacc.yacc()
 
 while True:
