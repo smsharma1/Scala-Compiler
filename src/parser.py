@@ -2,7 +2,6 @@
 
 import ply.yacc as yacc
 import pydot
-# import graphviz as gv
 # Get the token map from the lexer.  This is required.
 from lexer import tokens
 graph = pydot.Dot(graph_type='digraph')
@@ -28,6 +27,170 @@ class Node:
 			graph.add_edge(pydot.Edge(self.name, ch))
 		self.leaf = leaf
 		print leaf, " leaf"
+
+def p_CompilationUnit(p):
+	'''CompilationUnit : TopStatSeq 
+	|	R_PACKAGE QualId semi CompilationUnit ''' 
+
+def p_PackageObject(p):
+	'PackageObject : R_PACKAGE R_OBJECT ObjectDef'
+
+def p_Packaging(p):
+	'''Packaging : R_PACKAGE QualId 
+	| R_PACKAGE QualId n1 
+	| Packaging TopStatSeq '''
+
+def p_TopStat(p):
+	'''TopStat : Import 
+				| Packaging
+				| PackageObject
+			    | TopStat1 TopStat2 TmplDef '''
+
+def p_TopStat1(p):
+	'''TopStat1 : empty
+				| Anotation 
+				| Annotation nl
+				| TopStat1 Annotation 
+				| TopStat1 Annotation nl'''
+def p_TopStat2(p):
+	'''TopStat2 : empty 
+				| Modifier
+				| TopStat2 Modifier'''
+
+#look for semi
+def p_TopStatSeq(p):
+	'''TopStatSeq : semi TopStat 
+				  | TopStat TopStatSeq'''
+
+def p_SelfInvocation(p):
+	'''SelfInvocation : R_THIS ArgumentExprs
+					  | SelfInvocation ArgumentExprs'''
+
+def p_ConstrBlock(p):
+	'ConstrBlock : BLOCKOPEN SelfInvocation ConstrBlock1 BLOCKCLOSE '
+
+def p_ConstrBlock1(p):
+	'''ConstrBlock1 : empty 
+					| semi BlockStat'''
+
+def p_ConstrExpr(p):
+	'''ConstrExpr : SelfInvocation 
+				  | ConstrBlock'''
+
+def p_EarlyDef(p):
+	'EarlyDef : TopStat1 TopStat2 PatVarDef'
+
+def p_EarlyDefs(p):
+	'EarlyDefs : BLOCKOPEN EarlyDefs1 BLOCKCLOSE R_WITH'
+
+def p_EarlyDefs1(p):
+	'''EarlyDefs1 : empty 
+				  | EarlyDef EarlyDefs2'''
+		
+def p_EarlyDefs2(p):
+	'''EarlyDefs2 : empty 
+				  | semi EarlyDef EarlyDefs2''' 
+
+def p_Constr(p):
+	'''Constr : AnnotType 
+			  | AnnotType ArgumentExprs0more'''
+	
+def p_ArgumentExprs0more(p):
+	'''ArgumentExprs0more : empty 
+					   | ArgumentExprs0more ArgumentExprs'''
+	
+def p_TraitParents(p):
+	'''TraitParents : AnnotType 
+					| WithAnnotType0more'''
+
+def p_WithAnnotType0more(p):
+	'''WithAnnotType0more : empty
+							| WithAnnotType0more R_WITH AnnotType'''
+
+def p_ClassParents(p):
+	'ClassParents : Constr WithAnnotType0more'
+
+def p_TraitTemplate(p):
+	'TraitTemplate : EarlyDefs01 TraitParents TemplateBody01'
+
+def p_EarlyDefs01(p):
+	'''EarlyDefs01 : empty 
+					| EarlyDefs'''
+
+def p_TemplateBody01(p):
+	'''TemplateBody01 : empty 
+						| TemplateBody'''
+
+def p_ClassTemplate(p):
+	'ClassTemplate : EarlyDefs01 ClassParents TemplateBody01'
+
+def p_TraitTemplateOpt(p):
+	'''TraitTemplateOpt : R_EXTENDS TraitTemplate
+					 | Extends01TemplateBody01'''
+
+def  p_Extends01TemplateBody01(p):
+	'''Extends01TemplateBody01 : empty 
+								| Extends01 TemplateBody'''
+
+def p_Extends01(p):
+	'''Extends01 : empty 
+			  | Extends01 R_EXTENDS'''
+
+def p_ClassTemplateOpt(p):
+	''' ClassTemplateOpt : R_EXTENDS ClassTemplate
+							| Extends01TemplateBody01'''
+
+def p_ObjectDef(p):
+	'ObjectDef : ID ClassTemplateOpt'
+
+def p_TraitDef(p):
+	'TraitDef : ID TypeParamClause01 TraitTemplateOpt'
+
+def p_TypeParamClause01(p):
+	'''TypeParamClause01 : empty
+					| TypeParamClause'''
+
+def p_ClassDef(p):
+	'ClassDef : ID TypeParamClause01 ConstrAnnotation01 AccessModifier01 ClassParamClauses ClassTemplateOpt'
+
+def p_AccessModifier01(p):
+	'''AccessModifier01 : empty 
+						|  AccessModifier'''
+
+def p_ConstrAnnotation01(p):
+	'''ConstrAnnotation01 : empty
+							| ConstrAnnotation'''
+
+def p_TmplDef(p):
+	'''TmplDef : Case01 R_CLASS ClassDef
+			| Case01 R_OBJECT ObjectDef
+			| R_TRAIT TraitDef'''
+
+def p_Case01(p):
+	'''Case01 : empty 
+				| R_CASE'''
+
+def p_TypeDef(p):
+	'TypeDef : ID TypeParamClause01 EQUALASS Type'
+
+FunDef ::= FunSig [‘:’ Type] ‘=’ Expr
+| FunSig [nl] ‘{’ Block ‘}’
+| ‘this’ ParamClause ParamClauses
+(‘=’ ConstrExpr | [nl] ConstrBlock)
+
+def p_FunDef(p):
+	'''FunDef : FunSig ColonType01 EQUALASS Expr
+			| FunSig nl01 BLOCKOPEN Block BLOCKCLOSE
+			| R_THIS ParamClause ParamClauses EQUALASS ConstrExpr
+			| R_THIS ParamClause ParamClauses nl01 ConstrBlock'''
+
+
+def p_Ids(p):
+        "Ids : ID "
+        if(len(p) == 2):
+                p[0] = Node("Ids", None, [p[1]] )
+        else:
+                p[0] = Node("Ids", [p[3]], [p[1],p[2]])
 
 
 def p_QualId(p):
@@ -130,6 +293,9 @@ def p_Ids(p):
 # 	print("Syntax error in input!")
 
 
+def p_empty(p):
+    'empty :'
+    pass
 parser = yacc.yacc()
 
 while True:
