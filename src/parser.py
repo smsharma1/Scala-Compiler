@@ -746,45 +746,80 @@ def p_Params01(p):
 
 def p_ParamClauses(p):
 	'ParamClauses : ParamClause0more Temp02'
+	p[0] = Node("ParamsClauses", [p[1], p[2]],[]).name
 
 def p_ParamClause0more(p):
 	'''ParamClause0more : empty
 					| ParamClause0more ParamClause'''
+	if "ParamClause0more" in p[1]:
+		p[0] = Node("ParamClause0more", [p[1], p[2]],[]).name
+	else:
+		p[0] = Node("ParamClause0more", [p[1]],[]).name
 
 def p_Temp02(p):
 	'''Temp02 : nl01 LPARAN R_IMPLICIT Params RPARAN
 			| empty'''
+if "Params" in p[4]:
+		p[0] = Node("Temp02", [p[1], p[4]],[p[2], p[3], p[5]]).name
+	else:
+		p[0] = Node("Temp02", [p[1]],[]).name
 
 def p_TypeParam(p): 
 	'''TypeParam : id  TypeParamClause01  Obscure2Type01 ObscureType01 ObscureType0more ColonType0more	
 				| UNDERSCORE TypeParamClause01  Obscure2Type01 ObscureType01 ObscureType0more ColonType0more'''
+	if "id" in p[1]:
+		p[0] = Node("TypeParam", [p[1], p[2], p[3], p[4], p[5], p[6]],[]).name
+	else:
+		p[0] = Node("TypeParam", [p[2], p[3], p[4], p[5], p[6]],[p[1]]).name
 
 def p_ObscureType0more(p):
 	'''ObscureType0more : empty
 						| ObscureType0more R_OBSCURE Type'''
+	if "Type" in p[3]:
+		p[0] = Node("ObscureType0more", [p[1], p[3]],[p[2]]).name
+	else:
+		p[0] = Node("ObscureType0more", [p[1]],[]).name
 
 def p_ColonType0more(p):
 	'''ColonType0more : empty
 					| ColonType0more COLON Type'''
+	if "Type" in p[3]:
+		p[0] = Node("ColonType0more", [p[1], p[3]],[p[2]]).name
+	else:
+		p[0] = Node("ColonType0more", [p[1]],[]).name
 
 def p_VariantTypeParam(p):
 	'''VariantTypeParam : Annotation0more TypeParam
 					| Annotation0more PLUS TypeParam
 					| Annotation0more MINUS TypeParam'''
+	if len(p)==4:
+		p[0] = Node("VariantTypeParam", [p[1], p[3]],[p[2]]).name
+	else:
+		p[0] = Node("VariantTypeParam", [p[1], p[2]],[]).name
 
 def p_FunTypeParamClause(p):
 	'FunTypeParamClause : LSQRB TypeParam CommaTypeParam0more RSQRB'
+	p[0] = Node("FunTypeParamClause", [p[2], p[3]],[p[1], p[4]]).name
 
 def p_CommaTypeParam0more(p):
 	'''CommaParam0more : empty
 					| CommaTypeParam0more COMMA TypeParam'''
+	if len(p)==4:
+		p[0] = Node("CommaParam0more", [p[1], p[3]],[p[2]]).name
+	else:
+		p[0] = Node("CommaParam0more", [p[1]],[]).name
 
 def p_TypeParamClause(p):
 	'TypeParamClause : LSQRB VariantTypeParam CommaVariantTypeParam0more RSQRB'
+	p[0] = Node("TypeParamClause", [p[2], p[3]],[p[1], p[4]]).name
 
 def p_CommaVariantTypeParam0more(p):
 	'''CommaVariantTypeParam0more : empty
 							| CommaVariantTypeParam0more COMMA VariantTypeParam''' 
+	if len(p)==4:
+		p[0] = Node("CommaVariantParam0more", [p[1], p[3]],[p[2]]).name
+	else:
+		p[0] = Node("CommaVariantParam0more", [p[1]],[]).name
 
 #look reference there is ambiguity 
 def p_Patterns(p):
@@ -793,95 +828,188 @@ def p_Patterns(p):
 def p_CommaPatterns01(p):
 	'''CommaPatterns01 : empty
 					| COMMA Patterns'''
-
+	if len(p)==3:
+		p[0] = Node("CommaPatterns01", [p[2]],[p[1]]).name
+	else:
+		p[0] = Node("CommaPatterns01", [p[1]],[]).name
 #look reference
 
 def p_SimplePattern(p):
 	'''SimplePattern : UNDERSCORE
 					| varid
 					| Literal
-					| StableID
+					| StableId
 					| StableId LPARAN Patterns01 RPARAN
 					| StableId LPARAN PatternsComma01 varidUnderscore01 UNDERSCORE MULTIPLICATION RPARAN
 					| LPARAN Patterns01 RPARAN
 					| XmlPattern'''
+	if len(p)==8:
+		p[0] = Node("SimplePattern", [p[1], p[3], p[4]],[p[2], p[5], p[6], p[7]]).name
+	elif len(p)==5:
+		p[0] = Node("SimplePattern", [p[1], p[3]],[p[2], p[4]]).name
+	elif len(p)==4:
+		p[0] = Node("SimplePattern", [p[2]],[p[1], p[3]]).name
+	elif "XmlPattern" in p[1]:
+		p[0] = Node("SimplePattern", [p[1]],[]).name
+	elif "StableID" in p[1]:
+		p[0] = Node("SimplePattern", [p[1]],[]).name
+	elif "Literal" in p[1]:
+		p[0] = Node("SimplePattern", [p[1]],[]).name
+	elif "varid" in p[1]:
+		p[0] = Node("SimplePattern", [p[1]],[]).name
+	else:
+		p[0] = Node("SimplePattern", [p[1]],[]).name
+
 def p_Patterns01(p):
 	'''Patterns01 : empty
 				| Patterns'''
+	if "Patterns" in p[1]:
+		p[0] = Node("Patterns01", [p[1]],[p[1]]).name
+	else:
+		p[0] = Node("Patterns01", [p[1]],[]).name
 
 def p_PatternsComma01(p):
 	'''PatternsComma01 : empty
 				| Patterns COMMA'''
+	if len(p)==3:
+		p[0] = Node("PatternsComma01", [p[1]],[p[2]]).name
+	else:
+		p[0] = Node("PatternsComma01", [p[1]],[]).name
 
 def p_varidUnderscore01(p):
 	'''varidUnderscore01 : empty
 				| varid  UNDERSCORE'''
+	if len(p)==3:
+		p[0] = Node("varidUnderscore01", [p[1]],[p[2]]).name
+	else:
+		p[0] = Node("varidUnderscore01", [p[1]],[]).name
 
 def p_Pattern3(p):
 	'''Pattern3 : SimplePattern
 			| SimplePattern idnl01SimplePattern0more'''
+	if len(p)==3:
+		p[0] = Node("Pattern3", [p[1], p[2]],[]).name
+	else:
+		p[0] = Node("Pattern3", [p[1]],[]).name
 
 def p_idnl01SimplePattern0more(p):
 	'''idnl01SimplePattern0more : empty
 				| idnl01SimplePattern0more id nl01 SimplePattern'''
+	if len(p)==5:
+		p[0] = Node("idnl01SimplePattern0more", [p[1], p[2], p[3], p[4]],[]).name
+	else:
+		p[0] = Node("idnl01SimplePattern0more", [p[1]],[]).name
 
 def p_Pattern2(p):
 	'''Pattern2 : varid AttheratePattern301
 		| Pattern3'''
+	if len(p)==3:
+		p[0] = Node("Pattern2", [p[1], p[2]],[]).name
+	else:
+		p[0] = Node("Pattern2", [p[1]],[]).name
 
 def p_AttheratePattern301(p):
 	'''AttheratePattern301 : empty
 				| ATTHERATE Pattern3''' 
+	if len(p)==3:
+		p[0] = Node("AttheratePattern301", [p[2]],[p[1]]).name
+	else:
+		p[0] = Node("AttheratePattern301", [p[1]],[]).name
 
 def p_Pattern1(p):
 	'''Pattern1 : varid COLON TypePat
 				| UNDERSCORE COLON TypePat
 				| Pattern2'''
+	if "varid" in p[1]:
+		p[0] = Node("Pattern01", [p[1], p[3]],[p[2]]).name
+	elif "Pattern2" in p[1]:
+		p[0] = Node("Pattern01", [p[1]],[]).name
+	else:
+		p[0] = Node("Pattern01", [p[3]],[p[1],p[2]]).name
 
 def p_Pattern(p):
 	'Pattern : Pattern1  BitorPattern10more'
+	p[0] = Node("Pattern", [p[1], p[2]],[]).name
 
 def p_BitorPattern10more(p):
 	'''BitorPattern10more : BitorPattern10more BITOR Pattern1
 						| empty'''
+	if len(p)==4:
+		p[0] = Node("BitorPattern10more", [p[1], p[3]],[p[2]]).name
+	else:
+		p[0] = Node("BitorPattern10more", [p[1]],[]).name
 
 def p_Guard(p):
 	'Guard : R_IF PostfixExpr'
+	p[0] = Node("Guard", [p[2]],[p[1]]).name
 
 def p_CaseClause(p):
 	'CaseClause : R_CASE Pattern Guard01 R_IMPLIES1 Block'
+	p[0] = Node("CaseClause", [p[2], p[3], p[5]],[p[1], p[4]]).name
 
 def p_Guard01(p):
 	'''Guard01 : Guard
 			| empty'''
+	if "Guard" in p[1]:
+		p[0] = Node("Guard", [p[1]],[]).name
+	else:
+		p[0] = Node("Guard", [p[1]],[]).name
 
 def p_CaseClauses(p):
 	'CaseClauses : CaseClause CaseClause0more'
+	p[0] = Node("CaseClauses", [p[1], p[2]],[]).name
 
 def p_CaseClause0more(p):
 	'''CaseClause0more : empty
 					| CaseClause0more CaseClause'''
+	if "CaseClause0more" in p[1]:
+		p[0] = Node("CaseClause0more", [p[1]],[p[2]]).name
+	else:
+		p[0] = Node("CaseClause0more", [p[1]],[]).name
 
 def p_Generator(p):
 	'Generator : Pattern1 R_LEFTARROW1 Expr Guard01'
+	p[0] = Node("Generator", [p[1], p[3], p[4]],[p[2]]).name
 
 def p_Enumerator(p):
 	'''Enumerator : Generator
 				| Guard
 				| Pattern1 EQUALASS Expr''' 
+	if "Pattern1" in p[1]:
+		p[0] = Node("Enumerator", [p[1], p[3]],[p[2]]).name
+	elif "Guard" in p[1]:
+		p[0] = Node("Enumerator", [p[1]],[]).name
+	else:
+		p[0] = Node("Enumerator", [p[1]],[]).name
 
 def p_Enumerators(p):
 	'Enumerators ::= Generator semiEnumerator0more'
+	p[0] = Node("Enumerators", [p[1], p[2]],[]).name
 
 def p_semiEnumerator0more(p):
 	'''semiEnumerator0more : empty
 						| semiEnumerator0more semi Enumerator'''
+	if "semiEnumerator" in p[1]:
+		p[0] = Node("semiEnumerator0more", [p[1], p[2], p[3]],[]).name
+	else
+		p[0] = Node("semiEnumerator0more", [p[1]],[]).name
+
 def p_ResultExpr(p):
 	'''ResultExpr : Expr1
 				| Bindings R_IMPLIES1 Block
 				| UNDERSCORE COLON CompoundType R_IMPLIES1 Block
 				|  R_IMPLICIT id  COLON CompoundType R_IMPLIES1 Block
 				| id  COLON CompoundType R_IMPLIES1 Block'''
+	if "id" in p[1]:
+		p[0] = Node("ResultExpr", [p[1], p[3], p[5]],[p[2], p[4]]).name
+	elif "id" in p[2]:
+		p[0] = Node("ResultExpr", [p[2], p[4], p[6]],[p[1], p[3], p[5]]).name
+	elif "CompoundType" in p[3]:
+		p[0] = Node("ResultExpr", [p[3], p[5]],[p[1], p[2], p[4]]).name
+	elif "Bindings" in p[1]:
+		p[0] = Node("ResultExpr", [p[1], p[3]],[p[2]]).name
+	else:
+		p[0] = Node("ResultExpr", [p[1]],[]).name
 
 #check Import	
 def p_BlockStat(p):
@@ -892,36 +1020,77 @@ def p_BlockStat(p):
 				| Annotation0more LocalModifier0more TmplDef
 				| Expr1
 				| empty'''
+	if "LocalModifier0more" in p[2]:
+		p[0] = Node("BlockStat", [p[1], p[2], p[3]],[]).name
+	elif "lazy" in p[2]:
+		p[0] = Node("BlockStat", [p[1], p[3]],[p[2]]).name
+	elif "Implicit" in p[2]:
+		p[0] = Node("BlockStat", [p[1], p[3]],[p[2]]).name
+	elif len(p)==2:
+		p[0] = Node("BlockStat", [p[1], p[2]],[]).name
+	elif "Import" in p[1]:
+		p[0] = Node("BlockStat", [p[1]],[]).name
+	elif "Expr1" in p[1]:
+		p[0] = Node("BlockStat", [p[1]],[]).name
+	else:
+		p[0] = Node("BlockStat", [p[1]],[]).name
 
 def p_LocalModifier0more(p):
 	'''LocalModifier0more : empty
 						| LocalModifier0more LocalModifier'''
+	if len(p)==3:
+		p[0] = Node("LocalModifier0more", [p[1], p[2]],[]).name
+	else:
+		p[0] = Node("LocalModifier0more", [p[1]],[]).name
 
 def p_Block(p):
 	'Block : BlockStatsemi0more ResultExpr01'
+	p[0] = Node("Block", [p[1], p[2]],[]).name
 
 def p_ResultExpr01(p):
 	'''ResultExpr01 : empty	
 					| ResultExpr'''
+	if len(p)==3:
+		p[0] = Node("ResultExpr01", [p[1]],[]).name
+	else:
+		p[0] = Node("ResultExpr01", [p[1]],[]).name
 
 def p_BlockStatsemi0more(p):
 	'''BlockStatsemi0more : BlockStatsemi0more BlockStat semi
 							| empty'''
+	if len(p)==4:
+		p[0] = Node("BlockStatsemi0more", [p[1], p[2], p[3]],[]).name
+	else:
+		p[0] = Node("BlockStatsemi0more", [p[1]],[]).name
 
 def p_BlockExpr(p):
 	'''BlockExpr : BLOCKOPEN CaseClauses BLOCKCLOSE
 				| BLOCKOPEN Block BLOCKCLOSE'''
-
+	if "Block" in p[2]:
+		p[0] = Node("BlockExpr", [p[2]],[p[1], p[3]]).name
+	else:
+		p[0] = Node("BlockExpr", [p[2]],[p[1], p[3]]).name
 def p_ArgumentExprs(p):
 	'''ArgumentExprs : LPARAN Exprs RPARAN
 					| LPARAN RPARAN
 					| LPARAN ExprsComma01 PostfixExpr COLON UNDERSCORE MULTIPLICATION RPARAN
 					| nl01 BlockExpr'''
+	if "nl01" in p[1]:
+		p[0] = Node("ArgumentExprs", [p[1], p[2]],[]).name
+	elif "ExprsComma01" in p[2]:
+		p[0] = Node("ArgumentExprs", [p[2], p[3]],[p[1], p[4], p[5], p[6], p[7]]).name
+	elif "Exprs" in p[2]:
+		p[0] = Node("ArgumentExprs", [p[2]],[p[1],p[3]]).name
+	else:
+		p[0] = Node("ArgumentExprs", [], [p[1],p[2]])
 
 def p_ExprsComma01(p):
 	'''ExprsComma01 : empty
 					| Exprs COMMA'''
-
+	if "Exprs" in p[1]:
+		p[0] = Node("ExprsComma01", [p[1]],[p[2]]).name
+	else:
+		p[0] = Node("ExprsComma01", [p[1]]).name
 
 
 
