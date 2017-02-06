@@ -111,6 +111,51 @@ def p_ClassHeader(p):
 	elif "Super" in p[4]:
 		p[0] = Node("ClassHeader", [p[2]],[p[1], p[3]]).name
 
+#<class body declarations> ::= <class body declaration> | <class body declarations> <class body declaration>
+def p_ClassBodyDeclarations(p):
+	'''ClassBodyDeclarations : ClassBodyDeclaration
+							 | ClassBodyDeclarations ClassBodyDeclaration'''
+
+#<class body declaration> ::= <field declaration> | <method declaration>
+def p_ClassBodyDeclaration(p):
+	'''ClassBodyDeclaration : FieldDeclaration
+							| MethodDeclaration'''
+
+#<formal parameter list> ::= <formal parameter> | <formal parameter list> , <formal parameter>
+def p_FormalParameterList(p):
+	'''FormalParameterList : FormalParameter 
+							| FormalParameterList COMMA FormalParameter'''
+
+#<formal parameter> ::= <variable declarator id> : <type> 
+def p_FormalParameter(p):
+	'FormalParameter : VariableDeclaratorId COLON Type'
+
+#<class type> ::= <identifier> | with <identifier><class type>
+#confusion check later
+def p_ClassType(p):
+	'''ClassType : Identifier 
+				| R_WITH Identifier ClassType'''
+
+#<field declaration> ::=  val <variable declarator> ;
+def p_FieldDeclaration(p):
+	'FieldDeclaration : R_VAL VariableDeclarator SEMICOLON'
+
+#<variable declarator> ::= <identifier> | <identifier>: <type>   | <identifier> <variable_declarator_extra>  
+def p_VariableDeclarator(p):
+	'''VariableDeclarator : Identifier 
+						| Identifier COLON Type 
+						| Identifier VariableDeclaratorExtra'''
+
+#<variable_declarator_extra> ::= = <variable initializer> | :<type> = <variable initializer>
+def p_VariableDeclaratorExtra(p):
+	'''VariableDeclaratorExtra : EQUALASS VariableInitializer
+							| COLON Type EQUALASS VariableInitializer''' 
+
+#<variable initializer> ::= <expression> | <array initializer>
+def p_VariableInitializer(p):
+	'''VariableInitializer : Expression
+						| ArrayInitializer'''
+
 
 def p_PackageQualIdsemi0more(p):
 	'''PackageQualIdsemi0more : empty
