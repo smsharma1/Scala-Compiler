@@ -389,45 +389,77 @@ def p_PatVarDef(p):
 #check for id
 def p_TypeDcl(p):
 	'TypeDcl : id TypeParamClause01 Obscure2Type01 ObscureType01'
-	p[0] = Node("Vardef", [p[1], p[3]], [p[2], p[4], p[5]]).name
-	
+	p[0] = Node("TypeDcl", [p[1], p[2], p[3], p[4]], []).name
+
 
 def p_Obscure2Type01(p):
 	'''Obscure2Type01 : empty 
 					| R_OBSCURE2 Type'''
+	if "Type" in p[2]:
+		p[0] = Node("Obscure2Type01", [p[2]], [p[1]]).name
+	else:
+		p[0] = Node("Obscure2Type01", [p[1]], []).name
 
 def p_ObscureType01(p):
 	'''ObscureType01 : empty 
 					| R_OBSCURE Type'''
+	if "Type" in p[2]:
+		p[0] = Node("ObscureType01", [p[2]], [p[1]]).name
+	else:
+		p[0] = Node("ObscureType01", [p[1]], []).name
 
 def p_FunSig(p):
 	'FunSig : id FunTypeParamClause01 ParamClauses'
+	p[0] = Node("FunSig", [p[1], p[2], p[3]], []).name
 
 def p_FunTypeParamClause01(p):
 	''' FunTypeParamClause01 : empty 
 							| FunTypeParamClause'''
+	if "FunTypeParamClause" in p[2]:
+		p[0] = Node("FunTypeParamClause01", [p[1]], []).name
+	else:
+		p[0] = Node("FunTypeParamClause01", [p[1]], []).name
+
 def p_FunDcl(p):
 	'FunDcl : FunSig ColonType01'
+	p[0] = Node("FunDcl", [p[1], p[2]], []).name
 
 def p_VarDcl(p):
 	'VarDcl : ids COLON Type'
+	p[0] = Node("VarDcl", [p[1], p[3]], [p[2]]).name
 
 def p_ValDcl(p):
 	'ValDcl : ids COLON Type'
+	p[0] = Node("ValDcl", [p[1], p[3]], [p[2]]).name
 
 def p_Dcl(p):
 	'''Dcl : R_VAL ValDcl
 		| R_VAR VarDcl
 		| R_DEF FunDcl
 		| R_TYPE nl0more TypeDcl'''
+	if len(p)==4:
+		p[0] = Node("Dcl", [p[2],p[3]],[p[1]]).name
+	elif "FunDcl" in p[2]:
+		p[0] = Node("Dcl", [p[2]], [p[1]]).name
+	elif "VarDcl" in p[2]:
+		p[0] = Node("Dcl", [p[2]], [p[1]]).name
+	else
+		p[0] = Node("Dcl", [p[2]],[p[1]]).name
 
 def p_ImportSelector(p):
 	'ImportSelector : id ImpliesidorUnderscore01'
+	p[0] = Node("ImportSelector", [p[1], p[2]], []).name
 
 def p_ImpliesidorUnderscore01(p):
 	'''ImpliesidorUnderscore01 : empty 
 							 | 	R_IMPLIES1 id
 							| R_IMPLIES1 UNDERSCORE'''
+	if len(p)==4:
+		p[0] = Node("Dcl", [p[2],p[3]],[p[1]]).name
+	elif "FunDcl" in p[2]:
+		p[0] = Node("Dcl", [p[2]], [p[1]]).name
+	elif "VarDcl" in p[2]:
+		p[0] = Node("Dcl", [p[2]], [p[1]]).name
 
 def p_ImportSelectors(p):
 	'''ImportSelectors : BLOCKOPEN ImportselectorComma0more ImportSelector BLOCKCLOSE
