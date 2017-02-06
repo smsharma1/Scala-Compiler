@@ -67,13 +67,16 @@ def p_TopStat(p):
 	'''TopStat : Import 
 				| Packaging
 				| PackageObject
-			    | TopStat1 TopStat2 TmplDef '''
+			    | TopStat1 TopStat2 TmplDef
+				| empty '''
 	if len(p)==4:
 		p[0] = Node("TopStat", [p[2],p[3],p[4]],[]).name
 	elif "Import" in p[1]:
 		p[0] = Node("TopStat", [p[1]], []).name
 	elif "Packaging" in p[1]:
 		p[0] = Node("TopStat", [p[1]], []).name
+	elif "PackageObject" in p[1]:
+		p[0] = Node("TopStat", [p[1]],[]).name
 	else:
 		p[0] = Node("TopStat", [p[1]],[]).name
 	
@@ -94,16 +97,15 @@ def p_TopStat1(p):
 	else :
 		p[0] = Node("TopStat1", [p[1]],[]).name
 
-def p_TopStat2(p):
-	'''TopStat2 : empty 
-				| Modifier
-				| TopStat2 Modifier'''
+def p_Modifier0more(p):
+	'''Modifier0more : empty 
+				| Modifier0more Modifier'''
 	if len(p)==3:
-		p[0] = Node("TopStat2", [p[2],p[3]],[]).name
+		p[0] = Node("Modifier0more", [p[2],p[3]],[]).name
 	elif "Import" in p[1]:
-		p[0] = Node("TopStat2", [p[1]], []).name
+		p[0] = Node("Modifier0more", [p[1]], []).name
 	else:
-		p[0] = Node("TopStat2", [p[1]],[]).name
+		p[0] = Node("Modifier0more", [p[1]],[]).name
 
 #look for semi
 def p_TopStatSeq(p):
@@ -302,6 +304,7 @@ def p_TypeDef(p):
 	'TypeDef : ID TypeParamClause01 EQUALASS Type'
 	p[0] = Node("TypeDef", [p[2], p[4]], [p[1], p[3]]).name
 
+
 def p_FunDef(p):
 	'''FunDef : FunSig ColonType01 EQUALASS Expr
 			| FunSig nl01 BLOCKOPEN Block BLOCKCLOSE
@@ -315,6 +318,227 @@ def p_FunDef(p):
 		p[0] = Node("FunDef", [p[2], p[3], p[4], p[5]], [p[1]]).name
 	else:
 		p[0] = Node("FunDef", [p[2], p[3], p[5]], [p[1], p[4]]).name
+
+def p_ColonType01(p):
+	'''ColonType01 : empty 
+				| COLON Type'''
+
+#check for nl
+def p_nl01(p):
+	'''nl01 : empty 
+			| nl'''
+
+#check for ids 
+def p_VarDef(p):
+	'''VarDef : PatDef
+			| ids COLON Type EQUALASS UNDERSCORE'''
+
+def p_PatDef(p):
+	'PatDef : Pattern2 CommaPattern20more ColonType01 EQUALASS Expr'
+
+def  p_CommaPattern20more(p):
+	'''CommaPattern20more : empty
+						  | CommaPattern20more COMMA Pattern2'''
+def p_Def(p):
+	'''Def : ParVarDef
+		| R_DEF FunDef
+		| R_TYPE nl0more TypeDef
+		| TmplDef'''
+
+def p_nl0more(p):
+	'''nl0more : empty
+				| nl0more nl '''
+
+def p_PatVarDef(p):
+	'''PatVarDef : R_VAL PatDef
+				| R_VAR VarDef'''
+#check for id
+def p_TypeDcl(p):
+	'TypeDcl : id TypeParamClause01 Obscure2Type01 ObscureType01'
+
+def p_Obscure2Type01(p):
+	'''Obscure2Type01 : empty 
+					| R_OBSCURE2 Type'''
+
+def p_ObscureType01(p):
+	'''ObscureType01 : empty 
+					| R_OBSCURE Type'''
+
+def p_FunSig(p):
+	'FunSig : id FunTypeParamClause01 ParamClauses'
+
+def p_FunTypeParamClause01(p):
+	''' FunTypeParamClause01 : empty 
+							| FunTypeParamClause'''
+def p_FunDcl(p):
+	'FunDcl : FunSig ColonType01'
+
+def p_VarDcl(p):
+	'VarDcl : ids COLON Type'
+
+def p_ValDcl(p):
+	'ValDcl : ids COLON Type'
+
+def p_Dcl(p):
+	'''Dcl : R_VAL ValDcl
+		| R_VAR VarDcl
+		| R_DEF FunDcl
+		| R_TYPE nl0more TypeDcl'''
+
+def p_ImportSelector(p):
+	'ImportSelector : id ImpliesidorUnderscore01'
+
+def p_ImpliesidorUnderscore01(p):
+	'''ImpliesidorUnderscore01 : empty 
+							 | 	R_IMPLIES1 id
+							| R_IMPLIES1 UNDERSCORE'''
+
+def p_ImportSelectors(p):
+	'''ImportSelectors : BLOCKOPEN ImportselectorComma0more ImportSelector BLOCKCLOSE
+					| BLOCKOPEN ImportselectorComma0more UNDERSCORE BLOCKCLOSE '''
+
+def p_ImportselectorComma0more(p):
+	'''ImportselectorComma0more : empty
+							| ImportselectorComma0more ImportSelector COMMA'''
+def p_ImportExpr(p):
+	'''ImportExpr : StableId DOT id
+				| StableId DOT UNDERSCORE
+				| StableId DOT ImportSelectors'''
+
+def p_Import(p):
+	'Import : R_IMPORT ImportExpr CommaImportExpr0more'
+
+def p_CommaImportExpr0more(p):
+	'''CommaImportExpr0more : empty
+						| CommaImportExpr0more COMMA ImportExpr'''
+
+def p_SelfType(p):
+	'''SelfType : id ColonType01 R_IMPLIES1
+			| R_THIS COLON Type R_IMPLIES1'''
+
+def p_TemplateStat(p):
+	'''TemplateStat : TopStat1 Modifier0more Def
+				| TopStat1 Modifier0more Dcl
+				| Expr
+				| empty'''
+
+def p_TemplateBody(p):
+	'TemplateBody : nl01 BLOCKOPEN SelfType01 TemplateStat semiTemplateStat0more BLOCKCLOSE'
+ 
+def p_semiTemplateStat0more(p):
+	'''semiTemplateStat0more : empty
+							| semiTemplateStat0more semi TemplateStat'''
+def p_SelfType01(p):
+	'''SelfType01 : empty
+					| SelfType'''
+
+def p_NameValuePair(p):
+	'NameValuePair : R_VAL id EQUALASS PrefixExpr'
+
+def p_ConstrAnnotation(p):
+	'ConstrAnnotation : R_ATTHERATE SimpleType ArgumentExprs'
+
+def p_Annotation(p):
+	'Annotation : R_ATTHERATE SimpleType ArgumentExprs0more'
+
+def p_AccessQualifier(p):
+	'''AccessQualifier : LSQRB id RSQRB
+					| LSQRB R_THIS RSQRB'''
+
+def p_AccessModifier(p):
+	'''AccessModifier : R_PRIVATE AccessQualifier01
+					| R_PROTECTED AccessQualifier01'''
+
+def p_AccessQualifier01(p):
+	'''AccessQualifier01 : empty
+						| AccessQualifier'''
+
+def p_LocalModifier(p):
+	'''LocalModifier : R_ABSTRACT
+					| R_FINAL
+					| R_SEALED
+					| R_IMPLICIT
+					| R_LAZY'''
+
+def p_Modifier(p):
+	'''Modifier : LocalModifier
+			| AccessModifier
+			| R_OVERRIDE'''
+
+def p_Binding(p):
+	'''Binding : id ColonType01
+			| UNDERSCORE ColonType01''' 
+
+def p_Bindings(p):
+	'Bindings : LPARAN Binding CommaBinding0more RPARAN' 
+
+def p_CommaBinding0more(p):
+	'''CommaBinding0more : empty
+						| CommaBinding0more COMMA Binding''' 
+
+def p_ClassParam(p):
+	'ClassParam : Annotation0more Modifier0more valvar01 id  COLON ParamType EqualExpr01'
+
+def p_Annotation0more(p):
+	'''Annotation0more : empty
+					| Annotation0more Annotation'''
+
+def p_valvar01(p):
+	'''valvar01 : empty
+			| R_VAL
+			| R_VAR'''
+
+def p_EqualExpr01(p):
+	'''EqualExpr01 : empty
+				| EQUALASS Expr'''
+
+def p_ClassParams(p):
+	'ClassParams : ClassParam CommaClassParam0more'
+
+def p_CommaClassParam0more(p):
+	'''CommaClassParam0more : empty
+						| CommaClassParam0more COMMA ClassParam'''
+
+def p_ClassParamClause(p):
+	'ClassParamClause : nl01 LPARAN ClassParams01 RPARAN'
+
+def p_ClassParams01(p):
+	'''ClassParams01 : empty
+					| ClassParams '''
+
+def p_ClassParamClauses(p):
+	'ClassParamClauses : ClassParamClause0more Temp01'
+
+def p_Temp01(p):
+	'''Temp01 : nl01 LPARAN R_IMPLICIT ClassParams RPARAN
+			| empty'''
+
+def p_ParamType(p):
+	'''ParamType : Type
+				| R_IMPLIES1 Type
+				| Type MULASS'''
+
+def p_Param(p):
+	'Param : Annotation0more id ColonParamType01 EqualExpr01'
+
+def p_ColonParamType01(p):
+	'''ColonParamType01 : empty
+					| COLON ParamType'''
+
+def p_Params(p):
+	'Params : Param CommaParam0more'
+
+def p_CommaParam0more(p):
+	'''CommaParam0more : empty
+					| CommaParam0more COMMA Param'''
+
+def p_ParamClause(p):
+	'ParamClause : nl01 LPARAN Params01 RPARAN'
+
+def p_Params01(p):
+	'''Params01 : empty
+			| Params'''
+
 
 def p_Ids(p):
         "Ids : ID "

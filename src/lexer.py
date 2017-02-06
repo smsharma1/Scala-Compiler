@@ -127,6 +127,7 @@ tokens =list(reserved.values()) +  [
 	'COLON',
 	'COMMENT',
 	'COLOR',
+	'UNDERSCORE'
 ]
 
 def t_COMMENT(t):
@@ -206,7 +207,7 @@ t_SEMICOLON = r';'
 t_COLOR = r'\#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})'
 t_DOT = r'\.'
 t_COMMA = r'\,'
-
+t_UNDERSCORE = r'_'
 
 # Error handling rule
 def t_error(t):
