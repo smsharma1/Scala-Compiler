@@ -29,12 +29,16 @@ class Node:
 			graph.add_edge(pydot.Edge(self.name, ch))
 
 def p_CompilationUnit(p):
-	'''CompilationUnit : TopStatSeq 
-	|	R_PACKAGE QualId semi CompilationUnit ''' 
+	'CompilationUnit : PackageQualIdsemi0more TopStatSeq'
+	p[0] = Node('CompilationUnit',[p[1],p[2]],[]).name
+
+def p_PackageQualIdsemi0more(p):
+	'''PackageQualIdsemimore0 : empty
+							|PackageQualIdsemimore0 R_PACKAGE QualId semi''' 
 	if len(p)==2:
 		p[0] = Node("CompilationUnit", [p[1]],[]).name
 	else:
-		p[0] = Node("CompilationUnit", [p[2],p[3],p[4]],[p[1]]).name
+		p[0] = Node("CompilationUnit", [p[1],p[3],p[4]],[p[2]]).name
 
 def p_PackageObject(p):
 	'PackageObject : R_PACKAGE R_OBJECT ObjectDef'
@@ -42,14 +46,14 @@ def p_PackageObject(p):
 
 def p_Packaging(p):
 	'''Packaging : R_PACKAGE QualId 
-	| R_PACKAGE QualId nl
-	| Packaging TopStatSeq '''
-	if len(p)==4:
-		p[0] = Node("Packaging", [p[2],p[3]],[p[1]]).name
+	| R_PACKAGE QualId nl 
+	| BLOCKOPEN TopStatSeq BLOCKCLOSE '''
+	if len(p)==3:
+		p[0] = Node("Packaging", [p[2]],[p[1]]).name
 	elif p[1] == "package":
-		p[0] = Node("Packaging", [p[2]], [p[1]]).name
+		p[0] = Node("Packaging", [p[2],p[3]], [p[1]]).name
 	else:
-		p[0] = Node("Packaging", [p[1],p[2]],[]).name
+		p[0] = Node("Packaging", [p[2]],[p[1],p[3]]).name
 
 def p_TopStat(p):
 	'''TopStat : Import 
