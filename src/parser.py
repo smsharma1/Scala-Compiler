@@ -225,7 +225,7 @@ def p_ClassTemplate(p):
 def p_TraitTemplateOpt(p):
 	'''TraitTemplateOpt : R_EXTENDS TraitTemplate
 					 | Extends01TemplateBody01'''
-	if len(p)==2
+	if len(p)==2:
 		p[0] = Node("TraitTemplateOpt", [p[2]], [p[1]]).name
 	else:
 		p[0] = Node("TraitTemplateOpt", [p[1]],[]).name
@@ -368,7 +368,7 @@ def p_Def(p):
 		p[0] = Node("Def", [p[2]], [p[1]]).name
 	elif "ParVarDef" in p[1]:
 		p[0] = Node("Def", [p[1]], []).name
-	else
+	else:
 		p[0] = Node("Def", [p[1]],[]).name
 
 def p_nl0more(p):
@@ -443,7 +443,7 @@ def p_Dcl(p):
 		p[0] = Node("Dcl", [p[2]], [p[1]]).name
 	elif "VarDcl" in p[2]:
 		p[0] = Node("Dcl", [p[2]], [p[1]]).name
-	else
+	else:
 		p[0] = Node("Dcl", [p[2]],[p[1]]).name
 
 def p_ImportSelector(p):
@@ -484,7 +484,7 @@ def p_ImportExpr(p):
 	if "ImportSelectors" in p[3]:
 		p[0] = Node("ImportExpr", [p[3],p[1]],[p[2]]).name
 	elif "id" in p[3]:
-		p[0] = Node("ImportExpr", [p[3], p[1]], [p[2]).name
+		p[0] = Node("ImportExpr", [p[3], p[1]], [p[2]]).name
 	else:
 		p[0] = Node("ImportExpr", [p[1], p[3]], [p[2]]).name
 
@@ -506,7 +506,7 @@ def p_SelfType(p):
 	if "id" in p[1]:
 		p[0] = Node("SelfType", [p[1], p[2]], [p[3]]).name
 	else:
-		p[0] = Node("SelfType", [p[3]], [p[1], p[2], p[4]).name
+		p[0] = Node("SelfType", [p[3]], [p[1], p[2], p[4]]).name
 
 def p_TemplateStat(p):
 	'''TemplateStat : TopStat1 Modifier0more Def
@@ -531,7 +531,7 @@ def p_semiTemplateStat0more(p):
 							| semiTemplateStat0more semi TemplateStat'''
 	if "semi" in p[2]:
 		p[0] = Node("semiTemplateStat0more", [p[1], p[2],p[3]],[]).name
-	else
+	else:
 		p[0] = Node("semiTemplateStat0more", [p[1]],[]).name
 
 def p_SelfType01(p):
@@ -539,7 +539,7 @@ def p_SelfType01(p):
 					| SelfType'''
 	if "semi" in p[1]:
 		p[0] = Node("SelfType01", [p[1]],[]).name
-	else
+	else:
 		p[0] = Node("SelfType01", [p[1]],[]).name
 
 def p_NameValuePair(p):
@@ -559,7 +559,7 @@ def p_AccessQualifier(p):
 					| LSQRB R_THIS RSQRB'''
 	if "id" in p[2]:
 		p[0] = Node("AccessQualifier", [p[2]],[p[1], p[3]]).name
-	else
+	else:
 		p[0] = Node("AccessQualifier", [],[p[1], p[2], p[3]]).name
 
 def p_AccessModifier(p):
@@ -567,7 +567,7 @@ def p_AccessModifier(p):
 					| R_PROTECTED AccessQualifier01'''
 	if p[1] == "private":
 		p[0] = Node("AccessModifier", [p[2]],[p[1]]).name
-	else
+	else:
 		p[0] = Node("AccessModifier", [p[2]],[p[1]]).name
 
 def p_AccessQualifier01(p):
@@ -575,7 +575,7 @@ def p_AccessQualifier01(p):
 						| AccessQualifier'''
 	if "AccessQualifier" in p[1]:
 		p[0] = Node("AccessQualifier01", [p[1]],[]).name
-	else
+	else:
 		p[0] = Node("AccessQualifier01", [p[1]],[]).name
 
 def p_LocalModifier(p):
@@ -592,7 +592,7 @@ def p_LocalModifier(p):
 		p[0] = Node("LocalModifier", [p[1]],[]).name
 	if p[1] == "lazy":
 		p[0] = Node("LocalModifier", [p[1]],[]).name
-	else
+	else:
 		p[0] = Node("LocalModifier", [p[1]],[]).name
 
 def p_Modifier(p):
@@ -603,7 +603,7 @@ def p_Modifier(p):
 		p[0] = Node("Modifier", [p[1]],[]).name
 	if "AccessModifier" in p[1]:
 		p[0] = Node("Modifier", [p[1]],[]).name
-	else
+	else:
 		p[0] = Node("Modifier", [],[p[1]]).name
 
 def p_Binding(p):
@@ -611,7 +611,7 @@ def p_Binding(p):
 			| UNDERSCORE ColonType01''' 
 	if "id" in p[1]:
 		p[0] = Node("Binding", [p[1],p[2]],[]).name
-	else
+	else:
 		p[0] = Node("Binding", [p[2]],[p[1]]).name
 
 def p_Bindings(p):
@@ -759,7 +759,7 @@ def p_ParamClause0more(p):
 def p_Temp02(p):
 	'''Temp02 : nl01 LPARAN R_IMPLICIT Params RPARAN
 			| empty'''
-if "Params" in p[4]:
+	if "Params" in p[4]:
 		p[0] = Node("Temp02", [p[1], p[4]],[p[2], p[3], p[5]]).name
 	else:
 		p[0] = Node("Temp02", [p[1]],[]).name
@@ -991,7 +991,7 @@ def p_semiEnumerator0more(p):
 						| semiEnumerator0more semi Enumerator'''
 	if "semiEnumerator" in p[1]:
 		p[0] = Node("semiEnumerator0more", [p[1], p[2], p[3]],[]).name
-	else
+	else:
 		p[0] = Node("semiEnumerator0more", [p[1]],[]).name
 
 def p_ResultExpr(p):
@@ -1146,7 +1146,7 @@ def p_SimpleExpr(p):
 		p[0] = Node("SimpleExpr", [p[1]],[]).name
 	elif len(p)==2:
 		p[0] = Node("SimpleExpr", [p[1]],[p[2]]).name
-	else
+	else:
 		p[0] = Node("SimpleExpr", [p[1]],[]).name
 
 def p_PrefixExpr(p):
@@ -1157,7 +1157,7 @@ def p_PrefixExpr(p):
 				| NOT SimpleExpr'''
 	if "SimpleExpr" in p[2]:
 		p[0] = Node("PrefixExpr", [p[2]],[p[1]]).name
-	else
+	else:
 		p[0] = Node("PrefixExpr", [p[1]],[]).name
 
 def p_InfixExpr(p):
@@ -1165,7 +1165,7 @@ def p_InfixExpr(p):
 				| InfixExpr id nl01 InfixExpr'''
 	if "InfixExpr" in p[1]:
 		p[0] = Node("InfixExpr", [p[1], p[2], p[3], p[4]],[]).name
-	else
+	else:
 		p[0] = Node("InfixExpr", [p[1]],[]).name
 
 def p_PostfixExpr(p):
@@ -1173,7 +1173,7 @@ def p_PostfixExpr(p):
 				| InfixExpr id nl01'''
 	if "id" in p[2]:
 		p[0] = Node("PostfixExpr", [p[1], p[2], p[3]],[]).name
-	else
+	else:
 		p[0] = Node("PostfixExpr", [p[1]],[]).name	
 
 def p_semi01(p):
@@ -1181,7 +1181,7 @@ def p_semi01(p):
 			| empty'''
 	if "semi" in p[1]:
 		p[0] = Node("semi01", [p[1]],[]).name
-	else
+	else:
 		p[0] = Node("semi01", [p[1]],[]).name
 
 def p_Expr1(p):
@@ -1219,7 +1219,7 @@ def p_Ascription(p):
 				| COLON Annotation Annotation0more
 				| COLON UNDERSCORE MULTIPLICATION'''
 
-def p_TypePat(p);
+def p_TypePat(p):
 	'TypePat : Type'
 
 def p_RefineStat(p):
@@ -1316,7 +1316,7 @@ def p_commaid0more(p):
 					| empty'''
 
 def p_QualId(p):
-	QualId : id Dotid0more
+	'''QualId : id Dotid0more'''
 
 def p_Dotid0more(p):
 	'''Dotid0more : Dotid0more DOT id
