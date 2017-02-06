@@ -129,6 +129,7 @@ Rule 4     literals -> FLOAT
 Rule 5     literals -> STRING
 Rule 6     literals -> CHAR
 Rule 7     Ids -> ID
+Rule 8     empty -> <empty>
 
 Terminals, with rules where they appear
 
@@ -260,6 +261,7 @@ Nonterminals, with rules where they appear
 
 Ids                  : 
 QualId               : 2 0
+empty                : 
 literals             : 
 
 Parsing method: LALR

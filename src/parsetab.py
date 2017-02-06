@@ -5,7 +5,7 @@ _tabversion = '3.8'
 
 _lr_method = 'LALR'
 
-_lr_signature = '6246A0EABE6966D0CACAC760260A2540'
+_lr_signature = '16766148A8379E4F54A2B7BFCF343848'
     
 _lr_action_items = {'ID':([0,3,],[2,2,]),'DOT':([2,],[3,]),'$end':([1,2,4,],[0,-1,-2,]),}
 
@@ -26,11 +26,12 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> QualId","S'",1,None,None,None),
-  ('QualId -> ID','QualId',1,'p_QualId','parser.py',30),
-  ('QualId -> ID DOT QualId','QualId',3,'p_QualId','parser.py',31),
-  ('literals -> INT','literals',1,'p_literals','parser.py',40),
-  ('literals -> FLOAT','literals',1,'p_literals','parser.py',41),
-  ('literals -> STRING','literals',1,'p_literals','parser.py',42),
-  ('literals -> CHAR','literals',1,'p_literals','parser.py',43),
-  ('Ids -> ID','Ids',1,'p_Ids','parser.py',60),
+  ('QualId -> ID','QualId',1,'p_QualId','parser.py',32),
+  ('QualId -> ID DOT QualId','QualId',3,'p_QualId','parser.py',33),
+  ('literals -> INT','literals',1,'p_literals','parser.py',210),
+  ('literals -> FLOAT','literals',1,'p_literals','parser.py',211),
+  ('literals -> STRING','literals',1,'p_literals','parser.py',212),
+  ('literals -> CHAR','literals',1,'p_literals','parser.py',213),
+  ('Ids -> ID','Ids',1,'p_Ids','parser.py',230),
+  ('empty -> <empty>','empty',0,'p_empty','parser.py',297),
 ]
