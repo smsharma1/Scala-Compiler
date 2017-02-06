@@ -1488,7 +1488,7 @@ def p_id(p):
 	p[0] = Node('id',[],[p[1]]).name
 
 def p_varid(p):
-	'varid : ID'
+	'varid : BITAND'
 	print("hello1")
 	p[0] = Node('varid',[],[p[1]]).name
 
