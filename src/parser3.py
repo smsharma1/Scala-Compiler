@@ -36,31 +36,28 @@ def p_PackageQualIdsemi0more(p):
 	'''PackageQualIdsemi0more : empty
 							| PackageQualIdsemi0more R_PACKAGE QualId semi''' 
 	if len(p)==4:
-		p[0] = Node("CompilationUnit", [p[1],p[3],p[4]],[p[2]]).name
+		p[0] = Node("PackageQualIdsemi0more", [p[1],p[3],p[4]],[p[2]]).name
 	# else:
 	# 	p[0] = Node("CompilationUnit", [p[1]],[]).name
 		
 
 def p_PackageObject(p):
 	'PackageObject : R_PACKAGE R_OBJECT ObjectDef'
-	p[0] = Node("PackageObject", [p[3]],[p[2],p[1]]).name
+	p[0] = Node("PackageObject", [p[3]],[p[1], p[2]]).name
 
 def p_Packaging(p):
 	'''Packaging : R_PACKAGE QualId BLOCKOPEN TopStatSeq BLOCKCLOSE 
 	| R_PACKAGE QualId nl  BLOCKOPEN TopStatSeq BLOCKCLOSE '''
-	if len(p)==3:
-		p[0] = Node("Packaging", [p[2]],[p[1]]).name
-	elif p[1] == "package":
-		p[0] = Node("Packaging", [p[2],p[3]], [p[1]]).name
+	if len(p)==5:
+		p[0] = Node("Packaging", [p[2], p[4]],[p[1], p[3], p[5]]).name
 	else:
-		p[0] = Node("Packaging", [p[2]],[p[1],p[3]]).name
+		p[0] = Node("Packaging", [p[2], p[3], p[5]],[p[1], p[4], p[6]]).name
 
 def p_TopStat(p):
 	'''TopStat : Import 
 				| Packaging
 				| PackageObject
-				| TopStat1 Modifier0more TmplDef
-				| empty '''
+				| TopStat1 Modifier0more TmplDef'''
 	if len(p)==4:
 		p[0] = Node("TopStat", [p[2],p[3],p[4]],[]).name
 	elif "Import" in p[1]:
@@ -1178,6 +1175,10 @@ def p_Expr1(p):
 		  | R_TRY BLOCKOPEN Block BLOCKCLOSE R_CATCH BLOCKOPEN CaseClauses BLOCKCLOSE
 		  | R_TRY BLOCKOPEN Block BLOCKCLOSE R_FINALLY Expr
 		  | R_TRY BLOCKOPEN Block BLOCKCLOSE R_CATCH BLOCKOPEN CaseClauses BLOCKCLOSE R_FINALLY Expr
+		  | R_TRY Expr
+		  | R_TRY Expr R_CATCH BLOCKOPEN CaseClauses BLOCKCLOSE
+		  | R_TRY Expr R_FINALLY Expr
+		  | R_TRY Expr R_CATCH BLOCKOPEN CaseClauses BLOCKCLOSE R_FINALLY Expr 
 		  | R_DO Expr semi01 R_WHILE LPARAN Expr RPARAN
 		  | R_FOR LPARAN Enumerators RPARAN nl0more R_YIELD Expr
 		  | R_FOR BLOCKOPEN Enumerators BLOCKCLOSE nl0more R_YIELD Expr
