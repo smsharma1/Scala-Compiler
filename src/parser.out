@@ -1,0 +1,307 @@
+Created by PLY version 3.8 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    R_TRY
+    R_VAR
+    R_FINALLY
+    BITRSFILL
+    R_PROTECTED
+    R_LONG
+    BITLEFTASS
+    MULTIPLICATION
+    R_VAL
+    MINUS
+    R_HASH
+    COMMENT
+    R_NOTHING
+    PLUS
+    BITANDASS
+    BITOR
+    GT
+    BITLSHIFT
+    R_BYTE
+    GE
+    BLOCKOPEN
+    R_NULL1
+    R_TRUE
+    BLOCKCLOSE
+    R_CLASS
+    MULASS
+    OR
+    R_THIS
+    R_DOUBLE
+    R_MATCH
+    NOTEQUAL
+    R_IMPLIES
+    R_FLOAT
+    COLOR
+    BITRSHIFT
+    R_DEF
+    COLON
+    R_OBSCURE
+    R_TRAIT
+    R_TYPE
+    CARRIAGERETN
+    R_LEFTARROW
+    AND
+    DIGIT
+    R_WHILE
+    R_OBSCURE1
+    R_OBSCURE2
+    SUBASS
+    STARTQUOTE
+    R_DO
+    NOT
+    R_BOOLEAN
+    R_YIELD
+    R_CASE
+    R_STRING
+    BACKSLASH
+    R_IMPLICIT
+    R_IF
+    R_INT
+    R_FINAL
+    R_CATCH
+    SEMICOLON
+    RPARAN
+    LSQRB
+    R_ABSTRACT
+    DIVASS
+    HORITAB
+    R_EXTENDS
+    R_ANY
+    R_LAZY
+    R_FOR
+    R_ANYREF
+    LPARAN
+    BITAND
+    MODULUS
+    R_UNIT
+    DOUBLEQUOTE
+    R_SEALED
+    R_FORSOME
+    MODASS
+    R_CHAR
+    BACKSPACE
+    RSQRB
+    R_SHORT
+    BITNEG
+    R_LEFTARROW1
+    ENDQUOTE
+    R_FALSE
+    EQUAL
+    FORMFEED
+    EQUALASS
+    BITXOR
+    R_WITH
+    R_THROW
+    ADDASS
+    BITXORASS
+    LE
+    R_OVERRIDE
+    LT
+    SINGLEQUOTE
+    COMMA
+    R_PACKAGE
+    DIVISION
+    R_IMPLIES1
+    R_OBJECT
+    R_PRIVATE
+    R_ELSE
+    R_SUPER
+    R_NEW
+    BITRIGHTASS
+    R_ATTHERATE
+    R_RETURN
+    LINEFEED
+    R_NULL
+    BITORASS
+    R_IMPORT
+
+Grammar
+
+Rule 0     S' -> QualId
+Rule 1     QualId -> ID
+Rule 2     QualId -> ID DOT QualId
+Rule 3     literals -> INT
+Rule 4     literals -> FLOAT
+Rule 5     literals -> STRING
+Rule 6     literals -> CHAR
+Rule 7     Ids -> ID
+
+Terminals, with rules where they appear
+
+ADDASS               : 
+AND                  : 
+BACKSLASH            : 
+BACKSPACE            : 
+BITAND               : 
+BITANDASS            : 
+BITLEFTASS           : 
+BITLSHIFT            : 
+BITNEG               : 
+BITOR                : 
+BITORASS             : 
+BITRIGHTASS          : 
+BITRSFILL            : 
+BITRSHIFT            : 
+BITXOR               : 
+BITXORASS            : 
+BLOCKCLOSE           : 
+BLOCKOPEN            : 
+CARRIAGERETN         : 
+CHAR                 : 6
+COLON                : 
+COLOR                : 
+COMMA                : 
+COMMENT              : 
+DIGIT                : 
+DIVASS               : 
+DIVISION             : 
+DOT                  : 2
+DOUBLEQUOTE          : 
+ENDQUOTE             : 
+EQUAL                : 
+EQUALASS             : 
+FLOAT                : 4
+FORMFEED             : 
+GE                   : 
+GT                   : 
+HORITAB              : 
+ID                   : 1 2 7
+INT                  : 3
+LE                   : 
+LINEFEED             : 
+LPARAN               : 
+LSQRB                : 
+LT                   : 
+MINUS                : 
+MODASS               : 
+MODULUS              : 
+MULASS               : 
+MULTIPLICATION       : 
+NOT                  : 
+NOTEQUAL             : 
+OR                   : 
+PLUS                 : 
+RPARAN               : 
+RSQRB                : 
+R_ABSTRACT           : 
+R_ANY                : 
+R_ANYREF             : 
+R_ATTHERATE          : 
+R_BOOLEAN            : 
+R_BYTE               : 
+R_CASE               : 
+R_CATCH              : 
+R_CHAR               : 
+R_CLASS              : 
+R_DEF                : 
+R_DO                 : 
+R_DOUBLE             : 
+R_ELSE               : 
+R_EXTENDS            : 
+R_FALSE              : 
+R_FINAL              : 
+R_FINALLY            : 
+R_FLOAT              : 
+R_FOR                : 
+R_FORSOME            : 
+R_HASH               : 
+R_IF                 : 
+R_IMPLICIT           : 
+R_IMPLIES            : 
+R_IMPLIES1           : 
+R_IMPORT             : 
+R_INT                : 
+R_LAZY               : 
+R_LEFTARROW          : 
+R_LEFTARROW1         : 
+R_LONG               : 
+R_MATCH              : 
+R_NEW                : 
+R_NOTHING            : 
+R_NULL               : 
+R_NULL1              : 
+R_OBJECT             : 
+R_OBSCURE            : 
+R_OBSCURE1           : 
+R_OBSCURE2           : 
+R_OVERRIDE           : 
+R_PACKAGE            : 
+R_PRIVATE            : 
+R_PROTECTED          : 
+R_RETURN             : 
+R_SEALED             : 
+R_SHORT              : 
+R_STRING             : 
+R_SUPER              : 
+R_THIS               : 
+R_THROW              : 
+R_TRAIT              : 
+R_TRUE               : 
+R_TRY                : 
+R_TYPE               : 
+R_UNIT               : 
+R_VAL                : 
+R_VAR                : 
+R_WHILE              : 
+R_WITH               : 
+R_YIELD              : 
+SEMICOLON            : 
+SINGLEQUOTE          : 
+STARTQUOTE           : 
+STRING               : 5
+SUBASS               : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+Ids                  : 
+QualId               : 2 0
+literals             : 
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . QualId
+    (1) QualId -> . ID
+    (2) QualId -> . ID DOT QualId
+
+    ID              shift and go to state 2
+
+    QualId                         shift and go to state 1
+
+state 1
+
+    (0) S' -> QualId .
+
+
+
+state 2
+
+    (1) QualId -> ID .
+    (2) QualId -> ID . DOT QualId
+
+    $end            reduce using rule 1 (QualId -> ID .)
+    DOT             shift and go to state 3
+
+
+state 3
+
+    (2) QualId -> ID DOT . QualId
+    (1) QualId -> . ID
+    (2) QualId -> . ID DOT QualId
+
+    ID              shift and go to state 2
+
+    QualId                         shift and go to state 4
+
+state 4
+
+    (2) QualId -> ID DOT QualId .
+
+    $end            reduce using rule 2 (QualId -> ID DOT QualId .)
+
