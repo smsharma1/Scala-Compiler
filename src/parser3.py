@@ -46,9 +46,8 @@ def p_PackageObject(p):
 	p[0] = Node("PackageObject", [p[3]],[p[2],p[1]]).name
 
 def p_Packaging(p):
-	'''Packaging : R_PACKAGE QualId 
-	| R_PACKAGE QualId nl 
-	| BLOCKOPEN TopStatSeq BLOCKCLOSE '''
+	'''Packaging : R_PACKAGE QualId BLOCKOPEN TopStatSeq BLOCKCLOSE 
+	| R_PACKAGE QualId nl  BLOCKOPEN TopStatSeq BLOCKCLOSE '''
 	if len(p)==3:
 		p[0] = Node("Packaging", [p[2]],[p[1]]).name
 	elif p[1] == "package":
@@ -74,19 +73,10 @@ def p_TopStat(p):
 	# 	p[0] = Node("TopStat", [p[1]],[]).name
 	
 def p_TopStat1(p):
-	'''TopStat1 : empty
-				| Annotation 
-				| Annotation nl
-				| TopStat1 Annotation 
-				| TopStat1 Annotation nl'''
+	'''TopStat1 : empty 
+				| TopStat1 Annotation nl01'''
 	if len(p)==4:
 		p[0] = Node("TopStat1", [p[1],p[2],p[3]],[]).name
-	elif "TopStat1" in p[1]:
-		p[0] = Node("TopStat1", [p[1], p[2]], []).name
-	elif "nl" in p[2]:
-		p[0] = Node("TopStat1", [p[1], p[2]], []).name
-	elif "Annotation" in p[1]:
-		p[0] = Node("TopStat1", [p[1]],[]).name
 	# else :
 	# 	p[0] = Node("TopStat1", [p[1]],[]).name
 
@@ -102,30 +92,30 @@ def p_Modifier0more(p):
 
 #look for semi
 def p_TopStatSeq(p):
-	'''TopStatSeq : semi TopStat 
-				  | TopStat TopStatSeq'''
-	if "TopStat" in p[1]:
-		p[0] = Node("TopStatSeq", [p[1],p[2]],[]).name
-	else:
-		p[0] = Node("TopStatSeq", [p[1],p[2]],[]).name
+	'TopStatSeq :  TopStat semiTopStat0more'
+	p[0] = Node("TopStatSeq", [p[1],p[2]],[]).name
+	
+def p_semiTopStat0more(p):
+	'''semiTopStat0more : semiTopStat0more semi TopStat
+					| empty'''
+	if len(p) == 4:
+		p[0] = Node('semiTopStat0more',[p[1],p[2],p[3]],[])
 
 def p_SelfInvocation(p):
-	'''SelfInvocation : R_THIS ArgumentExprs
-					  | SelfInvocation ArgumentExprs'''
-	if "this" in p[1]:
-		p[0] = Node("SelfInvocation", [p[2]],[p[1]]).name
-	else:
-		p[0] = Node("SelfInvocation", [p[1],p[2]],[]).name
+	'SelfInvocation : R_THIS ArgumentExprs ArgumentExprs0more'
+	p[0] = Node("SelfInvocation", [p[2],p[3]],[p[1]]).name
+	# else:
+	# 	p[0] = Node("SelfInvocation", [p[1],p[2]],[]).name
 
 def p_ConstrBlock(p):
-	'ConstrBlock : BLOCKOPEN SelfInvocation ConstrBlock1 BLOCKCLOSE '
+	'ConstrBlock : BLOCKOPEN SelfInvocation semiBlockStat0more BLOCKCLOSE '
 	p[0] = Node("ConstrBlock", [p[2],p[3]],[p[1],p[4]]).name
 
-def p_ConstrBlock1(p):
-	'''ConstrBlock1 : empty 
-					| semi BlockStat'''
-	if "semi" in p[1]:
-		p[0] = Node("ConstrBlock1", [p[1],p[2]], []).name
+def p_semiBlockStat0more(p):
+	'''semiBlockStat0more : empty 
+					| semiBlockStat0more semi BlockStat'''
+	if "semi" in p[2]:
+		p[0] = Node("semiBlockStat0more", [p[1],p[2],p[3]], []).name
 	# else:
 	# 	p[0] = Node("ConstrBlock1", [p[1],p[2]],[]).name
 
