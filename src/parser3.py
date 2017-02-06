@@ -29,8 +29,26 @@ class Node:
 			graph.add_edge(pydot.Edge(self.name, ch))
 
 def p_CompilationUnit(p):
-	'CompilationUnit : PackageQualIdsemi0more TopStatSeq'
-	p[0] = Node('CompilationUnit',[p[1],p[2]],[]).name
+	'''CompilationUnit : ImportDeclarations ClassesObjects
+						| ClassesObjects'''
+
+#<import declarations> ::= <import declaration> | <import declarations> <import declaration>
+
+def p_ImportDeclarations(p):
+	'''	ImportDeclarations : ImportDeclaration 
+							| ImportDeclarations ImportDeclaration'''
+
+
+#<import declaration> ::= import <type name> ;
+
+def p_ImportDeclaration(p):
+	'ImportDeclaration : R_IMPORT TypeName R_SEMICOLON'
+
+#<classes_objects> ::= <class_object> | <class_object> <classes_objects>
+
+def ClassesObjects(p):
+	'''ClassesObjects : ClassObject 
+						| ClassObject ClassesObjects'''
 
 def p_PackageQualIdsemi0more(p):
 	'''PackageQualIdsemi0more : empty
