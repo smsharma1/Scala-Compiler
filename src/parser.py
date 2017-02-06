@@ -789,122 +789,196 @@ def p_ExprsComma01(p):
 	'''ExprsComma01 : empty
 					| Exprs COMMA'''
 
+def p_Exprs(p):
+	'Exprs : Expr  CommaExpr0more'
 
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
+def p_CommaExpr0more(p):
+	'''CommaExpr0more : CommaExpr0more COMMA Expr
+					| empty'''
 
+def p_SimpleExpr1(p):
+	'''SimpleExpr1 : Literal
+				| Path
+				| UNDERSCORE
+				| LPARAN Exprs RPARAN
+				| LPARAN  RPARAN
+				| SimpleExpr DOT id
+				| SimpleExpr TypeArgs
+				| SimpleExpr1 ArgumentExprs
+				| XmlExpr'''
 
-def p_Ids(p):
-        "Ids : ID "
-        if(len(p) == 2):
-                p[0] = Node("Ids", None, [p[1]] )
-        else:
-                p[0] = Node("Ids", [p[3]], [p[1],p[2]])
+def p_SimpleExpr(p):
+	'''SimpleExpr : R_NEW ClassTemplate
+				| R_NEW TemplateBody
+				| BlockExpr
+				| SimpleExpr1 
+				| SimpleExpr1 UNDERSCORE'''
 
+def p_PrefixExpr(p):
+	'''PrefixExpr : MINUS SimpleExpr
+				| PLUS SimpleExpr
+				| BITNEG SimpleExpr
+				| SimpleExpr
+				| NOT SimpleExpr'''
 
+def p_InfixExpr(p):
+	'''InfixExpr : PrefixExpr
+				| InfixExpr id nl01 InfixExpr'''
+
+def p_PostfixExpr(p):
+	'''PostfixExpr : InfixExpr
+				| InfixExpr id nl01'''
+
+def p_semi01(p):
+	'''semi01 : semi
+			| empty'''
+
+def p_Expr1(p):
+	'''Expr1 : R_IF LPARAN Expr RPARAN nl0more Expr
+		  | R_IF LPARAN Expr RPARAN nl0more Expr semi01 else Expr
+		  | R_WHILE LPARAN Expr RPARAN nl0more Expr
+		  | R_TRY BLOCKOPEN Block BLOCKCLOSE 
+		  | R_TRY BLOCKOPEN Block BLOCKCLOSE R_CATCH BLOCKOPEN CaseClauses BLOCKCLOSE
+		  | R_TRY BLOCKOPEN Block BLOCKCLOSE R_FINALLY Expr
+		  | R_TRY BLOCKOPEN Block BLOCKCLOSE R_CATCH BLOCKOPEN CaseClauses BLOCKCLOSE R_FINALLY Expr
+		  | R_DO Expr semi01 R_WHILE LPARAN Expr RPARAN
+		  | R_FOR LPARAN Enumerators RPARAN nl0more R_YIELD Expr
+		  | R_FOR BLOCKOPEN Enumerators BLOCKCLOSE nl0more R_YIELD Expr
+		  | R_FOR LPARAN Enumerators RPARAN nl0more  Expr
+		  | R_FOR BLOCKOPEN Enumerators BLOCKCLOSE nl0more  Expr
+		  | R_THROW Expr
+		  | R_RETURN 
+		  | R_RETURN Expr
+		  | SimpleExpr DOT id EQUALASS Expr
+		  | id EQUALASS Expr
+		  | SimpleExpr1 ArgumentExprs EQUALASS Expr
+		  | PostfixExpr
+          | PostfixExpr Ascription
+          | PostfixExpr R_MATCH OPENBLOCK CaseClauses CLOSEBLOCK'''
+
+def p_Expr(p):
+	'''Expr : Bindings R_IMPLIES1 Expr
+		 |   id  R_IMPLIES1 Expr
+		 |  R_IMPLICIT id  R_IMPLIES Expr
+		 |  UNDERSCORE R_IMPLIES Expr
+		 | Expr1'''
+
+def p_Ascription(p):
+	'''Ascription : COLON InfixType
+				| COLON Annotation Annotation0more
+				| COLON UNDERSCORE MULTIPLICATION'''
+
+def p_TypePat(p);
+	'TypePat : Type'
+
+def p_RefineStat(p):
+	'''RefineStat : Dcl
+				| R_TYPE TypeDef'''
+
+def p_Refinement(p):
+	'Refinement ::= nl01 BLOCKOPEN RefineStat semiRefineStat0more BLOCKCLOSE'
+
+def p_semiRefineStat0more(p):
+	'''semiRefineStat0more : semiRefineStat0more semi RefineStat
+						| empty'''
+
+def p_Types(p):
+	'Types : Type CommaType0more'
+
+def p_CommaType0more(p):
+	'''CommaType0more : CommaType0more COMMA Type
+					| empty'''
+
+def p_TypeArgs(p):
+	'TypeArgs : LSQRB Types RSQRB'
+
+def p_SimpleType(p):
+	'''SimpleType : SimpleType TypeArgs
+		   		  | SimpleType R_HASH id
+		   		  | StableId
+		          | Path DOT R_TYPE
+		          | LPARAN Types RPARAN'''
+
+def p_AnnotType(p):
+	'AnnotType : SimpleType Annotation0more'
+
+def p_CompoundType(p):
+	'''CompoundType : AnnotType withAnnotType0more 
+				| AnnotType withAnnotType0more Refinement
+				| Refinement'''
+
+def p_InfixType(p):
+	'InfixType : CompoundType idnl01CompoundType0more'
+
+def p_idnl01CompoundType0more(p):
+	'''idnl01CompoundType0more : idnl01CompoundType0more id nl01 CompoundType
+							 | empty '''
+
+def p_ExistentialDcl(p):
+	'''ExistentialDcl : R_TYPE TypeDcl
+					| R_VAL ValDcl'''
+
+def p_ExistentialClause(p):
+	'ExistentialClause : R_FORSOME OPENBLOCK ExistentialDcl semiExistentialDcl0more CLOSEBLOCK'
+
+def p_semiExistentialDcl0more(p):
+	'''semiExistentialDcl0more : semiExistentialDcl0more semi ExistentialDcl
+							| empty'''
+
+def p_FunctionArgTypes(p):
+	'''FunctionArgTypes : InfixType
+					| LPARAN ParamType CommaParamType0more  RPARAN
+					| LPARAN  RPARAN'''
+
+def p_CommaParamType0more(p):
+	'''CommaParamType0more : CommaParamType0more COMMA ParamType
+							| empty'''
+
+def p_Type(p):
+	'''Type : FunctionArgTypes R_IMPLIES1 Type
+		| InfixType ExistentialClause
+		| InfixType'''
+
+def p_ClassQualifier(p):
+	'ClassQualifier : LSQRB id RSQRB'
+
+def p_StableId(p):
+	'''StableId : id
+			| Path DOT id
+			| id DOT R_SUPER ClassQualifier01 DOT id
+			| R_SUPER ClassQualifier01 DOT id'''
+
+def p_ClassQualifier01(p):
+	'''ClassQualifier01 : ClassQualifier
+						| empty '''
+
+def p_Path(p):
+	'''Path : StableId
+		| id DOT R_THIS
+		|  R_THIS'''
+
+def p_ids(p):
+	'ids : id commaid0more'
+
+def p_commaid0more(p):
+	'''commaid0more : commaid0more COMMA ID
+					| empty'''
+
+def p_QualId(p):
+	QualId : id Dotid0more
+
+def p_Dotid0more(p):
+	'''Dotid0more : Dotid0more DOT id
+				| empty'''
 
 def p_literals(p):
 	'''literals : INT 
 		| FLOAT 
 		| STRING 
-		| CHAR'''
-	print("sharma")
+		| CHAR
+		| R_NULL'''
 	p[0] = Node("literals",None,[p[1]])
 	return "literals"
-
-# def p_CompilationUnit(p):
-# 	'''CompilationUnit : TopStatSeq 
-# 	|	R_PACKAGE QualId semi CompilationUnit ''' 
-# 	if len(p) == 2:
-# 		p[0] = Node(CompilationUnit,[p[1]],None)
-# 	else:
-# 		p[0] = Node(CompilationUnit,[p[2],p[3],p[4]],[p[1]])
-
-
-# Build the parser
-
-def p_Ids(p):
-		"Ids : ID "
-		if(len(p) == 2):
-				p[0] = Node("Ids", [], [p[1]] )
-		else:
-				p[0] = Node("Ids", [p[3]], [p[1],p[2]])
-
-
-
-# def p_Ids(p):
-# 	'''Ids : ID 
-# 	| ID COMMA Ids'''
-# 	if(len(p) == 2):
-# 		p[0] = Node("Ids", None, [p[1]] )
-# 	else:
-# 		p[0] = Node("Ids", [p[3]], [p[1],p[2]])
-
-# def p_QualId(p):
-# 	'''QualId : ID 
-# 	| ID DOT QualId'''
-# 	if(len(p) == 2):
-# 		p[0] = Node("QualId", None, [p[1]] )
-# 	else:
-# 		p[0] = Node("QualId", [p[3]], [p[1],p[2]])	
-
-
-# def p_Path(p):
-# 	'''Path : StableId 
-# 	| ID DOT R_THIS 
-# 	| R_THIS'''
-# 	if(len(p) == 2):
-# 		if(p[1] == "this"):
-# 			p[0] = Node("Path", None, [p[1]] )
-# 		else:
-# 			p[0] = Node("Path", [p[1]],None )
-# 	else:
-# 		p[0] = Node("Path",None,  [p[1],p[2],p[3]])
-
-# def p_StableId(p):
-# 	'''StableId :  ID 
-# 	| Path DOT ID 
-# 	| R_SUPER DOT ID 
-# 	| ID DOT R_SUPER DOT ID '''
-# 	# | ID DOT R_SUPER ClassQualifier DOT ID 
-# 	# | R_SUPER ClassQualifier DOT ID'''
-# 	if(len(p) == 2):
-# 		p[0] = Node("StableId", None, p[1] )
-# 	elif(len(p)==4):
-# 		if(p[2] == "super"):
-# 			p[0] = Node("StableId",None, [p[1], p[2], p[3]])
-# 		else:
-# 			p[0] = Node("StableId", [p[1]], [p[2],p[3]])
-# 	elif(len(p)==5):
-# 		p[0] = Node("StableId", [p[2]], [p[1],p[3], p[4]])
-# 	elif(len(p)==6):
-# 		p[0] = Node("StableId", None, [p[1], p[2], p[3], p[4], p[5]])
-# 	else:
-# 		p[0] = Node("StableId", [p[4]], [p[1], p[2], p[3], p[5], p[6]])
-
-
-
-
-# Error rule for syntax errors
-# def p_error(p):
-# 	print("Syntax error in input!")
-
 
 def p_empty(p):
     'empty :'
