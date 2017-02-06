@@ -464,62 +464,119 @@ def p_ImpliesidorUnderscore01(p):
 def p_ImportSelectors(p):
 	'''ImportSelectors : BLOCKOPEN ImportselectorComma0more ImportSelector BLOCKCLOSE
 					| BLOCKOPEN ImportselectorComma0more UNDERSCORE BLOCKCLOSE '''
+	if "ImportSelector" in p[3]:
+		p[0] = Node("ImportSelectors", [p[2], p[3]], [p[1], p[4]]).name
+	else:
+		p[0] = Node("ImportSelectors", [p[2]], [p[1], p[3], p[4]]).name
 
 def p_ImportselectorComma0more(p):
 	'''ImportselectorComma0more : empty
 							| ImportselectorComma0more ImportSelector COMMA'''
+	if "ImportSelector" in p[2]:
+		p[0] = Node("ImportselectorComma0more", [p[1], p[2]], [p[3]]).name
+	else:
+		p[0] = Node("ImportselectorComma0more", [p[1]], []).name
+	
 def p_ImportExpr(p):
 	'''ImportExpr : StableId DOT id
 				| StableId DOT UNDERSCORE
 				| StableId DOT ImportSelectors'''
+	if "ImportSelectors" in p[3]:
+		p[0] = Node("ImportExpr", [p[3],p[1]],[p[2]]).name
+	elif "id" in p[3]:
+		p[0] = Node("ImportExpr", [p[3], p[1]], [p[2]).name
+	else:
+		p[0] = Node("ImportExpr", [p[1], p[3]], [p[2]]).name
 
 def p_Import(p):
 	'Import : R_IMPORT ImportExpr CommaImportExpr0more'
-
+	p[0] = Node("Import", [p[2], p[3]], [p[1]]).name
+	
 def p_CommaImportExpr0more(p):
 	'''CommaImportExpr0more : empty
 						| CommaImportExpr0more COMMA ImportExpr'''
+	if "ImportExpr" in p[3]:
+		p[0] = Node("CommaImportExpr0more", [p[1], p[3]], [p[3]]).name
+	else:
+		p[0] = Node("CommaImportExpr0more", [p[1]], []).name
 
 def p_SelfType(p):
 	'''SelfType : id ColonType01 R_IMPLIES1
 			| R_THIS COLON Type R_IMPLIES1'''
+	if "id" in p[1]:
+		p[0] = Node("SelfType", [p[1], p[2]], [p[3]]).name
+	else:
+		p[0] = Node("SelfType", [p[3]], [p[1], p[2], p[4]).name
 
 def p_TemplateStat(p):
 	'''TemplateStat : TopStat1 Modifier0more Def
 				| TopStat1 Modifier0more Dcl
 				| Expr
 				| empty'''
+	if "Def" in p[3]:
+		p[0] = Node("TemplateStat", [p[1], p[2],p[3]],[]).name
+	elif "Def" in p[3]:
+		p[0] = Node("TemplateStat", [p[1], p[2],p[3]],[]).name
+	elif "Expr" in p[1]:
+		p[0] = Node("TemplateStat", [p[1]], []).name
+	else:
+		p[0] = Node("TemplateStat", [p[1]], []).name
 
 def p_TemplateBody(p):
 	'TemplateBody : nl01 BLOCKOPEN SelfType01 TemplateStat semiTemplateStat0more BLOCKCLOSE'
+	p[0] = Node("TemplateBody", [p[1], p[3], p[4], p[5]], [p[2], p[6]]).name
  
 def p_semiTemplateStat0more(p):
 	'''semiTemplateStat0more : empty
 							| semiTemplateStat0more semi TemplateStat'''
+	if "semi" in p[2]:
+		p[0] = Node("semiTemplateStat0more", [p[1], p[2],p[3]],[]).name
+	else
+		p[0] = Node("semiTemplateStat0more", [p[1]],[]).name
+
 def p_SelfType01(p):
 	'''SelfType01 : empty
 					| SelfType'''
+	if "semi" in p[1]:
+		p[0] = Node("SelfType01", [p[1]],[]).name
+	else
+		p[0] = Node("SelfType01", [p[1]],[]).name
 
 def p_NameValuePair(p):
 	'NameValuePair : R_VAL id EQUALASS PrefixExpr'
+	p[0] = Node("NameValuePair", [p[2],p[4]],[p[1],p[3]]).name
 
 def p_ConstrAnnotation(p):
 	'ConstrAnnotation : R_ATTHERATE SimpleType ArgumentExprs'
+	p[0] = Node("ConstrAnnotation", [p[2],p[3]],[p[1]]).name
 
 def p_Annotation(p):
 	'Annotation : R_ATTHERATE SimpleType ArgumentExprs0more'
+	p[0] = Node("Annotation", [p[2],p[3]],[p[1]]).name
 
 def p_AccessQualifier(p):
 	'''AccessQualifier : LSQRB id RSQRB
 					| LSQRB R_THIS RSQRB'''
+	if "id" in p[2]:
+		p[0] = Node("AccessQualifier", [p[2]],[p[1], p[3]]).name
+	else
+		p[0] = Node("AccessQualifier", [],[p[1], p[2], p[3]]).name
 
 def p_AccessModifier(p):
 	'''AccessModifier : R_PRIVATE AccessQualifier01
 					| R_PROTECTED AccessQualifier01'''
+	if p[1] == "private":
+		p[0] = Node("AccessModifier", [p[2]],[p[1]]).name
+	else
+		p[0] = Node("AccessModifier", [p[2]],[p[1]]).name
 
 def p_AccessQualifier01(p):
 	'''AccessQualifier01 : empty
 						| AccessQualifier'''
+	if "AccessQualifier" in p[1]:
+		p[0] = Node("AccessQualifier01", [p[1]],[]).name
+	else
+		p[0] = Node("AccessQualifier01", [p[1]],[]).name
 
 def p_LocalModifier(p):
 	'''LocalModifier : R_ABSTRACT
@@ -527,86 +584,161 @@ def p_LocalModifier(p):
 					| R_SEALED
 					| R_IMPLICIT
 					| R_LAZY'''
+	if p[1] == "abstract":
+		p[0] = Node("LocalModifier", [p[1]],[]).name
+	if p[1] == "final":
+		p[0] = Node("LocalModifier", [p[1]],[]).name
+	if p[1] == "sealed":
+		p[0] = Node("LocalModifier", [p[1]],[]).name
+	if p[1] == "lazy":
+		p[0] = Node("LocalModifier", [p[1]],[]).name
+	else
+		p[0] = Node("LocalModifier", [p[1]],[]).name
 
 def p_Modifier(p):
 	'''Modifier : LocalModifier
 			| AccessModifier
 			| R_OVERRIDE'''
+	if "LocalModifier" in p[1]:
+		p[0] = Node("Modifier", [p[1]],[]).name
+	if "AccessModifier" in p[1]:
+		p[0] = Node("Modifier", [p[1]],[]).name
+	else
+		p[0] = Node("Modifier", [],[p[1]]).name
 
 def p_Binding(p):
 	'''Binding : id ColonType01
 			| UNDERSCORE ColonType01''' 
+	if "id" in p[1]:
+		p[0] = Node("Binding", [p[1],p[2]],[]).name
+	else
+		p[0] = Node("Binding", [p[2]],[p[1]]).name
 
 def p_Bindings(p):
 	'Bindings : LPARAN Binding CommaBinding0more RPARAN' 
+	p[0] = Node("Bindings", [p[2],p[3]],[p[1], p[4]]).name
 
 def p_CommaBinding0more(p):
 	'''CommaBinding0more : empty
-						| CommaBinding0more COMMA Binding''' 
+						| CommaBinding0more COMMA Binding'''
+	if "Binding" in p[3]:
+		p[0] = Node("CommaBinding0more", [p[1],p[3]],[p[2]]).name
+	else:
+		p[0] = Node("CommaBinding0more", [p[1]],[]).name
 
 def p_ClassParam(p):
 	'ClassParam : Annotation0more Modifier0more valvar01 id  COLON ParamType EqualExpr01'
+	p[0] = Node("ClassParam", [p[1], p[2],p[3], p[4], p[6], p[7]],[p[5]]).name
 
 def p_Annotation0more(p):
 	'''Annotation0more : empty
 					| Annotation0more Annotation'''
+	if "Annotation" in p[2]:
+		p[0] = Node("Annotation0more", [p[1],p[2]],[]).name
+	else:
+		p[0] = Node("Annotation0more", [p[1]],[]).name
 
 def p_valvar01(p):
 	'''valvar01 : empty
 			| R_VAL
 			| R_VAR'''
+	if p[1] == "val":
+		p[0] = Node("valvar01", [p[1]],[]).name
+	if p[1] == "var":
+		p[0] = Node("valvar01", [p[1]],[]).name
+	else:
+		p[0] = Node("valvar01", [p[1]],[]).name
 
 def p_EqualExpr01(p):
 	'''EqualExpr01 : empty
 				| EQUALASS Expr'''
+	if "Expr" in p[2]:
+		p[0] = Node("EqualExpr01", [p[2]],[p[1]]).name
+	else:
+		p[0] = Node("EqualExpr01", [p[1]],[]).name
 
 def p_ClassParams(p):
 	'ClassParams : ClassParam CommaClassParam0more'
+	p[0] = Node("ClassParams", [p[1],p[2]],[]).name
 
 def p_CommaClassParam0more(p):
 	'''CommaClassParam0more : empty
 						| CommaClassParam0more COMMA ClassParam'''
+	if "Expr" in p[2]:
+		p[0] = Node("CommaClassParam0more", [p[1],p[3]],[p[2]]).name
+	else:
+		p[0] = Node("CommaClassParam0more", [p[1]],[]).name
 
 def p_ClassParamClause(p):
 	'ClassParamClause : nl01 LPARAN ClassParams01 RPARAN'
+	p[0] = Node("ClassParamClause", [p[1],p[3]],[p[2], p[4]]).name
 
 def p_ClassParams01(p):
 	'''ClassParams01 : empty
 					| ClassParams '''
+	if "ClassParams" in p[1]:
+		p[0] = Node("ClassParams01", [p[1]],[]).name
+	else:
+		p[0] = Node("ClassParams01", [p[1]],[]).name
 
 def p_ClassParamClauses(p):
 	'ClassParamClauses : ClassParamClause0more Temp01'
+	p[0] = Node("ClassParamClauses", [p[1],p[2]],[]).name
 
 def p_Temp01(p):
 	'''Temp01 : nl01 LPARAN R_IMPLICIT ClassParams RPARAN
 			| empty'''
+	if "ClassParams" in p[4]:
+		p[0] = Node("Temp01", [p[1], p[4]],[p[2], p[3], p[5]]).name
+	else:
+		p[0] = Node("Temp01", [p[1]],[]).name
 
 def p_ParamType(p):
 	'''ParamType : Type
 				| R_IMPLIES1 Type
 				| Type MULASS'''
+	if len(p)==1:
+		p[0] = Node("ParamType", [p[1]],[]).name
+	elif "Type" in p[2]:
+		p[0] = Node("ParamType", [p[2]],[p[1]]).name
+	else:
+		p[0] = Node("ParamType", [p[1]],[p[2]]).name
 
 def p_Param(p):
 	'Param : Annotation0more id ColonParamType01 EqualExpr01'
+	p[0] = Node("Param", [p[1], p[2], p[3], p[4]],[]).name
 
 def p_ColonParamType01(p):
 	'''ColonParamType01 : empty
 					| COLON ParamType'''
+	if "ParamType" in p[2]:
+		p[0] = Node("ParamType", [p[2]],[p[1]]).name
+	else:
+		p[0] = Node("ParamType", [p[1]],[]).name
 
 def p_Params(p):
 	'Params : Param CommaParam0more'
+	p[0] = Node("Params", [p[1], p[2]],[]).name
 
 def p_CommaParam0more(p):
 	'''CommaParam0more : empty
 					| CommaParam0more COMMA Param'''
+	if "Param" in p[3]:
+		p[0] = Node("CommaParam0more", [p[1],p[3]],[p[2]]).name
+	else:
+		p[0] = Node("CommaParam0more", [p[1]],[]).name
 
 def p_ParamClause(p):
 	'ParamClause : nl01 LPARAN Params01 RPARAN'
+	p[0] = Node("ParamClause", [p[1],p[3]],[p[2],p[4]]).name
 
 def p_Params01(p):
 	'''Params01 : empty
 			| Params'''
-
+	if "Params" in p[1]:
+		p[0] = Node("Params01", [p[1]],[]).name
+	else:
+		p[0] = Node("Params01", [p[1]],[]).name
 
 def p_Ids(p):
         "Ids : ID "
