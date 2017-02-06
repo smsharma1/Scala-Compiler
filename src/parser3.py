@@ -46,9 +46,40 @@ def p_ImportDeclaration(p):
 
 #<classes_objects> ::= <class_object> | <class_object> <classes_objects>
 
-def ClassesObjects(p):
+def p_ClassesObjects(p):
 	'''ClassesObjects : ClassObject 
 						| ClassObject ClassesObjects'''
+
+#<class_object> ::= <class_declaration> | <object_declaration> | ;
+def p_ClassObject(p):
+	'''ClassObject : ClassDeclaration 
+				| ObjectDeclaration
+				| R_SEMICOLON'''
+
+#<object_declaration> ::= object <identifier> <super>? { method_body }
+def p_ObjectDeclaration(p):
+	'''ObjectDeclaration : R_OBJECT Identifier BLOCKOPEN MethodBody BLOCKCLOSE
+						| R_OBJECT Identifier Super BLOCKOPEN MethodBody BLOCKCLOSE'''
+
+#<class_declaration> ::= class <identifier> <class_header> <super>? { <class body declarations>? }
+
+def p_ClassDeclaration(p):
+	'''ClassDeclaration : R_CLASS Identifier ClassHeader BLOCKOPEN ClassBodyDeclarations BLOCKCLOSE
+					 | R_CLASS Identifier ClassHeader Super BLOCKOPEN ClassBodyDeclarations BLOCKCLOSE
+					 | R_CLASS Identifier ClassHeader BLOCKOPEN  BLOCKCLOSE
+					 | R_CLASS Identifier ClassHeader Super BLOCKOPEN  BLOCKCLOSE'''
+
+#<super> ::= extends <class type>
+
+def p_Super(p):
+	'Super : R_EXTENDS ClassType'
+
+#<class_header> ::= ( <formal parameter list>? )
+def p_ClassHeader(p):
+	'''ClassHeader : LPARAN RPARAN
+				| LPARAN FormalParameterList RPARAN'''
+
+
 
 def p_PackageQualIdsemi0more(p):
 	'''PackageQualIdsemi0more : empty
