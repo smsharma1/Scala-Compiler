@@ -1,0 +1,4 @@
+*.pyc
+*.png
+*.out
+/src/parsetab.py
