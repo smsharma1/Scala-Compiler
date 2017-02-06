@@ -152,12 +152,8 @@ def p_EarlyDefs2(p):
 	# 	p[0] = Node("EarlyDefs2", [p[1]],[]).name
 
 def p_Constr(p):
-	'''Constr : AnnotType 
-			  | AnnotType ArgumentExprs0more'''
-	if len(p)==3:
-		p[0] = Node("Constr", [p[1], p[2]], []).name
-	else:
-		p[0] = Node("Constr", [p[1]],[]).name
+	'Constr : AnnotType ArgumentExprs0more'
+	p[0] = Node("Constr", [p[1], p[2]], []).name
 	
 def p_ArgumentExprs0more(p):
 	'''ArgumentExprs0more : empty 
@@ -225,9 +221,9 @@ def  p_Extends01TemplateBody01(p):
 
 def p_Extends01(p):
 	'''Extends01 : empty 
-			  | Extends01 R_EXTENDS'''
+			  |  R_EXTENDS'''
 	if len(p)==2:
-		p[0] = Node("Extends01", [p[1]], [p[2]]).name
+		p[0] = Node("Extends01", [p[1]]).name
 	# else:
 	# 	p[0] = Node("Extends01", [p[1]],[]).name
 
@@ -254,7 +250,7 @@ def p_TypeParamClause01(p):
 		p[0] = Node("TypeParamClause01", [p[1]], []).name
 
 def p_ClassDef(p):
-	'ClassDef : id TypeParamClause01 ConstrAnnotation01 AccessModifier01 ClassParamClauses ClassTemplateOpt'
+	'ClassDef : id TypeParamClause01 ConstrAnnotation0more AccessModifier01 ClassParamClauses ClassTemplateOpt'
 	p[0] = Node("ClassDef", [p[2], p[3], p[4], p[5], p[5]], [p[1]]).name
 
 def p_AccessModifier01(p):
@@ -263,11 +259,11 @@ def p_AccessModifier01(p):
 	if "AccessModifier" in p[1]:
 		p[0] = Node("AccessModifier01", [p[1]], []).name
 
-def p_ConstrAnnotation01(p):
-	'''ConstrAnnotation01 : empty
-							| ConstrAnnotation'''
-	if "ConstrAnnotation" in p[1]:
-		p[0] = Node("ConstrAnnotation01", [p[1]], []).name
+def p_ConstrAnnotation0more(p):
+	'''ConstrAnnotation0more : empty
+							| ConstrAnnotation0more ConstrAnnotation'''
+	if "ConstrAnnotation" in p[2]:
+		p[0] = Node("ConstrAnnotation0more", [p[1],p[2]], []).name
 
 def p_TmplDef(p):
 	'''TmplDef : Case01 R_CLASS ClassDef
@@ -499,8 +495,7 @@ def p_SelfType(p):
 def p_TemplateStat(p):
 	'''TemplateStat : TopStat1 Modifier0more Def
 				| TopStat1 Modifier0more Dcl
-				| Expr
-				| empty'''
+				| Expr1'''
 	if "Def" in p[3]:
 		p[0] = Node("TemplateStat", [p[1], p[2],p[3]],[]).name
 	elif "Def" in p[3]:
@@ -529,10 +524,6 @@ def p_SelfType01(p):
 		p[0] = Node("SelfType01", [p[1]],[]).name
 	# else:
 	# 	p[0] = Node("SelfType01", [p[1]],[]).name
-
-def p_NameValuePair(p):
-	'NameValuePair : R_VAL id EQUALASS PrefixExpr'
-	p[0] = Node("NameValuePair", [p[2],p[4]],[p[1],p[3]]).name
 
 def p_ConstrAnnotation(p):
 	'ConstrAnnotation : R_ATTHERATE SimpleType ArgumentExprs'
@@ -692,7 +683,7 @@ def p_Temp01(p):
 def p_ParamType(p):
 	'''ParamType : Type
 				| R_IMPLIES1 Type
-				| Type MULASS'''
+				| Type MULTIPLICATION'''
 	if len(p)==1:
 		p[0] = Node("ParamType", [p[1]],[]).name
 	elif "Type" in p[2]:
@@ -757,20 +748,20 @@ def p_Temp02(p):
 	# 	p[0] = Node("Temp02", [p[1]],[]).name
 
 def p_TypeParam(p): 
-	'''TypeParam : id  TypeParamClause01  Obscure2Type01 ObscureType01 ObscureType0more ColonType0more	
-				| UNDERSCORE TypeParamClause01  Obscure2Type01 ObscureType01 ObscureType0more ColonType0more'''
+	'''TypeParam : id  TypeParamClause01  Obscure2Type01 ObscureType01 Obscure1Type0more ColonType0more	
+				| UNDERSCORE TypeParamClause01  Obscure2Type01 ObscureType01 Obscure1Type0more ColonType0more'''
 	if "id" in p[1]:
 		p[0] = Node("TypeParam", [p[1], p[2], p[3], p[4], p[5], p[6]],[]).name
 	else:
 		p[0] = Node("TypeParam", [p[2], p[3], p[4], p[5], p[6]],[p[1]]).name
 
-def p_ObscureType0more(p):
-	'''ObscureType0more : empty
-						| ObscureType0more R_OBSCURE Type'''
+def p_Obscure1Type0more(p):
+	'''Obscure1Type0more : empty
+						| Obscure1Type0more R_OBSCURE1 Type'''
 	if "Type" in p[3]:
-		p[0] = Node("ObscureType0more", [p[1], p[3]],[p[2]]).name
+		p[0] = Node("ObscureType10more", [p[1], p[3]],[p[2]]).name
 	# else:
-	# 	p[0] = Node("ObscureType0more", [p[1]],[]).name
+	# 	p[0] = Node("ObscureType10more", [p[1]],[]).name
 
 def p_ColonType0more(p):
 	'''ColonType0more : empty
@@ -816,6 +807,7 @@ def p_CommaVariantTypeParam0more(p):
 #look reference there is ambiguity 
 def p_Patterns(p):
 	'Patterns : Pattern CommaPatterns01'
+	p[0] = Node('Patterns',[p[1],p[2]],[])
 
 def p_CommaPatterns01(p):
 	'''CommaPatterns01 : empty
@@ -1010,8 +1002,8 @@ def p_BlockStat(p):
 				| Annotation0more R_IMPLICIT Def
 				| Annotation0more  R_LAZY Def
 				| Annotation0more LocalModifier0more TmplDef
-				| Expr1
-				| empty'''
+				| Expr1'''
+
 	if "LocalModifier0more" in p[2]:
 		p[0] = Node("BlockStat", [p[1], p[2], p[3]],[]).name
 	elif "lazy" in p[2]:
@@ -1035,6 +1027,7 @@ def p_LocalModifier0more(p):
 	# else:
 	# 	p[0] = Node("LocalModifier0more", [p[1]],[]).name
 
+#ambiguity
 def p_Block(p):
 	'Block : BlockStatsemi0more ResultExpr01'
 	p[0] = Node("Block", [p[1], p[2]],[]).name
@@ -1087,6 +1080,7 @@ def p_ExprsComma01(p):
 def p_Exprs(p):
 	'Exprs : Expr  CommaExpr0more'
 	p[0] = Node("Exprs", [p[1], p[2]],[]).name
+
 def p_CommaExpr0more(p):
 	'''CommaExpr0more : CommaExpr0more COMMA Expr
 					| empty'''
@@ -1154,7 +1148,7 @@ def p_PrefixExpr(p):
 
 def p_InfixExpr(p):
 	'''InfixExpr : PrefixExpr
-				| InfixExpr id nl01 InfixExpr'''
+				| InfixExpr id nl01'''
 	if "InfixExpr" in p[1]:
 		p[0] = Node("InfixExpr", [p[1], p[2], p[3], p[4]],[]).name
 	else:
@@ -1474,7 +1468,6 @@ def p_Literal(p):
 		| STRING 
 		| CHAR
 		| R_NULL'''
-	print("Inliteral")
 	p[0] = Node('Literal',[],[p[1]]).name
 
 def p_semi(p):
