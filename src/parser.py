@@ -322,39 +322,75 @@ def p_FunDef(p):
 def p_ColonType01(p):
 	'''ColonType01 : empty 
 				| COLON Type'''
-
+	if len(p):
+		p[0] = Node("Case01", [], [p[1]]).name
+	else:
+		p[0] = Node("Case01", [p[1]], []).name
+	
 #check for nl
 def p_nl01(p):
 	'''nl01 : empty 
 			| nl'''
+	if "nl" in p[1]:
+		p[0] = Node("nl01", [p[1]], []).name
+	else:
+		p[0] = Node("nl01", [], [p[1]]).name
 
 #check for ids 
 def p_VarDef(p):
 	'''VarDef : PatDef
 			| ids COLON Type EQUALASS UNDERSCORE'''
+	if "Patdef" in p[1]:
+		p[0] = Node("Vardef", [p[1]], []).name
+	else:
+		p[0] = Node("Vardef", [p[1], p[3]], [p[2], p[4], p[5]]).name
 
 def p_PatDef(p):
 	'PatDef : Pattern2 CommaPattern20more ColonType01 EQUALASS Expr'
+	p[0] = Node("Patdef", [p[1], p[2], p[3], p[5]], [p[4]]).name
 
 def  p_CommaPattern20more(p):
 	'''CommaPattern20more : empty
 						  | CommaPattern20more COMMA Pattern2'''
+	if "CommaPatter20more" in p[1]:
+		p[0] = Node("CommaPatter20more", [p[1], p[3]], [p[2]]).name
+	else:
+		p[0] = Node("CommaPatter20more", [p[1]], []).name
+
 def p_Def(p):
 	'''Def : ParVarDef
 		| R_DEF FunDef
 		| R_TYPE nl0more TypeDef
 		| TmplDef'''
+	if len(p)==4:
+		p[0] = Node("Def", [p[2],p[3]],[p[1]]).name
+	elif len(p)==3:
+		p[0] = Node("Def", [p[2]], [p[1]]).name
+	elif "ParVarDef" in p[1]:
+		p[0] = Node("Def", [p[1]], []).name
+	else
+		p[0] = Node("Def", [p[1]],[]).name
 
 def p_nl0more(p):
 	'''nl0more : empty
 				| nl0more nl '''
+	if "nl0more" in p[1]:
+		p[0] = Node("nl0more", [p[1], p[2]], []).name
+	else:
+		p[0] = Node("nl0more", [p[1]], []).name
 
 def p_PatVarDef(p):
 	'''PatVarDef : R_VAL PatDef
 				| R_VAR VarDef'''
+	if "PatDef" in p[2]:
+		p[0] = Node("PatVarDef", [p[2]], [p[1]]).name
+	else:
+		p[0] = Node("PatVarDef", [p[2]], [p[1]]).name
 #check for id
 def p_TypeDcl(p):
 	'TypeDcl : id TypeParamClause01 Obscure2Type01 ObscureType01'
+	p[0] = Node("Vardef", [p[1], p[3]], [p[2], p[4], p[5]]).name
+	
 
 def p_Obscure2Type01(p):
 	'''Obscure2Type01 : empty 
