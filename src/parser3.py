@@ -210,17 +210,20 @@ def p_TraitTemplateOpt(p):
 
 def  p_Extends01TemplateBody01(p):
 	'''Extends01TemplateBody01 : empty 
-								| Extends01 TemplateBody'''
-	if len(p)==2:
-		p[0] = Node("Extends01TemplateBody01", [p[1], p[2]], []).name
+								| R_EXTENDS TemplateBody
+								| TemplateBody'''
+	if len(p)==3:
+		p[0] = Node("Extends01TemplateBody01", [p[2]], [p[1]]).name
+	else:
+		p[0] = Node("Extends01TemplateBody01", [p[1]]).name
 	# else:
 	# 	p[0] = Node("Extends01TemplateBody01", [p[1]],[]).name
 
-def p_Extends01(p):
-	'''Extends01 : empty 
-			  |  R_EXTENDS'''
-	if len(p)==2:
-		p[0] = Node("Extends01", [p[1]]).name
+# def p_Extends01(p):
+# 	'''Extends01 : empty 
+# 			  |  R_EXTENDS'''
+# 	if len(p)==2:
+# 		p[0] = Node("Extends01", [p[1]]).name
 	# else:
 	# 	p[0] = Node("Extends01", [p[1]],[]).name
 
@@ -1145,7 +1148,7 @@ def p_PrefixExpr(p):
 
 def p_InfixExpr(p):
 	'''InfixExpr : PrefixExpr
-				| InfixExpr id nl01'''
+				| InfixExpr id nl01 InfixExpr'''
 	if "InfixExpr" in p[1]:
 		p[0] = Node("InfixExpr", [p[1], p[2], p[3], p[4]],[]).name
 	else:
@@ -1309,7 +1312,7 @@ def p_TypeArgs(p):
 def p_SimpleType(p):
 	'''SimpleType : SimpleType TypeArgs
 		   		  | SimpleType R_HASH id
-		   		  | StableId
+				  | StableId
 				  | Path DOT R_TYPE
 				  | LPARAN Types RPARAN'''
 	if len(p) == 2:
@@ -1375,7 +1378,7 @@ def p_semiExistentialDcl0more(p):
 		p[0] = Node('semiExistentialDcl0more',[p[1],p[2],p[3]],[]).name
 
 def p_FunctionArgTypes(p):
-	'''FunctionArgTypes : InfixType
+	'''FunctionArgTypes : InfixType 
 					| LPARAN ParamType CommaParamType0more  RPARAN
 					| LPARAN  RPARAN'''
 	if len(p) == 2:
@@ -1428,10 +1431,11 @@ def p_ClassQualifier01(p):
 	if "ClassQualifier" in p[1]:
 		p[0] = Node('ClassQualifier01',p[1]).name
 
+#removed StableId
 def p_Path(p):
-	'''Path : StableId
-		| id DOT R_THIS
-		|  R_THIS'''
+	'''Path : id DOT R_THIS
+		|  R_THIS
+		| StableId'''
 	if 'StableId' in p[1]:
 		p[0] = Node('Path',[p[1]],[]).name
 	elif 'this' in p[1]:
@@ -1488,7 +1492,7 @@ def p_id(p):
 	p[0] = Node('id',[],[p[1]]).name
 
 def p_varid(p):
-	'varid : BITAND'
+	'varid : ID'
 	print("hello1")
 	p[0] = Node('varid',[],[p[1]]).name
 
