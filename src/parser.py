@@ -168,16 +168,94 @@ def p_Case01(p):
 def p_TypeDef(p):
 	'TypeDef : ID TypeParamClause01 EQUALASS Type'
 
-FunDef ::= FunSig [‘:’ Type] ‘=’ Expr
-| FunSig [nl] ‘{’ Block ‘}’
-| ‘this’ ParamClause ParamClauses
-(‘=’ ConstrExpr | [nl] ConstrBlock)
-
 def p_FunDef(p):
 	'''FunDef : FunSig ColonType01 EQUALASS Expr
 			| FunSig nl01 BLOCKOPEN Block BLOCKCLOSE
 			| R_THIS ParamClause ParamClauses EQUALASS ConstrExpr
 			| R_THIS ParamClause ParamClauses nl01 ConstrBlock'''
+def p_ColonType01(p):
+	'''ColonType01 : empty 
+				| COLON Type'''
+
+#check for nl
+def p_nl01(p):
+	'''nl01 : empty 
+			| nl'''
+
+#check for ids 
+def p_VarDef(p):
+	'''VarDef : PatDef
+			| ids COLON Type EQUALASS UNDERSCORE'''
+
+def p_PatDef(p):
+	'PatDef : Pattern2 CommaPattern20more ColonType01 EQUALASS Expr'
+
+def  p_CommaPattern20more(p):
+	'''CommaPattern20more : empty
+						  | CommaPattern20more COMMA Pattern2'''
+def p_Def(p):
+	'''Def : ParVarDef
+		| R_DEF FunDef
+		| R_TYPE nl0more TypeDef
+		| TmplDef'''
+
+def p_nl0more(p):
+	'''nl0more : empty
+				| nl0more nl '''
+
+def p_PatVarDef(p):
+	'''PatVarDef : R_VAL PatDef
+				| R_VAR VarDef'''
+#check for id
+def p_TypeDcl(p):
+	'TypeDcl : id TypeParamClause01 Obscure2Type01 ObscureType01'
+
+def p_Obscure2Type01(p):
+	'''Obscure2Type01 : empty 
+					| R_OBSCURE2 Type'''
+
+def p_ObscureType01(p):
+	'''ObscureType01 : empty 
+					| R_OBSCURE Type'''
+
+def p_FunSig(p):
+	'FunSig : id FunTypeParamClause01 ParamClauses'
+
+def p_FunTypeParamClause01(p):
+	''' FunTypeParamClause01 : empty 
+							| FunTypeParamClause'''
+def p_FunDcl(p):
+	'FunDcl : FunSig ColonType01'
+
+def p_VarDcl(p):
+	'VarDcl : ids COLON Type'
+
+def p_ValDcl(p):
+	'ValDcl : ids COLON Type'
+
+def p_Dcl(p):
+	'''Dcl : R_VAL ValDcl
+		| R_VAR VarDcl
+		| R_DEF FunDcl
+		| R_TYPE nl0more TypeDcl'''
+
+def p_ImportSelector(p):
+	'ImportSelector : id ImpliesidorUnderscore01'
+
+def p_ImpliesidorUnderscore01(p):
+	'''ImpliesidorUnderscore01 : empty 
+							 | 	R_IMPLIES1 id
+							| R_IMPLIES1 UNDERSCORE'''
+
+def p_ImportSelectors(p):
+	'''ImportSelectors : BLOCKOPEN ImportselectorComma0more ImportSelector BLOCKCLOSE
+					| BLOCKOPEN ImportselectorComma0more UNDERSCORE BLOCKCLOSE '''
+
+def p_ImportselectorComma0more(p):
+	'''ImportselectorComma0more : empty
+							| ImportselectorComma0more ImportSelector COMMA'''
+							 
+
 
 
 def p_Ids(p):
