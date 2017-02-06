@@ -739,12 +739,10 @@ def p_ParamClause(p):
 def p_Params01(p):
 	'''Params01 : empty
 			| Params'''
-<<<<<<< HEAD
 	if "Params" in p[1]:
 		p[0] = Node("Params01", [p[1]],[]).name
 	else:
 		p[0] = Node("Params01", [p[1]],[]).name
-=======
 
 def p_ParamClauses(p):
 	'ParamClauses : ParamClause0more Temp02'
@@ -925,26 +923,7 @@ def p_ExprsComma01(p):
 					| Exprs COMMA'''
 
 
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
-def p_
 
->>>>>>> 4e536602f746e49fa43081c88cd414d17bb999ff
 
 def p_Ids(p):
         "Ids : ID "
