@@ -567,57 +567,87 @@ def MethodInvocation(p):
 def FieldAccess(p):
 	'''FieldAccess : Primary DOT Identifier
 					| Super DOT Identifier'''
+	p[0] = Node('FieldAccess',[p[1],p[3]],[p[2]])
 
 # <primary> ::= <primary no new array> | <array creation expression>
 def Primary(p):
 	'''Primary : PrimaryNoNewArray
 				| ArrayCreationExpression'''
+	p[0] = Node('Primary',[p[1]],[])
 
-# <primary no new array> ::= <literal> | this | ( <expression> ) | <class instance creation expression> | <field access> | <method invocation> | <array access>
+# <primary no new array> ::= <literal> | this | ( <expression> ) | <class instance creation expression> 
+# | <field access> | <method invocation> | <array access>
+
 def PrimaryNoNewArray(p):
 	'''PrimaryNoNewArray : Literal
-						| This
+						| RTHIS
 						| LPARAN Expression RPARAN
 						| ClassInstanceCreationExpresssion
 						| FieldAccess
 						| MethodInvocation
 						| ArrayAccess'''
-
+	if len(p) == 3:
+		p[0] = Node('PrimaryNoNewArray',[p[2]],[p[1],p[3]])
+	elif 'RTHIS' in p[1] :
+		p[0] = Node('PrimaryNoNewArray',[ ],[p[1]])
+	else:
+		p[0] = Node('PrimaryNoNewArray',[p[1]],[])
 # <class instance creation expression> ::= new <class type> ( <argument list>? )
 def ClassInstanceCreationExpression(p):
 	'''ClassInstanceCreationExpression : R_NEW ClassType LPARAN ArgumentList RPARAN
 										| R_NEW ClassType LPARAN RPARAN'''
+	if len(p) ==6:
+		p[0] = Node('ClassInstanceCreationExpression',[p[2],p[4]],[p[1],p[3],p[5]])
+	else:
+		p[0] = Node('ClassInstanceCreationExpression',[p[2]],[p[1],p[3],p[4]])
 
 # <argument list> ::= <expression> | <argument list> , <expression>
 def ArgumentList(p):
 	'''ArgumentList : Expression
 					| ArgumentList COMMA Expression'''
+	if len(p) == 2:
+		p[0] = Node('ArgumentList',[p[1]],[])
+	else :
+		p[0] = Node('ArgumentList',[p[1],p[3]],[p[2]])
 
 # <array creation expression> ::= new <primitive type> <dim exprs> <dims>? | new <class or interface type> <dim exprs> <dims>?
 def ArrayCreationExpression(p):
 	'''ArrayCreationExpression : R_NEW PrimitiveType DimExprs
 								| R_NEW PrimitiveType DimExprs Dims
-								| R_new ClassOrInterfaceType DimExprs
-								| R_new ClassOrInterfaceType DimExprs Dims'''
-
+								| R_NEW ClassOrInterfaceType DimExprs
+								| R_NEW ClassOrInterfaceType DimExprs Dims'''
+	if len(p) == 4:
+		p[0] = Node('ArrayCreationExpression',[p[2],p[3]],p[0])
+	else 
+		p[0] = Node('ArrayCreationExpression',[p[2],p[3],p[4]],p[0])
 # <dim exprs> ::= <dim expr> | <dim exprs> <dim expr>
 def DimExprs(p):
 	'''DimExprs : DimExpr
 				| DimExprs DimExpr'''
+	if len(p) ==2:
+		p[0] = Node('DimExprs',[p[1]],[])
+	else :
+		p[0] = Node('DimExprs',[p[1],p[2]],[])
 
 # <dim expr> ::= [ <expression> ]
 def DimExpr(p):
 	'''DimExpr : LSQRB Expression RSQRB'''
+	p[0] = Node('DimExpr',[p[2]],[p[1],p[3]])
 
 # <dims> ::= [ ] | <dims> [ ]
 def Dims(p):
 	'''Dims : LSQRB RSQRB
 			| LSQRB Dims RSQRB'''
+	if len(p) == 3 :
+		p[0] = Node('Dims',[],[p[1],p[2]])
+	else:
+		p[0] = Node('Dims',[p[2]],[p[1],p[3]])
 
 # <array access> ::= <expression name> [ <expression> ] | <primary no new array> [ <expression>]
 def ArrayAccess(p):
 	'''ArrayAccess : ExpressionName LSQRB Expression RSQRB
 					| PrimaryNoNewArray LSQRB Expresssion RSQRB'''
+	p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]])
 
 
 
