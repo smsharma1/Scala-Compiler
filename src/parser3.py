@@ -31,35 +31,56 @@ class Node:
 def p_CompilationUnit(p):
 	'''CompilationUnit : ImportDeclarations ClassesObjects
 						| ClassesObjects'''
+	if len(p)==2:
+		p[0] = Node("CompilationUnit", [p[1], p[2]],[]).name
+	else:
+		p[0] = Node("CompilationUnit", [p[1]],[]).name
 
 #<import declarations> ::= <import declaration> | <import declarations> <import declaration>
 
 def p_ImportDeclarations(p):
 	'''	ImportDeclarations : ImportDeclaration 
 							| ImportDeclarations ImportDeclaration'''
-
+	if len(p)==2:
+		p[0] = Node("ImportDeclarations", [p[1], p[2]],[]).name
+	else:
+		p[0] = Node("ImportDeclarations", [p[1]],[]).name
 
 #<import declaration> ::= import <type name> ;
 
 def p_ImportDeclaration(p):
 	'ImportDeclaration : R_IMPORT TypeName R_SEMICOLON'
-
+	p[0] = Node("ImportDeclaration", [p[2]],[p[1],p[3]]).name
+	
 #<classes_objects> ::= <class_object> | <class_object> <classes_objects>
 
 def p_ClassesObjects(p):
 	'''ClassesObjects : ClassObject 
 						| ClassObject ClassesObjects'''
-
+	if len(p)==2:
+		p[0] = Node("ClassesObjects", [p[1], p[2]],[]).name
+	else:
+		p[0] = Node("ClassesObjects", [p[1]],[]).name
 #<class_object> ::= <class_declaration> | <object_declaration> | ;
 def p_ClassObject(p):
 	'''ClassObject : ClassDeclaration 
 				| ObjectDeclaration
 				| R_SEMICOLON'''
+	if "ClassDeclaration" in p[1]:
+		p[0] = Node("ClassObject", [p[1]],[]).name
+	elif:
+		p[0] = Node("ClassObject", [p[1]],[]).name
+	else:
+		p[0] = Node("ClassObject", [],[p[1]]).name
 
 #<object_declaration> ::= object <identifier> <super>? { method_body }
 def p_ObjectDeclaration(p):
 	'''ObjectDeclaration : R_OBJECT Identifier BLOCKOPEN MethodBody BLOCKCLOSE
 						| R_OBJECT Identifier Super BLOCKOPEN MethodBody BLOCKCLOSE'''
+	if len(p)==6:
+		p[0] = Node("ObjectDeclaration", [p[2], p[3], p[5]],[p[1], p[4], p[6]]).name
+	else:
+		p[0] = Node("ObjectDeclaration", [p[2], p[4]],[p[1], p[3], p[5]]).name
 
 #<class_declaration> ::= class <identifier> <class_header> <super>? { <class body declarations>? }
 
@@ -68,61 +89,99 @@ def p_ClassDeclaration(p):
 					 | R_CLASS Identifier ClassHeader Super BLOCKOPEN ClassBodyDeclarations BLOCKCLOSE
 					 | R_CLASS Identifier ClassHeader BLOCKOPEN  BLOCKCLOSE
 					 | R_CLASS Identifier ClassHeader Super BLOCKOPEN  BLOCKCLOSE'''
-
+	if len(p)==8:
+		p[0] = Node("ClassDeclaration", [p[2], p[3], p[4], p[6]],[p[1], p[5], p[7]]).name
+	elif "Super" in p[4]:
+		p[0] = Node("ClassDeclaration", [p[2], p[3], p[4]],[p[1], p[5], p[6]]).name
+	elif len(p)==7:
+		p[0] = Node("ClassDeclaration", [p[2], p[3], p[5]],[p[1], p[4], p[6]]).name
+	else:
+		p[0] = Node("ClassDeclaration", [p[2], p[3]],[p[1], p[4], p[5]]).name
 #<super> ::= extends <class type>
 
 def p_Super(p):
 	'Super : R_EXTENDS ClassType'
-
+	p[0] = Node("Super", [p[2]],[p[1]]).name
 #<class_header> ::= ( <formal parameter list>? )
 def p_ClassHeader(p):
 	'''ClassHeader : LPARAN RPARAN
 				| LPARAN FormalParameterList RPARAN'''
+	if len(p)==3:
+		p[0] = Node("ClassHeader", [],[p[1], p[2]]).name
+	else:
+		p[0] = Node("ClassHeader", [p[2]],[p[1], p[3]]).name
 
 #<class body declarations> ::= <class body declaration> | <class body declarations> <class body declaration>
 def p_ClassBodyDeclarations(p):
 	'''ClassBodyDeclarations : ClassBodyDeclaration
 							 | ClassBodyDeclarations ClassBodyDeclaration'''
-
+	if len(p)==3:
+		p[0] = Node("ClassBodyDeclarations", [p[1], p[2]],[]).name
+	else:
+		p[0] = Node("ClassBodyDeclarations", [p[1]],[]).name
 #<class body declaration> ::= <field declaration> | <method declaration>
 def p_ClassBodyDeclaration(p):
 	'''ClassBodyDeclaration : FieldDeclaration
 							| MethodDeclaration'''
+	if "FieldDeclaration" in p[1]:
+		p[0] = Node("ClassBodyDeclaration", [p[1]],[]).name
+	else:
+		p[0] = Node("ClassBodyDeclaration", [p[1]],[]).name
 
 #<formal parameter list> ::= <formal parameter> | <formal parameter list> , <formal parameter>
 def p_FormalParameterList(p):
 	'''FormalParameterList : FormalParameter 
 							| FormalParameterList COMMA FormalParameter'''
-
+	if len(p)==2:
+		p[0] = Node("FormalParameterList", [p[1]],[]).name
+	else:
+		p[0] = Node("FormalParameterList", [p[1], p[3]],[p[2]]).name
 #<formal parameter> ::= <variable declarator id> : <type> 
 def p_FormalParameter(p):
 	'FormalParameter : VariableDeclaratorId COLON Type'
-
+	p[0] = Node("FormalParamter", [p[1], p[3]],[p[2]]).name
 #<class type> ::= <identifier> | with <identifier><class type>
 #confusion check later
 def p_ClassType(p):
 	'''ClassType : Identifier 
 				| R_WITH Identifier ClassType'''
+	if len(p)==4:
+		p[0] = Node("ClassType", [p[2], p[3]],[p[1]]).name
+	else:
+		p[0] = Node("ClassType", [p[1]],[]).name
 
 #<field declaration> ::=  val <variable declarator> ;
 def p_FieldDeclaration(p):
 	'FieldDeclaration : R_VAL VariableDeclarator SEMICOLON'
-
+	p[0] = Node("FieldDeclaration", [p[2]],[p[1], p[3]]).name
 #<variable declarator> ::= <identifier> | <identifier>: <type>   | <identifier> <variable_declarator_extra>  
 def p_VariableDeclarator(p):
 	'''VariableDeclarator : Identifier 
 						| Identifier COLON Type 
 						| Identifier VariableDeclaratorExtra'''
+	if len(p)==4:
+		p[0] = Node("VariableDeclarator", [p[1], p[3]],[p[2]]).name
+	elif len(p)==3:
+		p[0] = Node("VariableDeclarator", [p[1], p[2]],[]).name
+	else:
+		p[0] = Node("VariableDeclarator", [p[1]],[]).name
 
 #<variable_declarator_extra> ::= = <variable initializer> | :<type> = <variable initializer>
 def p_VariableDeclaratorExtra(p):
 	'''VariableDeclaratorExtra : EQUALASS VariableInitializer
 							| COLON Type EQUALASS VariableInitializer''' 
-
+	if len(p)==5:
+		p[0] = Node("VariableDeclaratorExtra", [p[2], p[4]],[p[1], p[3]]).name
+	else:
+		p[0] = Node("VariableDeclaratorExtra", [p[2]],[p[1]]).name
 #<variable initializer> ::= <expression> | <array initializer>
 def p_VariableInitializer(p):
 	'''VariableInitializer : Expression
 						| ArrayInitializer'''
+	if "Expression" in p[1]:
+		p[0] = Node("VariableInitializer", [p[1]],[]).name
+	else:
+		p[0] = Node("VariableInitializer", [p[1]],[]).name
 
 #<method declaration> ::= <method header> <method body>
 def p_MethodDeclaration(p):
@@ -171,8 +230,6 @@ def p_IntegralType(p):
 <class type> ::= <type name>
 
 <array type> ::= <type> [ ]
-
-
 
 
 def p_PackageQualIdsemi0more(p):
