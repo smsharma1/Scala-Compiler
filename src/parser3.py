@@ -649,6 +649,13 @@ def AmbiguousName(p):
 					| AmbiguousName DOT Identifier'''
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
+def Literal(p):
+	'''Literal : IntegerLiteral
+				| FloatingPointLiteral
+				| BooleanLiteral
+				| CharacterLiteral
+				| StringLiteral
+				| NullLiteral'''
 
 # <integer literal> ::= <decimal integer literal> | <hex integer literal> | <octal integer literal>
 
