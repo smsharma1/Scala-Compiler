@@ -742,7 +742,7 @@ def ArrayCreationExpression(p):
 								| R_NEW ClassOrInterfaceType DimExprs Dims'''
 	if len(p) == 4:
 		p[0] = Node('ArrayCreationExpression',[p[2],p[3]],p[0]).name
-	else 
+	else: 
 		p[0] = Node('ArrayCreationExpression',[p[2],p[3],p[4]],p[0]).name
 # <dim exprs> ::= <dim expr> | <dim exprs> <dim expr>
 def DimExprs(p):
