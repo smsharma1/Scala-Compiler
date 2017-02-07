@@ -677,6 +677,13 @@ def AmbiguousName(p):
 		p[0] = Node('AmbiguousName',[p[1],p[3]],[p[2]])
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
+def Literal(p):
+	'''Literal : IntegerLiteral
+				| FloatingPointLiteral
+				| BooleanLiteral
+				| CharacterLiteral
+				| StringLiteral
+				| NullLiteral'''
 
 
 def p_BooleanLiteral(p):
