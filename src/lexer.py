@@ -127,7 +127,9 @@ tokens =list(reserved.values()) +  [
 	'COLON',
 	'COMMENT',
 	'COLOR',
-	'UNDERSCORE'
+	'UNDERSCORE',
+	'QUESTION',
+	'BITRSFILLASS',
 ]
 
 def t_COMMENT(t):
@@ -142,7 +144,7 @@ identifier = r'(' + nondigit + r'(' + digit + r'|' + nondigit + r')*)'
 def t_ID(t):
 	t.type = reserved.get(t.value,'ID')    # Check for reserved words
 	return t
-
+t_QUESTION = r'\?'
 t_GT = r'>'
 t_GE = r'>='
 t_LT = r'<'
@@ -172,6 +174,7 @@ t_BITNEG = r'~'
 t_BITLSHIFT = r'<<'
 t_BITRSHIFT = r'>>'
 t_BITRSFILL = r'>>>'
+t_BITRSFILLASS = r'>>>='
 t_EQUALASS = r'='
 t_ADDASS = r'\+='
 t_SUBASS = r'-='
