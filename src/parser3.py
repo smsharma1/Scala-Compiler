@@ -332,23 +332,174 @@ def p_StatementNoShortIf(p):
 #<empty statement> ::= ;
 def p_EmptyStatement(p):
 	'EmptyStatement : SEMICOLON'
-	
-<statement no short if> ::= <statement without trailing substatement> | <if then else statement no short if> | <while statement no short if> | <for statement no short if>
 
 
-<expression statement> ::= <statement expression> ;
+#<expression statement> ::= <statement expression> ;
+def ExpressionStatement(p):
+	'ExpressionStatement : StatementExpression SEMICOLON'
 
-<statement expression> ::= <assignment> | <preincrement expression> | <postincrement expression> | <predecrement expression> | <postdecrement expression> | <method invocation> | <class instance creation expression>
+#<statement expression> ::= <assignment> | <preincrement expression> 
+# | <postincrement expression> | <predecrement expression> | <postdecrement expression> 
+# | <method invocation> | <class instance creation expression>
+def StatementExpression(p):
+	'''StatementExpression : Assignment
+						| PreincrementExpression
+						| PostincrementExpression
+						| PredecrementExpression
+						| PostdecrementExpression
+						| MethodInvocation
+						| ClassInstanceCreationExpression'''
 
-<if then statement>::= if ( <expression> ) <statement>
 
-<if then else statement>::= if ( <expression> ) <statement no short if> else <statement>
+def p_IfThenStatement(p):
+	'IfThenStatement : R_IF LPARAN Expression RPARAN Statement'
 
-<if then else statement no short if> ::= if ( <expression> ) <statement no short if> else <statement no short if>
+def p_IfThenElseStatement(p):
+	'IfThenElseStatement : R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE Statement'
 
-<switch statement> ::= <expression>  match <switch block>
+def p_IfThenElseStatementNoShortIf(p):
+	'IfThenElseStatementNoShortIf : R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE StatementNoShortIf'
 
-<switch block> ::= { <switch block statement groups>? <switch labels>? }
+def p_SwitchStatement(p):
+	'SwitchStatement :  Expression  match SwitchBlock'
+
+def p_SwitchBlock(p):
+	'''SwitchBlock : BLOCKOPEN SwitchBlockStatementGroups SwitchLabels BLOCKCLOSE
+				| BLOCKOPEN  SwitchLabels BLOCKCLOSE
+				| BLOCKOPEN SwitchBlockStatementGroups  BLOCKCLOSE
+				| BLOCKOPEN   BLOCKCLOSE'''
+
+
+def p_SwitchBlockStatementGroups(p):
+	'''SwitchBlockStatementGroups : SwitchBlockStatementGroup
+									 | SwitchBlockStatementGroups SwitchBlockStatementGroup'''
+
+def p_SwitchBlockStatementGroup(p):
+	'SwitchBlockStatementGroup: SwitchLabels BlockStatements'
+
+def p_SwitchLabels(p):
+	'''SwitchLabels : SwitchLabel 
+					| SwitchLabels SwitchLabel'''
+
+def p_SwitchLabel(p):
+	'''SwitchLabel : R_CASE Expression COLON 
+				| R_DEFAULT COLON'''
+
+def p_WhileStatement(p):
+	'WhileStatement :  R_WHILE  LPARAN Expression RPARAN Statement'
+
+def p_ForLoop(p): 
+	'ForLoop : R_FOR BLOCKOPEN ForExprs ForIfCondition BLOCKCLOSE Statement'
+
+def p_ForIfCondition(p): 
+	 '''ForIfCondition : IfVariables SEMICOLON ForIfCondition 
+	 				| IfVariables'''
+
+def p_IfVariables(p):
+	'IfVariables : R_IF Expression'
+
+def p_ForExprs(p):
+	'''ForExprs :  ForVariables SEMICOLON ForExprs 
+			| ForVariables'''
+
+def p_ForVariables(p): 
+	'ForVariables: IDVARNAME R_LEFTARROW1 Expression ForUntilTo Expression' 
+
+def p_ForUntilTo(p):
+	'''ForUntilTo: R_UNTIL 
+				| R_TO'''
+
+def p_StatementExpressionList(p):
+	'''StatementExpressionList : StatementExpression 
+							| StatementExpressionList COMMA StatementExpression'''
+
+def p_BreakStatement(p) :
+	'''BreakStatement : R_BREAK Identifier SEMICOLON
+					| R_BREAK SEMICOLON'''
+
+def p_ContinueStatement(p):
+	'''ContinueStatement : R_CONTINUE Identifier SEMICOLON
+						| R_CONTINUE  SEMICOLON'''
+
+def p_ReturnStatement(p):
+	'''ReturnStatement : R_RETURN Expression SEMICOLON
+					| R_RETURN SEMICOLON'''
+
+def p_ConstantExpression(p):
+	'ConstantExpression : Expression'
+
+def Expression(p):
+	'Expression : AssignmentExpression'
+
+def AssignmentExpression(p):
+	'''AssignmentExpression : ConditionalExpression 
+						| Assignment'''
+
+def Assignment(p):
+	'Assignment : LeftHandSide AssignmentOperator AssignmentExpression'
+
+def LeftHandSide(p):
+	'''LeftHandSide : ExpressionName 
+				| FieldAccess
+				| ArrayAccess'''
+
+def AssignmentOperator(p):
+	'''AssignmentOperator : EQUALASS 
+						| MULASS
+						| DIVASS
+						| MODASS 
+						| ADDASS
+						| SUBASS
+						| BITLEFTASS
+						| BITRIGHTASS
+						| >>>= 
+						| BITANDASS 
+						| BITXORASS 
+						| BITORASS'''
+
+def ConditionalExpression(p):
+	'''ConditionalExpression : ConditionalOrExpression 
+							| ConditionalOrExpression QUESTION  Expression COLON ConditionalExpression'''
+
+def ConditionalOrExpression(p):
+	'''ConditionalOrExpression : ConditionalAndExpression 
+							| ConditionalOrExpression OR ConditionalAndExpression'''
+
+def ConditionalAndExpression(p) :
+	'''ConditionalAndExpression : InclusiveOrExpression 
+							| ConditionalAndExpression AND InclusiveOrExpression'''
+
+def InclusiveOrExpression(p) :
+	'''InclusiveOrExpression : ExclusiveOrExpression 
+						| InclusiveOrExpression 
+						| ExclusiveOrExpression'''
+
+def ExclusiveOrExpression(p):
+	'''ExclusiveOrExpression : AndExpression 
+							| ExclusiveOrExpression BITXOR AndExpression'''
+
+def AndExpression(p):
+	'''AndExpression : EqualityExpression 
+					| AndExpression BITAND EqualityExpression'''					
+
+def EqualityExpression(p):
+	'''EqualityExpression : RelationalExpression
+						 | EqualityExpression AND RelationalExpression
+						| EqualityExpression NOTEQUAL RelationalExpression'''
+
+def RelationalExpression(p):
+	'''RelationalExpression : ShiftExpression 
+						| RelationalExpression LT ShiftExpression 
+						| RelationalExpression GT ShiftExpression 
+						| RelationalExpression LE ShiftExpression 
+						| RelationalExpression GE ShiftExpression 
+						| RelationalExpression R_INSTANCEOF ReferenceType'''
+
+def ShiftExpression(p):
+	'''ShiftExpression : AdditiveExpression 
+					| ShiftExpression BITLSHIFT AdditiveExpression 
+					| ShiftExpression BITRSHIFT AdditiveExpression 
+					| ShiftExpression BITRSFILL AdditiveExpression'''
 
 
 
