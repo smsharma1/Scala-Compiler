@@ -319,6 +319,7 @@ def p_StatementWithoutTrailingSubstatement(p):
 										| ContinueStatement
 										| ReturnStatement'''
 	p[0] = Node("StatementWithoutTrailingSubstatement", [p[1]],[]).name
+
 <statement no short if> ::= <statement without trailing substatement> | <if then else statement no short if> | <while statement no short if> | <for statement no short if>
 
 <empty statement> ::= ;
@@ -1716,23 +1717,229 @@ def p_Type(p):
 	else:
 		p[0] = Node('Type',[p[1]],[]).name
 
-def p_ClassQualifier(p):
-	'ClassQualifier : LSQRB id RSQRB'
-	p[0] = Node('ClassQualifier',[p[2]],[p[1],p[3]]).name
+<additive expression> ::= <multiplicative expression> | <additive expression> + <multiplicative expression> | <additive expression> - <multiplicative expression>
 
-def p_StableId(p):
-	'''StableId : id
-			| Path DOT id
-			| id DOT R_SUPER ClassQualifier01 DOT id
-			| R_SUPER ClassQualifier01 DOT id'''
-	if len(p) == 2:
-		p[0] = Node('StableId',[p[1]],[]).name
-	elif 'Path' in p[1]:
-		p[0] = Node('StableId',[p[1],p[3]],[p[2]]).name
-	elif 'id' in p[1]:
-		p[0] = Node('StableId',[p[1],p[4],p[6]],[p[2],p[3],p[5]]).name
-	else:
-		p[0] = Node('StableId',[p[2],p[4]],[p[1],p[3]]).name
+<multiplicative expression> ::= <unary expression> | <multiplicative expression> * <unary expression> | <multiplicative expression> / <unary expression> | <multiplicative expression> % <unary expression>
+
+<cast expression> ::= ( <primitive type> ) <unary expression> | ( <reference type> ) <unary expression not plus minus>
+
+<unary expression> ::= <preincrement expression> | <predecrement expression> | + <unary expression> | - <unary expression> | <unary expression not plus minus>
+def UnaryExpression(p):
+	'''UnaryExpression'''
+
+<predecrement expression> ::= -- <unary expression>
+def PredecrementExpression(p):
+	'PredecrementExpression : MINUS MINUS UnaryExpression'
+<preincrement expression> ::= ++ <unary expression>
+def PreincrementExpression(p):
+	'PreincrementExpression : PLUS PLUS UnaryExpression'
+
+<unary expression not plus minus> ::= <postfix expression> | ~ <unary expression> | ! <unary expression> | <cast expression>
+def UnaryExpressionNotPlusMinus(p):
+	'''UnaryExpressionNotPlusMinus : PostfixExpression
+									| BITNEG UnaryExpression
+									| NOT UnaryExpression
+									| CastExpression'''
+<postdecrement expression> ::= <postfix expression> --
+def PostdecrementExpression(p):
+	'PostdecrementExpression : PostfixExpression'
+<postincrement expression> ::= <postfix expression> ++
+def PostincrementExpression(p):
+	'PostincrementExpression : PostfixExpression PLUS PLUS'
+
+<postfix expression> ::= <primary> | <expression name> | <postincrement expression> | <postdecrement expression>
+def PostfixExpression(p):
+	'''PostfixExpression : Primary
+							| ExpressionName
+							| PostincrementExpression
+							| PostdecrementExpression'''
+
+<method invocation> ::= <method name> ( <argument list>? ) | <primary> . <identifier> ( <argument list>? ) | super . <identifier> ( <argument list>? )
+def MethodInvocation(p):
+	'''MethodInvocation : MethodName LPARAN ArgumentList RPARAN
+						| MethodName LPARAN RPARAN
+						| Primary DOT Identifier LPARAN ArgumentList RPARAN
+						| Primary DOT Identifier LPARAN RPARAN
+						| Super DOT Identifier LPARAN ArgumentList RPARAN
+						| Super DOT Identifier LPARAN RPARAN
+
+<field access> ::= <primary> . <identifier> | super . <identifier>
+def FieldAccess(p):
+	'''FieldAccess : Primary DOT Identifier
+					| Super DOT Identifier
+
+<primary> ::= <primary no new array> | <array creation expression>
+def Primary(p):
+	'''Primary : PrimaryNoNewArray
+				| ArrayCreationExpression'''
+
+<primary no new array> ::= <literal> | this | ( <expression> ) | <class instance creation expression> | <field access> | <method invocation> | <array access>
+def PrimaryNoNewArray(p):
+	'''PrimaryNoNewArray : Literal
+						| This
+						| LPARAN Expression RPARAN
+						| ClassInstanceCreationExpresssion
+						| FieldAccess
+						| MethodInvocation
+						| ArrayAccess
+
+<class instance creation expression> ::= new <class type> ( <argument list>? )
+def ClassInstanceCreationExpression(p):
+	'''ClassInstanceCreationExpression : R_NEW ClassType LPARAN ArgumentList RPARAN
+										| R_NEW ClassType LPARAN RPARAN
+
+<argument list> ::= <expression> | <argument list> , <expression>
+def ArgumentList(p):
+	'''ArgumentList : Expression
+					| ArgumentList COMMA Expression'''
+
+<array creation expression> ::= new <primitive type> <dim exprs> <dims>? | new <class or interface type> <dim exprs> <dims>?
+def ArrayCreationExpression(p):
+	'''ArrayCreationExpression : R_NEW PrimitiveType DimExprs
+								| R_NEW PrimitiveType DimExprs Dims
+								| R_new ClassOrInterfaceType DimExprs
+								| R_new ClassOrInterfaceType DimExprs Dims
+
+<dim exprs> ::= <dim expr> | <dim exprs> <dim expr>
+def DimExprs(p):
+	'''DimExprs : DimExpr
+				| DimExprs DimExpr'''
+
+<dim expr> ::= [ <expression> ]
+def DimExpr(p):
+	'''DimExpr : LSQRB Expression RSQRB'''
+
+<dims> ::= [ ] | <dims> [ ]
+def Dims(p):
+	'''Dims : empty
+			| Dims'''
+
+<array access> ::= <expression name> [ <expression> ] | <primary no new array> [ <expression>]
+def ArrayAccess(p):
+	'''ArrayAccess : ExpressionName LSQRB Expression RSQRB
+					| PrimaryNoNewArray LSQRB Expresssion RSQRB'''
+
+
+
+<package name> ::= <identifier> | <package name> . <identifier>
+def PackageName(p):
+	'''PackageName : Identifier
+					| PackageName.Identifier'''
+<type name> ::= <identifier> | <package name> . <identifier>
+def TypeName(p):
+	'''Typename : Identifier 
+				| PackageName DOT Identifier'''
+<simple type name> ::= <identifier>
+def SimpleTypeName(p):
+	'SimpleTypeName : Identifier'
+
+<expression name> ::= <identifier> | <ambiguous name> . <identifier>
+def ExpressionName(p):
+	'''ExpressionName : Identifier
+						| AmbiguousName DOT Identifier'''
+
+<method name> ::= <identifier> | <ambiguous name>. <identifier>
+def MethodName(p):
+	'''MethodName : Identifier 
+					| AmbiguousName DOT Identifier'''
+
+<ambiguous name>::= <identifier> | <ambiguous name>. <identifier>
+def AmbiguousName(p):
+	'''AmbiguousName : Identifier 
+					| AmbiguousName Identifier'''
+
+# <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
+
+# <integer literal> ::= <decimal integer literal> | <hex integer literal> | <octal integer literal>
+
+# <decimal integer literal> ::= <decimal numeral> <integer type suffix>?
+
+# <hex integer literal> ::= <hex numeral> <integer type suffix>?
+
+# <octal integer literal> ::= <octal numeral> <integer type suffix>?
+
+# <integer type suffix> ::= l | L
+
+# <decimal numeral> ::= 0 | <non zero digit> <digits>?
+
+# <digits> ::= <digit> | <digits> <digit>
+
+# <digit> ::= 0 | <non zero digit>
+
+# <non zero digit> ::= 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+# <hex numeral> ::= 0 x <hex digit> | 0 X <hex digit> | <hex numeral> <hex digit>
+
+# <hex digit> :: = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | a | b | c | d | e | f | A | B | C | D | E | F
+
+# <octal numeral> ::= 0 <octal digit> | <octal numeral> <octal digit>
+
+
+
+
+<floating-point literal> ::= <digits> . <digits>? <exponent part>? <float type suffix>?
+def FloatingPointLiteral(p):
+	'''FloatingPointLiteral : Digits Dot
+							| Digits Dot FloatTypeSuffix
+							| Digits Dot ExponentPart
+							| Digits Dot ExponentPart FloatTypeSuffix
+							| Digits Dot Digits
+							| Digits Dot Digits FloatTypeSuffix
+							| Digits Dot Digits ExponentPart
+							| Digits Dot Digits ExponentPart FloatTypeSuffix'''
+
+<digits> <exponent part>? <float type suffix>?
+#doubtful
+
+<exponent part> ::= <exponent indicator> <signed integer>
+def ExponentPart(p):
+	'''ExponentPart(p) : ExponentIndicator 
+						| SignedInteger'''
+
+<exponent indicator> ::= e | E
+#define in lexer
+<signed integer> ::= <sign>? <digits>
+def SignedInteger(p):
+	'''SignedInteger : Sign digits
+					| digits'''
+
+
+<sign> ::= + | -
+
+<float type suffix> ::= f | F | d | D
+#define in lexer
+<boolean literal> ::= true | false
+def BooleanLiteral(p):
+	'''BooleanLiteral : true 
+						| false'''
+
+<character literal> ::= ' <single character> ' | ' <escape sequence> '
+def CharacterLiteral(p):
+	'''CharacterLiteral : SingleCharacter
+						| EscapeSequence'''
+
+
+<single character> ::= <input character> except ' and \
+#define InputChar in lexer
+def SingleCharacter(p):
+	'SingleCharacter : InputChar'
+<string literal> ::= " <string characters>?"
+def StringLiteral(p):
+	'StringLiteral : StringCharacters'
+
+# <string characters> ::= <string character> | <string characters> <string character>
+def StringCharacters(p):
+	'''StringCharacters: StringCharacter
+						| StringCharacters StringCharacter'''
+
+<string character> ::= <input character> except " and \ | <escape character>
+#define string char in lexer
+def StringCharacter(p):
+	'StringCharacter : StrChar'
+
+# <null literal> ::= null
+def NullLiteral(p):
+	'NullLiteral : NULL'
 
 def p_ClassQualifier01(p):
 	'''ClassQualifier01 : ClassQualifier
