@@ -68,7 +68,7 @@ def p_ClassObject(p):
 				| R_SEMICOLON'''
 	if "ClassDeclaration" in p[1]:
 		p[0] = Node("ClassObject", [p[1]],[]).name
-	elif:
+	elif "ObjectDeclaration" in p[1]:
 		p[0] = Node("ClassObject", [p[1]],[]).name
 	else:
 		p[0] = Node("ClassObject", [],[p[1]]).name
