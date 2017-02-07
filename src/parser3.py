@@ -320,9 +320,22 @@ def p_StatementWithoutTrailingSubstatement(p):
 										| ReturnStatement'''
 	p[0] = Node("StatementWithoutTrailingSubstatement", [p[1]],[]).name
 
+# <statement no short if> ::= <statement without trailing substatement> | <if then else statement no short if> 
+# | <while statement no short if> | <for statement no short if>
+def p_StatementNoShortIf(p):
+	'''StatementNoShortIf : StatementWithoutTrailingSubstatement
+						| IfThenElseStatementNoShortIf
+						| WhileStatementNoShortIf
+						| ForStatementNoShortIf'''
+
+
+#<empty statement> ::= ;
+def p_EmptyStatement(p):
+	'EmptyStatement : SEMICOLON'
+	
+
 <statement no short if> ::= <statement without trailing substatement> | <if then else statement no short if> | <while statement no short if> | <for statement no short if>
 
-<empty statement> ::= ;
 
 <expression statement> ::= <statement expression> ;
 
