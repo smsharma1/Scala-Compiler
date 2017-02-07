@@ -1731,14 +1731,30 @@ def p_Type(p):
 		p[0] = Node('Type',[p[1]],[]).name
 
 <additive expression> ::= <multiplicative expression> | <additive expression> + <multiplicative expression> | <additive expression> - <multiplicative expression>
+def AdditiveExpression(p):
+	'''AdditiveExpression : MultiplicativeExpression
+							| AdditiveExpression PLUS MultiplicativeExpression
+							| AdditiveExpression MINUS MultiplicativeExpression'''
 
 <multiplicative expression> ::= <unary expression> | <multiplicative expression> * <unary expression> | <multiplicative expression> / <unary expression> | <multiplicative expression> % <unary expression>
+def MultiplicativeExpression(p):
+	'''Multiplicative Expression : UnaryExpression
+								| MultiplicativeExpression MULTIPLICATION UnaryExpression
+								| MultiplicativeExpression DIVISION UnaryExpression
+								| MultiplicativeExpression MODULUS UnaryExpression'''
 
 <cast expression> ::= ( <primitive type> ) <unary expression> | ( <reference type> ) <unary expression not plus minus>
+def CastExpression(p):
+	'''CastExpression : LPARAN PrimitiveType RPARAN UnaryExpression 
+						| LPARAN Reference Type RPARAN UnaryExpressionNotPlusMinus'''
 
 <unary expression> ::= <preincrement expression> | <predecrement expression> | + <unary expression> | - <unary expression> | <unary expression not plus minus>
 def UnaryExpression(p):
-	'''UnaryExpression'''
+	'''UnaryExpression : PreincrementExpression
+						| PredecrementExpression
+						| PLUS UnaryExpression
+						| MINUS UnaryExpression
+						| UnaryExpressionNotPlusMinus'''
 
 <predecrement expression> ::= -- <unary expression>
 def PredecrementExpression(p):
