@@ -71,7 +71,7 @@ tokens =list(reserved.values()) +  [
 	'FLOAT',
 	'STRING',
 	'CHAR',
-	'BOOL'
+	'BOOL',
 	'LPARAN',
 	'RPARAN',
 	'LSQRB',
@@ -83,7 +83,7 @@ tokens =list(reserved.values()) +  [
 	'LT',           #Less than
 	'LE',           #Less than equal
 	'DIGIT',        #Digit
-	'NONZERODIGIT'
+	'NONZERODIGIT',
     'ID',
 	'BITAND',
 	'BITOR',
