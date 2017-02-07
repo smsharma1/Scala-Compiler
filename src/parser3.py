@@ -327,15 +327,17 @@ def p_StatementNoShortIf(p):
 						| IfThenElseStatementNoShortIf
 						| WhileStatementNoShortIf
 						| ForStatementNoShortIf'''
-
+	p[0] = Node("StatementNoShortIf", [p[1]],[]).name
 
 #<empty statement> ::= ;
 def p_EmptyStatement(p):
 	'EmptyStatement : SEMICOLON'
+	p[0] = Node("EmptyStatement", [p[1]],[]).name
 
 #<expression statement> ::= <statement expression> ;
 def ExpressionStatement(p):
 	'ExpressionStatement : StatementExpression SEMICOLON'
+	p[0] = Node("ExpressionStatement", [p[1]],[]).name
 
 #<statement expression> ::= <assignment> | <preincrement expression> 
 # | <postincrement expression> | <predecrement expression> | <postdecrement expression> 
@@ -348,99 +350,158 @@ def StatementExpression(p):
 						| PostdecrementExpression
 						| MethodInvocation
 						| ClassInstanceCreationExpression'''
-
+	p[0] = Node("StatementExpression", [p[1]],[]).name
 
 def p_IfThenStatement(p):
 	'IfThenStatement : R_IF LPARAN Expression RPARAN Statement'
+	p[0] = Node("IfThenStatement", [p[3], p[5]],[p[1], p[2], p[4]]).name
 
 def p_IfThenElseStatement(p):
 	'IfThenElseStatement : R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE Statement'
+	p[0] = Node("IfThenElseStatement", [p[3], p[5], p[7]],[p[1], p[2], p[4], p[6]]).name
 
 def p_IfThenElseStatementNoShortIf(p):
 	'IfThenElseStatementNoShortIf : R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE StatementNoShortIf'
+	p[0] = Node("IfThenElseStatementNoShortIf", [p[3], p[5], p[7]],[p[1], p[2], p[4], p[6]]).name
 
 def p_SwitchStatement(p):
 	'SwitchStatement :  Expression  match SwitchBlock'
+	p[0] = Node("SwitchStatement", [p[1], p[2], p[3]],[]).name
+
 
 def p_SwitchBlock(p):
 	'''SwitchBlock : BLOCKOPEN SwitchBlockStatementGroups SwitchLabels BLOCKCLOSE
 				| BLOCKOPEN  SwitchLabels BLOCKCLOSE
 				| BLOCKOPEN SwitchBlockStatementGroups  BLOCKCLOSE
 				| BLOCKOPEN   BLOCKCLOSE'''
-
+	if len(p) ==  5:
+		p[0] = Node("SwitchBlock", [p[2], p[3]],[p[1],p[4]]).name
+	elif "SwitchLabels" in p[2]:
+		p[0] = Node("SwitchBlock", [p[2]],[p[1],p[3]]).name
+	elif "SwitchBlockStatementGroups" in p[2]:
+		p[0] = Node("SwitchBlock", [p[2]],[p[1],p[3]]).name
+	else:
+		p[0] = Node("SwitchBlock", [], [p[1], p[2]])
 
 def p_SwitchBlockStatementGroups(p):
 	'''SwitchBlockStatementGroups : SwitchBlockStatementGroup
 									 | SwitchBlockStatementGroups SwitchBlockStatementGroup'''
+	if len(p) ==  3:
+		p[0] = Node("SwitchBlockStatementGroups", [p[1], p[2]],[]).name
+	else:
+		p[0] = Node("SwitchBlockStatementGroups", [p[1]],[]).name
 
 def p_SwitchBlockStatementGroup(p):
 	'SwitchBlockStatementGroup: SwitchLabels BlockStatements'
+	p[0] = Node("SwitchBlockStatementGroup", [p[1], p[2]],[]).name
 
 def p_SwitchLabels(p):
 	'''SwitchLabels : SwitchLabel 
 					| SwitchLabels SwitchLabel'''
+	if len(p) ==  3:
+		p[0] = Node("SwitchLabels", [p[1], p[2]],[]).name
+	else:
+		p[0] = Node("SwitchLabels", [p[1]],[]).name
 
 def p_SwitchLabel(p):
 	'''SwitchLabel : R_CASE Expression COLON 
 				| R_DEFAULT COLON'''
+	if len(p) ==  3:
+		p[0] = Node("SwitchLabel", [p[2]],[p[1], p[3]]).name
+	else:
+		p[0] = Node("SwitchLabel", [p[1], p[2]],[]).name
 
 def p_WhileStatement(p):
 	'WhileStatement :  R_WHILE  LPARAN Expression RPARAN Statement'
+	p[0] = Node("WhileStatement", [p[3], p[5]],[p[1], p[2], p[4]]).name
 
 def p_ForLoop(p): 
 	'ForLoop : R_FOR BLOCKOPEN ForExprs ForIfCondition BLOCKCLOSE Statement'
+	p[0] = Node("ForLoop", [p[3], p[4], p[6]],[p[1], p[2], p[5]]).name
 
 def p_ForIfCondition(p): 
-	 '''ForIfCondition : IfVariables SEMICOLON ForIfCondition 
+	'''ForIfCondition : IfVariables SEMICOLON ForIfCondition 
 	 				| IfVariables'''
+	if len(p) ==  3:
+		p[0] = Node("ForIfCondition", [p[1]],[p[3]], [p[2]]).name
+	else:
+		p[0] = Node("ForIfCondition", [p[1]],[]).name
 
 def p_IfVariables(p):
 	'IfVariables : R_IF Expression'
+	p[0] = Node("ForIfCondition", [p[1]],[]).name
 
 def p_ForExprs(p):
 	'''ForExprs :  ForVariables SEMICOLON ForExprs 
 			| ForVariables'''
+	if len(p) ==  4:
+		p[0] = Node("ForExprs", [p[1]],[p[3]], [p[2]]).name
+	else:
+		p[0] = Node("ForExprs", [p[1]],[]).name
 
 def p_ForVariables(p): 
 	'ForVariables: IDVARNAME R_LEFTARROW1 Expression ForUntilTo Expression' 
-
+	p[0] = Node("ForVariables", [p[3]],[p[4], p[5]], [p[1], p[2]]).name
+	
 def p_ForUntilTo(p):
 	'''ForUntilTo: R_UNTIL 
 				| R_TO'''
+	p[0] = Node("ForUntilTo", [],[p[1]]).name
 
 def p_StatementExpressionList(p):
 	'''StatementExpressionList : StatementExpression 
 							| StatementExpressionList COMMA StatementExpression'''
+	if len(p) ==  4:
+		p[0] = Node("StatementExpressionList", [p[1]],[p[3]], [p[2]]).name
+	else:
+		p[0] = Node("StatementExpressionList", [p[1]],[]).name
 
 def p_BreakStatement(p) :
 	'''BreakStatement : R_BREAK Identifier SEMICOLON
 					| R_BREAK SEMICOLON'''
+	if len(p) ==  4:
+		p[0] = Node("BreakStatement", [p[2]], [p[1]],[p[3]]).name
+	else:
+		p[0] = Node("BreakStatement", [],[p[1], p[2]]).name
 
 def p_ContinueStatement(p):
 	'''ContinueStatement : R_CONTINUE Identifier SEMICOLON
 						| R_CONTINUE  SEMICOLON'''
+	if len(p) ==  4:
+		p[0] = Node("ContinueStatement", [p[2]], [p[1]],[p[3]]).name
+	else:
+		p[0] = Node("ContinueStatement", [],[p[1], p[2]]).name
 
 def p_ReturnStatement(p):
 	'''ReturnStatement : R_RETURN Expression SEMICOLON
 					| R_RETURN SEMICOLON'''
+	if len(p) ==  4:
+		p[0] = Node("ReturnStatement", [p[2]], [p[1]],[p[3]]).name
+	else:
+		p[0] = Node("ReturnStatement", [],[p[1], p[2]]).name
 
 def p_ConstantExpression(p):
 	'ConstantExpression : Expression'
+	p[0] = Node("ConstantExpression", [p[1]],[]).name
 
 def Expression(p):
 	'Expression : AssignmentExpression'
+	p[0] = Node("Expression", [p[1]],[]).name
 
 def AssignmentExpression(p):
 	'''AssignmentExpression : ConditionalExpression 
 						| Assignment'''
+	p[0] = Node("AssignmentExpression", [p[1]],[]).name
 
 def Assignment(p):
 	'Assignment : LeftHandSide AssignmentOperator AssignmentExpression'
+	p[0] = Node("Assignment", [p[1], p[2], p[3]],[]).name
 
 def LeftHandSide(p):
 	'''LeftHandSide : ExpressionName 
 				| FieldAccess
 				| ArrayAccess'''
+	p[0] = Node("LeftHandSide", [p[1]],[]).name
 
 def AssignmentOperator(p):
 	'''AssignmentOperator : EQUALASS 
@@ -455,36 +516,62 @@ def AssignmentOperator(p):
 						| BITANDASS 
 						| BITXORASS 
 						| BITORASS'''
+	p[0] = Node("AssignmentOperator", [],[p[1]]).name
 
 def ConditionalExpression(p):
 	'''ConditionalExpression : ConditionalOrExpression 
 							| ConditionalOrExpression QUESTION  Expression COLON ConditionalExpression'''
+	if len(p) ==  6:
+		p[0] = Node("ConditionalAndExpression", [p[1], p[3], p[5]], [p[2]],[p[4]]).name
+	else:
+		p[0] = Node("ConditionalAndExpression", [p[1]],[]).name
 
 def ConditionalOrExpression(p):
 	'''ConditionalOrExpression : ConditionalAndExpression 
 							| ConditionalOrExpression OR ConditionalAndExpression'''
+	if len(p) ==  4:
+		p[0] = Node("ConditionalOrExpression", [p[1]],[p[3]], [p[2]]).name
+	else:
+		p[0] = Node("ConditionalOrExpression", [p[1]],[]).name
 
 def ConditionalAndExpression(p) :
 	'''ConditionalAndExpression : InclusiveOrExpression 
 							| ConditionalAndExpression AND InclusiveOrExpression'''
+	if len(p) ==  4:
+		p[0] = Node("ConditionalAndExpression", [p[1]],[p[3]], [p[2]]).name
+	else:
+		p[0] = Node("ConditionalAndExpression", [p[1]],[]).name
 
 def InclusiveOrExpression(p) :
 	'''InclusiveOrExpression : ExclusiveOrExpression 
 						| InclusiveOrExpression 
 						| ExclusiveOrExpression'''
+	p[0] = Node("InclusiveOrExpression", [p[1]],[]).name
 
 def ExclusiveOrExpression(p):
 	'''ExclusiveOrExpression : AndExpression 
 							| ExclusiveOrExpression BITXOR AndExpression'''
+	if len(p) ==  4:
+		p[0] = Node("ExclusiveOrExpression", [p[1]],[p[3]], [p[2]]).name
+	else:
+		p[0] = Node("ExclusiveOrExpression", [p[1]],[]).name
 
 def AndExpression(p):
 	'''AndExpression : EqualityExpression 
-					| AndExpression BITAND EqualityExpression'''					
+					| AndExpression BITAND EqualityExpression'''
+	if len(p) ==  4:
+		p[0] = Node("AndExpression", [p[1]],[p[3]], [p[2]]).name
+	else:
+		p[0] = Node("AndExpression", [p[1]],[]).name			
 
 def EqualityExpression(p):
 	'''EqualityExpression : RelationalExpression
 						 | EqualityExpression AND RelationalExpression
 						| EqualityExpression NOTEQUAL RelationalExpression'''
+	if len(p) ==  4:
+		p[0] = Node("EqualityExpression", [p[1]],[p[3]], [p[2]]).name
+	else:
+		p[0] = Node("EqualityExpression", [p[1]],[]).name
 
 def RelationalExpression(p):
 	'''RelationalExpression : ShiftExpression 
@@ -493,19 +580,30 @@ def RelationalExpression(p):
 						| RelationalExpression LE ShiftExpression 
 						| RelationalExpression GE ShiftExpression 
 						| RelationalExpression R_INSTANCEOF ReferenceType'''
+	if len(p) ==  4:
+		p[0] = Node("RelationalExpression", [p[1]],[p[3]], [p[2]]).name
+	else:
+		p[0] = Node("RelationalExpression", [p[1]],[]).name
 
 def ShiftExpression(p):
 	'''ShiftExpression : AdditiveExpression 
 					| ShiftExpression BITLSHIFT AdditiveExpression 
 					| ShiftExpression BITRSHIFT AdditiveExpression 
 					| ShiftExpression BITRSFILL AdditiveExpression'''
-
+	if len(p) ==  4:
+		p[0] = Node("ShiftExpression", [p[1]],[p[3]], [p[2]]).name
+	else:
+		p[0] = Node("ShiftExpression", [p[1]],[]).name
 
 # <additive expression> ::= <multiplicative expression> | <additive expression> + <multiplicative expression> | <additive expression> - <multiplicative expression>
 def AdditiveExpression(p):
 	'''AdditiveExpression : MultiplicativeExpression
 							| AdditiveExpression PLUS MultiplicativeExpression
 							| AdditiveExpression MINUS MultiplicativeExpression'''
+	if len(p) ==  4:
+		p[0] = Node("AdditiveExpression", [p[1]],[p[3]], [p[2]]).name
+	else:
+		p[0] = Node("AdditiveExpression", [p[1]],[]).name
 
 # <multiplicative expression> ::= <unary expression> | <multiplicative expression> * <unary expression> | <multiplicative expression> / <unary expression> | <multiplicative expression> % <unary expression>
 def MultiplicativeExpression(p):
@@ -513,11 +611,19 @@ def MultiplicativeExpression(p):
 								| MultiplicativeExpression MULTIPLICATION UnaryExpression
 								| MultiplicativeExpression DIVISION UnaryExpression
 								| MultiplicativeExpression MODULUS UnaryExpression'''
+	if len(p) ==  4:
+		p[0] = Node("MultiplicativeExpression", [p[1]],[p[3]], [p[2]]).name
+	else:
+		p[0] = Node("MultiplicativeExpression", [p[1]],[]).name
 
 # <cast expression> ::= ( <primitive type> ) <unary expression> | ( <reference type> ) <unary expression not plus minus>
 def CastExpression(p):
 	'''CastExpression : LPARAN PrimitiveType RPARAN UnaryExpression 
 						| LPARAN Reference Type RPARAN UnaryExpressionNotPlusMinus'''
+	if len(p) ==  5:
+		p[0] = Node("CastExpression", [p[2], p[4]], [p[1],p[3]]).name
+	else:
+		p[0] = Node("CastExpression", [p[2], p[3], p[5]],[p[1],p[4]]).name
 
 # <unary expression> ::= <preincrement expression> | <predecrement expression> | + <unary expression> | - <unary expression> | <unary expression not plus minus>
 def UnaryExpression(p):
@@ -526,26 +632,37 @@ def UnaryExpression(p):
 						| PLUS UnaryExpression
 						| MINUS UnaryExpression
 						| UnaryExpressionNotPlusMinus'''
-
+	if len(p) ==  3:
+		p[0] = Node("MultiplicativeExpression", [p[2]], [p[1]]).name
+	else:
+		p[0] = Node("MultiplicativeExpression", [p[1]],[]).name
 # <predecrement expression> ::= -- <unary expression>
 def PredecrementExpression(p):
 	'PredecrementExpression : MINUS MINUS UnaryExpression'
+	p[0] = Node("PredecrementExpression", [p[3]], [p[1], p[2]]).name
 # <preincrement expression> ::= ++ <unary expression>
 def PreincrementExpression(p):
 	'PreincrementExpression : PLUS PLUS UnaryExpression'
-
+	p[0] = Node("PreincrementExpression", [p[3]], [p[1], p[2]]).name
 # <unary expression not plus minus> ::= <postfix expression> | ~ <unary expression> | ! <unary expression> | <cast expression>
 def UnaryExpressionNotPlusMinus(p):
 	'''UnaryExpressionNotPlusMinus : PostfixExpression
 									| BITNEG UnaryExpression
 									| NOT UnaryExpression
 									| CastExpression'''
+	if len(p) ==  3:
+		p[0] = Node("UnaryExpressionNotPlusMinus", [p[2]], [p[1]]).name
+	else:
+		p[0] = Node("UnaryExpressionNotPlusMinus", [p[1]],[]).name
+
 # <postdecrement expression> ::= <postfix expression> --
 def PostdecrementExpression(p):
 	'PostdecrementExpression : PostfixExpression'
+	p[0] = Node("PostdecrementExpression", [p[1]],[]).name
 # <postincrement expression> ::= <postfix expression> ++
 def PostincrementExpression(p):
 	'PostincrementExpression : PostfixExpression PLUS PLUS'
+	p[0] = Node("PostincrementExpression", [p[1]],[p[2], p[3]]).name
 
 # <postfix expression> ::= <primary> | <expression name> | <postincrement expression> | <postdecrement expression>
 def PostfixExpression(p):
@@ -553,7 +670,7 @@ def PostfixExpression(p):
 							| ExpressionName
 							| PostincrementExpression
 							| PostdecrementExpression'''
-
+	p[0] = Node("PostfixExpression", [p[1]],[]).name
 # <method invocation> ::= <method name> ( <argument list>? ) | <primary> . <identifier> ( <argument list>? ) | super . <identifier> ( <argument list>? )
 def MethodInvocation(p):
 	'''MethodInvocation : MethodName LPARAN ArgumentList RPARAN
@@ -562,7 +679,14 @@ def MethodInvocation(p):
 						| Primary DOT Identifier LPARAN RPARAN
 						| Super DOT Identifier LPARAN ArgumentList RPARAN
 						| Super DOT Identifier LPARAN RPARAN'''
-
+	if len(p) ==  7:
+		p[0] = Node("MethodInvocation", [p[1], p[3], p[5]], [p[2], p[4], p[6]]).name
+	elif len(p) ==  6:
+		p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4], p[5]]).name
+	if len(p) ==  5:
+		p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]]).name
+	else:
+		p[0] = Node("MethodInvocation", [p[1]],[p[2], p[3]]).name
 # <field access> ::= <primary> . <identifier> | super . <identifier>
 def FieldAccess(p):
 	'''FieldAccess : Primary DOT Identifier
@@ -656,7 +780,7 @@ def Literal(p):
 				| CharacterLiteral
 				| StringLiteral
 				| NullLiteral'''
-
+	p[0] = Node("Literal", [p[1]],[]).name
 # <integer literal> ::= <decimal integer literal> | <hex integer literal> | <octal integer literal>
 
 # <decimal integer literal> ::= <decimal numeral> <integer type suffix>?
@@ -745,9 +869,9 @@ def Literal(p):
 # # 	'StringCharacter : StrChar'
 
 # # # <null literal> ::= null
-# # def NullLiteral(p):
-# # 	'NullLiteral : NULL'
-
+def NullLiteral(p):
+	'NullLiteral : R_NULL'
+	p[0] = Node("NullLiteral", [],[p[1]]).name
 
 
 parser = yacc.yacc()
