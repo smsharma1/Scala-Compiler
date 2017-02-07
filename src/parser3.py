@@ -275,10 +275,17 @@ def p_Block(p):
 	else:
 		p[0] = Node("Block", [p[2]],[p[1], p[3]]).name
 #<block statements> ::= <block statement> | <block statements> <block statement>
-def Blo
-<block statement> ::= <local variable declaration statement> | <statement>
+def p_BlockStatements(p):
+	'''BlockStatements : BlockStatement 
+					| BlockStatements BlockStatement'''
 
-<local variable declaration statement> ::= <local variable declaration> ;
+#<block statement> ::= <local variable declaration statement> | <statement>
+def p_BlockStatement(p):
+	'''BlockStatement : LocalVariableDeclarationStatement 
+					| Statement'''
+#<local variable declaration statement> ::= <local variable declaration> ;
+def LocalVariableDeclarationStatement(p):
+	'LocalVariableDeclarationStatement : LocalVariableDeclaration'
 
 <local variable declaration> ::= <type> <variable declarators>
 
