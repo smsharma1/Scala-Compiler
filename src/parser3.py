@@ -293,11 +293,11 @@ def p_BlockStatement(p):
 #<local variable declaration statement> ::= <local variable declaration> ;
 def LocalVariableDeclarationStatement(p):
 	'LocalVariableDeclarationStatement : LocalVariableDeclaration'
-
+	p[0] = Node("LocalVariableDeclarationStatement", [p[1]],[]).name	
 #<local variable declaration> ::= <type> <variable declarators>
 def p_LocalVariableDeclaration(p):
 	'LocalVariableDeclaration : Type VariableDeclarators'
-
+	p[0] = Node("LocalVariableDeclaration", [p[1],p[2]],[]).name	
 #<statement> ::= <statement without trailing substatement> | <if then statement> | <if then else statement> 
 # | <while statement> | <for statement>
 def p_Statement(p):
@@ -306,6 +306,7 @@ def p_Statement(p):
 				| IfThenElseStatement
 				| WhileStatement
 				| ForStatement'''
+	p[0] = Node("Statement", [p[1]],[]).name
 
 #<statement without trailing substatement> ::= <block> | <empty statement> | <expression statement> 
 # | <switch statement> | <break statement> | <continue statement> | <return statement>
@@ -317,7 +318,7 @@ def p_StatementWithoutTrailingSubstatement(p):
 										| BreakStatement
 										| ContinueStatement
 										| ReturnStatement'''
-
+	p[0] = Node("StatementWithoutTrailingSubstatement", [p[1]],[]).name
 <statement no short if> ::= <statement without trailing substatement> | <if then else statement no short if> | <while statement no short if> | <for statement no short if>
 
 <empty statement> ::= ;
