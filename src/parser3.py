@@ -278,11 +278,18 @@ def p_Block(p):
 def p_BlockStatements(p):
 	'''BlockStatements : BlockStatement 
 					| BlockStatements BlockStatement'''
-
+	if len(p)==2:
+		p[0] = Node("BlockStatements", [p[1]],[]).name
+	else:
+		p[0] = Node("BlockStatements", [p[1],p[2]],[]).name				
 #<block statement> ::= <local variable declaration statement> | <statement>
 def p_BlockStatement(p):
 	'''BlockStatement : LocalVariableDeclarationStatement 
 					| Statement'''
+	if "Statement" in p[1]:
+		p[0] = Node("BlockStatement", [p[1]],[]).name
+	else:
+		p[0] = Node("BlockStatement", [p[1]],[]).name
 #<local variable declaration statement> ::= <local variable declaration> ;
 def LocalVariableDeclarationStatement(p):
 	'LocalVariableDeclarationStatement : LocalVariableDeclaration'
