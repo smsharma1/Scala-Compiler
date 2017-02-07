@@ -124,6 +124,55 @@ def p_VariableInitializer(p):
 	'''VariableInitializer : Expression
 						| ArrayInitializer'''
 
+#<method declaration> ::= <method header> <method body>
+def p_MethodDeclaration(p):
+	'MethodDeclaration : MethodHeader MethodBody'
+
+#<method header> ::= def <method declarator> : <type> = | def <method declarator> = 
+def p_MethodHeader(p):
+	'''MethodHeader : R_DEF MethodDeclarator COLON Type EQUALASS 
+				| R_DEF MethodDeclarator EQUALASS'''
+
+#<method declarator> ::= <identifier> ( <formal parameter list>? )
+def p_MethodDeclarator(p):
+	'''MethodDeclarator : Identifier LPARAN RPARAN
+					| Identifier LPARAN FormalParameterList RPARAN'''
+
+#<method body> ::= <block> | ;
+def p_MethodBody(p):
+	'''MethodBody : Block 
+				| SEMICOLON'''
+
+#<type> ::= <primitive type> | <reference type>
+def p_Type(p):
+	'''Type : PrimitiveType 
+		| ReferenceType'''
+
+#<primitive type> ::= <numeric type> | boolean
+def p_PrimitiveType(p):
+	'''PrimitiveType : NumericType 
+					| Boolean'''
+
+#<numeric type> ::= <integral type> | <floating-point type>
+def p_NumericType(p):
+	'''NumericType : IntegralType
+				| FloatingPointType'''
+
+<integral type> ::= byte | short | int | long | char
+def p_IntegralType(p):
+	IntegralType : 
+
+
+
+<floating-point type> ::= float | double
+
+<reference type> ::= <class type> | <array type>
+
+<class type> ::= <type name>
+
+<array type> ::= <type> [ ]
+
+
 
 
 def p_PackageQualIdsemi0more(p):
