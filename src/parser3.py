@@ -625,52 +625,96 @@ def ArrayAccess(p):
 def PackageName(p):
 	'''PackageName : Identifier
 					| PackageName DOT Identifier'''
+	if len(p)==2:
+		p[0] = Node('PackageName',[p[1]],[])
+	else:
+		p[0] = Node('PackageName',[p[1],p[3]],[p[2]])
+
+
 # <type name> ::= <identifier> | <package name> . <identifier>
 def TypeName(p):
 	'''Typename : Identifier 
 				| PackageName DOT Identifier'''
+	if len(p)==2:
+		p[0] = Node('TypeName',[p[1]],[])
+	else:
+		p[0] = Node('TypeName',[p[1],p[3]],[p[2]])
+
+
 # <simple type name> ::= <identifier>
 def SimpleTypeName(p):
 	'SimpleTypeName : Identifier'
+	p[0] = Node('SimpleTypeName',[p[1]],[])
+
 
 # <expression name> ::= <identifier> | <ambiguous name> . <identifier>
 def ExpressionName(p):
 	'''ExpressionName : Identifier
 						| AmbiguousName DOT Identifier'''
+	if len(p)==2:
+		p[0] = Node('ExpressionName',[p[1]],[])
+	else:
+		p[0] = Node('ExpressionName',[p[1],p[3]],[p[2]])
+
 
 # <method name> ::= <identifier> | <ambiguous name>. <identifier>
 def MethodName(p):
 	'''MethodName : Identifier 
 					| AmbiguousName DOT Identifier'''
+	if len(p)==2:
+		p[0] = Node('MethodName',[p[1]],[])
+	else:
+		p[0] = Node('MethodName',[p[1],p[3]],[p[2]])
+
 
 # <ambiguous name>::= <identifier> | <ambiguous name>. <identifier>
 def AmbiguousName(p):
 	'''AmbiguousName : Identifier 
 					| AmbiguousName DOT Identifier'''
+	if len(p)==2:
+		p[0] = Node('AmbiguousName',[p[1]],[])
+	else:
+		p[0] = Node('AmbiguousName',[p[1],p[3]],[p[2]])
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
 
-# <integer literal> ::= <decimal integer literal> | <hex integer literal> | <octal integer literal>
 
-# <decimal integer literal> ::= <decimal numeral> <integer type suffix>?
+def p_BooleanLiteral(p):
+	'BooleanLiteral : BOOL'
+	p[0] = Node('BooleanLiteral',[],[p[1]])
 
-# <hex integer literal> ::= <hex numeral> <integer type suffix>?
+def p_IntegerLiteral(p):
+	 'IntegerLiteral : INT'
+	 p[0] = Node('IntegerLiteral',[],[p[1]])
 
-# <octal integer literal> ::= <octal numeral> <integer type suffix>?
+def p_FloatingPointLiteral(p):
+	'FloatingPointLiteral : FLOAT'
+	p[0] = Node('FloatingPointLiteral',[],[p[1]])
 
-# <integer type suffix> ::= l | L
+def p_CharacterLiteral(p):
+	'CharacterLiteral : CHAR'
+	p[0] = Node('CharacterLiteral',[],[p[1]])
+
+def p_StringLiteral(p):
+	'StringLiteral : STRING'
+	p[0] = Node('StringLiteral',[],[p[1]])
 
 # <decimal numeral> ::= 0 | <non zero digit> <digits>?
+def p_DecimalNumeral(p):
+	'''DecimalNumeral : ZERO 
+					| NONZERODIGIT 
+					| NONZERODIGIT DIGITS'''
 
-# <digits> ::= <digit> | <digits> <digit>
+def p_Digits(p):
+	'Digits : DIGIT | DIGITS DIGIT'
 
-# <digit> ::= 0 | <non zero digit>
 
-# <non zero digit> ::= 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+def p_HexNumeral(p):
+	'''HexNumeral = ZERO x HEXDIGIT 
+					| ZERO X HEXDIGIT 
+					| HexNumeral HEXDIGIT'''
 
-# <hex numeral> ::= 0 x <hex digit> | 0 X <hex digit> | <hex numeral> <hex digit>
 
-# <hex digit> :: = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | a | b | c | d | e | f | A | B | C | D | E | F
 
 # <octal numeral> ::= 0 <octal digit> | <octal numeral> <octal digit>
 
@@ -692,9 +736,9 @@ def AmbiguousName(p):
 #doubtful
 
 # <exponent part> ::= <exponent indicator> <signed integer>
-# def ExponentPart(p):
-# 	'''ExponentPart(p) : ExponentIndicator 
-# 						| SignedInteger'''
+#  def ExponentPart(p):
+#  	'''ExponentPart(p) : ExponentIndicator 
+#  						| SignedInteger'''
 
 # <exponent indicator> ::= e | E
 #define in lexer
@@ -738,8 +782,8 @@ def AmbiguousName(p):
 # # 	'StringCharacter : StrChar'
 
 # # # <null literal> ::= null
-# # def NullLiteral(p):
-# # 	'NullLiteral : NULL'
+ def NullLiteral(p):
+ 	'NullLiteral : R_NULL'
 
 
 

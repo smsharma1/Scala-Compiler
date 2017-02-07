@@ -71,6 +71,7 @@ tokens =list(reserved.values()) +  [
 	'FLOAT',
 	'STRING',
 	'CHAR',
+	'BOOL'
 	'LPARAN',
 	'RPARAN',
 	'LSQRB',
@@ -82,7 +83,8 @@ tokens =list(reserved.values()) +  [
 	'LT',           #Less than
 	'LE',           #Less than equal
 	'DIGIT',        #Digit
-    	'ID',
+	'NONZERODIGIT'
+    'ID',
 	'BITAND',
 	'BITOR',
 	'BITXOR',
@@ -130,7 +132,12 @@ tokens =list(reserved.values()) +  [
 	'UNDERSCORE',
 	'QUESTION',
 	'BITRSFILLASS',
+	'HEXDIGIT',
+	'ZERO',
+	'INTERGERTYPESUFFIX',
 ]
+# <hex digit> :: = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | a | b | c | d | e | f | A | B | C | D | E | F
+# <integer type suffix> ::= l | L
 
 def t_COMMENT(t):
 	r'(/\*(.|\n)*?\*/)|(//.*)'
@@ -145,12 +152,15 @@ def t_ID(t):
 	t.type = reserved.get(t.value,'ID')    # Check for reserved words
 	return t
 t_QUESTION = r'\?'
+t_HEXDIGIT = r'[0-9a-fA-F]'
+t_INTERGERTYPESUFFIX = r'[lL]'
 t_GT = r'>'
 t_GE = r'>='
 t_LT = r'<'
 t_LE = r'<='
 t_INT = r'[+-]?([0-9])+'
 t_FLOAT = r'([+-])?[0-9]+\.([0-9]+([Ee]?[+-][0-9]+)?)?'
+t_BOOL = r'(True | False)'
 def t_CHAR(t):
 	r'\'.\''
 	t.value = t.value[1:-1]
@@ -161,6 +171,9 @@ def t_STRING(t):
 	t.value = t.value[1:-1]
 	return t
 
+t_DIGIT = r'[0-9]'
+t_NONZERODIGIT = r'[1-9]'
+t_ZERO = r'0'
 t_LPARAN = r'\('
 t_RPARAN = r'\)'
 t_LSQRB = r'\['
