@@ -186,37 +186,58 @@ def p_VariableInitializer(p):
 #<method declaration> ::= <method header> <method body>
 def p_MethodDeclaration(p):
 	'MethodDeclaration : MethodHeader MethodBody'
-
+	p[0] = Node("MethodDeclaration", [p[1], p[2]],[]).name
 #<method header> ::= def <method declarator> : <type> = | def <method declarator> = 
 def p_MethodHeader(p):
 	'''MethodHeader : R_DEF MethodDeclarator COLON Type EQUALASS 
 				| R_DEF MethodDeclarator EQUALASS'''
-
+	if len(p)==6:
+		p[0] = Node("MethodHeader", [p[2], p[4]],[p[1], p[3], p[5]]).name
+	else:
+		p[0] = Node("MethodHeader", [p[2]],[p[1],p[3]]).name
 #<method declarator> ::= <identifier> ( <formal parameter list>? )
 def p_MethodDeclarator(p):
 	'''MethodDeclarator : Identifier LPARAN RPARAN
 					| Identifier LPARAN FormalParameterList RPARAN'''
+	if len(p)==4:
+		p[0] = Node("MethodDeclarator", [p[1]],[p[2], p[3]]).name
+	else:
+		p[0] = Node("MethodDeclarator", [p[1], p[3]],[p[2], p[4]]).name
 
 #<method body> ::= <block> | ;
 def p_MethodBody(p):
 	'''MethodBody : Block 
 				| SEMICOLON'''
-
+	if "Block" in p[1]:
+		p[0] = Node("VariableInitializer", [p[1]],[]).name
+	else:
+		p[0] = Node("VariableInitializer", [],[p[1]]).name
 #<type> ::= <primitive type> | <reference type>
 def p_Type(p):
 	'''Type : PrimitiveType 
 		| ReferenceType'''
-
+	if "PrimitiveType" in p[1]:
+		p[0] = Node("Type", [p[1]],[]).name
+	else:
+		p[0] = Node("Type", [p[1]],[]).name
 #<primitive type> ::= <numeric type> | boolean
 def p_PrimitiveType(p):
 	'''PrimitiveType : NumericType 
 					| Boolean'''
-
+	if "NumericType" in p[1]:
+		p[0] = Node("PrimitiveType", [p[1]],[]).name
+	else:
+		p[0] = Node("PrimitiveType", [p[1]],[]).name
 #<numeric type> ::= <integral type> | <floating-point type>
 def p_NumericType(p):
 	'''NumericType : IntegralType
 				| FloatingPointType'''
+	if "IntegralType" in p[1]:
+		p[0] = Node("Numeric Type", [p[1]],[]).name
+	else:
+		p[0] = Node("Numeric Type", [p[1]],[]).name
 
+		
 <integral type> ::= byte | short | int | long | char
 def p_IntegralType(p):
 	IntegralType : 
