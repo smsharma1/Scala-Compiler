@@ -237,20 +237,75 @@ def p_NumericType(p):
 	else:
 		p[0] = Node("Numeric Type", [p[1]],[]).name
 
-		
-<integral type> ::= byte | short | int | long | char
+#<integral type> ::= byte | short | int | long | char
+
 def p_IntegralType(p):
-	IntegralType : 
+	'''IntegralType : BYTE
+				 | SHORT
+				 | INT
+				 | LONG 
+				 | CHAR'''
+	p[0] = Node("IntegralType", [],[p[1]]).name
+
+#<floating-point type> ::= float | double
+def d_FloatingPointType(p):
+	'''FloatingPointType : FLOAT 
+						| DOUBLE'''
+	p[0] = Node("FloatingPointType", [],[p[1]]).name
+#<reference type> ::= <class type> | <array type>
+def p_ReferenceType(p):
+	'''ReferenceType : ClassType 
+					| ArrayType'''
+	p[0] = Node("ReferenceType", [p[1]],[]).name
+#<class type> ::= <type name>
+def p_ClassType(p):
+	'ClassType : TypeName'
+	p[0] = Node("ClassType", [p[1]],[]).name
+#<array type> ::= <type> [ ]
+def p_ArrayType(p):
+	'ArrayType : Type LSQRB RSQRB'
+	p[0] = Node("ArrayType", [p[1]],[p[2], p[3]]).name
+
+#<block> ::= { <block statements>? }
+def p_Block(p):
+	'''Block : BLOCKOPEN BLOCKCLOSE
+			| BLOCKOPEN BlockStatements BLOCKCLOSE'''
+	if len(p)==3:
+		p[0] = Node("Block", [],[p[1], p[2]]).name
+	else:
+		p[0] = Node("Block", [p[2]],[p[1], p[3]]).name
+#<block statements> ::= <block statement> | <block statements> <block statement>
+def Blo
+<block statement> ::= <local variable declaration statement> | <statement>
+
+<local variable declaration statement> ::= <local variable declaration> ;
+
+<local variable declaration> ::= <type> <variable declarators>
+
+<statement> ::= <statement without trailing substatement> | <if then statement> | <if then else statement> | <while statement> | <for statement>
+
+<statement without trailing substatement> ::= <block> | <empty statement> | <expression statement> | <switch statement> | <break statement> | <continue statement> | <return statement>
+
+<statement no short if> ::= <statement without trailing substatement> | <if then else statement no short if> | <while statement no short if> | <for statement no short if>
+
+<empty statement> ::= ;
+
+<expression statement> ::= <statement expression> ;
+
+<statement expression> ::= <assignment> | <preincrement expression> | <postincrement expression> | <predecrement expression> | <postdecrement expression> | <method invocation> | <class instance creation expression>
+
+<if then statement>::= if ( <expression> ) <statement>
+
+<if then else statement>::= if ( <expression> ) <statement no short if> else <statement>
+
+<if then else statement no short if> ::= if ( <expression> ) <statement no short if> else <statement no short if>
+
+<switch statement> ::= <expression>  match <switch block>
+
+<switch block> ::= { <switch block statement groups>? <switch labels>? }
 
 
 
-<floating-point type> ::= float | double
-
-<reference type> ::= <class type> | <array type>
-
-<class type> ::= <type name>
-
-<array type> ::= <type> [ ]
 
 
 def p_PackageQualIdsemi0more(p):
