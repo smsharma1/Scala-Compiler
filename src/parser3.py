@@ -106,56 +106,82 @@ def p_Super(p):
 def p_ClassHeader(p):
 	'''ClassHeader : LPARAN RPARAN
 				| LPARAN FormalParameterList RPARAN'''
-	if len(p)==8:
+	if len(p)==3:
 		p[0] = Node("ClassHeader", [],[p[1], p[2]]).name
-	elif "Super" in p[4]:
+	else:
 		p[0] = Node("ClassHeader", [p[2]],[p[1], p[3]]).name
 
 #<class body declarations> ::= <class body declaration> | <class body declarations> <class body declaration>
 def p_ClassBodyDeclarations(p):
 	'''ClassBodyDeclarations : ClassBodyDeclaration
 							 | ClassBodyDeclarations ClassBodyDeclaration'''
-
+	if len(p)==3:
+		p[0] = Node("ClassBodyDeclarations", [p[1], p[2]],[]).name
+	else:
+		p[0] = Node("ClassBodyDeclarations", [p[1]],[]).name
 #<class body declaration> ::= <field declaration> | <method declaration>
 def p_ClassBodyDeclaration(p):
 	'''ClassBodyDeclaration : FieldDeclaration
 							| MethodDeclaration'''
+	if "FieldDeclaration" in p[1]:
+		p[0] = Node("ClassBodyDeclaration", [p[1]],[]).name
+	else:
+		p[0] = Node("ClassBodyDeclaration", [p[1]],[]).name
 
 #<formal parameter list> ::= <formal parameter> | <formal parameter list> , <formal parameter>
 def p_FormalParameterList(p):
 	'''FormalParameterList : FormalParameter 
 							| FormalParameterList COMMA FormalParameter'''
-
+	if len(p)==2:
+		p[0] = Node("FormalParameterList", [p[1]],[]).name
+	else:
+		p[0] = Node("FormalParameterList", [p[1], p[3]],[p[2]]).name
 #<formal parameter> ::= <variable declarator id> : <type> 
 def p_FormalParameter(p):
 	'FormalParameter : VariableDeclaratorId COLON Type'
-
+	p[0] = Node("FormalParamter", [p[1], p[3]],[p[2]]).name
 #<class type> ::= <identifier> | with <identifier><class type>
 #confusion check later
 def p_ClassType(p):
 	'''ClassType : Identifier 
 				| R_WITH Identifier ClassType'''
+	if len(p)==4:
+		p[0] = Node("ClassType", [p[2], p[3]],[p[1]]).name
+	else:
+		p[0] = Node("ClassType", [p[1]],[]).name
 
 #<field declaration> ::=  val <variable declarator> ;
 def p_FieldDeclaration(p):
 	'FieldDeclaration : R_VAL VariableDeclarator SEMICOLON'
-
+	p[0] = Node("FieldDeclaration", [p[2]],[p[1], p[3]]).name
 #<variable declarator> ::= <identifier> | <identifier>: <type>   | <identifier> <variable_declarator_extra>  
 def p_VariableDeclarator(p):
 	'''VariableDeclarator : Identifier 
 						| Identifier COLON Type 
 						| Identifier VariableDeclaratorExtra'''
+	if len(p)==4:
+		p[0] = Node("VariableDeclarator", [p[1], p[3]],[p[2]]).name
+	elif len(p)==3:
+		p[0] = Node("VariableDeclarator", [p[1], p[2]],[]).name
+	else:
+		p[0] = Node("VariableDeclarator", [p[1]],[]).name
 
 #<variable_declarator_extra> ::= = <variable initializer> | :<type> = <variable initializer>
 def p_VariableDeclaratorExtra(p):
 	'''VariableDeclaratorExtra : EQUALASS VariableInitializer
 							| COLON Type EQUALASS VariableInitializer''' 
-
+	if len(p)==5:
+		p[0] = Node("VariableDeclaratorExtra", [p[2], p[4]],[p[1], p[3]]).name
+	else:
+		p[0] = Node("VariableDeclaratorExtra", [p[2]],[p[1]]).name
 #<variable initializer> ::= <expression> | <array initializer>
 def p_VariableInitializer(p):
 	'''VariableInitializer : Expression
 						| ArrayInitializer'''
-
+	if "Expression" in p[1]:
+		p[0] = Node("VariableInitializer", [p[1]],[]).name
+	else:
+		p[0] = Node("VariableInitializer", [p[1]],[]).name
 
 def p_PackageQualIdsemi0more(p):
 	'''PackageQualIdsemi0more : empty
