@@ -311,9 +311,18 @@ def p_StatementWithoutTrailingSubstatement(p):
 										| ContinueStatement
 										| ReturnStatement'''
 
-<statement no short if> ::= <statement without trailing substatement> | <if then else statement no short if> | <while statement no short if> | <for statement no short if>
+# <statement no short if> ::= <statement without trailing substatement> | <if then else statement no short if> 
+# | <while statement no short if> | <for statement no short if>
+def p_StatementNoShortIf(p):
+	'''StatementNoShortIf : StatementWithoutTrailingSubstatement
+						| IfThenElseStatementNoShortIf
+						| WhileStatementNoShortIf
+						| ForStatementNoShortIf'''
 
-<empty statement> ::= ;
+
+#<empty statement> ::= ;
+def p_EmptyStatement(p):
+	'EmptyStatement : SEMICOLON'
 
 <expression statement> ::= <statement expression> ;
 
