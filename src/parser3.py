@@ -567,13 +567,13 @@ def MethodInvocation(p):
 def FieldAccess(p):
 	'''FieldAccess : Primary DOT Identifier
 					| Super DOT Identifier'''
-	p[0] = Node('FieldAccess',[p[1],p[3]],[p[2]])
+	p[0] = Node('FieldAccess',[p[1],p[3]],[p[2]]).name
 
 # <primary> ::= <primary no new array> | <array creation expression>
 def Primary(p):
 	'''Primary : PrimaryNoNewArray
 				| ArrayCreationExpression'''
-	p[0] = Node('Primary',[p[1]],[])
+	p[0] = Node('Primary',[p[1]],[]).name
 
 # <primary no new array> ::= <literal> | this | ( <expression> ) | <class instance creation expression> 
 # | <field access> | <method invocation> | <array access>
@@ -587,28 +587,28 @@ def PrimaryNoNewArray(p):
 						| MethodInvocation
 						| ArrayAccess'''
 	if len(p) == 3:
-		p[0] = Node('PrimaryNoNewArray',[p[2]],[p[1],p[3]])
+		p[0] = Node('PrimaryNoNewArray',[p[2]],[p[1],p[3]]).name
 	elif 'RTHIS' in p[1] :
-		p[0] = Node('PrimaryNoNewArray',[ ],[p[1]])
+		p[0] = Node('PrimaryNoNewArray',[ ],[p[1]]).name
 	else:
-		p[0] = Node('PrimaryNoNewArray',[p[1]],[])
+		p[0] = Node('PrimaryNoNewArray',[p[1]],[]).name
 # <class instance creation expression> ::= new <class type> ( <argument list>? )
 def ClassInstanceCreationExpression(p):
 	'''ClassInstanceCreationExpression : R_NEW ClassType LPARAN ArgumentList RPARAN
 										| R_NEW ClassType LPARAN RPARAN'''
 	if len(p) ==6:
-		p[0] = Node('ClassInstanceCreationExpression',[p[2],p[4]],[p[1],p[3],p[5]])
+		p[0] = Node('ClassInstanceCreationExpression',[p[2],p[4]],[p[1],p[3],p[5]]).name
 	else:
-		p[0] = Node('ClassInstanceCreationExpression',[p[2]],[p[1],p[3],p[4]])
+		p[0] = Node('ClassInstanceCreationExpression',[p[2]],[p[1],p[3],p[4]]).name
 
 # <argument list> ::= <expression> | <argument list> , <expression>
 def ArgumentList(p):
 	'''ArgumentList : Expression
 					| ArgumentList COMMA Expression'''
 	if len(p) == 2:
-		p[0] = Node('ArgumentList',[p[1]],[])
+		p[0] = Node('ArgumentList',[p[1]],[]).name
 	else :
-		p[0] = Node('ArgumentList',[p[1],p[3]],[p[2]])
+		p[0] = Node('ArgumentList',[p[1],p[3]],[p[2]]).name
 
 # <array creation expression> ::= new <primitive type> <dim exprs> <dims>? | new <class or interface type> <dim exprs> <dims>?
 def ArrayCreationExpression(p):
@@ -617,37 +617,37 @@ def ArrayCreationExpression(p):
 								| R_NEW ClassOrInterfaceType DimExprs
 								| R_NEW ClassOrInterfaceType DimExprs Dims'''
 	if len(p) == 4:
-		p[0] = Node('ArrayCreationExpression',[p[2],p[3]],p[0])
+		p[0] = Node('ArrayCreationExpression',[p[2],p[3]],p[0]).name
 	else 
-		p[0] = Node('ArrayCreationExpression',[p[2],p[3],p[4]],p[0])
+		p[0] = Node('ArrayCreationExpression',[p[2],p[3],p[4]],p[0]).name
 # <dim exprs> ::= <dim expr> | <dim exprs> <dim expr>
 def DimExprs(p):
 	'''DimExprs : DimExpr
 				| DimExprs DimExpr'''
 	if len(p) ==2:
-		p[0] = Node('DimExprs',[p[1]],[])
+		p[0] = Node('DimExprs',[p[1]],[]).name
 	else :
-		p[0] = Node('DimExprs',[p[1],p[2]],[])
+		p[0] = Node('DimExprs',[p[1],p[2]],[]).name
 
 # <dim expr> ::= [ <expression> ]
 def DimExpr(p):
 	'''DimExpr : LSQRB Expression RSQRB'''
-	p[0] = Node('DimExpr',[p[2]],[p[1],p[3]])
+	p[0] = Node('DimExpr',[p[2]],[p[1],p[3]]).name
 
 # <dims> ::= [ ] | <dims> [ ]
 def Dims(p):
 	'''Dims : LSQRB RSQRB
 			| LSQRB Dims RSQRB'''
 	if len(p) == 3 :
-		p[0] = Node('Dims',[],[p[1],p[2]])
+		p[0] = Node('Dims',[],[p[1],p[2]]).name
 	else:
-		p[0] = Node('Dims',[p[2]],[p[1],p[3]])
+		p[0] = Node('Dims',[p[2]],[p[1],p[3]]).name
 
 # <array access> ::= <expression name> [ <expression> ] | <primary no new array> [ <expression>]
 def ArrayAccess(p):
 	'''ArrayAccess : ExpressionName LSQRB Expression RSQRB
 					| PrimaryNoNewArray LSQRB Expresssion RSQRB'''
-	p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]])
+	p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]]).name
 
 
 
@@ -656,9 +656,9 @@ def PackageName(p):
 	'''PackageName : Identifier
 					| PackageName DOT Identifier'''
 	if len(p)==2:
-		p[0] = Node('PackageName',[p[1]],[])
+		p[0] = Node('PackageName',[p[1]],[]).name
 	else:
-		p[0] = Node('PackageName',[p[1],p[3]],[p[2]])
+		p[0] = Node('PackageName',[p[1],p[3]],[p[2]]).name
 
 
 # <type name> ::= <identifier> | <package name> . <identifier>
@@ -666,15 +666,15 @@ def TypeName(p):
 	'''Typename : Identifier 
 				| PackageName DOT Identifier'''
 	if len(p)==2:
-		p[0] = Node('TypeName',[p[1]],[])
+		p[0] = Node('TypeName',[p[1]],[]).name
 	else:
-		p[0] = Node('TypeName',[p[1],p[3]],[p[2]])
+		p[0] = Node('TypeName',[p[1],p[3]],[p[2]]).name
 
 
 # <simple type name> ::= <identifier>
 def SimpleTypeName(p):
 	'SimpleTypeName : Identifier'
-	p[0] = Node('SimpleTypeName',[p[1]],[])
+	p[0] = Node('SimpleTypeName',[p[1]],[]).name
 
 
 # <expression name> ::= <identifier> | <ambiguous name> . <identifier>
@@ -682,9 +682,9 @@ def ExpressionName(p):
 	'''ExpressionName : Identifier
 						| AmbiguousName DOT Identifier'''
 	if len(p)==2:
-		p[0] = Node('ExpressionName',[p[1]],[])
+		p[0] = Node('ExpressionName',[p[1]],[]).name
 	else:
-		p[0] = Node('ExpressionName',[p[1],p[3]],[p[2]])
+		p[0] = Node('ExpressionName',[p[1],p[3]],[p[2]]).name
 
 
 # <method name> ::= <identifier> | <ambiguous name>. <identifier>
@@ -692,9 +692,9 @@ def MethodName(p):
 	'''MethodName : Identifier 
 					| AmbiguousName DOT Identifier'''
 	if len(p)==2:
-		p[0] = Node('MethodName',[p[1]],[])
+		p[0] = Node('MethodName',[p[1]],[]).name
 	else:
-		p[0] = Node('MethodName',[p[1],p[3]],[p[2]])
+		p[0] = Node('MethodName',[p[1],p[3]],[p[2]]).name
 
 
 # <ambiguous name>::= <identifier> | <ambiguous name>. <identifier>
@@ -702,9 +702,9 @@ def AmbiguousName(p):
 	'''AmbiguousName : Identifier 
 					| AmbiguousName DOT Identifier'''
 	if len(p)==2:
-		p[0] = Node('AmbiguousName',[p[1]],[])
+		p[0] = Node('AmbiguousName',[p[1]],[]).name
 	else:
-		p[0] = Node('AmbiguousName',[p[1],p[3]],[p[2]])
+		p[0] = Node('AmbiguousName',[p[1],p[3]],[p[2]]).name
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
 def Literal(p):
@@ -718,23 +718,23 @@ def Literal(p):
 
 def p_BooleanLiteral(p):
 	'BooleanLiteral : BOOL'
-	p[0] = Node('BooleanLiteral',[],[p[1]])
+	p[0] = Node('BooleanLiteral',[],[p[1]]).name
 
 def p_IntegerLiteral(p):
 	 'IntegerLiteral : INT'
-	 p[0] = Node('IntegerLiteral',[],[p[1]])
+	 p[0] = Node('IntegerLiteral',[],[p[1]]).name
 
 def p_FloatingPointLiteral(p):
 	'FloatingPointLiteral : FLOAT'
-	p[0] = Node('FloatingPointLiteral',[],[p[1]])
+	p[0] = Node('FloatingPointLiteral',[],[p[1]]).name
 
 def p_CharacterLiteral(p):
 	'CharacterLiteral : CHAR'
-	p[0] = Node('CharacterLiteral',[],[p[1]])
+	p[0] = Node('CharacterLiteral',[],[p[1]]).name
 
 def p_StringLiteral(p):
 	'StringLiteral : STRING'
-	p[0] = Node('StringLiteral',[],[p[1]])
+	p[0] = Node('StringLiteral',[],[p[1]]).name
 
 # <decimal numeral> ::= 0 | <non zero digit> <digits>?
 def p_DecimalNumeral(p):
