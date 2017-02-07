@@ -501,25 +501,25 @@ def ShiftExpression(p):
 					| ShiftExpression BITRSFILL AdditiveExpression'''
 
 
-<additive expression> ::= <multiplicative expression> | <additive expression> + <multiplicative expression> | <additive expression> - <multiplicative expression>
+# <additive expression> ::= <multiplicative expression> | <additive expression> + <multiplicative expression> | <additive expression> - <multiplicative expression>
 def AdditiveExpression(p):
 	'''AdditiveExpression : MultiplicativeExpression
 							| AdditiveExpression PLUS MultiplicativeExpression
 							| AdditiveExpression MINUS MultiplicativeExpression'''
 
-<multiplicative expression> ::= <unary expression> | <multiplicative expression> * <unary expression> | <multiplicative expression> / <unary expression> | <multiplicative expression> % <unary expression>
+# <multiplicative expression> ::= <unary expression> | <multiplicative expression> * <unary expression> | <multiplicative expression> / <unary expression> | <multiplicative expression> % <unary expression>
 def MultiplicativeExpression(p):
 	'''Multiplicative Expression : UnaryExpression
 								| MultiplicativeExpression MULTIPLICATION UnaryExpression
 								| MultiplicativeExpression DIVISION UnaryExpression
 								| MultiplicativeExpression MODULUS UnaryExpression'''
 
-<cast expression> ::= ( <primitive type> ) <unary expression> | ( <reference type> ) <unary expression not plus minus>
+# <cast expression> ::= ( <primitive type> ) <unary expression> | ( <reference type> ) <unary expression not plus minus>
 def CastExpression(p):
 	'''CastExpression : LPARAN PrimitiveType RPARAN UnaryExpression 
 						| LPARAN Reference Type RPARAN UnaryExpressionNotPlusMinus'''
 
-<unary expression> ::= <preincrement expression> | <predecrement expression> | + <unary expression> | - <unary expression> | <unary expression not plus minus>
+# <unary expression> ::= <preincrement expression> | <predecrement expression> | + <unary expression> | - <unary expression> | <unary expression not plus minus>
 def UnaryExpression(p):
 	'''UnaryExpression : PreincrementExpression
 						| PredecrementExpression
@@ -527,53 +527,53 @@ def UnaryExpression(p):
 						| MINUS UnaryExpression
 						| UnaryExpressionNotPlusMinus'''
 
-<predecrement expression> ::= -- <unary expression>
+# <predecrement expression> ::= -- <unary expression>
 def PredecrementExpression(p):
 	'PredecrementExpression : MINUS MINUS UnaryExpression'
-<preincrement expression> ::= ++ <unary expression>
+# <preincrement expression> ::= ++ <unary expression>
 def PreincrementExpression(p):
 	'PreincrementExpression : PLUS PLUS UnaryExpression'
 
-<unary expression not plus minus> ::= <postfix expression> | ~ <unary expression> | ! <unary expression> | <cast expression>
+# <unary expression not plus minus> ::= <postfix expression> | ~ <unary expression> | ! <unary expression> | <cast expression>
 def UnaryExpressionNotPlusMinus(p):
 	'''UnaryExpressionNotPlusMinus : PostfixExpression
 									| BITNEG UnaryExpression
 									| NOT UnaryExpression
 									| CastExpression'''
-<postdecrement expression> ::= <postfix expression> --
+# <postdecrement expression> ::= <postfix expression> --
 def PostdecrementExpression(p):
 	'PostdecrementExpression : PostfixExpression'
-<postincrement expression> ::= <postfix expression> ++
+# <postincrement expression> ::= <postfix expression> ++
 def PostincrementExpression(p):
 	'PostincrementExpression : PostfixExpression PLUS PLUS'
 
-<postfix expression> ::= <primary> | <expression name> | <postincrement expression> | <postdecrement expression>
+# <postfix expression> ::= <primary> | <expression name> | <postincrement expression> | <postdecrement expression>
 def PostfixExpression(p):
 	'''PostfixExpression : Primary
 							| ExpressionName
 							| PostincrementExpression
 							| PostdecrementExpression'''
 
-<method invocation> ::= <method name> ( <argument list>? ) | <primary> . <identifier> ( <argument list>? ) | super . <identifier> ( <argument list>? )
+# <method invocation> ::= <method name> ( <argument list>? ) | <primary> . <identifier> ( <argument list>? ) | super . <identifier> ( <argument list>? )
 def MethodInvocation(p):
 	'''MethodInvocation : MethodName LPARAN ArgumentList RPARAN
 						| MethodName LPARAN RPARAN
 						| Primary DOT Identifier LPARAN ArgumentList RPARAN
 						| Primary DOT Identifier LPARAN RPARAN
 						| Super DOT Identifier LPARAN ArgumentList RPARAN
-						| Super DOT Identifier LPARAN RPARAN
+						| Super DOT Identifier LPARAN RPARAN'''
 
-<field access> ::= <primary> . <identifier> | super . <identifier>
+# <field access> ::= <primary> . <identifier> | super . <identifier>
 def FieldAccess(p):
 	'''FieldAccess : Primary DOT Identifier
-					| Super DOT Identifier
+					| Super DOT Identifier'''
 
-<primary> ::= <primary no new array> | <array creation expression>
+# <primary> ::= <primary no new array> | <array creation expression>
 def Primary(p):
 	'''Primary : PrimaryNoNewArray
 				| ArrayCreationExpression'''
 
-<primary no new array> ::= <literal> | this | ( <expression> ) | <class instance creation expression> | <field access> | <method invocation> | <array access>
+# <primary no new array> ::= <literal> | this | ( <expression> ) | <class instance creation expression> | <field access> | <method invocation> | <array access>
 def PrimaryNoNewArray(p):
 	'''PrimaryNoNewArray : Literal
 						| This
@@ -581,72 +581,72 @@ def PrimaryNoNewArray(p):
 						| ClassInstanceCreationExpresssion
 						| FieldAccess
 						| MethodInvocation
-						| ArrayAccess
+						| ArrayAccess'''
 
-<class instance creation expression> ::= new <class type> ( <argument list>? )
+# <class instance creation expression> ::= new <class type> ( <argument list>? )
 def ClassInstanceCreationExpression(p):
 	'''ClassInstanceCreationExpression : R_NEW ClassType LPARAN ArgumentList RPARAN
-										| R_NEW ClassType LPARAN RPARAN
+										| R_NEW ClassType LPARAN RPARAN'''
 
-<argument list> ::= <expression> | <argument list> , <expression>
+# <argument list> ::= <expression> | <argument list> , <expression>
 def ArgumentList(p):
 	'''ArgumentList : Expression
 					| ArgumentList COMMA Expression'''
 
-<array creation expression> ::= new <primitive type> <dim exprs> <dims>? | new <class or interface type> <dim exprs> <dims>?
+# <array creation expression> ::= new <primitive type> <dim exprs> <dims>? | new <class or interface type> <dim exprs> <dims>?
 def ArrayCreationExpression(p):
 	'''ArrayCreationExpression : R_NEW PrimitiveType DimExprs
 								| R_NEW PrimitiveType DimExprs Dims
 								| R_new ClassOrInterfaceType DimExprs
-								| R_new ClassOrInterfaceType DimExprs Dims
+								| R_new ClassOrInterfaceType DimExprs Dims'''
 
-<dim exprs> ::= <dim expr> | <dim exprs> <dim expr>
+# <dim exprs> ::= <dim expr> | <dim exprs> <dim expr>
 def DimExprs(p):
 	'''DimExprs : DimExpr
 				| DimExprs DimExpr'''
 
-<dim expr> ::= [ <expression> ]
+# <dim expr> ::= [ <expression> ]
 def DimExpr(p):
 	'''DimExpr : LSQRB Expression RSQRB'''
 
-<dims> ::= [ ] | <dims> [ ]
+# <dims> ::= [ ] | <dims> [ ]
 def Dims(p):
-	'''Dims : empty
-			| Dims'''
+	'''Dims : LSQRB RSQRB
+			| LSQRB Dims RSQRB'''
 
-<array access> ::= <expression name> [ <expression> ] | <primary no new array> [ <expression>]
+# <array access> ::= <expression name> [ <expression> ] | <primary no new array> [ <expression>]
 def ArrayAccess(p):
 	'''ArrayAccess : ExpressionName LSQRB Expression RSQRB
 					| PrimaryNoNewArray LSQRB Expresssion RSQRB'''
 
 
 
-<package name> ::= <identifier> | <package name> . <identifier>
+# <package name> ::= <identifier> | <package name> . <identifier>
 def PackageName(p):
 	'''PackageName : Identifier
-					| PackageName.Identifier'''
-<type name> ::= <identifier> | <package name> . <identifier>
+					| PackageName DOT Identifier'''
+# <type name> ::= <identifier> | <package name> . <identifier>
 def TypeName(p):
 	'''Typename : Identifier 
 				| PackageName DOT Identifier'''
-<simple type name> ::= <identifier>
+# <simple type name> ::= <identifier>
 def SimpleTypeName(p):
 	'SimpleTypeName : Identifier'
 
-<expression name> ::= <identifier> | <ambiguous name> . <identifier>
+# <expression name> ::= <identifier> | <ambiguous name> . <identifier>
 def ExpressionName(p):
 	'''ExpressionName : Identifier
 						| AmbiguousName DOT Identifier'''
 
-<method name> ::= <identifier> | <ambiguous name>. <identifier>
+# <method name> ::= <identifier> | <ambiguous name>. <identifier>
 def MethodName(p):
 	'''MethodName : Identifier 
 					| AmbiguousName DOT Identifier'''
 
-<ambiguous name>::= <identifier> | <ambiguous name>. <identifier>
+# <ambiguous name>::= <identifier> | <ambiguous name>. <identifier>
 def AmbiguousName(p):
 	'''AmbiguousName : Identifier 
-					| AmbiguousName Identifier'''
+					| AmbiguousName DOT Identifier'''
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
 
@@ -677,144 +677,72 @@ def AmbiguousName(p):
 
 
 
-<floating-point literal> ::= <digits> . <digits>? <exponent part>? <float type suffix>?
-def FloatingPointLiteral(p):
-	'''FloatingPointLiteral : Digits Dot
-							| Digits Dot FloatTypeSuffix
-							| Digits Dot ExponentPart
-							| Digits Dot ExponentPart FloatTypeSuffix
-							| Digits Dot Digits
-							| Digits Dot Digits FloatTypeSuffix
-							| Digits Dot Digits ExponentPart
-							| Digits Dot Digits ExponentPart FloatTypeSuffix'''
+# <floating-point literal> ::= <digits> . <digits>? <exponent part>? <float type suffix>?
+# def FloatingPointLiteral(p):
+# 	'''FloatingPointLiteral : Digits Dot
+# 							| Digits Dot FloatTypeSuffix
+# 							| Digits Dot ExponentPart
+# 							| Digits Dot ExponentPart FloatTypeSuffix
+# 							| Digits Dot Digits
+# 							| Digits Dot Digits FloatTypeSuffix
+# 							| Digits Dot Digits ExponentPart
+# 							| Digits Dot Digits ExponentPart FloatTypeSuffix'''
 
-<digits> <exponent part>? <float type suffix>?
+# <digits> <exponent part>? <float type suffix>?
 #doubtful
 
-<exponent part> ::= <exponent indicator> <signed integer>
-def ExponentPart(p):
-	'''ExponentPart(p) : ExponentIndicator 
-						| SignedInteger'''
+# <exponent part> ::= <exponent indicator> <signed integer>
+# def ExponentPart(p):
+# 	'''ExponentPart(p) : ExponentIndicator 
+# 						| SignedInteger'''
 
-<exponent indicator> ::= e | E
+# <exponent indicator> ::= e | E
 #define in lexer
-<signed integer> ::= <sign>? <digits>
-def SignedInteger(p):
-	'''SignedInteger : Sign digits
-					| digits'''
+# <signed integer> ::= <sign>? <digits>
+# def SignedInteger(p):
+# 	'''SignedInteger : Sign digits
+# 					| digits'''
 
 
-<sign> ::= + | -
+# <sign> ::= + | -
 
-<float type suffix> ::= f | F | d | D
+# <float type suffix> ::= f | F | d | D
 #define in lexer
-<boolean literal> ::= true | false
-def BooleanLiteral(p):
-	'''BooleanLiteral : true 
-						| false'''
+# # <boolean literal> ::= true | false
+# # def BooleanLiteral(p):
+# # 	'''BooleanLiteral : true 
+# # 						| false'''
 
-<character literal> ::= ' <single character> ' | ' <escape sequence> '
-def CharacterLiteral(p):
-	'''CharacterLiteral : SingleCharacter
-						| EscapeSequence'''
+# # <character literal> ::= ' <single character> ' | ' <escape sequence> '
+# # def CharacterLiteral(p):
+# # 	'''CharacterLiteral : SingleCharacter
+# # 						| EscapeSequence'''
 
 
-<single character> ::= <input character> except ' and \
-#define InputChar in lexer
-def SingleCharacter(p):
-	'SingleCharacter : InputChar'
-<string literal> ::= " <string characters>?"
-def StringLiteral(p):
-	'StringLiteral : StringCharacters'
+# # <single character> ::= <input character> except ' and \
+# # #define InputChar in lexer
+# # def SingleCharacter(p):
+# # 	'SingleCharacter : InputChar'
+# # <string literal> ::= " <string characters>?"
+# # def StringLiteral(p):
+# # 	'StringLiteral : StringCharacters'
 
-# <string characters> ::= <string character> | <string characters> <string character>
-def StringCharacters(p):
-	'''StringCharacters: StringCharacter
-						| StringCharacters StringCharacter'''
+# # # <string characters> ::= <string character> | <string characters> <string character>
+# # def StringCharacters(p):
+# # 	'''StringCharacters: StringCharacter
+# # 						| StringCharacters StringCharacter'''
 
-<string character> ::= <input character> except " and \ | <escape character>
-#define string char in lexer
-def StringCharacter(p):
-	'StringCharacter : StrChar'
+# # <string character> ::= <input character> except " and \ | <escape character>
+# # #define string char in lexer
+# # def StringCharacter(p):
+# # 	'StringCharacter : StrChar'
 
-# <null literal> ::= null
-def NullLiteral(p):
-	'NullLiteral : NULL'
+# # # <null literal> ::= null
+# # def NullLiteral(p):
+# # 	'NullLiteral : NULL'
 
-def p_ClassQualifier01(p):
-	'''ClassQualifier01 : ClassQualifier
-						| empty '''
-	if "ClassQualifier" in p[1]:
-		p[0] = Node('ClassQualifier01',p[1]).name
 
-#removed StableId
-def p_Path(p):
-	'''Path : id DOT R_THIS
-		|  R_THIS
-		| StableId'''
-	if 'StableId' in p[1]:
-		p[0] = Node('Path',[p[1]],[]).name
-	elif 'this' in p[1]:
-		p[0] = Node('Path',[],[p[1]]).name
-	else:
-		p[0] = Node('Path',[p[1]],[p[2],p[3]]).name
 
-def p_ids(p):
-	'ids : id commaid0more'
-	p[0] = Node('ids',[p[1],p[2]],[]).name
-
-def p_commaid0more(p):
-	'''commaid0more : commaid0more COMMA id
-					| empty'''
-	if len(p) == 4:
-		p[0] = Node('commaid0more',[p[1],p[3]],[p[2]]).name
-	# else:
-	# 	p[0] = Node('commaid0more',[p[1]],[]).name
-
-def p_QualId(p):
-	'QualId : id Dotid0more'
-	p[0] = Node('QualId',[p[1],p[2]],[]) 
-
-def p_Dotid0more(p):
-	'''Dotid0more : Dotid0more DOT id
-				| empty'''
-	if len(p) == 4:
-		p[0] = Node('Dotid0more',[p[1],p[3]],[p[2]]).name
-	# else:
-	# 	p[0] = Node('Dotid0more',[p[1]],[]).name
-
-def p_Literal(p):
-	'''Literal : INT 
-		| FLOAT 
-		| STRING 
-		| CHAR
-		| R_NULL'''
-	p[0] = Node('Literal',[],[p[1]]).name
-
-def p_semi(p):
-	'''semi : SEMICOLON
-			| nl nl0more'''
-	if len(p) == 2:
-		p[0] = Node('semi',[p[1],p[2]],[]).name
-	else:
-		p[0] = Node('semi',[],[p[1]]).name
-def p_nl(p):
-	'nl : LINEFEED'
-	p[0] = Node('nl',[],[p[1]]).name
-
-def p_id(p):
-	'id : ID'
-	print("hello")
-	p[0] = Node('id',[],[p[1]]).name
-
-def p_varid(p):
-	'varid : ID'
-	print("hello1")
-	p[0] = Node('varid',[],[p[1]]).name
-
-def p_empty(p):
-	'empty :'
-	pass
 parser = yacc.yacc()
 
 while True:
