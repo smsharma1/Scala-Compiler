@@ -3,28 +3,28 @@ from ply.lex import TOKEN
 
 reserved = {
 	'abstract' : 'R_ABSTRACT',
-	'do'  : 'R_DO',
-	'finally' : 'R_FINALLY',
+#	'do'  : 'R_DO',
+	#'finally' : 'R_FINALLY',
 	'import' : 'R_IMPORT',
 	'object' : 'R_OBJECT',
 	'override' : 'R_OVERRIDE',
 	'package' : 'R_PACKAGE',
 	'private' : 'R_PRIVATE',
-	'protected' : 'R_PROTECTED',
+#	'protected' : 'R_PROTECTED',
 	'return' : 'R_RETURN',
 	'sealed' : 'R_SEALED',
  	'super' : 'R_SUPER',
-	'this' : 'R_THIS',
+#	'this' : 'R_THIS',
 	'throw' : 'R_THROW',
-	'trait' : 'R_TRAIT',
-	'try' : 'R_TRY',
-	'true' : 'R_TRUE',
-	'type' : 'R_TYPE', 
+#	'trait' : 'R_TRAIT',
+#	'try' : 'R_TRY',
+#	'true' : 'R_TRUE',
+#	'type' : 'R_TYPE', 
 	'val' : 'R_VAL', 
 	'var' : 'R_VAR', 
 	'while' : 'R_WHILE',  
 	'with' : 'R_WITH',
-	'yield' : 'R_YIELD',
+#	'yield' : 'R_YIELD',
 	'case' :'R_CASE',
 	'catch' : 'R_CATCH',
 	'class' : 'R_CLASS',
@@ -53,15 +53,15 @@ reserved = {
 	'match' : 'R_MATCH',
 	'new' : 'R_NEW', 
 	'null' : 'R_NULL',
-	'\u21D2' : 'R_IMPLIES',
-	'\u2190' : 'R_LEFTARROW',
+#	'\u21D2' : 'R_IMPLIES',
+#	'\u2190' : 'R_LEFTARROW',
 	'=>' : 'R_IMPLIES1',
 	'<-' : 'R_LEFTARROW1',
-	'<:' : 'R_OBSCURE',
-	'#' : 'R_HASH',
+	#'<:' : 'R_OBSCURE',
+	#'#' : 'R_HASH',
 	'@' : 'R_ATTHERATE',
-	'<%' : 'R_OBSCURE1',
-	'>:' : 'R_OBSCURE2',
+#	'<%' : 'R_OBSCURE1',
+#	'>:' : 'R_OBSCURE2',
 	'Byte' : 'R_BYTE',
 	'Short' : 'R_SHORT',
 	'Int' : 'R_INT',
@@ -72,8 +72,8 @@ reserved = {
 	'String' : 'R_STRING',
 	'Boolean' : 'R_BOOLEAN',
 	'Unit' : 'R_UNIT',
-	'Null' : 'R_NULL1',
-	'Nothing' : 'R_NOTHING',
+#	'Null' : 'R_NULL1',
+#	'Nothing' : 'R_NOTHING',
 	'Any' : 'R_ANY',
 	'List' : 'R_LIST',
 	'AnyRef' : 'R_ANYREF'
@@ -95,7 +95,7 @@ tokens =list(reserved.values()) +  [
 	'GE',           #Grearer than equal
 	'LT',           #Less than
 	'LE',           #Less than equal
-	'DIGIT',        #Digit
+	#'DIGIT',        #Digit
 	'NONZERODIGIT',
     'ID',
 	'BITAND',
@@ -123,10 +123,10 @@ tokens =list(reserved.values()) +  [
 	'MODULUS',
 	'EQUAL',
 	'NOTEQUAL',
-	'AND',
+#	'AND',
 	'OR',
 	'NOT',
-	'STARTQUOTE',
+	#'STARTQUOTE',
 	'ENDQUOTE',
 	'DOT',
 	'SEMICOLON',
@@ -142,12 +142,12 @@ tokens =list(reserved.values()) +  [
 	'COLON',
 	'COMMENT',
 	'COLOR',
-	'UNDERSCORE',
-	'QUESTION',
+#	'UNDERSCORE',
+	#'QUESTION',
 	'BITRSFILLASS',
 	'HEXDIGIT',
 	'ZERO',
-	'INTERGERTYPESUFFIX',
+#	'INTERGERTYPESUFFIX',
 	'X_SMALL',
 	'X_BIG'
 ]
@@ -165,10 +165,11 @@ identifier = r'(' + nondigit + r'(' + digit + r'|' + nondigit + r')*)'
 @TOKEN(identifier)
 def t_ID(t):
 	t.type = reserved.get(t.value,'ID')    # Check for reserved words
+	print(t.type)
 	return t
-t_QUESTION = r'\?'
+#t_QUESTION = r'\?'
 t_HEXDIGIT = r'[0-9a-fA-F]'
-t_INTERGERTYPESUFFIX = r'[lL]'
+#t_INTERGERTYPESUFFIX = r'[lL]'
 t_GT = r'>'
 t_GE = r'>='
 t_LT = r'<'
@@ -186,7 +187,7 @@ def t_STRING(t):
 	t.value = t.value[1:-1]
 	return t
 
-t_DIGIT = r'[0-9]'
+#t_DIGIT = r'[0-9]'
 t_NONZERODIGIT = r'[1-9]'
 t_ZERO = r'0'
 t_LPARAN = r'\('
@@ -221,7 +222,7 @@ t_DIVISION = r'/'
 t_MODULUS = r'%'
 t_EQUAL = r'=='
 t_NOTEQUAL = r'!='
-t_AND = r'&&'
+#t_AND = r'&&'
 t_OR = r'\|\|'
 t_NOT = r'!'
 t_ignore  = ' \t'
@@ -235,10 +236,10 @@ t_SINGLEQUOTE = r'\''
 t_BACKSLASH = r'\\'
 t_COLON = r':'
 t_SEMICOLON = r';'
-t_COLOR = r'\#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})'
+#t_COLOR = r'\#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})'
 t_DOT = r'\.'
 t_COMMA = r'\,'
-t_UNDERSCORE = r'_'
+#t_UNDERSCORE = r'_'
 t_X_SMALL = r'x'
 t_X_BIG = r'X'
 
@@ -316,7 +317,7 @@ data = '''object addressbook {
   }
 }'''
 data = "10.5E-5"
-data = "\"Rahul is intelligent\""
+data = "object Demo { }"
 # Give the lexer some input
 lexer.input(data)
 
