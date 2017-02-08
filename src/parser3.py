@@ -465,13 +465,13 @@ def p_ForUntilTo(p):
 				| R_TO'''
 	p[0] = Node("ForUntilTo", [],[p[1]]).name
 
-def p_StatementExpressionList(p):
-	'''StatementExpressionList : StatementExpression 
-							| StatementExpressionList COMMA StatementExpression'''
-	if len(p) ==  4:
-		p[0] = Node("StatementExpressionList", [p[1]],[p[3]], [p[2]]).name
-	else:
-		p[0] = Node("StatementExpressionList", [p[1]],[]).name
+# def p_StatementExpressionList(p):
+# 	'''StatementExpressionList : StatementExpression 
+# 							| StatementExpressionList COMMA StatementExpression'''
+# 	if len(p) ==  4:
+# 		p[0] = Node("StatementExpressionList", [p[1]],[p[3]], [p[2]]).name
+# 	else:
+# 		p[0] = Node("StatementExpressionList", [p[1]],[]).name
 
 def p_BreakStatement(p) :
 	'''BreakStatement : R_BREAK Identifier SEMICOLON
@@ -497,9 +497,9 @@ def p_ReturnStatement(p):
 	else:
 		p[0] = Node("ReturnStatement", [],[p[1], p[2]]).name
 
-def p_ConstantExpression(p):
-	'ConstantExpression : Expression'
-	p[0] = Node("ConstantExpression", [p[1]],[]).name
+# def p_ConstantExpression(p):
+# 	'ConstantExpression : Expression'
+# 	p[0] = Node("ConstantExpression", [p[1]],[]).name
 
 def p_Expression(p):
 	'Expression : AssignmentExpression'
@@ -813,9 +813,9 @@ def p_TypeName(p):
 
 
 # <simple type name> ::= <identifier>
-def p_SimpleTypeName(p):
-	'SimpleTypeName : Identifier'
-	p[0] = Node('SimpleTypeName',[p[1]],[]).name
+# def p_SimpleTypeName(p):
+# 	'SimpleTypeName : Identifier'
+# 	p[0] = Node('SimpleTypeName',[p[1]],[]).name
 
 
 # <expression name> ::= <identifier> | <ambiguous name> . <identifier>
@@ -880,14 +880,14 @@ def p_StringLiteral(p):
 	p[0] = Node('StringLiteral',[],[p[1]]).name
 
 # <decimal numeral> ::= 0 | <non zero digit> <digits>?
-def p_DecimalNumeral(p):
-	'''DecimalNumeral : ZERO 
-					| NONZERODIGIT 
-					| NONZERODIGIT DIGITS'''
+# def p_DecimalNumeral(p):
+# 	'''DecimalNumeral : ZERO 
+# 					| NONZERODIGIT 
+# 					| NONZERODIGIT DIGITS'''
 
-def p_DIGITS(p):
-	'''DIGITS : DIGIT 
-			| DIGITS DIGIT'''
+# def p_DIGITS(p):
+# 	'''DIGITS : DIGIT 
+# 			| DIGITS DIGIT'''
 
 
 def p_HexNumeral(p):
