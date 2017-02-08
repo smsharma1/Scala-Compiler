@@ -29,8 +29,8 @@ class Node:
 			graph.add_edge(pydot.Edge(self.name, ch))
 
 def p_CompilationUnit(p):
-	'''CompilationUnit : ImportDeclarations ClassesObjects
-						| ClassesObjects'''
+	'''CompilationUnit : ImportDeclarations ClassesObjects'''
+						# | ClassesObjects'''
 	if len(p)==2:
 		p[0] = Node("CompilationUnit", [p[1], p[2]],[]).name
 	else:
@@ -643,11 +643,11 @@ def p_CastExpression(p):
 
 # <unary expression> ::= <preincrement expression> | <predecrement expression> | + <unary expression> | - <unary expression> | <unary expression not plus minus>
 def p_UnaryExpression(p):
-	'''UnaryExpression : PreincrementExpression
-						| PredecrementExpression
-						| PLUS UnaryExpression
+	'''UnaryExpression :  PLUS UnaryExpression
 						| MINUS UnaryExpression
 						| UnaryExpressionNotPlusMinus'''
+						# | PreincrementExpression
+						# | PredecrementExpression'''
 	if len(p) ==  3:
 		p[0] = Node("MultiplicativeExpression", [p[2]], [p[1]]).name
 	else:
