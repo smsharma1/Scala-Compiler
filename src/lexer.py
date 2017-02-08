@@ -146,6 +146,8 @@ tokens =list(reserved.values()) +  [
 	'HEXDIGIT',
 	'ZERO',
 	'INTERGERTYPESUFFIX',
+	'X_SMALL',
+	'X_BIG'
 ]
 # <hex digit> :: = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | a | b | c | d | e | f | A | B | C | D | E | F
 # <integer type suffix> ::= l | L
@@ -235,6 +237,8 @@ t_COLOR = r'\#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})'
 t_DOT = r'\.'
 t_COMMA = r'\,'
 t_UNDERSCORE = r'_'
+t_X_SMALL = r'x'
+t_X_BIG = r'X'
 
 # Error handling rule
 def t_error(t):

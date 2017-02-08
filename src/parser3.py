@@ -240,17 +240,17 @@ def p_NumericType(p):
 #<integral type> ::= byte | short | int | long | char
 
 def p_IntegralType(p):
-	'''IntegralType : BYTE
-				 | SHORT
-				 | INT
-				 | LONG 
-				 | CHAR'''
+	'''IntegralType : R_BYTE
+				 | R_SHORT
+				 | R_INT
+				 | R_LONG 
+				 | R_CHAR'''
 	p[0] = Node("IntegralType", [],[p[1]]).name
 
 #<floating-point type> ::= float | double
 def p_FloatingPointType(p):
-	'''FloatingPointType : FLOAT 
-						| DOUBLE'''
+	'''FloatingPointType : R_FLOAT 
+						| R_DOUBLE'''
 	p[0] = Node("FloatingPointType", [],[p[1]]).name
 #<reference type> ::= <class type> | <array type>
 def p_ReferenceType(p):
@@ -705,13 +705,13 @@ def p_PrimaryNoNewArray(p):
 	'''PrimaryNoNewArray : Literal
 						| R_THIS
 						| LPARAN Expression RPARAN
-						| ClassInstanceCreationExpresssion
+						| ClassInstanceCreationExpression
 						| FieldAccess
 						| MethodInvocation
 						| ArrayAccess'''
 	if len(p) == 3:
 		p[0] = Node('PrimaryNoNewArray',[p[2]],[p[1],p[3]]).name
-	elif 'R_THIS' in p[1] :
+	elif 'this' in p[1] :
 		p[0] = Node('PrimaryNoNewArray',[ ],[p[1]]).name
 	else:
 		p[0] = Node('PrimaryNoNewArray',[p[1]],[]).name
@@ -737,8 +737,8 @@ def p_ArgumentList(p):
 def p_ArrayCreationExpression(p):
 	'''ArrayCreationExpression : R_NEW PrimitiveType DimExprs
 								| R_NEW PrimitiveType DimExprs Dims
-								| R_NEW ClassOrInterfaceType DimExprs
-								| R_NEW ClassOrInterfaceType DimExprs Dims'''
+								| R_NEW ClassType DimExprs
+								| R_NEW ClassType DimExprs Dims'''
 	if len(p) == 4:
 		p[0] = Node('ArrayCreationExpression',[p[2],p[3]],p[0]).name
 	else :
@@ -760,7 +760,7 @@ def p_DimExpr(p):
 # <dims> ::= [ ] | <dims> [ ]
 def p_Dims(p):
 	'''Dims : LSQRB RSQRB
-			| LSQRB Dims RSQRB'''
+			| Dims LSQRB RSQRB'''
 	if len(p) == 3 :
 		p[0] = Node('Dims',[],[p[1],p[2]]).name
 	else:
@@ -769,7 +769,7 @@ def p_Dims(p):
 # <array access> ::= <expression name> [ <expression> ] | <primary no new array> [ <expression>]
 def p_ArrayAccess(p):
 	'''ArrayAccess : ExpressionName LSQRB Expression RSQRB
-					| PrimaryNoNewArray LSQRB Expresssion RSQRB'''
+					| PrimaryNoNewArray LSQRB Expression RSQRB'''
 	p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]]).name
 
 
@@ -873,8 +873,8 @@ def p_DIGITS(p):
 
 
 def p_HexNumeral(p):
-	'''HexNumeral : ZERO x HEXDIGIT 
-					| ZERO X HEXDIGIT 
+	'''HexNumeral : ZERO X_SMALL HEXDIGIT 
+					| ZERO X_BIG HEXDIGIT 
 					| HexNumeral HEXDIGIT'''
 
 
