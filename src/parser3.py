@@ -183,6 +183,13 @@ def p_VariableInitializer(p):
 	else:
 		p[0] = Node("VariableInitializer", [p[1]],[]).name
 
+def p_ArrayInitializer(p):
+    ''' ArrayInitializer : R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT RPARAN
+							| R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT COMMA INT RPARAN'''
+    if len(p) == 9:
+		p[0] = Node('ArrayInitializer',[p[1],p[2],p[3],p[5],p[6],p[7],p[8]],[p[4]])
+    else:
+		p[0] = Node('ArrayInitializer',[p[1],p[2],p[3],p[5],p[6],p[7],p[8],p[9],p[10]],[p[4]])
 #<method declaration> ::= <method header> <method body>
 def p_MethodDeclaration(p):
 	'MethodDeclaration : MethodHeader MethodBody'
@@ -296,7 +303,7 @@ def p_LocalVariableDeclarationStatement(p):
 	p[0] = Node("LocalVariableDeclarationStatement", [p[1]],[]).name	
 #<local variable declaration> ::= <type> <variable declarators>
 def p_LocalVariableDeclaration(p):
-	'LocalVariableDeclaration : Type VariableDeclarators'
+	'LocalVariableDeclaration : Type VariableDeclarator'
 	p[0] = Node("LocalVariableDeclaration", [p[1],p[2]],[]).name	
 #<statement> ::= <statement without trailing substatement> | <if then statement> | <if then else statement> 
 # | <while statement> | <for statement>
@@ -324,9 +331,7 @@ def p_StatementWithoutTrailingSubstatement(p):
 # | <while statement no short if> | <for statement no short if>
 def p_StatementNoShortIf(p):
 	'''StatementNoShortIf : StatementWithoutTrailingSubstatement
-						| IfThenElseStatementNoShortIf
-						| WhileStatementNoShortIf
-						| ForStatementNoShortIf'''
+						| IfThenElseStatementNoShortIf'''
 	p[0] = Node("StatementNoShortIf", [p[1]],[]).name
 
 #<empty statement> ::= ;
@@ -439,10 +444,22 @@ def p_ForExprs(p):
 	else:
 		p[0] = Node("ForExprs", [p[1]],[]).name
 
+#''' for_variables : declaration_keyword_extras IDENTIFIER IN expression for_untilTo expression '''
 def p_ForVariables(p): 
-	'ForVariables : IDVARNAME R_LEFTARROW1 Expression ForUntilTo Expression' 
+	'ForVariables : DeclarationKeywordExtras Identifier R_LEFTARROW1 Expression ForUntilTo Expression' 
 	p[0] = Node("ForVariables", [p[3], p[4], p[5]], [p[1], p[2]]).name
-	
+ #'''declaration_keyword_extras : variable_header | empty'''	
+#'''variable_header : K_VAL | K_VAR '''
+def p_DeclarationKeywordExtras(p):
+	'''DeclarationKeywordExtras : VariableHeader 
+								| empty'''
+	if 'VariableHeader' in p[1]:
+		p[0] = Node('DeclarationKeywordExtras',[p[1]],[])
+
+def p_VariableHeader(p):
+	'''VariableHeader : R_VAL
+					| R_VAR'''
+	p[0] = Node('VariableHeader',[[p[1]]],[])
 def p_ForUntilTo(p):
 	'''ForUntilTo : R_UNTIL 
 				| R_TO'''
@@ -618,7 +635,7 @@ def p_MultiplicativeExpression(p):
 # <cast expression> ::= ( <primitive type> ) <unary expression> | ( <reference type> ) <unary expression not plus minus>
 def p_CastExpression(p):
 	'''CastExpression : LPARAN PrimitiveType RPARAN UnaryExpression 
-						| LPARAN Reference Type RPARAN UnaryExpressionNotPlusMinus'''
+						| LPARAN ReferenceType RPARAN UnaryExpressionNotPlusMinus'''
 	if len(p) ==  5:
 		p[0] = Node("CastExpression", [p[2], p[4]], [p[1],p[3]]).name
 	else:
@@ -705,7 +722,7 @@ def p_PrimaryNoNewArray(p):
 	'''PrimaryNoNewArray : Literal
 						| R_THIS
 						| LPARAN Expression RPARAN
-						| ClassInstanceCreationExpresssion
+						| ClassInstanceCreationExpression
 						| FieldAccess
 						| MethodInvocation
 						| ArrayAccess'''
@@ -716,6 +733,7 @@ def p_PrimaryNoNewArray(p):
 	else:
 		p[0] = Node('PrimaryNoNewArray',[p[1]],[]).name
 # <class instance creation expression> ::= new <class type> ( <argument list>? )
+
 def p_ClassInstanceCreationExpression(p):
 	'''ClassInstanceCreationExpression : R_NEW ClassType LPARAN ArgumentList RPARAN
 										| R_NEW ClassType LPARAN RPARAN'''
@@ -943,6 +961,9 @@ def p_HexNumeral(p):
 # # #define string char in lexer
 # # def StringCharacter(p):
 # # 	'StringCharacter : StrChar'
+def p_empty(p):
+    'empty :'
+    pass
 
 # # # <null literal> ::= null
 def p_NullLiteral(p):
