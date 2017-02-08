@@ -109,12 +109,17 @@ def p_Super(p):
 		p[0] = Node("Super", [p[2]],[p[1]]).name
 #<class_header> ::= ( <formal parameter list>? )
 def p_ClassHeader(p):
-	'''ClassHeader : LPARAN RPARAN
-				| LPARAN FormalParameterList RPARAN'''
-	if len(p)==3:
-		p[0] = Node("ClassHeader", [],[p[1], p[2]]).name
-	else:
-		p[0] = Node("ClassHeader", [p[2]],[p[1], p[3]]).name
+	'''ClassHeader : LPARAN FormalParameterLists RPARAN'''
+	# if len(p)==3:
+	# 	p[0] = Node("ClassHeader", [],[p[1], p[2]]).name
+	# else:
+	p[0] = Node("ClassHeader", [p[2]],[p[1], p[3]]).name
+
+def p_FormalParameterLists(p):
+	'''FormalParameterLists : FormalParameterList
+							| empty'''
+	if 'FormalParameterList' in p[1]:
+		p[0] = Node('FormalParameterList',[p[1]],[])
 
 #<class body declarations> ::= <class body declaration> | <class body declarations> <class body declaration>
 def p_ClassBodyDeclarations(p):
@@ -209,12 +214,11 @@ def p_MethodHeader(p):
 		p[0] = Node("MethodHeader", [p[2]],[p[1],p[3]]).name
 #<method declarator> ::= <identifier> ( <formal parameter list>? )
 def p_MethodDeclarator(p):
-	'''MethodDeclarator : Identifier LPARAN RPARAN
-					| Identifier LPARAN FormalParameterList RPARAN'''
-	if len(p)==4:
-		p[0] = Node("MethodDeclarator", [p[1]],[p[2], p[3]]).name
-	else:
-		p[0] = Node("MethodDeclarator", [p[1], p[3]],[p[2], p[4]]).name
+	'''MethodDeclarator : Identifier LPARAN FormalParameterLists RPARAN'''
+	# if len(p)==4:
+	# 	p[0] = Node("MethodDeclarator", [p[1]],[p[2], p[3]]).name
+	# else:
+	p[0] = Node("MethodDeclarator", [p[1], p[3]],[p[2], p[4]]).name
 
 #<method body> ::= <block> | ;
 def p_MethodBody(p):
@@ -511,19 +515,14 @@ def p_ReturnStatement(p):
 # 	p[0] = Node("ConstantExpression", [p[1]],[]).name
 
 def p_Expression(p):
-	'Expression : AssignmentExpression'
+	'''Expression : Assignment
+					| OrExpression'''
 	p[0] = Node("Expression", [p[1]],[]).name
 
-def p_AssignmentExpression(p):
-	'''AssignmentExpression : ConditionalExpression 
-						| Assignment'''
-	p[0] = Node("AssignmentExpression", [p[1]],[]).name
-
-
-##check it very important issue
-def p_Assignment(p):
-	'Assignment : LeftHandSide AssignmentOperator AssignmentExpression'
-	p[0] = Node("Assignment", [p[1], p[2], p[3]],[]).name
+# def p_AssignmentExpression(p):
+# 	'''AssignmentExpression : L 
+# 						| Assignment'''
+# 	p[0] = Node("AssignmentExpression", [p[1]],[]).name
 
 def p_LeftHandSide(p):
 	'''LeftHandSide : AmbiguousName
@@ -546,42 +545,15 @@ def p_AssignmentOperator(p):
 						| BITORASS'''
 	p[0] = Node("AssignmentOperator", [],[p[1]]).name
 
-def p_ConditionalExpression(p):
-	'''ConditionalExpression : ConditionalOrExpression 
-							| ConditionalOrExpression QUESTION  Expression COLON ConditionalExpression'''
-	if len(p) ==  6:
-		p[0] = Node("ConditionalAndExpression", [p[1], p[3], p[5]], [p[2]],[p[4]]).name
-	else:
-		p[0] = Node("ConditionalAndExpression", [p[1]],[]).name
+##check it very important issue
+def p_Assignment(p):
+	'Assignment : LeftHandSide AssignmentOperator OrExpression'
+	p[0] = Node("Assignment", [p[1], p[2], p[3]],[]).name
 
-def p_ConditionalOrExpression(p):
-	'''ConditionalOrExpression : ConditionalAndExpression 
-							| ConditionalOrExpression OR ConditionalAndExpression'''
-	if len(p) ==  4:
-		p[0] = Node("ConditionalOrExpression", [p[1]],[p[3]], [p[2]]).name
-	else:
-		p[0] = Node("ConditionalOrExpression", [p[1]],[]).name
-
-def p_ConditionalAndExpression(p) :
-	'''ConditionalAndExpression : InclusiveOrExpression 
-							| ConditionalAndExpression AND InclusiveOrExpression'''
-	if len(p) ==  4:
-		p[0] = Node("ConditionalAndExpression", [p[1]],[p[3]], [p[2]]).name
-	else:
-		p[0] = Node("ConditionalAndExpression", [p[1]],[]).name
-
-def p_InclusiveOrExpression(p) :
-	'''InclusiveOrExpression : ExclusiveOrExpression 
-						| InclusiveOrExpression AND ExclusiveOrExpression'''
-	p[0] = Node("InclusiveOrExpression", [p[1]],[]).name
-
-def p_ExclusiveOrExpression(p):
-	'''ExclusiveOrExpression : AndExpression 
-							| ExclusiveOrExpression BITXOR AndExpression'''
-	if len(p) ==  4:
-		p[0] = Node("ExclusiveOrExpression", [p[1]],[p[3]], [p[2]]).name
-	else:
-		p[0] = Node("ExclusiveOrExpression", [p[1]],[]).name
+def p_OrExpression(p):
+	'''OrExpression : AndExpression
+				  | AndExpression OR OrExpression'''
+	p[0] = Node("Assignment", [p[1], p[2], p[3]],[]).name
 
 def p_AndExpression(p):
 	'''AndExpression : XorExpression 
@@ -598,6 +570,46 @@ def p_XorExpression(p):
 		p[0] = Node('XorExpression',[p[1]],[])
 	else :
 		p[0] = Node('XorExpression',[p[1],p[3]],[p[2]])
+
+
+# def p_ConditionalExpression(p):
+# 	'''ConditionalExpression : ConditionalOrExpression 
+# 							| ConditionalOrExpression QUESTION  Expression COLON ConditionalExpression'''
+# 	if len(p) ==  6:
+# 		p[0] = Node("ConditionalAndExpression", [p[1], p[3], p[5]], [p[2]],[p[4]]).name
+# 	else:
+# 		p[0] = Node("ConditionalAndExpression", [p[1]],[]).name
+
+# def p_ConditionalOrExpression(p):
+# 	'''ConditionalOrExpression : ConditionalAndExpression 
+# 							| ConditionalOrExpression OR ConditionalAndExpression'''
+# 	if len(p) ==  4:
+# 		p[0] = Node("ConditionalOrExpression", [p[1]],[p[3]], [p[2]]).name
+# 	else:
+# 		p[0] = Node("ConditionalOrExpression", [p[1]],[]).name
+
+# def p_ConditionalAndExpression(p) :
+# 	'''ConditionalAndExpression : InclusiveOrExpression 
+# 							| ConditionalAndExpression AND InclusiveOrExpression'''
+# 	if len(p) ==  4:
+# 		p[0] = Node("ConditionalAndExpression", [p[1]],[p[3]], [p[2]]).name
+# 	else:
+# 		p[0] = Node("ConditionalAndExpression", [p[1]],[]).name
+
+# def p_InclusiveOrExpression(p) :
+# 	'''InclusiveOrExpression : ExclusiveOrExpression 
+# 						| InclusiveOrExpression AND ExclusiveOrExpression'''
+# 	p[0] = Node("InclusiveOrExpression", [p[1]],[]).name
+
+# def p_ExclusiveOrExpression(p):
+# 	'''ExclusiveOrExpression : AndExpression 
+# 							| ExclusiveOrExpression BITXOR AndExpression'''
+# 	if len(p) ==  4:
+# 		p[0] = Node("ExclusiveOrExpression", [p[1]],[p[3]], [p[2]]).name
+# 	else:
+# 		p[0] = Node("ExclusiveOrExpression", [p[1]],[]).name
+
+
 
 def p_EqualityExpression(p):
 	'''EqualityExpression : RelationalExpression
@@ -709,8 +721,8 @@ def p_PostfixExpression(p):
 # <method invocation> ::= <method name> ( <argument list>? ) | <primary> . <identifier> ( <argument list>? ) | super . <identifier> ( <argument list>? )
 #'''method_invocation : ambiguous_name LPAREN argument_list_extras RPAREN '''
 def p_MethodInvocation(p):
-	'''MethodInvocation : AmbiguousName LPARAN ArgumentList RPARAN
-							| AmbiguousName LPARAN RPARAN'''
+	'''MethodInvocation : AmbiguousName LPARAN ArgumentLists RPARAN'''
+					#		| AmbiguousName LPARAN RPARAN'''
 						# | Primary DOT Identifier LPARAN ArgumentList RPARAN
 						# | Super DOT Identifier LPARAN ArgumentList RPARAN'''
 						# # | Super DOT Identifier LPARAN RPARAN
@@ -718,8 +730,14 @@ def p_MethodInvocation(p):
 						# | Primary DOT Identifier LPARAN RPARAN
 	if len(p) ==  5:
 		p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]]).name
-	elif len(p) ==  4:
-		p[0] = Node("MethodInvocation", [p[1]], [p[2], p[3]]).name
+	# elif len(p) ==  4:
+	# 	p[0] = Node("MethodInvocation", [p[1]], [p[2], p[3]]).name
+
+def p_ArgumentLists(p):
+	'''ArgumentLists : ArgumentList
+						| empty'''
+	if 'ArgumentList' in p[1]:
+		p[0] = Node('ArgumentLists',[p[1]],[])
 	# if len(p) ==  5:
 	# 	p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]]).name
 	# else:
@@ -755,12 +773,12 @@ def p_PrimaryNoNewArray(p):
 # <class instance creation expression> ::= new <class type> ( <argument list>? )
 
 def p_ClassInstanceCreationExpression(p):
-	'''ClassInstanceCreationExpression : R_NEW ClassType LPARAN ArgumentList RPARAN
-										| R_NEW ClassType LPARAN RPARAN'''
+	'''ClassInstanceCreationExpression : R_NEW ClassType LPARAN ArgumentLists RPARAN'''
+								#		| R_NEW ClassType LPARAN RPARAN'''
 	if len(p) ==6:
 		p[0] = Node('ClassInstanceCreationExpression',[p[2],p[4]],[p[1],p[3],p[5]]).name
-	else:
-		p[0] = Node('ClassInstanceCreationExpression',[p[2]],[p[1],p[3],p[4]]).name
+	# else:
+	# 	p[0] = Node('ClassInstanceCreationExpression',[p[2]],[p[1],p[3],p[4]]).name
 
 # <argument list> ::= <expression> | <argument list> , <expression>
 def p_ArgumentList(p):
