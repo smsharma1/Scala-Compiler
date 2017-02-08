@@ -28,6 +28,17 @@ reserved = {
 	'case' :'R_CASE',
 	'catch' : 'R_CATCH',
 	'class' : 'R_CLASS',
+	'break' : 'R_BREAK',
+# 	'R_DEFAULT' used, but not defined as a token or a rule
+# ERROR: parser3.py:443: Symbol 'IDVARNAME' used, but not defined as a token or a rule
+# ERROR: parser3.py:447: Symbol 'R_UNTIL' used, but not defined as a token or a rule
+# ERROR: parser3.py:448: Symbol 'R_TO' used, but not defined as a token or a rule
+# ERROR: parser3.py:581: Symbol 'R_INSTANCEOF' used, but not defined as a token or a rule
+	'default' : 'R_DEFAULT',
+	'until' : 'R_UNTIL',
+	'to' : 'R_TO',
+	'instanceof' : 'R_INSTANCEOF',
+	'continue' : 'R_CONTINUE',
 	'def' : 'R_DEF',
  	'else' : 'R_ELSE',
  	'extends' : 'R_EXTENDS',

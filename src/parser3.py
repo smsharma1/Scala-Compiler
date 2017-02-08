@@ -49,7 +49,7 @@ def p_ImportDeclarations(p):
 #<import declaration> ::= import <type name> ;
 
 def p_ImportDeclaration(p):
-	'ImportDeclaration : R_IMPORT TypeName R_SEMICOLON'
+	'ImportDeclaration : R_IMPORT TypeName SEMICOLON'
 	p[0] = Node("ImportDeclaration", [p[2]],[p[1],p[3]]).name
 	
 #<classes_objects> ::= <class_object> | <class_object> <classes_objects>
@@ -65,7 +65,7 @@ def p_ClassesObjects(p):
 def p_ClassObject(p):
 	'''ClassObject : ClassDeclaration 
 				| ObjectDeclaration
-				| R_SEMICOLON'''
+				| SEMICOLON'''
 	if "ClassDeclaration" in p[1]:
 		p[0] = Node("ClassObject", [p[1]],[]).name
 	elif "ObjectDeclaration" in p[1]:
@@ -138,7 +138,7 @@ def p_FormalParameterList(p):
 		p[0] = Node("FormalParameterList", [p[1], p[3]],[p[2]]).name
 #<formal parameter> ::= <variable declarator id> : <type> 
 def p_FormalParameter(p):
-	'FormalParameter : VariableDeclaratorId COLON Type'
+	'FormalParameter : Identifier COLON Type'
 	p[0] = Node("FormalParamter", [p[1], p[3]],[p[2]]).name
 #<class type> ::= <identifier> | with <identifier><class type>
 #confusion check later
@@ -223,7 +223,7 @@ def p_Type(p):
 #<primitive type> ::= <numeric type> | boolean
 def p_PrimitiveType(p):
 	'''PrimitiveType : NumericType 
-					| Boolean'''
+					| R_BOOLEAN'''
 	if "NumericType" in p[1]:
 		p[0] = Node("PrimitiveType", [p[1]],[]).name
 	else:
@@ -365,8 +365,8 @@ def p_IfThenElseStatementNoShortIf(p):
 	p[0] = Node("IfThenElseStatementNoShortIf", [p[3], p[5], p[7]],[p[1], p[2], p[4], p[6]]).name
 
 def p_SwitchStatement(p):
-	'SwitchStatement :  Expression  match SwitchBlock'
-	p[0] = Node("SwitchStatement", [p[1], p[2], p[3]],[]).name
+	'SwitchStatement :  Expression  R_MATCH SwitchBlock'
+	p[0] = Node("SwitchStatement", [p[1], p[3]],[p[2]]).name
 
 
 def p_SwitchBlock(p):
@@ -415,9 +415,9 @@ def p_WhileStatement(p):
 	'WhileStatement :  R_WHILE  LPARAN Expression RPARAN Statement'
 	p[0] = Node("WhileStatement", [p[3], p[5]],[p[1], p[2], p[4]]).name
 
-def p_ForLoop(p): 
-	'ForLoop : R_FOR BLOCKOPEN ForExprs ForIfCondition BLOCKCLOSE Statement'
-	p[0] = Node("ForLoop", [p[3], p[4], p[6]],[p[1], p[2], p[5]]).name
+def p_ForStatement(p): 
+	'ForStatement : R_FOR BLOCKOPEN ForExprs ForIfCondition BLOCKCLOSE Statement'
+	p[0] = Node("ForStatement", [p[3], p[4], p[6]],[p[1], p[2], p[5]]).name
 
 def p_ForIfCondition(p): 
 	'''ForIfCondition : IfVariables SEMICOLON ForIfCondition 
@@ -703,7 +703,7 @@ def p_Primary(p):
 
 def p_PrimaryNoNewArray(p):
 	'''PrimaryNoNewArray : Literal
-						| RTHIS
+						| R_THIS
 						| LPARAN Expression RPARAN
 						| ClassInstanceCreationExpresssion
 						| FieldAccess
@@ -711,7 +711,7 @@ def p_PrimaryNoNewArray(p):
 						| ArrayAccess'''
 	if len(p) == 3:
 		p[0] = Node('PrimaryNoNewArray',[p[2]],[p[1],p[3]]).name
-	elif 'RTHIS' in p[1] :
+	elif 'R_THIS' in p[1] :
 		p[0] = Node('PrimaryNoNewArray',[ ],[p[1]]).name
 	else:
 		p[0] = Node('PrimaryNoNewArray',[p[1]],[]).name
@@ -786,7 +786,7 @@ def p_PackageName(p):
 
 # <type name> ::= <identifier> | <package name> . <identifier>
 def p_TypeName(p):
-	'''Typename : Identifier 
+	'''TypeName : Identifier 
 				| PackageName DOT Identifier'''
 	if len(p)==2:
 		p[0] = Node('TypeName',[p[1]],[]).name
@@ -867,8 +867,8 @@ def p_DecimalNumeral(p):
 					| NONZERODIGIT 
 					| NONZERODIGIT DIGITS'''
 
-def p_Digits(p):
-	'''Digits : DIGIT 
+def p_DIGITS(p):
+	'''DIGITS : DIGIT 
 			| DIGITS DIGIT'''
 
 
@@ -949,7 +949,9 @@ def p_NullLiteral(p):
 	'NullLiteral : R_NULL'
 	p[0] = Node("NullLiteral", [],[p[1]]).name
 
-
+def p_Identifier(p):
+	'Identifier : ID'
+	p[0] = Node("Identifier", [],[p[1]]).name
 parser = yacc.yacc()
 
 while True:
