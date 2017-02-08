@@ -236,6 +236,11 @@ def p_Type(p):
 		p[0] = Node("Type", [p[1]],[]).name
 	else:
 		p[0] = Node("Type", [p[1]],[]).name
+
+def p_ForArrayType(p):
+	'''ForArrayType : PrimitiveType 
+					| ArrayType'''
+
 #<primitive type> ::= <numeric type> | boolean
 def p_PrimitiveType(p):
 	'''PrimitiveType : NumericType 
@@ -283,7 +288,7 @@ def p_ClassType(p):
 		p[0] = Node("ClassType", [p[2]],[p[1]]).name
 #<array type> ::= <type> [ ]
 def p_ArrayType(p):
-	'ArrayType : Type LSQRB RSQRB'
+	'ArrayType : ForArrayType LSQRB RSQRB'
 	p[0] = Node("ArrayType", [p[1]],[p[2], p[3]]).name
 
 #<block> ::= { <block statements>? }
@@ -684,13 +689,13 @@ def p_UnaryExpression(p):
 	else:
 		p[0] = Node("MultiplicativeExpression", [p[1]],[]).name
 # <predecrement expression> ::= -- <unary expression>
-def p_PredecrementExpression(p):
-	'PredecrementExpression : MINUS MINUS UnaryExpression'
-	p[0] = Node("PredecrementExpression", [p[3]], [p[1], p[2]]).name
-# <preincrement expression> ::= ++ <unary expression>
-def p_PreincrementExpression(p):
-	'PreincrementExpression : PLUS PLUS UnaryExpression'
-	p[0] = Node("PreincrementExpression", [p[3]], [p[1], p[2]]).name
+# def p_PredecrementExpression(p):
+# 	'PredecrementExpression : MINUS MINUS UnaryExpression'
+# 	p[0] = Node("PredecrementExpression", [p[3]], [p[1], p[2]]).name
+# # <preincrement expression> ::= ++ <unary expression>
+# def p_PreincrementExpression(p):
+# 	'PreincrementExpression : PLUS PLUS UnaryExpression'
+# 	p[0] = Node("PreincrementExpression", [p[3]], [p[1], p[2]]).name
 # <unary expression not plus minus> ::= <postfix expression> | ~ <unary expression> | ! <unary expression> | <cast expression>
 def p_UnaryExpressionNotPlusMinus(p):
 	'''UnaryExpressionNotPlusMinus : PostfixExpression
@@ -773,7 +778,7 @@ def p_PrimaryNoNewArray(p):
 # <class instance creation expression> ::= new <class type> ( <argument list>? )
 
 def p_ClassInstanceCreationExpression(p):
-	'''ClassInstanceCreationExpression : R_NEW ClassType LPARAN ArgumentLists RPARAN'''
+	'''ClassInstanceCreationExpression : R_NEW AmbiguousName LPARAN ArgumentLists RPARAN'''
 								#		| R_NEW ClassType LPARAN RPARAN'''
 	if len(p) ==6:
 		p[0] = Node('ClassInstanceCreationExpression',[p[2],p[4]],[p[1],p[3],p[5]]).name
