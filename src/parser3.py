@@ -707,21 +707,23 @@ def p_PostfixExpression(p):
 							# | PostdecrementExpression'''
 	p[0] = Node("PostfixExpression", [p[1]],[]).name
 # <method invocation> ::= <method name> ( <argument list>? ) | <primary> . <identifier> ( <argument list>? ) | super . <identifier> ( <argument list>? )
+#'''method_invocation : ambiguous_name LPAREN argument_list_extras RPAREN '''
 def p_MethodInvocation(p):
 	'''MethodInvocation : AmbiguousName LPARAN ArgumentList RPARAN
-						| AmbiguousName LPARAN RPARAN
-						| Primary DOT Identifier LPARAN ArgumentList RPARAN
-						| Primary DOT Identifier LPARAN RPARAN
-						| Super DOT Identifier LPARAN ArgumentList RPARAN
-						| Super DOT Identifier LPARAN RPARAN'''
-	if len(p) ==  7:
-		p[0] = Node("MethodInvocation", [p[1], p[3], p[5]], [p[2], p[4], p[6]]).name
-	elif len(p) ==  6:
-		p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4], p[5]]).name
+							| AmbiguousName LPARAN RPARAN'''
+						# | Primary DOT Identifier LPARAN ArgumentList RPARAN
+						# | Super DOT Identifier LPARAN ArgumentList RPARAN'''
+						# # | Super DOT Identifier LPARAN RPARAN
+						# | AmbiguousName LPARAN RPARAN
+						# | Primary DOT Identifier LPARAN RPARAN
 	if len(p) ==  5:
 		p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]]).name
-	else:
-		p[0] = Node("MethodInvocation", [p[1]],[p[2], p[3]]).name
+	elif len(p) ==  4:
+		p[0] = Node("MethodInvocation", [p[1]], [p[2], p[3]]).name
+	# if len(p) ==  5:
+	# 	p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]]).name
+	# else:
+	# 	p[0] = Node("MethodInvocation", [p[1]],[p[2], p[3]]).name
 # <field access> ::= <primary> . <identifier> | super . <identifier>
 def p_FieldAccess(p):
 	'''FieldAccess : Primary DOT Identifier
