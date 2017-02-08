@@ -49,8 +49,10 @@ def p_ImportDeclarations(p):
 #<import declaration> ::= import <type name> ;
 
 def p_ImportDeclaration(p):
-	'ImportDeclaration : R_IMPORT TypeName SEMICOLON'
-	p[0] = Node("ImportDeclaration", [p[2]],[p[1],p[3]]).name
+	'''ImportDeclaration : R_IMPORT ExpressionName SEMICOLON
+						 | empty	'''
+	if len(p) == 4:
+		p[0] = Node("ImportDeclaration", [p[2]],[p[1],p[3]]).name
 	
 #<classes_objects> ::= <class_object> | <class_object> <classes_objects>
 
@@ -100,8 +102,10 @@ def p_ClassDeclaration(p):
 #<super> ::= extends <class type>
 
 def p_Super(p):
-	'Super : R_EXTENDS ClassType'
-	p[0] = Node("Super", [p[2]],[p[1]]).name
+	'''Super : R_EXTENDS ClassType
+			| empty'''
+	if len(p) == 3:
+		p[0] = Node("Super", [p[2]],[p[1]]).name
 #<class_header> ::= ( <formal parameter list>? )
 def p_ClassHeader(p):
 	'''ClassHeader : LPARAN RPARAN
@@ -142,13 +146,13 @@ def p_FormalParameter(p):
 	p[0] = Node("FormalParamter", [p[1], p[3]],[p[2]]).name
 #<class type> ::= <identifier> | with <identifier><class type>
 #confusion check later
-def p_ClassType(p):
-	'''ClassType : Identifier 
-				| R_WITH Identifier ClassType'''
-	if len(p)==4:
-		p[0] = Node("ClassType", [p[2], p[3]],[p[1]]).name
-	else:
-		p[0] = Node("ClassType", [p[1]],[]).name
+# def p_ClassType(p):
+# 	'''ClassType : Identifier 
+# 				| R_WITH Identifier ClassType'''
+# 	if len(p)==4:
+# 		p[0] = Node("ClassType", [p[2], p[3]],[p[1]]).name
+# 	else:
+# 		p[0] = Node("ClassType", [p[1]],[]).name
 
 #<field declaration> ::=  val <variable declarator> ;
 def p_FieldDeclaration(p):
@@ -266,8 +270,12 @@ def p_ReferenceType(p):
 	p[0] = Node("ReferenceType", [p[1]],[]).name
 #<class type> ::= <type name>
 def p_ClassType(p):
-	'ClassType : TypeName'
-	p[0] = Node("ClassType", [p[1]],[]).name
+	'''ClassType : Identifier
+				 |	R_WITH TypeName'''
+	if len(p) == 2:
+		p[0] = Node("ClassType", [p[1]],[]).name
+	else:
+		p[0] = Node("ClassType", [p[2]],[p[1]]).name
 #<array type> ::= <type> [ ]
 def p_ArrayType(p):
 	'ArrayType : Type LSQRB RSQRB'
@@ -792,7 +800,7 @@ def p_ArrayAccess(p):
 
 
 
-# <package name> ::= <identifier> | <package name> . <identifier>
+#<package name> ::= <identifier> | <package name> . <identifier>
 def p_PackageName(p):
 	'''PackageName : Identifier
 					| PackageName DOT Identifier'''
