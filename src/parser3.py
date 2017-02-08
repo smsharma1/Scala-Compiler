@@ -31,7 +31,7 @@ class Node:
 def p_CompilationUnit(p):
 	'''CompilationUnit : ImportDeclarationss ClassObjectsList'''
 						# | ClassesObjects'''
-	if len(p)==2:
+	if len(p)==3:
 		p[0] = Node("CompilationUnit", [p[1], p[2]],[]).name
 	# else:
 	# 	p[0] = Node("CompilationUnit", [p[1]],[]).name
@@ -45,7 +45,7 @@ def p_ImportDeclarationss(p):
 def p_ImportDeclarations(p):
 	'''	ImportDeclarations : ImportDeclaration 
 							| ImportDeclarations ImportDeclaration'''
-	if len(p)==2:
+	if len(p)==3:
 		p[0] = Node("ImportDeclarations", [p[1], p[2]],[]).name
 	else:
 		p[0] = Node("ImportDeclarations", [p[1]],[]).name
@@ -97,7 +97,7 @@ def p_ObjectDeclaration(p):
 #	if len(p)==6:
 #		p[0] = Node("ObjectDeclaration", [p[2], p[3], p[5]],[p[1], p[4], p[6]]).name
 #	else:
-	p[0] = Node("ObjectDeclaration", [p[2], p[4]],[p[1], p[3], p[5]]).name
+	p[0] = Node("ObjectDeclaration", [p[2], p[3], p[4]],[p[1]]).name
 
 #<class_declaration> ::= class <identifier> <class_header> <super>? { <class body declarations>? }
 
@@ -113,7 +113,7 @@ def p_ClassDeclaration(p):
 	# elif "Super" in p[4]:
 	# 	p[0] = Node("ClassDeclaration", [p[2], p[3], p[4]],[p[1], p[5], p[6]]).name
 	elif len(p)==7:
-		p[0] = Node("ClassDeclaration", [p[2], p[3], p[5]],[p[1], p[4], p[6]]).name
+		p[0] = Node("ClassDeclaration", [p[2], p[3], p[4]],[p[1], p[5], p[6]]).name
 # 	else:
 # 		p[0] = Node("ClassDeclaration", [p[2], p[3]],[p[1], p[4], p[5]]).name
 # #<super> ::= extends <class type>
@@ -158,10 +158,10 @@ def p_ClassBodyDeclaration(p):
 def p_FormalParameterList(p):
 	'''FormalParameterList : Identifier COLON Type 
 							| Identifier COLON Type COMMA FormalParameterList'''
-	if len(p)==2:
-		p[0] = Node("FormalParameterList", [p[1]],[]).name
-	else:
+	if len(p)==4:
 		p[0] = Node("FormalParameterList", [p[1], p[3]],[p[2]]).name
+	else:
+		p[0] = Node("FormalParameterList", [p[1], p[3], p[5]],[p[2], p[4]]).name
 #<formal parameter> ::= <variable declarator id> : <type> 
 def p_FormalParameter(p):
 	'FormalParameter : Identifier COLON Type'
@@ -184,27 +184,43 @@ def p_FieldDeclaration(p):
 #<variable declarator> ::= <identifier> | <identifier>: <type>   | <identifier> <variable_declarator_extra> 
 
 def p_VariableDeclarator1(p):
-    ''' VariableDeclarator1 : Identifier COLON Type EQUALASS VariableInitializer
-                            | Identifier EQUALASS VariableInitializer'''
+	''' VariableDeclarator1 : Identifier COLON Type EQUALASS VariableInitializer
+							| Identifier EQUALASS VariableInitializer'''
+	if len(p)==4:
+		p[0] = Node("VariableDeclarator1", [p[1], p[3]],[p[2]]).name
+	else:
+		p[0] = Node("VariableDeclarator1", [p[1], p[3], p[5]],[p[2], p[4]]).name					
 
 def p_ClassArgumentHeader(p):
-    '''ClassArgumentHeader : ClassArgumentList
-                            | empty'''
+	'''ClassArgumentHeader : ClassArgumentList
+							| empty'''
+	if "ClassArgumentList" in p[0]:
+		p[0] = Node("ClassArgumentHeader", [p[1]],[]).name
 
 def p_ClassArgumentList(p):
-    ''' ClassArgumentList : Identifier COLON Type
-                            | Identifier COLON Type COMMA ClassArgumentList'''   
+	''' ClassArgumentList : Identifier COLON Type
+							| Identifier COLON Type COMMA ClassArgumentList''' 
+	if len(p)==4:
+		p[0] = Node("ClassArgumentList", [p[1], p[3]],[p[2]]).name
+	else:
+		p[0] = Node("ClassArgumentList", [p[1], p[3], p[5]],[p[2], p[4]]).name
 
 def p_FuncArgumentListExtras(p):
-    ''' FuncArgumentListExtras : VariableDeclarators
-                                | empty'''
+	''' FuncArgumentListExtras : VariableDeclarators
+								| empty'''
+	p[0] = Node("ClassArgumentHeader", [p[1]],[]).name
 
 def p_VariableDeclarators(p):
 	'''VariableDeclarators : VariableDeclarator
 						| VariableDeclarator COMMA VariableDeclarators'''
-                        
+	if len(p)==4:
+		p[0] = Node("VariableDeclarators", [p[1], p[3]],[p[2]]).name
+	else:
+		p[0] = Node("VariableDeclarators", [p[1]],[]).name
+						
 def p_VariableDeclarator(p):
 	'''VariableDeclarator : Identifier COLON Type '''
+	p[0] = Node("VariableDeclarator", [p[1], p[3]],[p[2]]).name
 
 # def p_VariableDeclarator(p):
 	# '''VariableDeclarator : Identifier COLON Type '''
@@ -228,19 +244,17 @@ def p_VariableDeclarator(p):
 def p_VariableInitializer(p):
 	'''VariableInitializer : ArrayInitializer
 							| Expression
-                            | ClassInstanceCreationExpression'''
-	if "Expression" in p[1]:
-		p[0] = Node("VariableInitializer", [p[1]],[]).name
-	else:
-		p[0] = Node("VariableInitializer", [p[1]],[]).name
+							| ClassInstanceCreationExpression'''
+	p[0] = Node("VariableInitializer", [p[1]],[]).name
 
 def p_ArrayInitializer(p):
-    ''' ArrayInitializer : R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT RPARAN
+	''' ArrayInitializer : R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT RPARAN
 							| R_ARRAY LPARAN ArgumentLists RPARAN'''
-    if len(p) == 9:
+	if len(p) == 9:
 		p[0] = Node('ArrayInitializer',[p[1],p[2],p[3],p[5],p[6],p[7],p[8]],[p[4]])
-    else:
-		p[0] = Node('ArrayInitializer',[p[1],p[2],p[3],p[5],p[6],p[7],p[8],p[9],p[10]],[p[4]])
+	else:
+		p[0] = Node('ArrayInitializer',[p[1],p[2],p[3],p[5]],[p[4]])
+
 #<method declaration> ::= <method header> <method body>
 def p_MethodDeclaration(p):
 	'MethodDeclaration : MethodHeader MethodBody'
@@ -248,10 +262,7 @@ def p_MethodDeclaration(p):
 #<method header> ::= def <method declarator> : <type> = | def <method declarator> = 
 def p_MethodHeader(p):
 	'''MethodHeader : R_DEF MethodDeclarator MethodReturnTypeExtras'''
-	if len(p)==6:
-		p[0] = Node("MethodHeader", [p[2], p[4]],[p[1], p[3], p[5]]).name
-	else:
-		p[0] = Node("MethodHeader", [p[2]],[p[1],p[3]]).name
+	p[0] = Node("MethodHeader", [p[2], p[3]],[p[1]]).name
 #<method declarator> ::= <identifier> ( <formal parameter list>? )
 def p_MethodDeclarator(p):
 	'''MethodDeclarator : Identifier LPARAN FuncArgumentListExtras RPARAN'''
@@ -261,22 +272,27 @@ def p_MethodDeclarator(p):
 	p[0] = Node("MethodDeclarator", [p[1], p[3]],[p[2], p[4]]).name
 
 def p_MethodReturnTypeExtras(p):
-    '''MethodReturnTypeExtras : COLON MethodReturnType EQUALASS
-                                | EQUALASS
-                                | empty '''
+	'''MethodReturnTypeExtras : COLON MethodReturnType EQUALASS
+								| EQUALASS
+								| empty '''
+	if len(p)==4:
+		p[0] = Node("MethodReturnTypeExtras", [p[2]],[p[1], p[3]]).name
+	elif "=" in p[1]:
+		p[0] = Node("MethodReturnTypeExtras", [p[1]],[]).name
 
 def  p_MethodReturnType(p):
-    '''MethodReturnType : Type 
-                        | R_UNIT'''
-
+	'''MethodReturnType : Type 
+						| R_UNIT'''
+	if "Type" in p[1]:
+		p[0] = Node("MethodReturnType", [p[1]],[]).name
+	else:
+		p[0] = Node("MethodReturnType", [],[p[1]]).name
 
 #<method body> ::= <block> | ;
 def p_MethodBody(p):
 	'''MethodBody : Block'''
-	if "Block" in p[1]:
-		p[0] = Node("VariableInitializer", [p[1]],[]).name
-	else:
-		p[0] = Node("VariableInitializer", [],[p[1]]).name
+	p[0] = Node("MethodBody", [p[1]],[]).name
+
 #<type> ::= <primitive type> | <reference type>
 def p_Type(p):
 	'''Type : PrimitiveType 
@@ -293,7 +309,8 @@ def p_PrimitiveType(p):
 	if "NumericType" in p[1]:
 		p[0] = Node("PrimitiveType", [p[1]],[]).name
 	else:
-		p[0] = Node("PrimitiveType", [p[1]],[]).name
+		p[0] = Node("PrimitiveType", [],[p[1]]).name
+
 #<numeric type> ::= <integral type> | <floating-point type>
 def p_NumericType(p):
 	'''NumericType : IntegralType
@@ -336,8 +353,8 @@ def p_ClassType(p):
 #<array type> ::= <type> [ ]
 def p_ArrayType(p):
 	'''ArrayType : R_ARRAY LSQRB RSQRB
-                | R_LIST LSQRB RSQRB'''
-	p[0] = Node("ArrayType", [p[1]],[p[2], p[3]]).name
+				| R_LIST LSQRB RSQRB'''
+	p[0] = Node("ArrayType", [p[1], p[2], p[3]],[]).name
 
 #<block> ::= { <block statements>? }
 def p_Block(p):
@@ -359,7 +376,7 @@ def p_BlockStatements(p):
 def p_BlockStatement(p):
 	'''BlockStatement : LocalVariableDeclarationStatement 
 					| Statement
-                    | MethodDeclaration'''
+					| MethodDeclaration'''
 	if "Statement" in p[1]:
 		p[0] = Node("BlockStatement", [p[1]],[]).name
 	else:
@@ -371,12 +388,12 @@ def p_LocalVariableDeclarationStatement(p):
 #<local variable declaration> ::= <type> <variable declarators>
 def p_LocalVariableDeclaration(p):
 	'''LocalVariableDeclaration : R_VAL VariableDeclarationBody
-                                | R_VAR VariableDeclarationBody'''
+								| R_VAR VariableDeclarationBody'''
 	p[0] = Node("LocalVariableDeclaration", [p[1],p[2]],[]).name
 
 def p_VariableDeclarationBody(p):
-    '''VariableDeclarationBody : Identifier COLON Type EQUALASS VariableInitializer
-        | Identifier EQUALASS VariableInitializer''' 
+	'''VariableDeclarationBody : Identifier COLON Type EQUALASS VariableInitializer
+		| Identifier EQUALASS VariableInitializer''' 
 #<statement> ::= <statement without trailing substatement> | <if then statement> | <if then else statement> 
 # | <while statement> | <for statement>
 def p_Statement(p):
@@ -584,9 +601,9 @@ def p_Expression(p):
 # 	p[0] = Node("AssignmentExpression", [p[1]],[]).name
 
 def p_CondititionalExpression(p): 
-    '''  CondititionalExpression : OrExpression
-            |  OrExpression Expression COLON CondititionalExpression
-                                    | Expression COLON CondititionalExpression'''
+	'''  CondititionalExpression : OrExpression
+			|  OrExpression Expression COLON CondititionalExpression
+									| Expression COLON CondititionalExpression'''
 
 def p_LeftHandSide(p):
 	'''LeftHandSide : AmbiguousName
@@ -1065,8 +1082,8 @@ def p_HexNumeral(p):
 # # def StringCharacter(p):
 # # 	'StringCharacter : StrChar'
 def p_empty(p):
-    'empty :'
-    pass
+	'empty :'
+	pass
 
 # # # <null literal> ::= null
 def p_NullLiteral(p):
@@ -1080,7 +1097,14 @@ parser = yacc.yacc()
 
 while True:
 	try:
-		s = raw_input('calc > ')
+		# s = raw_input('calc > ')
+		s = '''object Test {
+       var iter_count : Int = 0; 
+       while(iter_count < 20) {
+       iter_count = iter_count + 9;
+       }
+       return;
+}'''
 	except EOFError:
 		break
 	if not s: continue
