@@ -183,9 +183,9 @@ def p_FieldDeclaration(p):
 	p[0] = Node("FieldDeclaration", [p[2]],[p[1], p[3]]).name
 #<variable declarator> ::= <identifier> | <identifier>: <type>   | <identifier> <variable_declarator_extra>  
 def p_VariableDeclarator(p):
-	'''VariableDeclarator : Identifier 
-						| Identifier COLON Type 
-						| Identifier VariableDeclaratorExtra'''
+	'''VariableDeclarator :  Identifier COLON Type''' 
+					#	| Identifier VariableDeclaratorExtra'''
+					# | Identifier
 	if len(p)==4:
 		p[0] = Node("VariableDeclarator", [p[1], p[3]],[p[2]]).name
 	elif len(p)==3:
