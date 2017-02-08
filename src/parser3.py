@@ -863,14 +863,14 @@ def p_PackageName(p):
 		p[0] = Node('PackageName',[p[1],p[3]],[p[2]]).name
 
 
-# <type name> ::= <identifier> | <package name> . <identifier>
-def p_TypeName(p):
-	'''TypeName : Identifier 
-				| PackageName DOT Identifier'''
-	if len(p)==2:
-		p[0] = Node('TypeName',[p[1]],[]).name
-	else:
-		p[0] = Node('TypeName',[p[1],p[3]],[p[2]]).name
+# # <type name> ::= <identifier> | <package name> . <identifier>
+# def p_TypeName(p):
+# 	'''TypeName : Identifier 
+# 				| PackageName DOT Identifier'''
+# 	if len(p)==2:
+# 		p[0] = Node('TypeName',[p[1]],[]).name
+# 	else:
+# 		p[0] = Node('TypeName',[p[1],p[3]],[p[2]]).name
 
 
 # <simple type name> ::= <identifier>
