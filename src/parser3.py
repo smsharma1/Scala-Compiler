@@ -49,10 +49,8 @@ def p_ImportDeclarations(p):
 #<import declaration> ::= import <type name> ;
 
 def p_ImportDeclaration(p):
-	'''ImportDeclaration : R_IMPORT AmbiguousName SEMICOLON
-						 | empty	'''
-	if len(p) == 4:
-		p[0] = Node("ImportDeclaration", [p[2]],[p[1],p[3]]).name
+	'''ImportDeclaration : R_IMPORT AmbiguousName'''
+	p[0] = Node("ImportDeclaration", [p[2]],[p[1]]).name
 	
 #<classes_objects> ::= <class_object> | <class_object> <classes_objects>
 
@@ -77,29 +75,32 @@ def p_ClassObject(p):
 
 #<object_declaration> ::= object <identifier> <super>? { method_body }
 def p_ObjectDeclaration(p):
-	'''ObjectDeclaration : R_OBJECT Identifier BLOCKOPEN MethodBody BLOCKCLOSE
-						| R_OBJECT Identifier Super BLOCKOPEN MethodBody BLOCKCLOSE'''
-	if len(p)==6:
-		p[0] = Node("ObjectDeclaration", [p[2], p[3], p[5]],[p[1], p[4], p[6]]).name
-	else:
-		p[0] = Node("ObjectDeclaration", [p[2], p[4]],[p[1], p[3], p[5]]).name
+	'''ObjectDeclaration :  R_OBJECT Identifier Super BLOCKOPEN MethodBody BLOCKCLOSE'''
+#	R_OBJECT Identifier BLOCKOPEN MethodBody BLOCKCLOSE
+					
+#	if len(p)==6:
+#		p[0] = Node("ObjectDeclaration", [p[2], p[3], p[5]],[p[1], p[4], p[6]]).name
+#	else:
+	p[0] = Node("ObjectDeclaration", [p[2], p[4]],[p[1], p[3], p[5]]).name
 
 #<class_declaration> ::= class <identifier> <class_header> <super>? { <class body declarations>? }
 
 def p_ClassDeclaration(p):
-	'''ClassDeclaration : R_CLASS Identifier ClassHeader BLOCKOPEN ClassBodyDeclarations BLOCKCLOSE
-					 | R_CLASS Identifier ClassHeader Super BLOCKOPEN ClassBodyDeclarations BLOCKCLOSE
-					 | R_CLASS Identifier ClassHeader BLOCKOPEN  BLOCKCLOSE
+	'''ClassDeclaration :  R_CLASS Identifier ClassHeader Super BLOCKOPEN ClassBodyDeclarations BLOCKCLOSE
 					 | R_CLASS Identifier ClassHeader Super BLOCKOPEN  BLOCKCLOSE'''
+	# R_CLASS Identifier ClassHeader BLOCKOPEN ClassBodyDeclarations BLOCKCLOSE
+	# 				 |
+	# 				 	 | R_CLASS Identifier ClassHeader BLOCKOPEN  BLOCKCLOSE
+				
 	if len(p)==8:
 		p[0] = Node("ClassDeclaration", [p[2], p[3], p[4], p[6]],[p[1], p[5], p[7]]).name
-	elif "Super" in p[4]:
-		p[0] = Node("ClassDeclaration", [p[2], p[3], p[4]],[p[1], p[5], p[6]]).name
+	# elif "Super" in p[4]:
+	# 	p[0] = Node("ClassDeclaration", [p[2], p[3], p[4]],[p[1], p[5], p[6]]).name
 	elif len(p)==7:
 		p[0] = Node("ClassDeclaration", [p[2], p[3], p[5]],[p[1], p[4], p[6]]).name
-	else:
-		p[0] = Node("ClassDeclaration", [p[2], p[3]],[p[1], p[4], p[5]]).name
-#<super> ::= extends <class type>
+# 	else:
+# 		p[0] = Node("ClassDeclaration", [p[2], p[3]],[p[1], p[4], p[5]]).name
+# #<super> ::= extends <class type>
 
 def p_Super(p):
 	'''Super : R_EXTENDS ClassType
@@ -518,6 +519,8 @@ def p_AssignmentExpression(p):
 						| Assignment'''
 	p[0] = Node("AssignmentExpression", [p[1]],[]).name
 
+
+##check it very important issue
 def p_Assignment(p):
 	'Assignment : LeftHandSide AssignmentOperator AssignmentExpression'
 	p[0] = Node("Assignment", [p[1], p[2], p[3]],[]).name
@@ -581,16 +584,24 @@ def p_ExclusiveOrExpression(p):
 		p[0] = Node("ExclusiveOrExpression", [p[1]],[]).name
 
 def p_AndExpression(p):
-	'''AndExpression : EqualityExpression 
-					| AndExpression BITAND EqualityExpression'''
+	'''AndExpression : XorExpression 
+					| AndExpression BITAND XorExpression'''
 	if len(p) ==  4:
 		p[0] = Node("AndExpression", [p[1]],[p[3]], [p[2]]).name
 	else:
 		p[0] = Node("AndExpression", [p[1]],[]).name			
 
+def p_XorExpression(p):
+	'''XorExpression : EqualityExpression
+					| XorExpression BITXOR EqualityExpression'''
+	if len(p) == 2:
+		p[0] = Node('XorExpression',[p[1]],[])
+	else :
+		p[0] = Node('XorExpression',[p[1],p[3]],[p[2]])
+
 def p_EqualityExpression(p):
 	'''EqualityExpression : RelationalExpression
-						 | EqualityExpression AND RelationalExpression
+						 | EqualityExpression EQUAL RelationalExpression
 						| EqualityExpression NOTEQUAL RelationalExpression'''
 	if len(p) ==  4:
 		p[0] = Node("EqualityExpression", [p[1]],[p[3]], [p[2]]).name
