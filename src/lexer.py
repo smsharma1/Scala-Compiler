@@ -75,6 +75,7 @@ reserved = {
 	'Null' : 'R_NULL1',
 	'Nothing' : 'R_NOTHING',
 	'Any' : 'R_ANY',
+	'List' : 'R_LIST',
 	'AnyRef' : 'R_ANYREF'
 }
 

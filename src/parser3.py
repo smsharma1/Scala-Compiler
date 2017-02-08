@@ -91,7 +91,7 @@ def p_ClassAndObjectDeclaration(p):
 
 #<object_declaration> ::= object <identifier> <super>? { method_body }
 def p_ObjectDeclaration(p):
-	'''ObjectDeclaration :  R_OBJECT Identifier Super BLOCKOPEN MethodBody BLOCKCLOSE'''
+	'''ObjectDeclaration :  R_OBJECT Identifier Super Block'''
 #	R_OBJECT Identifier BLOCKOPEN MethodBody BLOCKCLOSE
 					
 #	if len(p)==6:
@@ -156,8 +156,8 @@ def p_ClassBodyDeclaration(p):
 
 #<formal parameter list> ::= <formal parameter> | <formal parameter list> , <formal parameter>
 def p_FormalParameterList(p):
-	'''FormalParameterList : FormalParameter 
-							| FormalParameterList COMMA FormalParameter'''
+	'''FormalParameterList : Identifier COLON Type 
+							| Identifier COLON Type COMMA FormalParameterList'''
 	if len(p)==2:
 		p[0] = Node("FormalParameterList", [p[1]],[]).name
 	else:
@@ -178,33 +178,57 @@ def p_FormalParameter(p):
 
 #<field declaration> ::=  val <variable declarator> ;
 def p_FieldDeclaration(p):
-	'''FieldDeclaration : R_VAL VariableDeclarator SEMICOLON
-						|  R_VAR VariableDeclarator SEMICOLON'''
+	'''FieldDeclaration : R_VAL VariableDeclarator1 SEMICOLON
+						|  R_VAR VariableDeclarator1 SEMICOLON'''
 	p[0] = Node("FieldDeclaration", [p[2]],[p[1], p[3]]).name
-#<variable declarator> ::= <identifier> | <identifier>: <type>   | <identifier> <variable_declarator_extra>  
+#<variable declarator> ::= <identifier> | <identifier>: <type>   | <identifier> <variable_declarator_extra> 
+
+def p_VariableDeclarator1(p):
+    ''' VariableDeclarator1 : Identifier COLON Type EQUALASS VariableInitializer
+                            | Identifier EQUALASS VariableInitializer'''
+
+def p_ClassArgumentHeader(p):
+    '''ClassArgumentHeader : ClassArgumentList
+                            | empty'''
+
+def p_ClassArgumentList(p):
+    ''' ClassArgumentList : Identifier COLON Type
+                            | Identifier COLON Type COMMA ClassArgumentList'''   
+
+def p_FuncArgumentListExtras(p):
+    ''' FuncArgumentListExtras : VariableDeclarators
+                                | empty'''
+
+def p_VariableDeclarators(p):
+	'''VariableDeclarators : VariableDeclarator
+						| VariableDeclarator COMMA VariableDeclarators'''
+                        
 def p_VariableDeclarator(p):
-	'''VariableDeclarator :  Identifier COLON Type''' 
-					#	| Identifier VariableDeclaratorExtra'''
-					# | Identifier
-	if len(p)==4:
-		p[0] = Node("VariableDeclarator", [p[1], p[3]],[p[2]]).name
-	elif len(p)==3:
-		p[0] = Node("VariableDeclarator", [p[1], p[2]],[]).name
-	else:
-		p[0] = Node("VariableDeclarator", [p[1]],[]).name
+	'''VariableDeclarator : Identifier COLON Type '''
+
+# def p_VariableDeclarator(p):
+	# '''VariableDeclarator : Identifier COLON Type '''
+						# | Identifier VariableDeclaratorExtra
+	# if len(p)==4:
+	# 	p[0] = Node("VariableDeclarator", [p[1], p[3]],[p[2]]).name
+	# elif len(p)==3:
+	# 	p[0] = Node("VariableDeclarator", [p[1], p[2]],[]).name
+	# else:
+	# 	p[0] = Node("VariableDeclarator", [p[1]],[]).name
 
 #<variable_declarator_extra> ::= = <variable initializer> | :<type> = <variable initializer>
-def p_VariableDeclaratorExtra(p):
-	'''VariableDeclaratorExtra : EQUALASS VariableInitializer
-							| COLON Type EQUALASS VariableInitializer''' 
-	if len(p)==5:
-		p[0] = Node("VariableDeclaratorExtra", [p[2], p[4]],[p[1], p[3]]).name
-	else:
-		p[0] = Node("VariableDeclaratorExtra", [p[2]],[p[1]]).name
+# def p_VariableDeclaratorExtra(p):
+# 	'''VariableDeclaratorExtra : EQUALASS VariableInitializer
+# 							| COLON Type EQUALASS VariableInitializer''' 
+# 	if len(p)==5:
+# 		p[0] = Node("VariableDeclaratorExtra", [p[2], p[4]],[p[1], p[3]]).name
+# 	else:
+# 		p[0] = Node("VariableDeclaratorExtra", [p[2]],[p[1]]).name
 #<variable initializer> ::= <expression> | <array initializer>
 def p_VariableInitializer(p):
-	'''VariableInitializer : Expression
-						| ArrayInitializer'''
+	'''VariableInitializer : ArrayInitializer
+							| Expression
+                            | ClassInstanceCreationExpression'''
 	if "Expression" in p[1]:
 		p[0] = Node("VariableInitializer", [p[1]],[]).name
 	else:
@@ -212,7 +236,7 @@ def p_VariableInitializer(p):
 
 def p_ArrayInitializer(p):
     ''' ArrayInitializer : R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT RPARAN
-							| R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT COMMA INT RPARAN'''
+							| R_ARRAY LPARAN ArgumentLists RPARAN'''
     if len(p) == 9:
 		p[0] = Node('ArrayInitializer',[p[1],p[2],p[3],p[5],p[6],p[7],p[8]],[p[4]])
     else:
@@ -223,24 +247,32 @@ def p_MethodDeclaration(p):
 	p[0] = Node("MethodDeclaration", [p[1], p[2]],[]).name
 #<method header> ::= def <method declarator> : <type> = | def <method declarator> = 
 def p_MethodHeader(p):
-	'''MethodHeader : R_DEF MethodDeclarator COLON Type EQUALASS 
-				| R_DEF MethodDeclarator EQUALASS'''
+	'''MethodHeader : R_DEF MethodDeclarator MethodReturnTypeExtras'''
 	if len(p)==6:
 		p[0] = Node("MethodHeader", [p[2], p[4]],[p[1], p[3], p[5]]).name
 	else:
 		p[0] = Node("MethodHeader", [p[2]],[p[1],p[3]]).name
 #<method declarator> ::= <identifier> ( <formal parameter list>? )
 def p_MethodDeclarator(p):
-	'''MethodDeclarator : Identifier LPARAN FormalParameterLists RPARAN'''
+	'''MethodDeclarator : Identifier LPARAN FuncArgumentListExtras RPARAN'''
 	# if len(p)==4:
 	# 	p[0] = Node("MethodDeclarator", [p[1]],[p[2], p[3]]).name
 	# else:
 	p[0] = Node("MethodDeclarator", [p[1], p[3]],[p[2], p[4]]).name
 
+def p_MethodReturnTypeExtras(p):
+    '''MethodReturnTypeExtras : COLON MethodReturnType EQUALASS
+                                | EQUALASS
+                                | empty '''
+
+def  p_MethodReturnType(p):
+    '''MethodReturnType : Type 
+                        | R_UNIT'''
+
+
 #<method body> ::= <block> | ;
 def p_MethodBody(p):
-	'''MethodBody : Block 
-				| SEMICOLON'''
+	'''MethodBody : Block'''
 	if "Block" in p[1]:
 		p[0] = Node("VariableInitializer", [p[1]],[]).name
 	else:
@@ -253,10 +285,6 @@ def p_Type(p):
 		p[0] = Node("Type", [p[1]],[]).name
 	else:
 		p[0] = Node("Type", [p[1]],[]).name
-
-def p_ForArrayType(p):
-	'''ForArrayType : PrimitiveType 
-					| ArrayType'''
 
 #<primitive type> ::= <numeric type> | boolean
 def p_PrimitiveType(p):
@@ -290,11 +318,13 @@ def p_FloatingPointType(p):
 	'''FloatingPointType : R_FLOAT 
 						| R_DOUBLE'''
 	p[0] = Node("FloatingPointType", [],[p[1]]).name
+
 #<reference type> ::= <class type> | <array type>
 def p_ReferenceType(p):
-	'''ReferenceType : ClassType 
+	'''ReferenceType : Identifier
 					| ArrayType'''
 	p[0] = Node("ReferenceType", [p[1]],[]).name
+
 #<class type> ::= <type name>
 def p_ClassType(p):
 	'''ClassType : Identifier
@@ -305,7 +335,8 @@ def p_ClassType(p):
 		p[0] = Node("ClassType", [p[2]],[p[1]]).name
 #<array type> ::= <type> [ ]
 def p_ArrayType(p):
-	'ArrayType : ForArrayType LSQRB RSQRB'
+	'''ArrayType : R_ARRAY LSQRB RSQRB
+                | R_LIST LSQRB RSQRB'''
 	p[0] = Node("ArrayType", [p[1]],[p[2], p[3]]).name
 
 #<block> ::= { <block statements>? }
@@ -327,19 +358,25 @@ def p_BlockStatements(p):
 #<block statement> ::= <local variable declaration statement> | <statement>
 def p_BlockStatement(p):
 	'''BlockStatement : LocalVariableDeclarationStatement 
-					| Statement'''
+					| Statement
+                    | MethodDeclaration'''
 	if "Statement" in p[1]:
 		p[0] = Node("BlockStatement", [p[1]],[]).name
 	else:
 		p[0] = Node("BlockStatement", [p[1]],[]).name
 #<local variable declaration statement> ::= <local variable declaration> ;
 def p_LocalVariableDeclarationStatement(p):
-	'LocalVariableDeclarationStatement : LocalVariableDeclaration'
+	'LocalVariableDeclarationStatement : LocalVariableDeclaration SEMICOLON'
 	p[0] = Node("LocalVariableDeclarationStatement", [p[1]],[]).name	
 #<local variable declaration> ::= <type> <variable declarators>
 def p_LocalVariableDeclaration(p):
-	'LocalVariableDeclaration : Type VariableDeclarator'
-	p[0] = Node("LocalVariableDeclaration", [p[1],p[2]],[]).name	
+	'''LocalVariableDeclaration : R_VAL VariableDeclarationBody
+                                | R_VAR VariableDeclarationBody'''
+	p[0] = Node("LocalVariableDeclaration", [p[1],p[2]],[]).name
+
+def p_VariableDeclarationBody(p):
+    '''VariableDeclarationBody : Identifier COLON Type EQUALASS VariableInitializer
+        | Identifier EQUALASS VariableInitializer''' 
 #<statement> ::= <statement without trailing substatement> | <if then statement> | <if then else statement> 
 # | <while statement> | <for statement>
 def p_Statement(p):
@@ -456,7 +493,7 @@ def p_WhileStatement(p):
 	p[0] = Node("WhileStatement", [p[3], p[5]],[p[1], p[2], p[4]]).name
 
 def p_ForStatement(p): 
-	'ForStatement : R_FOR BLOCKOPEN ForExprs ForIfCondition BLOCKCLOSE Statement'
+	'ForStatement : R_FOR LPARAN ForExprs RPARAN Statement'
 	p[0] = Node("ForStatement", [p[3], p[4], p[6]],[p[1], p[2], p[5]]).name
 
 def p_ForIfCondition(p): 
@@ -545,6 +582,11 @@ def p_Expression(p):
 # 	'''AssignmentExpression : L 
 # 						| Assignment'''
 # 	p[0] = Node("AssignmentExpression", [p[1]],[]).name
+
+def p_CondititionalExpression(p): 
+    '''  CondititionalExpression : OrExpression
+            |  OrExpression Expression COLON CondititionalExpression
+                                    | Expression COLON CondititionalExpression'''
 
 def p_LeftHandSide(p):
 	'''LeftHandSide : AmbiguousName
@@ -796,7 +838,7 @@ def p_PrimaryNoNewArray(p):
 # <class instance creation expression> ::= new <class type> ( <argument list>? )
 
 def p_ClassInstanceCreationExpression(p):
-	'''ClassInstanceCreationExpression : R_NEW AmbiguousName LPARAN ArgumentLists RPARAN'''
+	'''ClassInstanceCreationExpression : R_NEW Identifier LPARAN ArgumentLists RPARAN'''
 								#		| R_NEW ClassType LPARAN RPARAN'''
 	if len(p) ==6:
 		p[0] = Node('ClassInstanceCreationExpression',[p[2],p[4]],[p[1],p[3],p[5]]).name
@@ -847,8 +889,8 @@ def p_Dims(p):
 
 # <array access> ::= <expression name> [ <expression> ] | <primary no new array> [ <expression>]
 def p_ArrayAccess(p):
-	'''ArrayAccess : AmbiguousName LSQRB Expression RSQRB
-					| PrimaryNoNewArray LSQRB Expression RSQRB'''
+	'''ArrayAccess : AmbiguousName LSQRB Expression RSQRB'''
+					# | PrimaryNoNewArray LSQRB Expression RSQRB'''
 	p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]]).name
 
 
