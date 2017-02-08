@@ -527,8 +527,8 @@ def p_Assignment(p):
 
 def p_LeftHandSide(p):
 	'''LeftHandSide : AmbiguousName
-				| FieldAccess
 				| ArrayAccess'''
+					# | FieldAccess
 	p[0] = Node("LeftHandSide", [p[1]],[]).name
 
 def p_AssignmentOperator(p):
@@ -724,11 +724,11 @@ def p_MethodInvocation(p):
 	# 	p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]]).name
 	# else:
 	# 	p[0] = Node("MethodInvocation", [p[1]],[p[2], p[3]]).name
-# <field access> ::= <primary> . <identifier> | super . <identifier>
-def p_FieldAccess(p):
-	'''FieldAccess : Primary DOT Identifier
-					| Super DOT Identifier'''
-	p[0] = Node('FieldAccess',[p[1],p[3]],[p[2]]).name
+# # <field access> ::= <primary> . <identifier> | super . <identifier>
+# def p_FieldAccess(p):
+# 	'''FieldAccess : Primary DOT Identifier
+# 					| Super DOT Identifier'''
+# 	p[0] = Node('FieldAccess',[p[1],p[3]],[p[2]]).name
 
 # <primary> ::= <primary no new array> | <array creation expression>
 def p_Primary(p):
@@ -742,10 +742,10 @@ def p_Primary(p):
 def p_PrimaryNoNewArray(p):
 	'''PrimaryNoNewArray : Literal
 						| LPARAN Expression RPARAN
-						| FieldAccess
 						| MethodInvocation
 						| ArrayAccess'''
 						# | ClassInstanceCreationExpression
+						# | FieldAccess
 	if len(p) == 3:
 		p[0] = Node('PrimaryNoNewArray',[p[2]],[p[1],p[3]]).name
 	elif 'this' in p[1] :
