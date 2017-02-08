@@ -49,7 +49,7 @@ def p_ImportDeclarations(p):
 #<import declaration> ::= import <type name> ;
 
 def p_ImportDeclaration(p):
-	'''ImportDeclaration : R_IMPORT ExpressionName SEMICOLON
+	'''ImportDeclaration : R_IMPORT AmbiguousName SEMICOLON
 						 | empty	'''
 	if len(p) == 4:
 		p[0] = Node("ImportDeclaration", [p[2]],[p[1],p[3]]).name
@@ -271,7 +271,7 @@ def p_ReferenceType(p):
 #<class type> ::= <type name>
 def p_ClassType(p):
 	'''ClassType : Identifier
-				 |	R_WITH TypeName'''
+				 |	R_WITH ClassType'''
 	if len(p) == 2:
 		p[0] = Node("ClassType", [p[1]],[]).name
 	else:
@@ -357,12 +357,12 @@ def p_ExpressionStatement(p):
 # | <method invocation> | <class instance creation expression>
 def p_StatementExpression(p):
 	'''StatementExpression : Assignment
-						| PreincrementExpression
-						| PostincrementExpression
-						| PredecrementExpression
-						| PostdecrementExpression
 						| MethodInvocation
 						| ClassInstanceCreationExpression'''
+						# | PreincrementExpression
+						# | PostincrementExpression
+						# | PredecrementExpression
+						# | PostdecrementExpression
 	p[0] = Node("StatementExpression", [p[1]],[]).name
 
 def p_IfThenStatement(p):
@@ -523,7 +523,7 @@ def p_Assignment(p):
 	p[0] = Node("Assignment", [p[1], p[2], p[3]],[]).name
 
 def p_LeftHandSide(p):
-	'''LeftHandSide : ExpressionName 
+	'''LeftHandSide : AmbiguousName
 				| FieldAccess
 				| ArrayAccess'''
 	p[0] = Node("LeftHandSide", [p[1]],[]).name
@@ -691,14 +691,14 @@ def p_PostincrementExpression(p):
 # <postfix expression> ::= <primary> | <expression name> | <postincrement expression> | <postdecrement expression>
 def p_PostfixExpression(p):
 	'''PostfixExpression : Primary
-							| ExpressionName
-							| PostincrementExpression
-							| PostdecrementExpression'''
+							| AmbiguousName'''
+							# | PostincrementExpression
+							# | PostdecrementExpression'''
 	p[0] = Node("PostfixExpression", [p[1]],[]).name
 # <method invocation> ::= <method name> ( <argument list>? ) | <primary> . <identifier> ( <argument list>? ) | super . <identifier> ( <argument list>? )
 def p_MethodInvocation(p):
-	'''MethodInvocation : MethodName LPARAN ArgumentList RPARAN
-						| MethodName LPARAN RPARAN
+	'''MethodInvocation : AmbiguousName LPARAN ArgumentList RPARAN
+						| AmbiguousName LPARAN RPARAN
 						| Primary DOT Identifier LPARAN ArgumentList RPARAN
 						| Primary DOT Identifier LPARAN RPARAN
 						| Super DOT Identifier LPARAN ArgumentList RPARAN
@@ -719,8 +719,8 @@ def p_FieldAccess(p):
 
 # <primary> ::= <primary no new array> | <array creation expression>
 def p_Primary(p):
-	'''Primary : PrimaryNoNewArray
-				| ArrayCreationExpression'''
+	'''Primary : PrimaryNoNewArray'''
+				# | ArrayCreationExpression'''
 	p[0] = Node('Primary',[p[1]],[]).name
 
 # <primary no new array> ::= <literal> | this | ( <expression> ) | <class instance creation expression> 
@@ -728,12 +728,11 @@ def p_Primary(p):
 
 def p_PrimaryNoNewArray(p):
 	'''PrimaryNoNewArray : Literal
-						| R_THIS
 						| LPARAN Expression RPARAN
-						| ClassInstanceCreationExpression
 						| FieldAccess
 						| MethodInvocation
 						| ArrayAccess'''
+						# | ClassInstanceCreationExpression
 	if len(p) == 3:
 		p[0] = Node('PrimaryNoNewArray',[p[2]],[p[1],p[3]]).name
 	elif 'this' in p[1] :
@@ -794,7 +793,7 @@ def p_Dims(p):
 
 # <array access> ::= <expression name> [ <expression> ] | <primary no new array> [ <expression>]
 def p_ArrayAccess(p):
-	'''ArrayAccess : ExpressionName LSQRB Expression RSQRB
+	'''ArrayAccess : AmbiguousName LSQRB Expression RSQRB
 					| PrimaryNoNewArray LSQRB Expression RSQRB'''
 	p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]]).name
 
@@ -827,23 +826,23 @@ def p_TypeName(p):
 
 
 # <expression name> ::= <identifier> | <ambiguous name> . <identifier>
-def p_ExpressionName(p):
-	'''ExpressionName : Identifier
-						| AmbiguousName DOT Identifier'''
-	if len(p)==2:
-		p[0] = Node('ExpressionName',[p[1]],[]).name
-	else:
-		p[0] = Node('ExpressionName',[p[1],p[3]],[p[2]]).name
+# def p_ExpressionName(p):
+# 	'''ExpressionName : Identifier
+# 						| AmbiguousName DOT Identifier'''
+# 	if len(p)==2:
+# 		p[0] = Node('ExpressionName',[p[1]],[]).name
+# 	else:
+# 		p[0] = Node('ExpressionName',[p[1],p[3]],[p[2]]).name
 
 
 # <method name> ::= <identifier> | <ambiguous name>. <identifier>
-def p_MethodName(p):
-	'''MethodName : Identifier 
-					| AmbiguousName DOT Identifier'''
-	if len(p)==2:
-		p[0] = Node('MethodName',[p[1]],[]).name
-	else:
-		p[0] = Node('MethodName',[p[1],p[3]],[p[2]]).name
+# def p_MethodName(p):
+# 	'''MethodName : Identifier 
+# 					| AmbiguousName DOT Identifier'''
+# 	if len(p)==2:
+# 		p[0] = Node('MethodName',[p[1]],[]).name
+# 	else:
+# 		p[0] = Node('MethodName',[p[1],p[3]],[p[2]]).name
 
 
 # <ambiguous name>::= <identifier> | <ambiguous name>. <identifier>
