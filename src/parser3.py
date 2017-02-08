@@ -29,13 +29,17 @@ class Node:
 			graph.add_edge(pydot.Edge(self.name, ch))
 
 def p_CompilationUnit(p):
-	'''CompilationUnit : ImportDeclarations ClassesObjects'''
+	'''CompilationUnit : ImportDeclarationss ClassObjectsList'''
 						# | ClassesObjects'''
 	if len(p)==2:
 		p[0] = Node("CompilationUnit", [p[1], p[2]],[]).name
-	else:
-		p[0] = Node("CompilationUnit", [p[1]],[]).name
-
+	# else:
+	# 	p[0] = Node("CompilationUnit", [p[1]],[]).name
+def p_ImportDeclarationss(p):
+	'''ImportDeclarationss : ImportDeclarations
+							| empty'''
+	if 'ImportDeclarations' in p[1]:
+		p[0] = Node('ImportDeclarationss',[p[1]],[])
 #<import declarations> ::= <import declaration> | <import declarations> <import declaration>
 
 def p_ImportDeclarations(p):
@@ -51,27 +55,39 @@ def p_ImportDeclarations(p):
 def p_ImportDeclaration(p):
 	'''ImportDeclaration : R_IMPORT AmbiguousName'''
 	p[0] = Node("ImportDeclaration", [p[2]],[p[1]]).name
-	
-#<classes_objects> ::= <class_object> | <class_object> <classes_objects>
 
-def p_ClassesObjects(p):
-	'''ClassesObjects : ClassObject 
-						| ClassObject ClassesObjects'''
-	if len(p)==2:
-		p[0] = Node("ClassesObjects", [p[1], p[2]],[]).name
+
+def p_ClassObjectsList(p):
+	'''ClassObjectsList : ClassObjectsList ClassAndObjectDeclaration
+						| ClassAndObjectDeclaration'''
+	if len(p) ==2:
+		p[0] = Node('ClassObjectsList',[p[1]],[])
 	else:
-		p[0] = Node("ClassesObjects", [p[1]],[]).name
-#<class_object> ::= <class_declaration> | <object_declaration> | ;
-def p_ClassObject(p):
-	'''ClassObject : ClassDeclaration 
-				| ObjectDeclaration
-				| SEMICOLON'''
-	if "ClassDeclaration" in p[1]:
-		p[0] = Node("ClassObject", [p[1]],[]).name
-	elif "ObjectDeclaration" in p[1]:
-		p[0] = Node("ClassObject", [p[1]],[]).name
-	else:
-		p[0] = Node("ClassObject", [],[p[1]]).name
+		p[0] = Node('ClassObjectsList',[p[1],p[2]],[])
+#<classes_objects> ::= <class_object> | <class_object> <classes_objects>
+def p_ClassAndObjectDeclaration(p):
+	'''ClassAndObjectDeclaration : ObjectDeclaration
+								| ClassDeclaration'''
+	p[0] = Node('ClassAndObjectDeclaration',[p[1]],[])
+
+# def p_ClassesObjects(p):
+# 	'''ClassesObjects : ClassObject 
+# 						| ClassObject ClassesObjects'''
+# 	if len(p)==2:
+# 		p[0] = Node("ClassesObjects", [p[1], p[2]],[]).name
+# 	else:
+# 		p[0] = Node("ClassesObjects", [p[1]],[]).name
+# #<class_object> ::= <class_declaration> | <object_declaration> | ;
+# def p_ClassObject(p):
+# 	'''ClassObject : ClassDeclaration 
+# 				| ObjectDeclaration
+# 				| SEMICOLON'''
+# 	if "ClassDeclaration" in p[1]:
+# 		p[0] = Node("ClassObject", [p[1]],[]).name
+# 	elif "ObjectDeclaration" in p[1]:
+# 		p[0] = Node("ClassObject", [p[1]],[]).name
+# 	else:
+# 		p[0] = Node("ClassObject", [],[p[1]]).name
 
 #<object_declaration> ::= object <identifier> <super>? { method_body }
 def p_ObjectDeclaration(p):
@@ -162,7 +178,8 @@ def p_FormalParameter(p):
 
 #<field declaration> ::=  val <variable declarator> ;
 def p_FieldDeclaration(p):
-	'FieldDeclaration : R_VAL VariableDeclarator SEMICOLON'
+	'''FieldDeclaration : R_VAL VariableDeclarator SEMICOLON
+						|  R_VAR VariableDeclarator SEMICOLON'''
 	p[0] = Node("FieldDeclaration", [p[2]],[p[1], p[3]]).name
 #<variable declarator> ::= <identifier> | <identifier>: <type>   | <identifier> <variable_declarator_extra>  
 def p_VariableDeclarator(p):
@@ -628,9 +645,9 @@ def p_EqualityExpression(p):
 def p_RelationalExpression(p):
 	'''RelationalExpression : ShiftExpression 
 						| RelationalExpression LT ShiftExpression 
-						| RelationalExpression GT ShiftExpression 
-						| RelationalExpression LE ShiftExpression 
-						| RelationalExpression GE ShiftExpression 
+						| RelationalExpression GT ShiftExpression  
+						| RelationalExpression LE ShiftExpression  
+						| RelationalExpression GE ShiftExpression  
 						| RelationalExpression R_INSTANCEOF ReferenceType'''
 	if len(p) ==  4:
 		p[0] = Node("RelationalExpression", [p[1]],[p[3]], [p[2]]).name
@@ -669,13 +686,13 @@ def p_MultiplicativeExpression(p):
 		p[0] = Node("MultiplicativeExpression", [p[1]],[]).name
 
 # <cast expression> ::= ( <primitive type> ) <unary expression> | ( <reference type> ) <unary expression not plus minus>
-def p_CastExpression(p):
-	'''CastExpression : LPARAN PrimitiveType RPARAN UnaryExpression 
-						| LPARAN ReferenceType RPARAN UnaryExpressionNotPlusMinus'''
-	if len(p) ==  5:
-		p[0] = Node("CastExpression", [p[2], p[4]], [p[1],p[3]]).name
-	else:
-		p[0] = Node("CastExpression", [p[2], p[3], p[5]],[p[1],p[4]]).name
+# def p_CastExpression(p):
+# 	'''CastExpression : LPARAN PrimitiveType RPARAN UnaryExpression 
+# 						| LPARAN ReferenceType RPARAN UnaryExpressionNotPlusMinus'''
+# 	if len(p) ==  5:
+# 		p[0] = Node("CastExpression", [p[2], p[4]], [p[1],p[3]]).name
+# 	else:
+# 		p[0] = Node("CastExpression", [p[2], p[3], p[5]],[p[1],p[4]]).name
 
 # <unary expression> ::= <preincrement expression> | <predecrement expression> | + <unary expression> | - <unary expression> | <unary expression not plus minus>
 def p_UnaryExpression(p):
@@ -696,25 +713,26 @@ def p_UnaryExpression(p):
 # def p_PreincrementExpression(p):
 # 	'PreincrementExpression : PLUS PLUS UnaryExpression'
 # 	p[0] = Node("PreincrementExpression", [p[3]], [p[1], p[2]]).name
+
 # <unary expression not plus minus> ::= <postfix expression> | ~ <unary expression> | ! <unary expression> | <cast expression>
 def p_UnaryExpressionNotPlusMinus(p):
 	'''UnaryExpressionNotPlusMinus : PostfixExpression
-									| BITNEG UnaryExpression
-									| NOT UnaryExpression
-									| CastExpression'''
+									| NOT UnaryExpression'''
+									#| CastExpression'''
+									#| BITNEG UnaryExpression
 	if len(p) ==  3:
 		p[0] = Node("UnaryExpressionNotPlusMinus", [p[2]], [p[1]]).name
 	else:
 		p[0] = Node("UnaryExpressionNotPlusMinus", [p[1]],[]).name
 
 # <postdecrement expression> ::= <postfix expression> --
-def p_PostdecrementExpression(p):
-	'PostdecrementExpression : PostfixExpression'
-	p[0] = Node("PostdecrementExpression", [p[1]],[]).name
-# <postincrement expression> ::= <postfix expression> ++
-def p_PostincrementExpression(p):
-	'PostincrementExpression : PostfixExpression PLUS PLUS'
-	p[0] = Node("PostincrementExpression", [p[1]],[p[2], p[3]]).name
+# def p_PostdecrementExpression(p):
+# 	'PostdecrementExpression : PostfixExpression'
+# 	p[0] = Node("PostdecrementExpression", [p[1]],[]).name
+# # <postincrement expression> ::= <postfix expression> ++
+# def p_PostincrementExpression(p):
+# 	'PostincrementExpression : PostfixExpression PLUS PLUS'
+# 	p[0] = Node("PostincrementExpression", [p[1]],[p[2], p[3]]).name
 
 # <postfix expression> ::= <primary> | <expression name> | <postincrement expression> | <postdecrement expression>
 def p_PostfixExpression(p):
