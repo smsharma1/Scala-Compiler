@@ -220,7 +220,9 @@ def p_MethodReturnTypeExtras(p):
 	'''MethodReturnTypeExtras : COLON MethodReturnType EQUALASS
 								| EQUALASS
 								| empty '''
-	if len(p)==4:
+	if(p[1] == None):
+		pass
+	elif len(p)==4:
 		p[0] = Node("MethodReturnTypeExtras", [p[2]],[p[1], p[3]]).name
 	elif "=" in p[1]:
 		p[0] = Node("MethodReturnTypeExtras", [p[1]],[]).name
@@ -770,10 +772,6 @@ def p_NullLiteral(p):
 	'NullLiteral : R_NULL'
 	p[0] = Node("NullLiteral", [],[p[1]]).name
 
-# def p_Identifier(p):
-# 	'Identifier : ID'
-# 	print("checking")
-# 	p[0] = Node("Identifier", [],[p[1]]).name
 
 def p_EndStatement(p):
 	'''EndStatement : SEMICOLON 
@@ -789,7 +787,13 @@ parser = yacc.yacc()
 # while True:
 # try:
 	# s = raw_input('calc > ')
-s = '''object Test { }'''
+s = '''object Test {
+var iter_count : Int = 0; 
+while(iter_count < 20) {
+iter_count = iter_count + 9;
+}
+return;
+}'''
 # except EOFError:
 # 	break
 # if not s: continue
