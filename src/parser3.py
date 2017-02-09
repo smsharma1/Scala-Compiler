@@ -38,8 +38,12 @@ def p_CompilationUnit(p):
 def p_ImportDeclarationss(p):
 	'''ImportDeclarationss : ImportDeclarations
 							| empty'''
-	if 'ImportDeclarations' in p[1]:
-		p[0] = Node('ImportDeclarationss',[p[1]],[])
+	print('hello')
+	print(p[0], p[1])
+	if(p[1] == None):
+		pass
+	elif "ImportDeclarations" in p[1]:
+		p[0] = Node("ImportDeclarationss",[p[1]],[])
 #<import declarations> ::= <import declaration> | <import declarations> <import declaration>
 
 def p_ImportDeclarations(p):
@@ -70,28 +74,11 @@ def p_ClassAndObjectDeclaration(p):
 								| ClassDeclaration'''
 	p[0] = Node('ClassAndObjectDeclaration',[p[1]],[])
 
-# def p_ClassesObjects(p):
-# 	'''ClassesObjects : ClassObject 
-# 						| ClassObject ClassesObjects'''
-# 	if len(p)==2:
-# 		p[0] = Node("ClassesObjects", [p[1], p[2]],[]).name
-# 	else:
-# 		p[0] = Node("ClassesObjects", [p[1]],[]).name
-# #<class_object> ::= <class_declaration> | <object_declaration> | ;
-# def p_ClassObject(p):
-# 	'''ClassObject : ClassDeclaration 
-# 				| ObjectDeclaration
-# 				| SEMICOLON'''
-# 	if "ClassDeclaration" in p[1]:
-# 		p[0] = Node("ClassObject", [p[1]],[]).name
-# 	elif "ObjectDeclaration" in p[1]:
-# 		p[0] = Node("ClassObject", [p[1]],[]).name
-# 	else:
-# 		p[0] = Node("ClassObject", [],[p[1]]).name
 
 #<object_declaration> ::= object <identifier> <super>? { method_body }
 def p_ObjectDeclaration(p):
 	'''ObjectDeclaration :  R_OBJECT Identifier Super Block'''
+	print('Debugging')
 #	R_OBJECT Identifier BLOCKOPEN MethodBody BLOCKCLOSE
 					
 #	if len(p)==6:
@@ -162,19 +149,6 @@ def p_FormalParameterList(p):
 		p[0] = Node("FormalParameterList", [p[1], p[3]],[p[2]]).name
 	else:
 		p[0] = Node("FormalParameterList", [p[1], p[3], p[5]],[p[2], p[4]]).name
-#<formal parameter> ::= <variable declarator id> : <type> 
-def p_FormalParameter(p):
-	'FormalParameter : Identifier COLON Type'
-	p[0] = Node("FormalParamter", [p[1], p[3]],[p[2]]).name
-#<class type> ::= <identifier> | with <identifier><class type>
-#confusion check later
-# def p_ClassType(p):
-# 	'''ClassType : Identifier 
-# 				| R_WITH Identifier ClassType'''
-# 	if len(p)==4:
-# 		p[0] = Node("ClassType", [p[2], p[3]],[p[1]]).name
-# 	else:
-# 		p[0] = Node("ClassType", [p[1]],[]).name
 
 #<field declaration> ::=  val <variable declarator> ;
 def p_FieldDeclaration(p):
@@ -190,20 +164,6 @@ def p_VariableDeclarator1(p):
 		p[0] = Node("VariableDeclarator1", [p[1], p[3]],[p[2]]).name
 	else:
 		p[0] = Node("VariableDeclarator1", [p[1], p[3], p[5]],[p[2], p[4]]).name					
-
-def p_ClassArgumentHeader(p):
-	'''ClassArgumentHeader : ClassArgumentList
-							| empty'''
-	if "ClassArgumentList" in p[0]:
-		p[0] = Node("ClassArgumentHeader", [p[1]],[]).name
-
-def p_ClassArgumentList(p):
-	''' ClassArgumentList : Identifier COLON Type
-							| Identifier COLON Type COMMA ClassArgumentList''' 
-	if len(p)==4:
-		p[0] = Node("ClassArgumentList", [p[1], p[3]],[p[2]]).name
-	else:
-		p[0] = Node("ClassArgumentList", [p[1], p[3], p[5]],[p[2], p[4]]).name
 
 def p_FuncArgumentListExtras(p):
 	''' FuncArgumentListExtras : VariableDeclarators
@@ -222,25 +182,6 @@ def p_VariableDeclarator(p):
 	'''VariableDeclarator : Identifier COLON Type '''
 	p[0] = Node("VariableDeclarator", [p[1], p[3]],[p[2]]).name
 
-# def p_VariableDeclarator(p):
-	# '''VariableDeclarator : Identifier COLON Type '''
-						# | Identifier VariableDeclaratorExtra
-	# if len(p)==4:
-	# 	p[0] = Node("VariableDeclarator", [p[1], p[3]],[p[2]]).name
-	# elif len(p)==3:
-	# 	p[0] = Node("VariableDeclarator", [p[1], p[2]],[]).name
-	# else:
-	# 	p[0] = Node("VariableDeclarator", [p[1]],[]).name
-
-#<variable_declarator_extra> ::= = <variable initializer> | :<type> = <variable initializer>
-# def p_VariableDeclaratorExtra(p):
-# 	'''VariableDeclaratorExtra : EQUALASS VariableInitializer
-# 							| COLON Type EQUALASS VariableInitializer''' 
-# 	if len(p)==5:
-# 		p[0] = Node("VariableDeclaratorExtra", [p[2], p[4]],[p[1], p[3]]).name
-# 	else:
-# 		p[0] = Node("VariableDeclaratorExtra", [p[2]],[p[1]]).name
-#<variable initializer> ::= <expression> | <array initializer>
 def p_VariableInitializer(p):
 	'''VariableInitializer : ArrayInitializer
 							| Expression
@@ -513,17 +454,6 @@ def p_ForStatement(p):
 	'ForStatement : R_FOR LPARAN ForExprs RPARAN Statement'
 	p[0] = Node("ForStatement", [p[3], p[4], p[6]],[p[1], p[2], p[5]]).name
 
-def p_ForIfCondition(p): 
-	'''ForIfCondition : IfVariables SEMICOLON ForIfCondition 
-	 				| IfVariables'''
-	if len(p) ==  3:
-		p[0] = Node("ForIfCondition", [p[1]],[p[3]], [p[2]]).name
-	else:
-		p[0] = Node("ForIfCondition", [p[1]],[]).name
-
-def p_IfVariables(p):
-	'IfVariables : R_IF Expression'
-	p[0] = Node("ForIfCondition", [p[1]],[]).name
 
 def p_ForExprs(p):
 	'''ForExprs :  ForVariables SEMICOLON ForExprs 
@@ -554,13 +484,6 @@ def p_ForUntilTo(p):
 				| R_TO'''
 	p[0] = Node("ForUntilTo", [],[p[1]]).name
 
-# def p_StatementExpressionList(p):
-# 	'''StatementExpressionList : StatementExpression 
-# 							| StatementExpressionList COMMA StatementExpression'''
-# 	if len(p) ==  4:
-# 		p[0] = Node("StatementExpressionList", [p[1]],[p[3]], [p[2]]).name
-# 	else:
-# 		p[0] = Node("StatementExpressionList", [p[1]],[]).name
 
 def p_BreakStatement(p) :
 	'''BreakStatement : R_BREAK Identifier SEMICOLON
@@ -586,24 +509,18 @@ def p_ReturnStatement(p):
 	else:
 		p[0] = Node("ReturnStatement", [],[p[1], p[2]]).name
 
-# def p_ConstantExpression(p):
-# 	'ConstantExpression : Expression'
-# 	p[0] = Node("ConstantExpression", [p[1]],[]).name
 
 def p_Expression(p):
 	'''Expression : Assignment
 					| OrExpression'''
 	p[0] = Node("Expression", [p[1]],[]).name
 
-# def p_AssignmentExpression(p):
-# 	'''AssignmentExpression : L 
-# 						| Assignment'''
-# 	p[0] = Node("AssignmentExpression", [p[1]],[]).name
 
-def p_CondititionalExpression(p): 
-	'''  CondititionalExpression : OrExpression
-			|  OrExpression Expression COLON CondititionalExpression
-									| Expression COLON CondititionalExpression'''
+# def p_CondititionalExpression(p): 
+# 	'''  CondititionalExpression : OrExpression
+# 			|  OrExpression Expression COLON CondititionalExpression
+# 									| Expression COLON CondititionalExpression'''
+
 
 def p_LeftHandSide(p):
 	'''LeftHandSide : AmbiguousName
@@ -651,44 +568,6 @@ def p_XorExpression(p):
 		p[0] = Node('XorExpression',[p[1]],[])
 	else :
 		p[0] = Node('XorExpression',[p[1],p[3]],[p[2]])
-
-
-# def p_ConditionalExpression(p):
-# 	'''ConditionalExpression : ConditionalOrExpression 
-# 							| ConditionalOrExpression QUESTION  Expression COLON ConditionalExpression'''
-# 	if len(p) ==  6:
-# 		p[0] = Node("ConditionalAndExpression", [p[1], p[3], p[5]], [p[2]],[p[4]]).name
-# 	else:
-# 		p[0] = Node("ConditionalAndExpression", [p[1]],[]).name
-
-# def p_ConditionalOrExpression(p):
-# 	'''ConditionalOrExpression : ConditionalAndExpression 
-# 							| ConditionalOrExpression OR ConditionalAndExpression'''
-# 	if len(p) ==  4:
-# 		p[0] = Node("ConditionalOrExpression", [p[1]],[p[3]], [p[2]]).name
-# 	else:
-# 		p[0] = Node("ConditionalOrExpression", [p[1]],[]).name
-
-# def p_ConditionalAndExpression(p) :
-# 	'''ConditionalAndExpression : InclusiveOrExpression 
-# 							| ConditionalAndExpression AND InclusiveOrExpression'''
-# 	if len(p) ==  4:
-# 		p[0] = Node("ConditionalAndExpression", [p[1]],[p[3]], [p[2]]).name
-# 	else:
-# 		p[0] = Node("ConditionalAndExpression", [p[1]],[]).name
-
-# def p_InclusiveOrExpression(p) :
-# 	'''InclusiveOrExpression : ExclusiveOrExpression 
-# 						| InclusiveOrExpression AND ExclusiveOrExpression'''
-# 	p[0] = Node("InclusiveOrExpression", [p[1]],[]).name
-
-# def p_ExclusiveOrExpression(p):
-# 	'''ExclusiveOrExpression : AndExpression 
-# 							| ExclusiveOrExpression BITXOR AndExpression'''
-# 	if len(p) ==  4:
-# 		p[0] = Node("ExclusiveOrExpression", [p[1]],[p[3]], [p[2]]).name
-# 	else:
-# 		p[0] = Node("ExclusiveOrExpression", [p[1]],[]).name
 
 
 
@@ -744,16 +623,6 @@ def p_MultiplicativeExpression(p):
 	else:
 		p[0] = Node("MultiplicativeExpression", [p[1]],[]).name
 
-# <cast expression> ::= ( <primitive type> ) <unary expression> | ( <reference type> ) <unary expression not plus minus>
-# def p_CastExpression(p):
-# 	'''CastExpression : LPARAN PrimitiveType RPARAN UnaryExpression 
-# 						| LPARAN ReferenceType RPARAN UnaryExpressionNotPlusMinus'''
-# 	if len(p) ==  5:
-# 		p[0] = Node("CastExpression", [p[2], p[4]], [p[1],p[3]]).name
-# 	else:
-# 		p[0] = Node("CastExpression", [p[2], p[3], p[5]],[p[1],p[4]]).name
-
-# <unary expression> ::= <preincrement expression> | <predecrement expression> | + <unary expression> | - <unary expression> | <unary expression not plus minus>
 def p_UnaryExpression(p):
 	'''UnaryExpression :  PLUS UnaryExpression
 						| MINUS UnaryExpression
@@ -764,16 +633,7 @@ def p_UnaryExpression(p):
 		p[0] = Node("MultiplicativeExpression", [p[2]], [p[1]]).name
 	else:
 		p[0] = Node("MultiplicativeExpression", [p[1]],[]).name
-# <predecrement expression> ::= -- <unary expression>
-# def p_PredecrementExpression(p):
-# 	'PredecrementExpression : MINUS MINUS UnaryExpression'
-# 	p[0] = Node("PredecrementExpression", [p[3]], [p[1], p[2]]).name
-# # <preincrement expression> ::= ++ <unary expression>
-# def p_PreincrementExpression(p):
-# 	'PreincrementExpression : PLUS PLUS UnaryExpression'
-# 	p[0] = Node("PreincrementExpression", [p[3]], [p[1], p[2]]).name
 
-# <unary expression not plus minus> ::= <postfix expression> | ~ <unary expression> | ! <unary expression> | <cast expression>
 def p_UnaryExpressionNotPlusMinus(p):
 	'''UnaryExpressionNotPlusMinus : PostfixExpression
 									| NOT UnaryExpression'''
@@ -784,16 +644,6 @@ def p_UnaryExpressionNotPlusMinus(p):
 	else:
 		p[0] = Node("UnaryExpressionNotPlusMinus", [p[1]],[]).name
 
-# <postdecrement expression> ::= <postfix expression> --
-# def p_PostdecrementExpression(p):
-# 	'PostdecrementExpression : PostfixExpression'
-# 	p[0] = Node("PostdecrementExpression", [p[1]],[]).name
-# # <postincrement expression> ::= <postfix expression> ++
-# def p_PostincrementExpression(p):
-# 	'PostincrementExpression : PostfixExpression PLUS PLUS'
-# 	p[0] = Node("PostincrementExpression", [p[1]],[p[2], p[3]]).name
-
-# <postfix expression> ::= <primary> | <expression name> | <postincrement expression> | <postdecrement expression>
 def p_PostfixExpression(p):
 	'''PostfixExpression : Primary
 							| AmbiguousName'''
@@ -820,17 +670,7 @@ def p_ArgumentLists(p):
 						| empty'''
 	if 'ArgumentList' in p[1]:
 		p[0] = Node('ArgumentLists',[p[1]],[])
-	# if len(p) ==  5:
-	# 	p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]]).name
-	# else:
-	# 	p[0] = Node("MethodInvocation", [p[1]],[p[2], p[3]]).name
-# # <field access> ::= <primary> . <identifier> | super . <identifier>
-# def p_FieldAccess(p):
-# 	'''FieldAccess : Primary DOT Identifier
-# 					| Super DOT Identifier'''
-# 	p[0] = Node('FieldAccess',[p[1],p[3]],[p[2]]).name
 
-# <primary> ::= <primary no new array> | <array creation expression>
 def p_Primary(p):
 	'''Primary : PrimaryNoNewArray'''
 				# | ArrayCreationExpression'''
@@ -871,94 +711,12 @@ def p_ArgumentList(p):
 	else :
 		p[0] = Node('ArgumentList',[p[1],p[3]],[p[2]]).name
 
-# <array creation expression> ::= new <primitive type> <dim exprs> <dims>? | new <class or interface type> <dim exprs> <dims>?
-def p_ArrayCreationExpression(p):
-	'''ArrayCreationExpression : R_NEW PrimitiveType DimExprs
-								| R_NEW PrimitiveType DimExprs Dims
-								| R_NEW ClassType DimExprs
-								| R_NEW ClassType DimExprs Dims'''
-	if len(p) == 4:
-		p[0] = Node('ArrayCreationExpression',[p[2],p[3]],p[0]).name
-	else :
-		p[0] = Node('ArrayCreationExpression',[p[2],p[3],p[4]],p[0]).name
-# <dim exprs> ::= <dim expr> | <dim exprs> <dim expr>
-def p_DimExprs(p):
-	'''DimExprs : DimExpr
-				| DimExprs DimExpr'''
-	if len(p) ==2:
-		p[0] = Node('DimExprs',[p[1]],[]).name
-	else :
-		p[0] = Node('DimExprs',[p[1],p[2]],[]).name
-
-# <dim expr> ::= [ <expression> ]
-def p_DimExpr(p):
-	'''DimExpr : LSQRB Expression RSQRB'''
-	p[0] = Node('DimExpr',[p[2]],[p[1],p[3]]).name
-
-# <dims> ::= [ ] | <dims> [ ]
-def p_Dims(p):
-	'''Dims : LSQRB RSQRB
-			| Dims LSQRB RSQRB'''
-	if len(p) == 3 :
-		p[0] = Node('Dims',[],[p[1],p[2]]).name
-	else:
-		p[0] = Node('Dims',[p[2]],[p[1],p[3]]).name
-
 # <array access> ::= <expression name> [ <expression> ] | <primary no new array> [ <expression>]
 def p_ArrayAccess(p):
 	'''ArrayAccess : AmbiguousName LSQRB Expression RSQRB'''
 					# | PrimaryNoNewArray LSQRB Expression RSQRB'''
 	p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]]).name
 
-
-
-#<package name> ::= <identifier> | <package name> . <identifier>
-def p_PackageName(p):
-	'''PackageName : Identifier
-					| PackageName DOT Identifier'''
-	if len(p)==2:
-		p[0] = Node('PackageName',[p[1]],[]).name
-	else:
-		p[0] = Node('PackageName',[p[1],p[3]],[p[2]]).name
-
-
-# <type name> ::= <identifier> | <package name> . <identifier>
-def p_TypeName(p):
-	'''TypeName : Identifier 
-				| PackageName DOT Identifier'''
-	if len(p)==2:
-		p[0] = Node('TypeName',[p[1]],[]).name
-	else:
-		p[0] = Node('TypeName',[p[1],p[3]],[p[2]]).name
-
-
-# <simple type name> ::= <identifier>
-# def p_SimpleTypeName(p):
-# 	'SimpleTypeName : Identifier'
-# 	p[0] = Node('SimpleTypeName',[p[1]],[]).name
-
-
-# <expression name> ::= <identifier> | <ambiguous name> . <identifier>
-# def p_ExpressionName(p):
-# 	'''ExpressionName : Identifier
-# 						| AmbiguousName DOT Identifier'''
-# 	if len(p)==2:
-# 		p[0] = Node('ExpressionName',[p[1]],[]).name
-# 	else:
-# 		p[0] = Node('ExpressionName',[p[1],p[3]],[p[2]]).name
-
-
-# <method name> ::= <identifier> | <ambiguous name>. <identifier>
-# def p_MethodName(p):
-# 	'''MethodName : Identifier 
-# 					| AmbiguousName DOT Identifier'''
-# 	if len(p)==2:
-# 		p[0] = Node('MethodName',[p[1]],[]).name
-# 	else:
-# 		p[0] = Node('MethodName',[p[1],p[3]],[p[2]]).name
-
-
-# <ambiguous name>::= <identifier> | <ambiguous name>. <identifier>
 def p_AmbiguousName(p):
 	'''AmbiguousName : Identifier 
 					| AmbiguousName DOT Identifier'''
@@ -999,91 +757,6 @@ def p_StringLiteral(p):
 	'StringLiteral : STRING'
 	p[0] = Node('StringLiteral',[],[p[1]]).name
 
-# <decimal numeral> ::= 0 | <non zero digit> <digits>?
-# def p_DecimalNumeral(p):
-# 	'''DecimalNumeral : ZERO 
-# 					| NONZERODIGIT 
-# 					| NONZERODIGIT DIGITS'''
-
-# def p_DIGITS(p):
-# 	'''DIGITS : DIGIT 
-# 			| DIGITS DIGIT'''
-
-
-def p_HexNumeral(p):
-	'''HexNumeral : ZERO X_SMALL HEXDIGIT 
-					| ZERO X_BIG HEXDIGIT 
-					| HexNumeral HEXDIGIT'''
-
-
-
-# <octal numeral> ::= 0 <octal digit> | <octal numeral> <octal digit>
-
-
-
-
-# <floating-point literal> ::= <digits> . <digits>? <exponent part>? <float type suffix>?
-# def FloatingPointLiteral(p):
-# 	'''FloatingPointLiteral : Digits Dot
-# 							| Digits Dot FloatTypeSuffix
-# 							| Digits Dot ExponentPart
-# 							| Digits Dot ExponentPart FloatTypeSuffix
-# 							| Digits Dot Digits
-# 							| Digits Dot Digits FloatTypeSuffix
-# 							| Digits Dot Digits ExponentPart
-# 							| Digits Dot Digits ExponentPart FloatTypeSuffix'''
-
-# <digits> <exponent part>? <float type suffix>?
-#doubtful
-
-# <exponent part> ::= <exponent indicator> <signed integer>
-#  def ExponentPart(p):
-#  	'''ExponentPart(p) : ExponentIndicator 
-#  						| SignedInteger'''
-
-# <exponent indicator> ::= e | E
-#define in lexer
-# <signed integer> ::= <sign>? <digits>
-# def SignedInteger(p):
-# 	'''SignedInteger : Sign digits
-# 					| digits'''
-
-
-# <sign> ::= + | -
-
-# <float type suffix> ::= f | F | d | D
-#define in lexer
-# # <boolean literal> ::= true | false
-# # def BooleanLiteral(p):
-# # 	'''BooleanLiteral : true 
-# # 						| false'''
-
-# # <character literal> ::= ' <single character> ' | ' <escape sequence> '
-# # def CharacterLiteral(p):
-# # 	'''CharacterLiteral : SingleCharacter
-# # 						| EscapeSequence'''
-
-
-# # <single character> ::= <input character> except ' and \
-# # #define InputChar in lexer
-# # def SingleCharacter(p):
-# # 	'SingleCharacter : InputChar'
-# # <string literal> ::= " <string characters>?"
-# # def StringLiteral(p):
-# # 	'StringLiteral : StringCharacters'
-
-# # # <string characters> ::= <string character> | <string characters> <string character>
-# # def StringCharacters(p):
-# # 	'''StringCharacters: StringCharacter
-# # 						| StringCharacters StringCharacter'''
-
-# # <string character> ::= <input character> except " and \ | <escape character>
-# # #define string char in lexer
-# # def StringCharacter(p):
-# # 	'StringCharacter : StrChar'
-def p_empty(p):
-	'empty :'
-	pass
 
 # # # <null literal> ::= null
 def p_NullLiteral(p):
@@ -1092,23 +765,30 @@ def p_NullLiteral(p):
 
 def p_Identifier(p):
 	'Identifier : ID'
+	print("checking")
 	p[0] = Node("Identifier", [],[p[1]]).name
+
+
+def p_empty(p):
+    'empty :'
+    print(p)
+    pass
 parser = yacc.yacc()
 
-while True:
-	try:
-		# s = raw_input('calc > ')
-		s = '''object Test {
-       var iter_count : Int = 0; 
-       while(iter_count < 20) {
-       iter_count = iter_count + 9;
-       }
-       return;
+# while True:
+# try:
+	# s = raw_input('calc > ')
+s = '''object Test {
+var iter_count : Int = 0; 
+while(iter_count < 20) {
+iter_count = iter_count + 9;
+}
+return;
 }'''
-	except EOFError:
-		break
-	if not s: continue
-	parser.parse(s)
-	graph.write_png('parsetree.png')
-	graph.to_string()
-	print(graph.to_string())
+# except EOFError:
+# 	break
+# if not s: continue
+parser.parse(s)
+graph.write_png('parsetree.png')
+graph.to_string()
+print(graph.to_string())
