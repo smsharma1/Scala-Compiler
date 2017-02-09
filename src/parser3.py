@@ -336,11 +336,15 @@ def p_LocalVariableDeclarationStatement(p):
 def p_LocalVariableDeclaration(p):
 	'''LocalVariableDeclaration : R_VAL VariableDeclarationBody
 								| R_VAR VariableDeclarationBody'''
-	p[0] = Node("LocalVariableDeclaration", [p[1],p[2]],[]).name
+	p[0] = Node("LocalVariableDeclaration", [p[2]],[p[1]]).name
 
 def p_VariableDeclarationBody(p):
 	'''VariableDeclarationBody : Identifier COLON Type EQUALASS VariableInitializer
 		| Identifier EQUALASS VariableInitializer''' 
+	if len(p) == 6:
+		p[0] = Node('VariableDeclarationBody',[p[1],p[3],p[5]],[p[2],p[4]]).name
+	else:
+		p[0] = Node('VariableDeclarationBody',[p[1],p[3]],[p[2]]).name
 #<statement> ::= <statement without trailing substatement> | <if then statement> | <if then else statement> 
 # | <while statement> | <for statement>
 def p_Statement(p):
@@ -378,7 +382,7 @@ def p_EmptyStatement(p):
 #<expression statement> ::= <statement expression> ;
 def p_ExpressionStatement(p):
 	'ExpressionStatement : StatementExpression EndStatement'
-	p[0] = Node("ExpressionStatement", [p[1]],[]).name
+	p[0] = Node("ExpressionStatement", [p[1],p[2]],[]).name
 
 #<statement expression> ::= <assignment> | <preincrement expression> 
 # | <postincrement expression> | <predecrement expression> | <postdecrement expression> 
@@ -450,7 +454,7 @@ def p_SwitchLabel(p):
 	if len(p) ==  3:
 		p[0] = Node("SwitchLabel", [p[2]],[p[1], p[3]]).name
 	else:
-		p[0] = Node("SwitchLabel", [p[1], p[2]],[]).name
+		p[0] = Node("SwitchLabel", [],[p[1], p[2]]).name
 
 def p_WhileStatement(p):
 	'WhileStatement :  R_WHILE  LPARAN Expression RPARAN Statement'
@@ -458,33 +462,36 @@ def p_WhileStatement(p):
 
 def p_ForStatement(p): 
 	'ForStatement : R_FOR LPARAN ForExprs RPARAN Statement'
-	p[0] = Node("ForStatement", [p[3], p[4], p[6]],[p[1], p[2], p[5]]).name
+	p[0] = Node("ForStatement", [p[3], p[5]],[p[1], p[2], p[4]]).name
 
 
 def p_ForExprs(p):
 	'''ForExprs :  ForVariables EndStatement ForExprs 
 			| ForVariables'''
 	if len(p) ==  4:
-		p[0] = Node("ForExprs", [p[1]],[p[3]], [p[2]]).name
+		p[0] = Node("ForExprs", [p[1],p[2],p[3]], []).name
 	else:
 		p[0] = Node("ForExprs", [p[1]],[]).name
 
 #''' for_variables : declaration_keyword_extras IDENTIFIER IN expression for_untilTo expression '''
 def p_ForVariables(p): 
 	'ForVariables : DeclarationKeywordExtras Identifier R_LEFTARROW1 Expression ForUntilTo Expression' 
-	p[0] = Node("ForVariables", [p[3], p[4], p[5]], [p[1], p[2]]).name
+	p[0] = Node("ForVariables", [p[1], p[2], p[4],p[5],p[6]], [p[3]]).name
  #'''declaration_keyword_extras : variable_header | empty'''	
 #'''variable_header : K_VAL | K_VAR '''
 def p_DeclarationKeywordExtras(p):
 	'''DeclarationKeywordExtras : VariableHeader 
 								| empty'''
-	if 'VariableHeader' in p[1]:
-		p[0] = Node('DeclarationKeywordExtras',[p[1]],[])
+	if(p[1] == None):
+		pass
+	elif 'VariableHeader' in p[1]:
+		p[0] = Node('DeclarationKeywordExtras',[p[1]],[]).name
 
 def p_VariableHeader(p):
 	'''VariableHeader : R_VAL
 					| R_VAR'''
-	p[0] = Node('VariableHeader',[[p[1]]],[])
+	p[0] = Node('VariableHeader',[[p[1]]],[]).name
+
 def p_ForUntilTo(p):
 	'''ForUntilTo : R_UNTIL 
 				| R_TO'''
@@ -574,9 +581,9 @@ def p_XorExpression(p):
 	'''XorExpression : EqualityExpression
 					| XorExpression BITXOR EqualityExpression'''
 	if len(p) == 2:
-		p[0] = Node('XorExpression',[p[1]],[])
+		p[0] = Node('XorExpression',[p[1]],[]).name
 	else :
-		p[0] = Node('XorExpression',[p[1],p[3]],[p[2]])
+		p[0] = Node('XorExpression',[p[1],p[3]],[p[2]]).name
 
 
 
@@ -677,8 +684,10 @@ def p_MethodInvocation(p):
 def p_ArgumentLists(p):
 	'''ArgumentLists : ArgumentList
 						| empty'''
-	if 'ArgumentList' in p[1]:
-		p[0] = Node('ArgumentLists',[p[1]],[])
+	if(p[1] == None):
+		pass
+	elif 'ArgumentList' in p[1]:
+		p[0] = Node('ArgumentLists',[p[1]],[]).name
 
 def p_Primary(p):
 	'''Primary : PrimaryNoNewArray'''
@@ -697,8 +706,6 @@ def p_PrimaryNoNewArray(p):
 						# | FieldAccess
 	if len(p) == 3:
 		p[0] = Node('PrimaryNoNewArray',[p[2]],[p[1],p[3]]).name
-	elif 'this' in p[1] :
-		p[0] = Node('PrimaryNoNewArray',[ ],[p[1]]).name
 	else:
 		p[0] = Node('PrimaryNoNewArray',[p[1]],[]).name
 # <class instance creation expression> ::= new <class type> ( <argument list>? )
