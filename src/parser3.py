@@ -108,7 +108,9 @@ def p_ClassDeclaration(p):
 def p_Super(p):
 	'''Super : R_EXTENDS ClassType
 			| empty'''
-	if len(p) == 3:
+	if(p[1] == None):
+		pass
+	elif len(p) == 3:
 		p[0] = Node("Super", [p[2]],[p[1]]).name
 #<class_header> ::= ( <formal parameter list>? )
 def p_ClassHeader(p):
@@ -121,7 +123,9 @@ def p_ClassHeader(p):
 def p_FormalParameterLists(p):
 	'''FormalParameterLists : FormalParameterList
 							| empty'''
-	if 'FormalParameterList' in p[1]:
+	if(p[1] == None):
+		pass
+	elif 'FormalParameterList' in p[1]:
 		p[0] = Node('FormalParameterList',[p[1]],[])
 
 #<class body declarations> ::= <class body declaration> | <class body declarations> <class body declaration>
@@ -152,8 +156,8 @@ def p_FormalParameterList(p):
 
 #<field declaration> ::=  val <variable declarator> ;
 def p_FieldDeclaration(p):
-	'''FieldDeclaration : R_VAL VariableDeclarator1 SEMICOLON
-						|  R_VAR VariableDeclarator1 SEMICOLON'''
+	'''FieldDeclaration : R_VAL VariableDeclarator1 EndStatement
+						|  R_VAR VariableDeclarator1 EndStatement'''
 	p[0] = Node("FieldDeclaration", [p[2]],[p[1], p[3]]).name
 #<variable declarator> ::= <identifier> | <identifier>: <type>   | <identifier> <variable_declarator_extra> 
 
@@ -324,7 +328,7 @@ def p_BlockStatement(p):
 		p[0] = Node("BlockStatement", [p[1]],[]).name
 #<local variable declaration statement> ::= <local variable declaration> ;
 def p_LocalVariableDeclarationStatement(p):
-	'LocalVariableDeclarationStatement : LocalVariableDeclaration SEMICOLON'
+	'LocalVariableDeclarationStatement : LocalVariableDeclaration EndStatement'
 	p[0] = Node("LocalVariableDeclarationStatement", [p[1]],[]).name	
 #<local variable declaration> ::= <type> <variable declarators>
 def p_LocalVariableDeclaration(p):
@@ -366,12 +370,12 @@ def p_StatementNoShortIf(p):
 
 #<empty statement> ::= ;
 def p_EmptyStatement(p):
-	'EmptyStatement : SEMICOLON'
+	'EmptyStatement : EndStatement'
 	p[0] = Node("EmptyStatement", [p[1]],[]).name
 
 #<expression statement> ::= <statement expression> ;
 def p_ExpressionStatement(p):
-	'ExpressionStatement : StatementExpression SEMICOLON'
+	'ExpressionStatement : StatementExpression EndStatement'
 	p[0] = Node("ExpressionStatement", [p[1]],[]).name
 
 #<statement expression> ::= <assignment> | <preincrement expression> 
@@ -456,7 +460,7 @@ def p_ForStatement(p):
 
 
 def p_ForExprs(p):
-	'''ForExprs :  ForVariables SEMICOLON ForExprs 
+	'''ForExprs :  ForVariables EndStatement ForExprs 
 			| ForVariables'''
 	if len(p) ==  4:
 		p[0] = Node("ForExprs", [p[1]],[p[3]], [p[2]]).name
@@ -486,24 +490,24 @@ def p_ForUntilTo(p):
 
 
 def p_BreakStatement(p) :
-	'''BreakStatement : R_BREAK Identifier SEMICOLON
-					| R_BREAK SEMICOLON'''
+	'''BreakStatement : R_BREAK Identifier EndStatement
+					| R_BREAK EndStatement'''
 	if len(p) ==  4:
 		p[0] = Node("BreakStatement", [p[2]], [p[1]],[p[3]]).name
 	else:
 		p[0] = Node("BreakStatement", [],[p[1], p[2]]).name
 
 def p_ContinueStatement(p):
-	'''ContinueStatement : R_CONTINUE Identifier SEMICOLON
-						| R_CONTINUE  SEMICOLON'''
+	'''ContinueStatement : R_CONTINUE Identifier EndStatement
+						| R_CONTINUE  EndStatement'''
 	if len(p) ==  4:
 		p[0] = Node("ContinueStatement", [p[2]], [p[1]],[p[3]]).name
 	else:
 		p[0] = Node("ContinueStatement", [],[p[1], p[2]]).name
 
 def p_ReturnStatement(p):
-	'''ReturnStatement : R_RETURN Expression SEMICOLON
-					| R_RETURN SEMICOLON'''
+	'''ReturnStatement : R_RETURN Expression EndStatement
+					| R_RETURN EndStatement'''
 	if len(p) ==  4:
 		p[0] = Node("ReturnStatement", [p[2]], [p[1]],[p[3]]).name
 	else:
@@ -551,7 +555,10 @@ def p_Assignment(p):
 def p_OrExpression(p):
 	'''OrExpression : AndExpression
 				  | AndExpression OR OrExpression'''
-	p[0] = Node("Assignment", [p[1], p[2], p[3]],[]).name
+	if(len(p)==2):
+		p[0] = Node("OrExpression", [p[1]],[]).name
+	else:
+		p[0] = Node("OrExpression", [p[1], p[3]],[p[2]]).name
 
 def p_AndExpression(p):
 	'''AndExpression : XorExpression 
@@ -768,6 +775,10 @@ def p_Identifier(p):
 	print("checking")
 	p[0] = Node("Identifier", [],[p[1]]).name
 
+def p_EndStatement(p):
+	'''EndStatement : SEMICOLON 
+					| LINEFEED'''
+	p[0] = Node("EndStatement", [],[p[1]]).name
 
 def p_empty(p):
     'empty :'
