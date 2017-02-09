@@ -86,7 +86,7 @@ def p_ObjectDeclaration(p):
 #	if len(p)==6:
 #		p[0] = Node("ObjectDeclaration", [p[2], p[3], p[5]],[p[1], p[4], p[6]]).name
 #	else:
-	p[0] = Node("ObjectDeclaration", [p[2], p[3], p[4]],[p[1]]).name
+	p[0] = Node("ObjectDeclaration", [ p[3], p[4]],[p[1],p[2]]).name
 
 #<class_declaration> ::= class <identifier> <class_header> <super>? { <class body declarations>? }
 
