@@ -65,14 +65,14 @@ def p_ClassObjectsList(p):
 	'''ClassObjectsList : ClassObjectsList ClassAndObjectDeclaration
 						| ClassAndObjectDeclaration'''
 	if len(p) ==2:
-		p[0] = Node('ClassObjectsList',[p[1]],[])
+		p[0] = Node('ClassObjectsList',[p[1]],[]).name
 	else:
-		p[0] = Node('ClassObjectsList',[p[1],p[2]],[])
+		p[0] = Node('ClassObjectsList',[p[1],p[2]],[]).name
 #<classes_objects> ::= <class_object> | <class_object> <classes_objects>
 def p_ClassAndObjectDeclaration(p):
 	'''ClassAndObjectDeclaration : ObjectDeclaration
 								| ClassDeclaration'''
-	p[0] = Node('ClassAndObjectDeclaration',[p[1]],[])
+	p[0] = Node('ClassAndObjectDeclaration',[p[1]],[]).name
 
 
 #<object_declaration> ::= object <identifier> <super>? { method_body }
@@ -787,13 +787,7 @@ parser = yacc.yacc()
 # while True:
 # try:
 	# s = raw_input('calc > ')
-s = '''object Test {
-var iter_count : Int = 0; 
-while(iter_count < 20) {
-iter_count = iter_count + 9;
-}
-return;
-}'''
+s = '''object Test {}'''
 # except EOFError:
 # 	break
 # if not s: continue
