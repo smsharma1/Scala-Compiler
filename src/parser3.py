@@ -763,10 +763,10 @@ def p_NullLiteral(p):
 	'NullLiteral : R_NULL'
 	p[0] = Node("NullLiteral", [],[p[1]]).name
 
-def p_Identifier(p):
-	'Identifier : ID'
-	print("checking")
-	p[0] = Node("Identifier", [],[p[1]]).name
+# def p_Identifier(p):
+# 	'Identifier : ID'
+# 	print("checking")
+# 	p[0] = Node("Identifier", [],[p[1]]).name
 
 
 def p_empty(p):
@@ -778,13 +778,7 @@ parser = yacc.yacc()
 # while True:
 # try:
 	# s = raw_input('calc > ')
-s = '''object Test {
-var iter_count : Int = 0; 
-while(iter_count < 20) {
-iter_count = iter_count + 9;
-}
-return;
-}'''
+s = '''object Test { }'''
 # except EOFError:
 # 	break
 # if not s: continue
