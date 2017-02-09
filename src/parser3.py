@@ -23,10 +23,12 @@ class Node:
 		print leaf, " leaf"
 		self.leaf = leaf
 		for l in leaf:
-			term = Node(l, [], [],True).name
-			graph.add_edge(pydot.Edge(self.name, term))
+			if l != None:
+				term = Node(l, [], [],True).name
+				graph.add_edge(pydot.Edge(self.name, term))
 		for ch in self.children:
-			graph.add_edge(pydot.Edge(self.name, ch))
+			if ch != None:
+				graph.add_edge(pydot.Edge(self.name, ch))
 
 def p_CompilationUnit(p):
 	'''CompilationUnit : ImportDeclarationss ClassObjectsList'''
