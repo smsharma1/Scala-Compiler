@@ -79,7 +79,7 @@ def p_ClassAndObjectDeclaration(p):
 
 #<object_declaration> ::= object <identifier> <super>? { method_body }
 def p_ObjectDeclaration(p):
-	'''ObjectDeclaration :  R_OBJECT Identifier Super Block'''
+	'''ObjectDeclaration :  R_OBJECT ID Super Block'''
 	# print('Debugging')
 #	R_OBJECT Identifier BLOCKOPEN MethodBody BLOCKCLOSE
 					
@@ -91,18 +91,18 @@ def p_ObjectDeclaration(p):
 #<class_declaration> ::= class <identifier> <class_header> <super>? { <class body declarations>? }
 
 def p_ClassDeclaration(p):
-	'''ClassDeclaration :  R_CLASS Identifier ClassHeader Super BLOCKOPEN ClassBodyDeclarations BLOCKCLOSE
-					 | R_CLASS Identifier ClassHeader Super BLOCKOPEN  BLOCKCLOSE'''
+	'''ClassDeclaration :  R_CLASS ID ClassHeader Super BLOCKOPEN ClassBodyDeclarations BLOCKCLOSE
+					 | R_CLASS ID ClassHeader Super BLOCKOPEN  BLOCKCLOSE'''
 	# R_CLASS Identifier ClassHeader BLOCKOPEN ClassBodyDeclarations BLOCKCLOSE
 	# 				 |
 	# 				 	 | R_CLASS Identifier ClassHeader BLOCKOPEN  BLOCKCLOSE
 				
 	if len(p)==8:
-		p[0] = Node("ClassDeclaration", [p[2], p[3], p[4], p[6]],[p[1], p[5], p[7]]).name
+		p[0] = Node("ClassDeclaration", [p[3], p[4], p[6]],[p[1],p[2],p[5], p[7]]).name
 	# elif "Super" in p[4]:
 	# 	p[0] = Node("ClassDeclaration", [p[2], p[3], p[4]],[p[1], p[5], p[6]]).name
 	elif len(p)==7:
-		p[0] = Node("ClassDeclaration", [p[2], p[3], p[4]],[p[1], p[5], p[6]]).name
+		p[0] = Node("ClassDeclaration", [p[3], p[4]],[p[1],p[2],p[5], p[6]]).name
 # 	else:
 # 		p[0] = Node("ClassDeclaration", [p[2], p[3]],[p[1], p[4], p[5]]).name
 # #<super> ::= extends <class type>
@@ -149,12 +149,12 @@ def p_ClassBodyDeclaration(p):
 
 #<formal parameter list> ::= <formal parameter> | <formal parameter list> , <formal parameter>
 def p_FormalParameterList(p):
-	'''FormalParameterList : Identifier COLON Type 
-							| Identifier COLON Type COMMA FormalParameterList'''
+	'''FormalParameterList : ID COLON Type 
+							| ID COLON Type COMMA FormalParameterList'''
 	if len(p)==4:
-		p[0] = Node("FormalParameterList", [p[1], p[3]],[p[2]]).name
+		p[0] = Node("FormalParameterList", [p[3]],[p[1],p[2]]).name
 	else:
-		p[0] = Node("FormalParameterList", [p[1], p[3], p[5]],[p[2], p[4]]).name
+		p[0] = Node("FormalParameterList", [p[3], p[5]],[p[1],p[2], p[4]]).name
 
 #<field declaration> ::=  val <variable declarator> ;
 def p_FieldDeclaration(p):
@@ -164,12 +164,12 @@ def p_FieldDeclaration(p):
 #<variable declarator> ::= <identifier> | <identifier>: <type>   | <identifier> <variable_declarator_extra> 
 
 def p_VariableDeclarator1(p):
-	''' VariableDeclarator1 : Identifier COLON Type EQUALASS VariableInitializer
-							| Identifier EQUALASS VariableInitializer'''
+	''' VariableDeclarator1 : ID COLON Type EQUALASS VariableInitializer
+							| ID EQUALASS VariableInitializer'''
 	if len(p)==4:
-		p[0] = Node("VariableDeclarator1", [p[1], p[3]],[p[2]]).name
+		p[0] = Node("VariableDeclarator1", [p[3]],[p[2],p[1]]).name
 	else:
-		p[0] = Node("VariableDeclarator1", [p[1], p[3], p[5]],[p[2], p[4]]).name					
+		p[0] = Node("VariableDeclarator1", [p[3], p[5]],[p[2], p[4],p[1]]).name					
 
 def p_FuncArgumentListExtras(p):
 	''' FuncArgumentListExtras : VariableDeclarators
@@ -188,8 +188,8 @@ def p_VariableDeclarators(p):
 		p[0] = Node("VariableDeclarators", [p[1]],[]).name
 						
 def p_VariableDeclarator(p):
-	'''VariableDeclarator : Identifier COLON Type '''
-	p[0] = Node("VariableDeclarator", [p[1], p[3]],[p[2]]).name
+	'''VariableDeclarator : ID COLON Type '''
+	p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]]).name
 
 def p_VariableInitializer(p):
 	'''VariableInitializer : ArrayInitializer
@@ -215,11 +215,11 @@ def p_MethodHeader(p):
 	p[0] = Node("MethodHeader", [p[2], p[3]],[p[1]]).name
 #<method declarator> ::= <identifier> ( <formal parameter list>? )
 def p_MethodDeclarator(p):
-	'''MethodDeclarator : Identifier LPARAN FuncArgumentListExtras RPARAN'''
+	'''MethodDeclarator : ID LPARAN FuncArgumentListExtras RPARAN'''
 	# if len(p)==4:
 	# 	p[0] = Node("MethodDeclarator", [p[1]],[p[2], p[3]]).name
 	# else:
-	p[0] = Node("MethodDeclarator", [p[1], p[3]],[p[2], p[4]]).name
+	p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]]).name
 
 def p_MethodReturnTypeExtras(p):
 	'''MethodReturnTypeExtras : COLON MethodReturnType EQUALASS
@@ -290,16 +290,19 @@ def p_FloatingPointType(p):
 
 #<reference type> ::= <class type> | <array type>
 def p_ReferenceType(p):
-	'''ReferenceType : Identifier
+	'''ReferenceType : ID
 					| ArrayType'''
-	p[0] = Node("ReferenceType", [p[1]],[]).name
+	if 'ID' in p[1]:
+		p[0] = Node("ReferenceType", [],[p[1]]).name
+	else:
+		p[0] = Node("ReferenceType", [p[1]],[]).name
 
 #<class type> ::= <type name>
 def p_ClassType(p):
-	'''ClassType : Identifier
+	'''ClassType : ID
 				 |	R_WITH ClassType'''
 	if len(p) == 2:
-		p[0] = Node("ClassType", [p[1]],[]).name
+		p[0] = Node("ClassType", [ ] ,[p[1]]).name
 	else:
 		p[0] = Node("ClassType", [p[2]],[p[1]]).name
 #<array type> ::= <type> [ ]
@@ -336,7 +339,7 @@ def p_BlockStatement(p):
 #<local variable declaration statement> ::= <local variable declaration> ;
 def p_LocalVariableDeclarationStatement(p):
 	'LocalVariableDeclarationStatement : LocalVariableDeclaration EndStatement'
-	p[0] = Node("LocalVariableDeclarationStatement", [p[1]],[]).name	
+	p[0] = Node("LocalVariableDeclarationStatement", [p[1],p[2]],[]).name	
 #<local variable declaration> ::= <type> <variable declarators>
 def p_LocalVariableDeclaration(p):
 	'''LocalVariableDeclaration : R_VAL VariableDeclarationBody
@@ -344,12 +347,12 @@ def p_LocalVariableDeclaration(p):
 	p[0] = Node("LocalVariableDeclaration", [p[2]],[p[1]]).name
 
 def p_VariableDeclarationBody(p):
-	'''VariableDeclarationBody : Identifier COLON Type EQUALASS VariableInitializer
-		| Identifier EQUALASS VariableInitializer''' 
+	'''VariableDeclarationBody : ID COLON Type EQUALASS VariableInitializer
+		| ID EQUALASS VariableInitializer''' 
 	if len(p) == 6:
-		p[0] = Node('VariableDeclarationBody',[p[1],p[3],p[5]],[p[2],p[4]]).name
+		p[0] = Node('VariableDeclarationBody',[p[3],p[5]],[p[1],p[2],p[4]]).name
 	else:
-		p[0] = Node('VariableDeclarationBody',[p[1],p[3]],[p[2]]).name
+		p[0] = Node('VariableDeclarationBody',[p[3]],[p[1],p[2]]).name
 #<statement> ::= <statement without trailing substatement> | <if then statement> | <if then else statement> 
 # | <while statement> | <for statement>
 def p_Statement(p):
@@ -480,8 +483,8 @@ def p_ForExprs(p):
 
 #''' for_variables : declaration_keyword_extras IDENTIFIER IN expression for_untilTo expression '''
 def p_ForVariables(p): 
-	'ForVariables : DeclarationKeywordExtras Identifier R_LEFTARROW1 Expression ForUntilTo Expression' 
-	p[0] = Node("ForVariables", [p[1], p[2], p[4],p[5],p[6]], [p[3]]).name
+	'ForVariables : DeclarationKeywordExtras ID R_LEFTARROW1 Expression ForUntilTo Expression' 
+	p[0] = Node("ForVariables", [p[1],p[4],p[5],p[6]], [p[2],p[3]]).name
  #'''declaration_keyword_extras : variable_header | empty'''	
 #'''variable_header : K_VAL | K_VAR '''
 def p_DeclarationKeywordExtras(p):
@@ -504,28 +507,28 @@ def p_ForUntilTo(p):
 
 
 def p_BreakStatement(p) :
-	'''BreakStatement : R_BREAK Identifier EndStatement
+	'''BreakStatement : R_BREAK ID EndStatement
 					| R_BREAK EndStatement'''
 	if len(p) ==  4:
-		p[0] = Node("BreakStatement", [p[2]], [p[1]],[p[3]]).name
+		p[0] = Node("BreakStatement", [p[3]], [p[1]],[p[2]]).name
 	else:
-		p[0] = Node("BreakStatement", [],[p[1], p[2]]).name
+		p[0] = Node("BreakStatement", [p[2]],[p[1]]).name
 
 def p_ContinueStatement(p):
-	'''ContinueStatement : R_CONTINUE Identifier EndStatement
+	'''ContinueStatement : R_CONTINUE ID EndStatement
 						| R_CONTINUE  EndStatement'''
 	if len(p) ==  4:
-		p[0] = Node("ContinueStatement", [p[2]], [p[1]],[p[3]]).name
+		p[0] = Node("ContinueStatement", [p[3]], [p[1]],[p[2]]).name
 	else:
-		p[0] = Node("ContinueStatement", [],[p[1], p[2]]).name
+		p[0] = Node("ContinueStatement", [p[2]],[p[1]]).name
 
 def p_ReturnStatement(p):
 	'''ReturnStatement : R_RETURN Expression EndStatement
 					| R_RETURN EndStatement'''
 	if len(p) ==  4:
-		p[0] = Node("ReturnStatement", [p[2]], [p[1]],[p[3]]).name
+		p[0] = Node("ReturnStatement", [p[2],p[3]], [p[1]]).name
 	else:
-		p[0] = Node("ReturnStatement", [],[p[1], p[2]]).name
+		p[0] = Node("ReturnStatement", [p[2]],[p[1]]).name
 
 
 def p_Expression(p):
@@ -716,10 +719,10 @@ def p_PrimaryNoNewArray(p):
 # <class instance creation expression> ::= new <class type> ( <argument list>? )
 
 def p_ClassInstanceCreationExpression(p):
-	'''ClassInstanceCreationExpression : R_NEW Identifier LPARAN ArgumentLists RPARAN'''
+	'''ClassInstanceCreationExpression : R_NEW ID LPARAN ArgumentLists RPARAN'''
 								#		| R_NEW ClassType LPARAN RPARAN'''
 	if len(p) ==6:
-		p[0] = Node('ClassInstanceCreationExpression',[p[2],p[4]],[p[1],p[3],p[5]]).name
+		p[0] = Node('ClassInstanceCreationExpression',[p[4]],[p[1],p[2],p[3],p[5]]).name
 	# else:
 	# 	p[0] = Node('ClassInstanceCreationExpression',[p[2]],[p[1],p[3],p[4]]).name
 
@@ -739,12 +742,12 @@ def p_ArrayAccess(p):
 	p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]]).name
 
 def p_AmbiguousName(p):
-	'''AmbiguousName : Identifier 
-					| AmbiguousName DOT Identifier'''
+	'''AmbiguousName : ID 
+					| AmbiguousName DOT ID'''
 	if len(p)==2:
-		p[0] = Node('AmbiguousName',[p[1]],[]).name
+		p[0] = Node('AmbiguousName',[],[p[1]]).name
 	else:
-		p[0] = Node('AmbiguousName',[p[1],p[3]],[p[2]]).name
+		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]]).name
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
 def p_Literal(p):

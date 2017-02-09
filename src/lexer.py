@@ -97,7 +97,7 @@ tokens =list(reserved.values()) +  [
 	'LE',           #Less than equal
 	#'DIGIT',        #Digit
 	'NONZERODIGIT',
-    'Identifier',
+    'ID',
 	'BITAND',
 	'BITOR',
 	'BITXOR',
@@ -163,8 +163,8 @@ nondigit         = r'([_A-Za-z])'
 identifier = r'(' + nondigit + r'(' + digit + r'|' + nondigit + r')*)'
 
 @TOKEN(identifier)
-def t_Identifier(t):
-	t.type = reserved.get(t.value,'Identifier')    # Check for reserved words
+def t_ID(t):
+	t.type = reserved.get(t.value,'ID')    # Check for reserved words
 	print(t.type)
 	return t
 #t_QUESTION = r'\?'
