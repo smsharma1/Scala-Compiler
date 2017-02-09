@@ -78,7 +78,7 @@ def p_ClassAndObjectDeclaration(p):
 #<object_declaration> ::= object <identifier> <super>? { method_body }
 def p_ObjectDeclaration(p):
 	'''ObjectDeclaration :  R_OBJECT Identifier Super Block'''
-	print('Debugging')
+	# print('Debugging')
 #	R_OBJECT Identifier BLOCKOPEN MethodBody BLOCKCLOSE
 					
 #	if len(p)==6:
@@ -158,7 +158,7 @@ def p_FormalParameterList(p):
 def p_FieldDeclaration(p):
 	'''FieldDeclaration : R_VAL VariableDeclarator1 EndStatement
 						|  R_VAR VariableDeclarator1 EndStatement'''
-	p[0] = Node("FieldDeclaration", [p[2]],[p[1], p[3]]).name
+	p[0] = Node("FieldDeclaration", [p[2], p[3]],[p[1]]).name
 #<variable declarator> ::= <identifier> | <identifier>: <type>   | <identifier> <variable_declarator_extra> 
 
 def p_VariableDeclarator1(p):
@@ -172,7 +172,10 @@ def p_VariableDeclarator1(p):
 def p_FuncArgumentListExtras(p):
 	''' FuncArgumentListExtras : VariableDeclarators
 								| empty'''
-	p[0] = Node("ClassArgumentHeader", [p[1]],[]).name
+	if(p[1] == None):
+		pass
+	else:
+		p[0] = Node("FuncArgumentListExtras", [p[1]],[]).name
 
 def p_VariableDeclarators(p):
 	'''VariableDeclarators : VariableDeclarator
@@ -196,9 +199,9 @@ def p_ArrayInitializer(p):
 	''' ArrayInitializer : R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT RPARAN
 							| R_ARRAY LPARAN ArgumentLists RPARAN'''
 	if len(p) == 9:
-		p[0] = Node('ArrayInitializer',[p[1],p[2],p[3],p[5],p[6],p[7],p[8]],[p[4]])
+		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8]]).name
 	else:
-		p[0] = Node('ArrayInitializer',[p[1],p[2],p[3],p[5]],[p[4]])
+		p[0] = Node('ArrayInitializer',[p[3]],[p[1],p[2],p[4]]).name
 
 #<method declaration> ::= <method header> <method body>
 def p_MethodDeclaration(p):
