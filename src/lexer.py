@@ -321,8 +321,7 @@ data = '''object addressbook {
 if __name__ == "__main__" :
     # programfile = open(sys.argv[1])
     # data = programfile.read()
-    lexer.input('''object Rational { 
-}''')
+    lexer.input('''object Rational { }''')
     while True:
     	tok = lexer.token()
     	if not tok: 
