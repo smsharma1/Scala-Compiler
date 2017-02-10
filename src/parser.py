@@ -12,7 +12,7 @@ class Node:
 		self.type = type
 		Node.uid = Node.uid + 1
 		self.uid = Node.uid
-		self.name = type+" "+str(self.uid)
+		self.name = type+"##"+str(self.uid)
 		if isLeaf:
 			self.node = pydot.Node(self.name, style="filled", fillcolor="green", myNo = seqNo)
 		else:
@@ -26,17 +26,21 @@ class Node:
 		for letter in order:
 			if letter == 'l':
 				if leaf[leafno] != None:
-					term = Node(l, [], [],seqNo = count, isLeaf=True).name
+					term = Node(leaf[leafno], [], [],seqNo = count, isLeaf=True).name
 					graph.add_edge(pydot.Edge(self.name, term))
 					count = count + 1
 				leafno = leafno + 1
 			elif letter == 'c':
 				if children[childno] != None:
-					graph.add_edge(pydot.Edge(self.name, ch))
-					mynode = graph.get_node(ch)
-					mynode.set("myNo", count)
+					graph.add_edge(pydot.Edge(self.name, children[childno]))
+					# mynode = graph.get_node("EndStatement 1")
+					mynodes = graph.get_nodes()
+					for nodes in mynodes:
+					# graph.write_png('debug.png')
+						if nodes.get_name() == children[childno]:
+							nodes.set("myNo", count)
 					count = count + 1
-				childno = child + 1
+				childno = childno + 1
 
 def p_CompilationUnit(p):
 	'''CompilationUnit : ImportDeclarationss ClassObjectsList'''
