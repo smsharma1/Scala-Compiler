@@ -21,5 +21,6 @@ clean:
 	rm -r bin
 
 clean-src:
-	rm src/parser.out src/parse3.py src/*.png src/parsetab.py src/*.pyc
-
+	rm src/parser.out src/parse3.py src/*.png src/parsetab.py src/*.pyc src/*dot
+clean-tests:
+	rm tests/*dot
