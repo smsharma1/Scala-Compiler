@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import ply.lex as lex
 from ply.lex import TOKEN
 
