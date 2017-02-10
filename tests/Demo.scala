@@ -1,4 +1,4 @@
-object Rational {    
+object Rational {
     def gcd(a: Int, b: Int): Int = {
       if (b == 0){
         return a;
@@ -6,6 +6,7 @@ object Rational {
         return b;
       }
     }
-    val a = 3;
+    val a = 3 ;
+    val	b = 10 ;
     val g = gcd(a,d);
 }

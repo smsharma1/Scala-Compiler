@@ -353,7 +353,7 @@ def p_LocalVariableDeclaration(p):
 	p[0] = Node("LocalVariableDeclaration", [p[1],p[2]],[], order="cc").name
 
 def p_VariableDeclarationBody(p):
-	'''VariableDeclarationBody : ID COLON Type EQUALASS VariableInitializer
+	'''VariableDeclarationBody : ID COLON Type EQUALASS VariableInitializer 
 		| ID EQUALASS VariableInitializer''' 
 	if len(p) == 6:
 		p[0] = Node('VariableDeclarationBody',[p[3],p[5]],[p[1],p[2],p[4]], order="llclc").name
