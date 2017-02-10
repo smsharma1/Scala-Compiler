@@ -195,10 +195,6 @@ def p_ArrayInitializer(p):
 	else:
 		p[0] = Node('ArrayInitializer',[p[3]],[p[1],p[2],p[4]]).name
 
-def p_EndStatement(p):
-	'''EndStatement : SEMICOLON 
-					| LINEFEED'''
-	p[0] = Node("EndStatement", [],[p[1]]).name
 #<method declaration> ::= <method header> <method body>
 def p_MethodDeclaration(p):
 	'MethodDeclaration : MethodHeader MethodBody'
@@ -782,6 +778,11 @@ def p_NullLiteral(p):
 	p[0] = Node("NullLiteral", [],[p[1]]).name
 
 
+def p_EndStatement(p):
+	'''EndStatement : SEMICOLON 
+					| LINEFEED'''
+	p[0] = Node("EndStatement", [],[p[1]]).name
+
 def p_empty(p):
     'empty :'
     pass
@@ -791,9 +792,7 @@ parser = yacc.yacc()
 
 
 if __name__ == "__main__" :
- #   filename = sys.argv[1]
-    filename = "../tests/Demo.scala"
-    programfile = open(filename)
+    programfile = open(sys.argv[1])
     data = programfile.read()
     parser.parse(data)
     graph.write_png('parsetree.png')

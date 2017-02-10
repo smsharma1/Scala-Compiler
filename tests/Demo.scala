@@ -1,10 +1,10 @@
-object Demo {
-   def main(args: Array[String]) {
-      var myVar :Int = 10;
-      val myVal :String = "Hello Scala with datatype declaration.";
-      var myVar1 = 20;
-      val myVal1 = "Hello Scala new without datatype declaration.";     
-      println(myVar); println(myVal); println(myVar1); 
-      println(myVal1);
-   }
-}
+object Rational {
+         
+    def gcd(a: Int, b: Int): Int = {
+      if (b == 0){
+        return a;
+      } else{
+        return b;
+      }
+    }
+  }
