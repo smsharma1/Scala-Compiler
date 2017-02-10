@@ -169,11 +169,15 @@ def p_FieldDeclaration(p):
 
 def p_VariableDeclarator1(p):
 	''' VariableDeclarator1 : ID COLON Type EQUALASS VariableInitializer
-							| ID EQUALASS VariableInitializer'''
+							| ID EQUALASS VariableInitializer
+							| ID COLON Type EQUALASS VariableInitializer COMMA VariableDeclarator1
+							| ID EQUALASS VariableInitializer COMMA VariableDeclarator1'''
 	if len(p)==4:
-		p[0] = Node("VariableDeclarator1", [p[3]],[p[1],p[2]], order="llclc").name
+		p[0] = Node("VariableDeclarator1", [p[3]],[p[1],p[2]], order="llc").name
+	elif len(p)==8:
+		p[0] = Node("VariableDeclarator1", [p[3], p[5], p[7]],[p[1],p[2], p[4], p[6]], order="llclclc").name				
 	else:
-		p[0] = Node("VariableDeclarator1", [p[3], p[5]],[p[1],p[2], p[4]], order="llc").name					
+		p[0] = Node("VariableDeclarator1", [p[3], p[5]],[p[1],p[2], p[4]], order="llclc").name					
 
 def p_FuncArgumentListExtras(p):
 	''' FuncArgumentListExtras : VariableDeclarators
@@ -203,12 +207,11 @@ def p_VariableInitializer(p):
 
 def p_ArrayInitializer(p):
 	''' ArrayInitializer : R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT RPARAN
-							| R_ARRAY LSQRB Type RSQRB
-							| R_ARRAY LPARAN ArgumentLists RPARAN'''
+							| R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT COMMA INT RPARAN'''
 	if len(p) == 9:
 		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8]], order="lllcllll").name
 	else:
-		p[0] = Node('ArrayInitializer',[p[3]],[p[1],p[2],p[4]], order="llcl").name
+		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8],p[9], p[10]], order="lllcllllll").name
 
 def p_EndStatement(p):
 	'''EndStatement : SEMICOLON 
@@ -239,11 +242,10 @@ def p_MethodReturnTypeExtras(p):
 	elif len(p)==4:
 		p[0] = Node("MethodReturnTypeExtras", [p[2]],[p[1], p[3]], order="lcl").name
 	elif "=" in p[1]:
-		p[0] = Node("MethodReturnTypeExtras", [p[1]],[], order="c").name
+		p[0] = Node("MethodReturnTypeExtras", [],[p[1]], order="l").name
 
 def  p_MethodReturnType(p):
-	'''MethodReturnType : Type 
-						| R_UNIT'''
+	'''MethodReturnType : Type'''
 	if "Type" in p[1]:
 		p[0] = Node("MethodReturnType", [p[1]],[], order="c").name
 	else:
@@ -289,7 +291,8 @@ def p_IntegralType(p):
 				 | R_INT
 				 | R_LONG 
 				 | R_CHAR
-				 | R_STRING'''
+				 | R_STRING
+				 | R_UNIT'''
 	p[0] = Node("IntegralType", [],[p[1]], order="l").name
 
 #<floating-point type> ::= float | double
@@ -300,12 +303,11 @@ def p_FloatingPointType(p):
 
 #<reference type> ::= <class type> | <array type>
 def p_ReferenceType(p):
-	'''ReferenceType : ID
-					| ArrayType'''
+	'''ReferenceType : ArrayType'''
 	if "ArrayType" in p[1]:
 		p[0] = Node("ReferenceType", [p[1]],[], order="c").name
-	else:
-		p[0] = Node("ReferenceType", [],[p[1]], order="l").name
+	# else:
+	# 	p[0] = Node("ReferenceType", [],[p[1]], order="l").name
 
 #<class type> ::= <type name>
 def p_ClassType(p):
@@ -422,68 +424,58 @@ def p_IfThenElseStatementNoShortIf(p):
 	p[0] = Node("IfThenElseStatementNoShortIf", [p[3], p[5], p[7]],[p[1], p[2], p[4], p[6]],order='llclclc').name
 
 def p_SwitchStatement(p):
-	'SwitchStatement :  Expression  R_MATCH SwitchBlock'
-	p[0] = Node("SwitchStatement", [p[1], p[3]],[p[2]],order='clc').name
-
-
-def p_SwitchBlock(p):
-	'''SwitchBlock : BLOCKOPEN SwitchBlockStatementGroups SwitchLabels BLOCKCLOSE
-				| BLOCKOPEN  SwitchLabels BLOCKCLOSE
-				| BLOCKOPEN SwitchBlockStatementGroups  BLOCKCLOSE
-				| BLOCKOPEN   BLOCKCLOSE'''
-	if len(p) ==  5:
-		p[0] = Node("SwitchBlock", [p[2], p[3]],[p[1],p[4]],order='lccl').name
-	elif "SwitchLabels" in p[2]:
-		p[0] = Node("SwitchBlock", [p[2]],[p[1],p[3]],order='lcl').name
-	elif "SwitchBlockStatementGroups" in p[2]:
-		p[0] = Node("SwitchBlock", [p[2]],[p[1],p[3]],order='lcl').name
-	else:
-		p[0] = Node("SwitchBlock", [], [p[1], p[2]],order='ll')
+	'''SwitchStatement : Expression R_MATCH BLOCKOPEN SwitchBlockStatementGroups BLOCKCLOSE'''
+	p[0] = Node("SwitchStatement", [p[1],p[4]],[p[2],p[3],p[5]],order='cllcl').name
 
 def p_SwitchBlockStatementGroups(p):
-	'''SwitchBlockStatementGroups : SwitchBlockStatementGroup
-									 | SwitchBlockStatementGroups SwitchBlockStatementGroup'''
+	'''SwitchBlockStatementGroups : SwitchBlock
+					| SwitchBlockStatementGroups  SwitchBlock  '''
+				#	| SwitchBlockStatementGroups LINEFEED SwitchBlock 
+	if len(p) ==  2:
+		p[0] = Node("SwitchBlockStatementGroups", [p[1]],[],order='c').name
+	elif len(p) == 3:
+		p[0] = Node("SwitchBlockStatementGroups", [p[1],p[2]],[],order='cc').name
+	# else :
+	# 	p[0] = Node("SwitchBlockStatementGroups", [p[1],p[3]],[p[2]],order='clc').name
+	
+# def p_SwitchBlockStatementGroupss(p):
+# 	'''SwitchBlockStatementGroupss : SwitchBlockStatementGroups 
+# 									| empty'''
+# 	if p[1] is None:
+# 		pass
+# 	else :
+# 		p[0] = Node('SwitchBlockStatementGroupss',[p[1]],[],order='c')	
+def p_SwitchBlock(p):
+	'''SwitchBlock : SwitchBlockHeader SwitchBlockBody'''
 	if len(p) ==  3:
-		p[0] = Node("SwitchBlockStatementGroups", [p[1], p[2]],[],order='c').name
-	else:
-		p[0] = Node("SwitchBlockStatementGroups", [p[1]],[],order='cc').name
+		p[0] = Node("SwitchBlock", [p[1], p[2]],[],order='cc').name
+	
+def p_SwitchBlockHeader(p):
+	'SwitchBlockHeader : R_CASE Expression IMPLIES1'
+	p[0] = Node("SwitchBlockHeader", [p[2]],[p[1],p[3]],order='lcl').name
 
-def p_SwitchBlockStatementGroup(p):
-	'SwitchBlockStatementGroup : SwitchLabels BlockStatements'
-	p[0] = Node("SwitchBlockStatementGroup", [p[1], p[2]],[],order='cc').name
-
-def p_SwitchLabels(p):
-	'''SwitchLabels : SwitchLabel 
-					| SwitchLabels SwitchLabel'''
-	if len(p) ==  3:
-		p[0] = Node("SwitchLabels", [p[1], p[2]],[],order='cc').name
-	else:
-		p[0] = Node("SwitchLabels", [p[1]],[],order='c').name
-
-def p_SwitchLabel(p):
-	'''SwitchLabel : R_CASE Expression COLON 
-				| R_DEFAULT COLON'''
-	if len(p) ==  3:
-		p[0] = Node("SwitchLabel", [p[2]],[p[1], p[3]],order='lcl').name
-	else:
-		p[0] = Node("SwitchLabel", [],[p[1], p[2]],order='ll').name
+def p_SwitchBlockBody(p):
+	'''SwitchBlockBody : Expression  
+					| BlockStatements'''
+	p[0] = Node("SwitchBlockBody", [p[1]],[],order='c').name
+	
 
 def p_WhileStatement(p):
 	'WhileStatement :  R_WHILE  LPARAN Expression RPARAN Statement'
 	p[0] = Node("WhileStatement", [p[3], p[5]],[p[1], p[2], p[4]],order='llclc').name
 
 def p_ForStatement(p): 
-	'ForStatement : R_FOR LPARAN ForExprs RPARAN Statement'
+	'ForStatement : R_FOR LPARAN ForVariables RPARAN Statement'
 	p[0] = Node("ForStatement", [p[3], p[5]],[p[1], p[2], p[4]],order='llclc').name
 
 
-def p_ForExprs(p):
-	'''ForExprs :  ForVariables EndStatement ForExprs 
-			| ForVariables'''
-	if len(p) ==  4:
-		p[0] = Node("ForExprs", [p[1],p[2],p[3]], [],order='ccc').name
-	else:
-		p[0] = Node("ForExprs", [p[1]],[],order='c').name
+# def p_ForExprs(p):
+# 	'''ForExprs :  ForVariables EndStatement ForExprs 
+# 			| ForVariables'''
+# 	if len(p) ==  4:
+# 		p[0] = Node("ForExprs", [p[1],p[2],p[3]], [],order='ccc').name
+# 	else:
+# 		p[0] = Node("ForExprs", [p[1]],[],order='c').name
 
 #''' for_variables : declaration_keyword_extras IDENTIFIER IN expression for_untilTo expression '''
 def p_ForVariables(p): 
@@ -536,8 +528,7 @@ def p_ReturnStatement(p):
 
 
 def p_Expression(p):
-	'''Expression : Assignment
-					| OrExpression'''
+	'''Expression : OrExpression'''
 	p[0] = Node("Expression", [p[1]],[],order='c').name
 
 
@@ -548,8 +539,7 @@ def p_Expression(p):
 
 
 def p_LeftHandSide(p):
-	'''LeftHandSide : AmbiguousName
-				| ArrayAccess'''
+	'''LeftHandSide : AmbiguousName'''
 					# | FieldAccess
 	p[0] = Node("LeftHandSide", [p[1]],[],order='c').name
 
@@ -570,8 +560,16 @@ def p_AssignmentOperator(p):
 
 ##check it very important issue
 def p_Assignment(p):
-	'Assignment : LeftHandSide AssignmentOperator OrExpression'
-	p[0] = Node("Assignment", [p[1], p[2], p[3]],[]).name
+	'''Assignment : LeftHandSide AssignmentOperator OrExpression
+				| AmbiguousName LSQRB Expression RSQRB EQUALASS OrExpression
+				| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
+	if len(p)==4 :
+		p[0] = Node("Assignment", [p[1], p[2], p[3]],[], order="ccc").name
+	elif len(p)==7 :
+		p[0] = Node("Assignment", [p[1], p[3], p[6]],[p[2], p[4], p[5]], order="clcllc").name
+	else:
+		p[0] = Node("Assignment", [p[1], p[3], p[6]],[p[2], p[4], p[6], p[7], p[8]], order="clclcllc").name
+		
 
 def p_OrExpression(p):
 	'''OrExpression : AndExpression
@@ -583,7 +581,7 @@ def p_OrExpression(p):
 
 def p_AndExpression(p):
 	'''AndExpression : XorExpression 
-					| AndExpression BITAND XorExpression'''
+					| AndExpression AND XorExpression'''
 	if len(p) ==  4:
 		p[0] = Node("AndExpression", [p[1],p[3]], [p[2]],order='clc').name
 	else:
@@ -723,10 +721,10 @@ def p_PrimaryNoNewArray(p):
 # <class instance creation expression> ::= new <class type> ( <argument list>? )
 
 def p_ClassInstanceCreationExpression(p):
-	'''ClassInstanceCreationExpression : R_NEW ID LPARAN ArgumentLists RPARAN'''
+	'''ClassInstanceCreationExpression : R_NEW AmbiguousName LPARAN ArgumentLists RPARAN'''
 								#		| R_NEW ClassType LPARAN RPARAN'''
 	if len(p) ==6:
-		p[0] = Node('ClassInstanceCreationExpression',[p[4]],[p[1],p[2],p[3],p[5]],order='lllcl').name
+		p[0] = Node('ClassInstanceCreationExpression',[p[2], p[4]],[p[1],p[3],p[5]],order='lclcl').name
 	# else:
 	# 	p[0] = Node('ClassInstanceCreationExpression',[p[2]],[p[1],p[3],p[4]]).name
 
@@ -741,9 +739,13 @@ def p_ArgumentList(p):
 
 # <array access> ::= <expression name> [ <expression> ] | <primary no new array> [ <expression>]
 def p_ArrayAccess(p):
-	'''ArrayAccess : AmbiguousName LSQRB Expression RSQRB'''
+	'''ArrayAccess : AmbiguousName LSQRB Expression RSQRB
+					| AmbiguousName LSQRB Expression COMMA Expression RSQRB'''
 					# | PrimaryNoNewArray LSQRB Expression RSQRB'''
-	p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]]).name
+	if len(p) == 5:
+		p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]], order="clcl").name
+	else:
+		p[0] = Node('ArrayAccess',[p[1],p[3],p[5]],[p[2],p[4],p[6]], order="clclcl").name
 
 def p_AmbiguousName(p):
 	'''AmbiguousName : ID 

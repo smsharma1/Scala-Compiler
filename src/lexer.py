@@ -31,6 +31,7 @@ reserved = {
 	'catch' : 'R_CATCH',
 	'class' : 'R_CLASS',
 	'break' : 'R_BREAK',
+	'Unit' : 'R_UNIT',
 # 	'R_DEFAULT' used, but not defined as a token or a rule
 # ERROR: parser3.py:443: Symbol 'IDVARNAME' used, but not defined as a token or a rule
 # ERROR: parser3.py:447: Symbol 'R_UNTIL' used, but not defined as a token or a rule
@@ -57,7 +58,6 @@ reserved = {
 	'null' : 'R_NULL',
 #	'\u21D2' : 'R_IMPLIES',
 #	'\u2190' : 'R_LEFTARROW',
-	'=>' : 'R_IMPLIES1',
 	'<-' : 'R_LEFTARROW1',
 	#'<:' : 'R_OBSCURE',
 	#'#' : 'R_HASH',
@@ -90,6 +90,7 @@ tokens =list(reserved.values()) +  [
 	'LPARAN',
 	'RPARAN',
 	'LSQRB',
+	'IMPLIES1',
 	'RSQRB',
 	'BLOCKOPEN',
 	'BLOCKCLOSE',
@@ -125,7 +126,7 @@ tokens =list(reserved.values()) +  [
 	'MODULUS',
 	'EQUAL',
 	'NOTEQUAL',
-#	'AND',
+	'AND',
 	'OR',
 	'NOT',
 	#'STARTQUOTE',
@@ -195,6 +196,7 @@ t_LPARAN = r'\('
 t_RPARAN = r'\)'
 t_LSQRB = r'\['
 t_RSQRB = r'\]'
+t_IMPLIES1 = r'=>'
 t_BLOCKOPEN = r'\{'
 t_BLOCKCLOSE = r'\}'
 t_BITAND = r'&'
@@ -223,13 +225,16 @@ t_DIVISION = r'/'
 t_MODULUS = r'%'
 t_EQUAL = r'=='
 t_NOTEQUAL = r'!='
-#t_AND = r'&&'
+t_AND = r'&&'
 t_OR = r'\|\|'
 t_NOT = r'!'
 t_ignore  = ' \t'
 t_BACKSPACE = r'\\b'
 t_HORITAB = r'\t'
-t_LINEFEED = r'\n'
+def t_LINEFEED(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+    t.value = '\n'
 t_FORMFEED = r'\f'
 t_CARRIAGERETN = r'\r'
 t_DOUBLEQUOTE = r'\"'
