@@ -39,7 +39,7 @@ reserved = {
 	'default' : 'R_DEFAULT',
 	'until' : 'R_UNTIL',
 	'to' : 'R_TO',
-	'array' : 'R_ARRAY',
+	'Array' : 'R_ARRAY',
 	'instanceof' : 'R_INSTANCEOF',
 	'continue' : 'R_CONTINUE',
 	'def' : 'R_DEF',

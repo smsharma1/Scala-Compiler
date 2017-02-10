@@ -286,7 +286,8 @@ def p_IntegralType(p):
 				 | R_SHORT
 				 | R_INT
 				 | R_LONG 
-				 | R_CHAR'''
+				 | R_CHAR
+				 | R_STRING'''
 	p[0] = Node("IntegralType", [],[p[1]], order="l").name
 
 #<floating-point type> ::= float | double
@@ -316,7 +317,7 @@ def p_ClassType(p):
 def p_ArrayType(p):
 	'''ArrayType : R_ARRAY LSQRB RSQRB
 				| R_LIST LSQRB RSQRB'''
-	p[0] = Node("ArrayType", [p[1], p[2], p[3]],[], order="lll").name
+	p[0] = Node("ArrayType", [],[p[1], p[2], p[3]], order="lll").name
 
 #<block> ::= { <block statements>? }
 def p_Block(p):
@@ -387,11 +388,6 @@ def p_StatementNoShortIf(p):
 	'''StatementNoShortIf : StatementWithoutTrailingSubstatement
 						| IfThenElseStatementNoShortIf'''
 	p[0] = Node("StatementNoShortIf", [p[1]],[],order='c').name
-
-#<empty statement> ::= ;
-def p_EmptyStatement(p):
-	'EmptyStatement : EndStatement'
-	p[0] = Node("EmptyStatement", [p[1]],[],order='c').name
 
 #<expression statement> ::= <statement expression> ;
 def p_ExpressionStatement(p):
@@ -793,6 +789,11 @@ def p_NullLiteral(p):
 	'NullLiteral : R_NULL'
 	p[0] = Node("NullLiteral", [],[p[1]],order='l').name
 
+#<empty statement> ::= ;
+def p_EmptyStatement(p):
+	'EmptyStatement : EndStatement'
+	p[0] = Node("EmptyStatement", [p[1]],[],order='c').name
+
 
 def p_empty(p):
 	'empty :'
@@ -803,8 +804,8 @@ parser = yacc.yacc()
 
 
 if __name__ == "__main__" :
- #   filename = sys.argv[1]
-	filename = "../tests/Demo.scala"
+	filename = sys.argv[1]
+#	filename = "../tests/test1.scala"
 	programfile = open(filename)
 	data = programfile.read()
 	parser.parse(data[0:-1])
