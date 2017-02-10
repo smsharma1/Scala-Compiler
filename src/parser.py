@@ -8,7 +8,7 @@ graph = pydot.Dot(graph_type='digraph')
 
 class Node:
 	uid=0
-	def __init__(self,type,children,leaf,seqNo=0,order='',isLeaf=False):
+	def __init__(self,type,children,leaf,seqNo=1,order='',isLeaf=False):
 		self.type = type
 		Node.uid = Node.uid + 1
 		self.uid = Node.uid
@@ -39,6 +39,7 @@ class Node:
 					# graph.write_png('debug.png')
 						if nodes.get_name() == children[childno]:
 							nodes.set("myNo", count)
+							print(nodes.to_string())
 					count = count + 1
 				childno = childno + 1
 
@@ -149,7 +150,7 @@ def p_ClassBodyDeclaration(p):
 	if "FieldDeclaration" in p[1]:
 		p[0] = Node("ClassBodyDeclaration", [p[1]],[], order="c").name
 	else:
-		p[0] = Node("ClassBodyDeclaration", [p[1]],[]).name
+		p[0] = Node("ClassBodyDeclaration", [p[1]],[], order="c").name
 
 #<formal parameter list> ::= <formal parameter> | <formal parameter list> , <formal parameter>
 def p_FormalParameterList(p):
@@ -806,10 +807,12 @@ parser = yacc.yacc()
 
 if __name__ == "__main__" :
  #   filename = sys.argv[1]
-    filename = "../tests/Demo.scala"
-    programfile = open(filename)
-    data = programfile.read()
-    parser.parse(data)
-    graph.write_png('parsetree.png')
-    graph.to_string()
-    print(graph.to_string())
+    # filename = "../tests/Demo.scala"
+    # programfile = open(filename)
+    # data = programfile.read()
+	data='''object Test {
+}'''
+	parser.parse(data)
+	graph.write_png('parsetree.png')
+	graph.to_string()
+	print(graph.to_string())
