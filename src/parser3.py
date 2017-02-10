@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+# Yacc example
+
 import ply.yacc as yacc
 import pydot
-import sys
 # Get the token map from the lexer.  This is required.
 from lexer import tokens
 graph = pydot.Dot(graph_type='digraph')
@@ -18,7 +18,9 @@ class Node:
 		else:
 			self.node = pydot.Node(self.name, style="filled", fillcolor="red", myNo = seqNo)
 		graph.add_node(self.node)
+		print children, " children"
 		self.children = children
+		print leaf, " leaf"
 		self.leaf = leaf
 		count = 1
 		leafno = 0
@@ -48,6 +50,8 @@ def p_CompilationUnit(p):
 def p_ImportDeclarationss(p):
 	'''ImportDeclarationss : ImportDeclarations
 							| empty'''
+	print('hello')
+	print(p[0], p[1])
 	if(p[1] == None):
 		pass
 	elif "ImportDeclarations" in p[1]:
@@ -86,6 +90,12 @@ def p_ClassAndObjectDeclaration(p):
 #<object_declaration> ::= object <identifier> <super>? { method_body }
 def p_ObjectDeclaration(p):
 	'''ObjectDeclaration :  R_OBJECT ID Super Block'''
+	# print('Debugging')
+#	R_OBJECT Identifier BLOCKOPEN MethodBody BLOCKCLOSE
+					
+#	if len(p)==6:
+#		p[0] = Node("ObjectDeclaration", [p[2], p[3], p[5]],[p[1], p[4], p[6]]).name
+#	else:
 	p[0] = Node("ObjectDeclaration", [ p[3], p[4]],[p[1],p[2]]).name
 
 #<class_declaration> ::= class <identifier> <class_header> <super>? { <class body declarations>? }
@@ -205,10 +215,6 @@ def p_ArrayInitializer(p):
 	else:
 		p[0] = Node('ArrayInitializer',[p[3]],[p[1],p[2],p[4]]).name
 
-def p_EndStatement(p):
-	'''EndStatement : SEMICOLON 
-					| LINEFEED'''
-	p[0] = Node("EndStatement", [],[p[1]]).name
 #<method declaration> ::= <method header> <method body>
 def p_MethodDeclaration(p):
 	'MethodDeclaration : MethodHeader MethodBody'
@@ -792,20 +798,31 @@ def p_NullLiteral(p):
 	p[0] = Node("NullLiteral", [],[p[1]]).name
 
 
+def p_EndStatement(p):
+	'''EndStatement : SEMICOLON 
+					| LINEFEED'''
+	p[0] = Node("EndStatement", [],[p[1]]).name
+
 def p_empty(p):
     'empty :'
+    print(p)
     pass
 parser = yacc.yacc()
 
-
-
-
-if __name__ == "__main__" :
- #   filename = sys.argv[1]
-    filename = "../tests/Demo.scala"
-    programfile = open(filename)
-    data = programfile.read()
-    parser.parse(data)
-    graph.write_png('parsetree.png')
-    graph.to_string()
-    print(graph.to_string())
+# while True:
+# try:
+	# s = raw_input('calc > ')
+s = '''object Test {
+       var iter_count : Int = 0; 
+       while(iter_count < 20) {
+       iter_count = iter_count + 9;
+       }
+       return;
+}'''
+# except EOFError:
+# 	break
+# if not s: continue
+parser.parse(s)
+graph.write_png('parsetree.png')
+graph.to_string()
+print(graph.to_string())
