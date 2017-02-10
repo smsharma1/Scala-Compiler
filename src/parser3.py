@@ -802,7 +802,13 @@ parser = yacc.yacc()
 # while True:
 # try:
 	# s = raw_input('calc > ')
-s = '''object Test {}'''
+s = '''object Test {
+       var iter_count : Int = 0; 
+       while(iter_count < 20) {
+       iter_count = iter_count + 9;
+       }
+       return;
+}'''
 # except EOFError:
 # 	break
 # if not s: continue
