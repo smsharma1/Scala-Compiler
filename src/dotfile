@@ -12,23 +12,5 @@ digraph G {
 "BlockStatement##6" -> "Statement##5";
 "BlockStatements##7" [style=filled, fillcolor=red, myNo=1];
 "BlockStatements##7" -> "BlockStatement##6";
-"Block##8" [style=filled, fillcolor=red, myNo=1];
-"{##9" [style=filled, fillcolor=green, myNo=1];
-"Block##8" -> "{##9";
-"Block##8" -> "BlockStatements##7";
-"}##10" [style=filled, fillcolor=green, myNo=3];
-"Block##8" -> "}##10";
-"ObjectDeclaration##11" [style=filled, fillcolor=red, myNo=1];
-"object##12" [style=filled, fillcolor=green, myNo=1];
-"ObjectDeclaration##11" -> "object##12";
-"Test##13" [style=filled, fillcolor=green, myNo=2];
-"ObjectDeclaration##11" -> "Test##13";
-"ObjectDeclaration##11" -> "Block##8";
-"ClassAndObjectDeclaration##14" [style=filled, fillcolor=red, myNo=1];
-"ClassAndObjectDeclaration##14" -> "ObjectDeclaration##11";
-"ClassObjectsList##15" [style=filled, fillcolor=red, myNo=1];
-"ClassObjectsList##15" -> "ClassAndObjectDeclaration##14";
-"CompilationUnit##16" [style=filled, fillcolor=red, myNo=1];
-"CompilationUnit##16" -> "ClassObjectsList##15";
 }
 

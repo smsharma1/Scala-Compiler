@@ -163,9 +163,8 @@ def p_FormalParameterList(p):
 
 #<field declaration> ::=  val <variable declarator> ;
 def p_FieldDeclaration(p):
-	'''FieldDeclaration : R_VAL VariableDeclarator1 EndStatement
-						|  R_VAR VariableDeclarator1 EndStatement'''
-	p[0] = Node("FieldDeclaration", [p[2], p[3]],[p[1]], order="lcc").name
+	'''FieldDeclaration : VariableHeader VariableDeclarator1 EndStatement'''
+	p[0] = Node("FieldDeclaration", [p[1],p[2], p[3]],[], order="ccc").name
 #<variable declarator> ::= <identifier> | <identifier>: <type>   | <identifier> <variable_declarator_extra> 
 
 def p_VariableDeclarator1(p):
@@ -204,6 +203,7 @@ def p_VariableInitializer(p):
 
 def p_ArrayInitializer(p):
 	''' ArrayInitializer : R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT RPARAN
+							| R_ARRAY LSQRB Type RSQRB
 							| R_ARRAY LPARAN ArgumentLists RPARAN'''
 	if len(p) == 9:
 		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8]], order="lllcllll").name
@@ -351,9 +351,8 @@ def p_LocalVariableDeclarationStatement(p):
 	p[0] = Node("LocalVariableDeclarationStatement", [p[1],p[2]],[], order="cc").name	
 #<local variable declaration> ::= <type> <variable declarators>
 def p_LocalVariableDeclaration(p):
-	'''LocalVariableDeclaration : R_VAL VariableDeclarationBody
-								| R_VAR VariableDeclarationBody'''
-	p[0] = Node("LocalVariableDeclaration", [p[2]],[p[1]], order="lc").name
+	'''LocalVariableDeclaration : VariableHeader VariableDeclarationBody'''
+	p[0] = Node("LocalVariableDeclaration", [p[1],p[2]],[], order="cc").name
 
 def p_VariableDeclarationBody(p):
 	'''VariableDeclarationBody : ID COLON Type EQUALASS VariableInitializer
@@ -798,8 +797,8 @@ def p_NullLiteral(p):
 
 
 def p_empty(p):
-    'empty :'
-    pass
+	'empty :'
+	pass
 parser = yacc.yacc()
 
 
@@ -807,12 +806,10 @@ parser = yacc.yacc()
 
 if __name__ == "__main__" :
  #   filename = sys.argv[1]
-    # filename = "../tests/Demo.scala"
-    # programfile = open(filename)
-    # data = programfile.read()
-	data='''object Test {
-}'''
-	parser.parse(data)
+	filename = "../tests/Demo.scala"
+	programfile = open(filename)
+	data = programfile.read()
+	parser.parse(data[0:-1])
 	graph.write_png('parsetree.png')
 	graph.to_string()
 	print(graph.to_string())
