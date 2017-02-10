@@ -268,9 +268,9 @@ def p_NumericType(p):
 	'''NumericType : IntegralType
 				| FloatingPointType'''
 	if "IntegralType" in p[1]:
-		p[0] = Node("Numeric Type", [p[1]],[]).name
+		p[0] = Node("NumericType", [p[1]],[]).name
 	else:
-		p[0] = Node("Numeric Type", [p[1]],[]).name
+		p[0] = Node("NumericType", [p[1]],[]).name
 
 #<integral type> ::= byte | short | int | long | char
 
@@ -581,7 +581,7 @@ def p_AndExpression(p):
 	'''AndExpression : XorExpression 
 					| AndExpression BITAND XorExpression'''
 	if len(p) ==  4:
-		p[0] = Node("AndExpression", [p[1]],[p[3]], [p[2]]).name
+		p[0] = Node("AndExpression", [p[1],p[3]], [p[2]]).name
 	else:
 		p[0] = Node("AndExpression", [p[1]],[]).name			
 
@@ -600,7 +600,7 @@ def p_EqualityExpression(p):
 						 | EqualityExpression EQUAL RelationalExpression
 						| EqualityExpression NOTEQUAL RelationalExpression'''
 	if len(p) ==  4:
-		p[0] = Node("EqualityExpression", [p[1]],[p[3]], [p[2]]).name
+		p[0] = Node("EqualityExpression", [p[1], p[3]], [p[2]]).name
 	else:
 		p[0] = Node("EqualityExpression", [p[1]],[]).name
 
@@ -612,7 +612,7 @@ def p_RelationalExpression(p):
 						| RelationalExpression GE ShiftExpression  
 						| RelationalExpression R_INSTANCEOF ReferenceType'''
 	if len(p) ==  4:
-		p[0] = Node("RelationalExpression", [p[1]],[p[3]], [p[2]]).name
+		p[0] = Node("RelationalExpression", [p[1],p[3]], [p[2]]).name
 	else:
 		p[0] = Node("RelationalExpression", [p[1]],[]).name
 
@@ -622,7 +622,7 @@ def p_ShiftExpression(p):
 					| ShiftExpression BITRSHIFT AdditiveExpression 
 					| ShiftExpression BITRSFILL AdditiveExpression'''
 	if len(p) ==  4:
-		p[0] = Node("ShiftExpression", [p[1]],[p[3]], [p[2]]).name
+		p[0] = Node("ShiftExpression", [p[1], p[3]], [p[2]]).name
 	else:
 		p[0] = Node("ShiftExpression", [p[1]],[]).name
 
@@ -632,7 +632,7 @@ def p_AdditiveExpression(p):
 							| AdditiveExpression PLUS MultiplicativeExpression
 							| AdditiveExpression MINUS MultiplicativeExpression'''
 	if len(p) ==  4:
-		p[0] = Node("AdditiveExpression", [p[1]],[p[3]], [p[2]]).name
+		p[0] = Node("AdditiveExpression", [p[1],p[3]], [p[2]]).name
 	else:
 		p[0] = Node("AdditiveExpression", [p[1]],[]).name
 
@@ -802,7 +802,13 @@ parser = yacc.yacc()
 # while True:
 # try:
 	# s = raw_input('calc > ')
-s = '''object Test {}'''
+s = '''object Test {
+       var iter_count : Int = 0; 
+       while(iter_count < 20) {
+       iter_count = iter_count + 9;
+       }
+       return;
+}'''
 # except EOFError:
 # 	break
 # if not s: continue
