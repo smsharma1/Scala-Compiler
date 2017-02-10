@@ -812,7 +812,7 @@ if __name__ == "__main__" :
 #	filename = "../tests/test1.scala"
 	programfile = open(filename)
 	data = programfile.read()
-	parser.parse(data[0:-1])
+	parser.parse(data)
 	graph.write_png('parsetree.png')
 	graph.to_string()
 	print(graph.to_string())
