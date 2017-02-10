@@ -1,4 +1,4 @@
 object HelloWorld {
-    def aa(arr: Array[]){
+    def aa(arr: Array[Int]){
 	}
 }

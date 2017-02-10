@@ -315,9 +315,9 @@ def p_ClassType(p):
 		p[0] = Node("ClassType", [p[2]],[p[1]], order="lc").name
 #<array type> ::= <type> [ ]
 def p_ArrayType(p):
-	'''ArrayType : R_ARRAY LSQRB RSQRB
-				| R_LIST LSQRB RSQRB'''
-	p[0] = Node("ArrayType", [],[p[1], p[2], p[3]], order="lll").name
+	'''ArrayType : R_ARRAY LSQRB Type RSQRB
+				| R_LIST LSQRB Type RSQRB'''
+	p[0] = Node("ArrayType", [p[3]],[p[1], p[2], p[4]], order="llcl").name
 
 #<block> ::= { <block statements>? }
 def p_Block(p):
