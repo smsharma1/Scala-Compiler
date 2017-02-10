@@ -1,9 +1,7 @@
-object Rational {         
-    def gcd(a: Int, b: Int): Int = {
-      if (b == 0){
-        return a;
-      } else{
-        return b;
-      }
-    }
-  }
+object Test {
+       var iter_count : Int = 0; 
+       while(iter_count < 20) {
+       iter_count = iter_count + 9;
+       }
+       return;
+}
