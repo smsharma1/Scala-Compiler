@@ -8,27 +8,37 @@ graph = pydot.Dot(graph_type='digraph')
 
 class Node:
 	uid=0
-	def __init__(self,type,children,leaf,isChild=False):
+	def __init__(self,type,children,leaf,seqNo=0,order='',isLeaf=False):
 		self.type = type
 		Node.uid = Node.uid + 1
 		self.uid = Node.uid
 		self.name = type+" "+str(self.uid)
-		if isChild:
-			self.node = pydot.Node(self.name, style="filled", fillcolor="green")
+		if isLeaf:
+			self.node = pydot.Node(self.name, style="filled", fillcolor="green", myNo = seqNo)
 		else:
-			self.node = pydot.Node(self.name, style="filled", fillcolor="red")
+			self.node = pydot.Node(self.name, style="filled", fillcolor="red", myNo = seqNo)
 		graph.add_node(self.node)
 		print children, " children"
 		self.children = children
 		print leaf, " leaf"
 		self.leaf = leaf
-		for l in leaf:
-			if l != None:
-				term = Node(l, [], [],True).name
-				graph.add_edge(pydot.Edge(self.name, term))
-		for ch in self.children:
-			if ch != None:
-				graph.add_edge(pydot.Edge(self.name, ch))
+		count = 1
+		leafno = 0
+		childno = 0
+		for letter in order:
+			if letter == 'l':
+				if leaf[leafno] != None:
+					term = Node(l, [], [],seqNo = count, isLeaf=True).name
+					graph.add_edge(pydot.Edge(self.name, term))
+					count = count + 1
+				leafno = leafno + 1
+			elif letter == 'c':
+				if children[childno] != None:
+					graph.add_edge(pydot.Edge(self.name, ch))
+					mynode = graph.get_node(ch)
+					mynode.set("myNo", count)
+					count = count + 1
+				childno = child + 1
 
 def p_CompilationUnit(p):
 	'''CompilationUnit : ImportDeclarationss ClassObjectsList'''
