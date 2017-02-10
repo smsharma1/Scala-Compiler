@@ -802,6 +802,9 @@ def p_EmptyStatement(p):
 def p_empty(p):
 	'empty :'
 	pass
+
+def p_error(p):
+	sys.exit("Syntax Error")
 parser = yacc.yacc()
 
 
@@ -812,7 +815,7 @@ if __name__ == "__main__" :
 #	filename = "../tests/test1.scala"
 	programfile = open(filename)
 	data = programfile.read()
-	parser.parse(data[0:-1])
+	parser.parse(data)
 	graph.write_png('parsetree.png')
-	graph.to_string()
-	print(graph.to_string())
+	filedot = open(filename + "dot",'w')
+	filedot.write(graph.to_string())
