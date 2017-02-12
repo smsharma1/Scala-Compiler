@@ -1,6 +1,6 @@
 *.pyc
 *.png
 *.out
-/src/parsetab.py
+parsetab.py
 *.vscode/
 *.scaladot
