@@ -4,20 +4,20 @@ import sys
 from ply.lex import TOKEN
 
 reserved = {
-	'abstract' : 'R_ABSTRACT',
+	# 'abstract' : 'R_ABSTRACT',
 #	'do'  : 'R_DO',
 	#'finally' : 'R_FINALLY',
 	'import' : 'R_IMPORT',
 	'object' : 'R_OBJECT',
-	'override' : 'R_OVERRIDE',
-	'package' : 'R_PACKAGE',
-	'private' : 'R_PRIVATE',
+	# 'override' : 'R_OVERRIDE',
+	# 'package' : 'R_PACKAGE',
+	# 'private' : 'R_PRIVATE',
 #	'protected' : 'R_PROTECTED',
 	'return' : 'R_RETURN',
-	'sealed' : 'R_SEALED',
- 	'super' : 'R_SUPER',
+	# 'sealed' : 'R_SEALED',
+ 	# 'super' : 'R_SUPER',
 #	'this' : 'R_THIS',
-	'throw' : 'R_THROW',
+	# 'throw' : 'R_THROW',
 #	'trait' : 'R_TRAIT',
 #	'try' : 'R_TRY',
 #	'true' : 'R_TRUE',
@@ -28,7 +28,7 @@ reserved = {
 	'with' : 'R_WITH',
 #	'yield' : 'R_YIELD',
 	'case' :'R_CASE',
-	'catch' : 'R_CATCH',
+	# 'catch' : 'R_CATCH',
 	'class' : 'R_CLASS',
 	'break' : 'R_BREAK',
 	'Unit' : 'R_UNIT',
@@ -37,7 +37,7 @@ reserved = {
 # ERROR: parser3.py:447: Symbol 'R_UNTIL' used, but not defined as a token or a rule
 # ERROR: parser3.py:448: Symbol 'R_TO' used, but not defined as a token or a rule
 # ERROR: parser3.py:581: Symbol 'R_INSTANCEOF' used, but not defined as a token or a rule
-	'default' : 'R_DEFAULT',
+	# 'default' : 'R_DEFAULT',
 	'until' : 'R_UNTIL',
 	'to' : 'R_TO',
 	'Array' : 'R_ARRAY',
@@ -46,13 +46,13 @@ reserved = {
 	'def' : 'R_DEF',
  	'else' : 'R_ELSE',
  	'extends' : 'R_EXTENDS',
- 	'false' : 'R_FALSE', 
-	'final' : 'R_FINAL',
+ 	# 'false' : 'R_FALSE', 
+	# 'final' : 'R_FINAL',
  	'for' : 'R_FOR',
-	'forSome' : 'R_FORSOME',
+	# 'forSome' : 'R_FORSOME',
 	'if' : 'R_IF',
-	'implicit' : 'R_IMPLICIT',
- 	'lazy' : 'R_LAZY',
+	# 'implicit' : 'R_IMPLICIT',
+ 	# 'lazy' : 'R_LAZY',
 	'match' : 'R_MATCH',
 	'new' : 'R_NEW', 
 	'null' : 'R_NULL',
@@ -61,7 +61,7 @@ reserved = {
 	'<-' : 'R_LEFTARROW1',
 	#'<:' : 'R_OBSCURE',
 	#'#' : 'R_HASH',
-	'@' : 'R_ATTHERATE',
+	# '@' : 'R_ATTHERATE',
 #	'<%' : 'R_OBSCURE1',
 #	'>:' : 'R_OBSCURE2',
 	'Byte' : 'R_BYTE',
@@ -76,9 +76,9 @@ reserved = {
 	'Unit' : 'R_UNIT',
 #	'Null' : 'R_NULL1',
 #	'Nothing' : 'R_NOTHING',
-	'Any' : 'R_ANY',
+	# 'Any' : 'R_ANY',
 	'List' : 'R_LIST',
-	'AnyRef' : 'R_ANYREF'
+	# 'AnyRef' : 'R_ANYREF'
 }
 
 tokens =list(reserved.values()) +  [
@@ -99,12 +99,12 @@ tokens =list(reserved.values()) +  [
 	'LT',           #Less than
 	'LE',           #Less than equal
 	#'DIGIT',        #Digit
-	'NONZERODIGIT',
+	# 'NONZERODIGIT',
     'ID',
-	'BITAND',
-	'BITOR',
+	# 'BITAND',
+	# 'BITOR',
 	'BITXOR',
-	'BITNEG',
+	# 'BITNEG',
 	'BITLSHIFT',
 	'BITRSHIFT',
 	'BITRSFILL',    #bit right shift fill operator
@@ -130,29 +130,29 @@ tokens =list(reserved.values()) +  [
 	'OR',
 	'NOT',
 	#'STARTQUOTE',
-	'ENDQUOTE',
+	# 'ENDQUOTE',
 	'DOT',
 	'SEMICOLON',
 	'COMMA',
-	'BACKSPACE',
-	'HORITAB',
+	# 'BACKSPACE',
+	# 'HORITAB',
 	'LINEFEED',
-	'FORMFEED',
-	'CARRIAGERETN',
-	'DOUBLEQUOTE',
-	'SINGLEQUOTE',
-	'BACKSLASH',
+	# 'FORMFEED',
+	# 'CARRIAGERETN',
+	# 'DOUBLEQUOTE',
+	# 'SINGLEQUOTE',
+	# 'BACKSLASH',
 	'COLON',
-	'COMMENT',
-	'COLOR',
+	# 'COMMENT',
+	# 'COLOR',
 #	'UNDERSCORE',
 	#'QUESTION',
 	'BITRSFILLASS',
-	'HEXDIGIT',
-	'ZERO',
+	# 'HEXDIGIT',
+	# 'ZERO',
 #	'INTERGERTYPESUFFIX',
-	'X_SMALL',
-	'X_BIG'
+	# 'X_SMALL',
+	# 'X_BIG'
 ]
 # <hex digit> :: = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | a | b | c | d | e | f | A | B | C | D | E | F
 # <integer type suffix> ::= l | L
@@ -170,7 +170,7 @@ def t_ID(t):
 	t.type = reserved.get(t.value,'ID')    # Check for reserved words
 	return t
 #t_QUESTION = r'\?'
-t_HEXDIGIT = r'[0-9a-fA-F]'
+# t_HEXDIGIT = r'[0-9a-fA-F]'
 #t_INTERGERTYPESUFFIX = r'[lL]'
 t_GT = r'>'
 t_GE = r'>='
@@ -190,8 +190,8 @@ def t_STRING(t):
 	return t
 
 #t_DIGIT = r'[0-9]'
-t_NONZERODIGIT = r'[1-9]'
-t_ZERO = r'0'
+# t_NONZERODIGIT = r'[1-9]'
+# t_ZERO = r'0'
 t_LPARAN = r'\('
 t_RPARAN = r'\)'
 t_LSQRB = r'\['
@@ -199,10 +199,10 @@ t_RSQRB = r'\]'
 t_IMPLIES1 = r'=>'
 t_BLOCKOPEN = r'\{'
 t_BLOCKCLOSE = r'\}'
-t_BITAND = r'&'
-t_BITOR = r'\|'
+# t_BITAND = r'&'
+# t_BITOR = r'\|'
 t_BITXOR = r'\^'
-t_BITNEG = r'~'
+# t_BITNEG = r'~'
 t_BITLSHIFT = r'<<'
 t_BITRSHIFT = r'>>'
 t_BITRSFILL = r'>>>'
@@ -229,25 +229,25 @@ t_AND = r'&&'
 t_OR = r'\|\|'
 t_NOT = r'!'
 t_ignore  = ' \t'
-t_BACKSPACE = r'\\b'
-t_HORITAB = r'\t'
+# t_BACKSPACE = r'\\b'
+# t_HORITAB = r'\t'
 def t_LINEFEED(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
     t.value = '\n'
-t_FORMFEED = r'\f'
-t_CARRIAGERETN = r'\r'
-t_DOUBLEQUOTE = r'\"'
-t_SINGLEQUOTE = r'\''
-t_BACKSLASH = r'\\'
+# t_FORMFEED = r'\f'
+# t_CARRIAGERETN = r'\r'
+# t_DOUBLEQUOTE = r'\"'
+# t_SINGLEQUOTE = r'\''
+# t_BACKSLASH = r'\\'
 t_COLON = r':'
 t_SEMICOLON = r';'
 #t_COLOR = r'\#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})'
 t_DOT = r'\.'
 t_COMMA = r'\,'
 #t_UNDERSCORE = r'_'
-t_X_SMALL = r'x'
-t_X_BIG = r'X'
+# t_X_SMALL = r'x'
+# t_X_BIG = r'X'
 
 # Error handling rule
 def t_error(t):
@@ -257,76 +257,20 @@ def t_error(t):
 
 lexer = lex.lex()
 
-# Test it out
-
-data = '''object addressbook {
-
-  case class Person(name: String, age: Int)
-
-  /** An AddressBook takes a variable number of arguments
-   *  which are accessed as a Sequence
-   */
-  class AddressBook(a: Person*) {
-    private val people: List[Person] = a.toList
-
-    /** Serialize to XHTML. Scala supports XML literals
-     *  which may contain Scala expressions between braces,
-     *  which are replaced by their evaluation
-     */
-    def toXHTML =
-      <table cellpadding="2" cellspacing="0">
-        <tr>
-          <th>Name</th>
-          <th>Age</th>
-        </tr>
-        { for (val p <- people) yield
-            <tr>
-              <td> { p.name } </td>
-              <td> { p.age.toString() } </td>
-            </tr> 
-        }
-      </table>;
-  }
-
-  /** We introduce CSS using raw strings (between triple
-   *  quotes). Raw strings may contain newlines and special
-   *  characters (like \) are not interpreted.
-   */
-  val header =
-    <head>
-      <title>
-        { "My Address Book" }
-      </title>
-      <style type="text/css"> {
-     """table { border-right: 1px solid #cccccc; }
-        th { background-color: #cccccc; }
-        td { border-left: 1px solid #acacac; }
-        td { border-bottom: 1px solid #acacac;"""}
-      </style>
-    </head>;
-
-  val people = new AddressBook(
-    Person("Tom", 20),
-    Person("Bob", 22),
-    Person("James", 19));
-
-  val page =
-    <html>
-      { header }
-      <body>
-       { people.toXHTML }
-      </body>
-    </html>;
-
-  def main(args: Array[String]) {
-    println(page)
-  }
-}'''
-
 if __name__ == "__main__" :
     # programfile = open(sys.argv[1])
     # data = programfile.read()
-    lexer.input('''object Rational { }''')
+    lexer.input('''object Demo {
+   def main(args: Array[String]) {
+      var a = 10;
+        a = 3 + 10;
+      // An infinite loop.
+      while( True ){
+         println( "10 + a" );
+      }
+   }
+}
+''')
     while True:
     	tok = lexer.token()
     	if not tok: 
