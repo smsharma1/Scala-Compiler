@@ -16,11 +16,13 @@ object Demo {
 		var a : Int  = 10;	
 		var b : Int  = 20;
 		var d : Int  = 0;
-		var c : Int = a + ++b;
+		var c : Int = a + b;
 		var x : Int = 23;
 		var y : Int = 23;
 		var z : Int = 23;
-		x = y = z = x == z;
-		y = d*b++*d;
+		x = x == z;
+		y = x == z;
+		z = x == z;
+		y = d*b*d;
 	}
 } 
