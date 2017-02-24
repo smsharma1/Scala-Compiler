@@ -226,14 +226,14 @@ def p_MethodDeclaration(p):
 #<method header> ::= def <method declarator> : <type> = | def <method declarator> =
 def p_MethodHeader(p):
 	'''MethodHeader : R_DEF MethodDeclarator MethodReturnTypeExtras'''
-	p[0] = Node("MethodHeader", [p[2], p[3]],[p[1]], order="lcc")
+	p[0] = Node("MethodHeader", [p[2], p[3]],[p[1]],typelist = p[2].typelist + p[3].typelist,order="lcc")
 #<method declarator> ::= <identifier> ( <formal parameter list>? )
 def p_MethodDeclarator(p):
 	'''MethodDeclarator : ID LPARAN FuncArgumentListExtras RPARAN'''
 	# if len(p)==4:
 	# 	p[0] = Node("MethodDeclarator", [p[1]],[p[2], p[3]])
 	# else:
-	p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]], order="llcl")
+	p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]],typelist= p[3].typelist, order="llcl")
 
 def p_MethodReturnTypeExtras(p):
 	'''MethodReturnTypeExtras : COLON MethodReturnType EQUALASS
@@ -242,16 +242,16 @@ def p_MethodReturnTypeExtras(p):
 	if(p[1] == None):
 		pass
 	elif len(p)==4:
-		p[0] = Node("MethodReturnTypeExtras", [p[2]],[p[1], p[3]], order="lcl")
+		p[0] = Node("MethodReturnTypeExtras", [p[2]],[p[1], p[3]],typelist = p[2].typelist, order="lcl")
 	elif "=" in p[1].name:
 		p[0] = Node("MethodReturnTypeExtras", [],[p[1]], order="l")
 
 def  p_MethodReturnType(p):
 	'''MethodReturnType : Type'''
 	if "Type" in p[1].name:
-		p[0] = Node("MethodReturnType", [p[1]],[], order="c")
-	else:
-		p[0] = Node("MethodReturnType", [],[p[1]], order="l")
+		p[0] = Node("MethodReturnType", [p[1]],[],typelist = p[1].typelist, order="c")
+	# else:
+	# 	p[0] = Node("MethodReturnType", [],[p[1]], order="l")
 
 #<method body> ::= <block> | ;
 def p_MethodBody(p):
