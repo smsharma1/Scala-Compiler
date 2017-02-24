@@ -1,3 +1,26 @@
+object Good8 {
+	 def add(arr: Array[Int]) {
+		var c = 0;
+		var i = 0;
+		while (i <= 4) {
+                arr(i) = i+1;
+				c = c + arr(i);
+				i = i + 1;
+    	}
+	 }
+
+	def main(args: Array[String]) {
+        	var a = new Array[Int](4);
+			a(0) = 1
+			a(1) = 2
+			a(2) = 3
+			a(3) = 4
+			var i = 0;
+			var c = 0;
+			add(a);
+	}
+}
+
 /*
 // Program to exercise the array feature implemented
 #include<stdio.h>
@@ -11,22 +34,3 @@ printf(" sum is  %d  && random value is %d",c,d);
 }
 */
 
-
-object Good8 {
-	 def add(arr: Array[Int]) {
-		var c = 0;
-		var i = 0;
-		while (i <= 4) {
-                arr(i) = i+1;
-				c = c + a(i);
-				i = i + 1;
-    	}
-	 }
-
-	def main(args: Array[String]) {
-        	var a = new Array[Int](4);
-			var i = 0;
-			var c = 0;
-			add(a);
-	}
-}
