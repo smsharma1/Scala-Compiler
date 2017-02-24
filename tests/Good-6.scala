@@ -15,6 +15,6 @@ class node () {
 
 object Good6 {
    def main(args: Array[String]) {
-      val n = new node();
+      val n = new node(10, 20);
    }
 }
