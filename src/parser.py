@@ -561,14 +561,14 @@ def p_AssignmentOperator(p):
 ##check it very important issue
 def p_Assignment(p):
 	'''Assignment : LeftHandSide AssignmentOperator OrExpression
-				| AmbiguousName LSQRB Expression RSQRB EQUALASS OrExpression
-				| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
+				| ArrayAccess EQUALASS OrExpression'''
+				#| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
 	if len(p)==4 :
 		p[0] = Node("Assignment", [p[1], p[2], p[3]],[], order="ccc").name
-	elif len(p)==7 :
-		p[0] = Node("Assignment", [p[1], p[3], p[6]],[p[2], p[4], p[5]], order="clcllc").name
+	#elif len(p)==7 :
+	#	p[0] = Node("Assignment", [p[1], p[3], p[6]],[p[2], p[4], p[5]], order="clcllc").name
 	else:
-		p[0] = Node("Assignment", [p[1], p[3], p[6]],[p[2], p[4], p[6], p[7], p[8]], order="clclcllc").name
+		p[0] = Node("Assignment",[p[1],p[3]],[p[2]], order="clc").name
 		
 
 def p_OrExpression(p):
@@ -812,7 +812,7 @@ parser = yacc.yacc()
 
 if __name__ == "__main__" :
 	filename = sys.argv[1]
-#	filename = "../tests/test1.scala"
+#	filename = "../tests/Good-8.scala"
 	programfile = open(filename)
 	data = programfile.read()
 	parser.parse(data)
