@@ -6,15 +6,16 @@ class Dictlist(dict):
 			super(Dictlist, self).__setitem__(key, [])
 		self[key].append(value)
 
-class SymbolTable(object):
+class SymbolTable:
 	uid = 0
-	def __init__(self, parent, name, argList=[]): # parent scope and symbol table name
+	def __init__(self, parent, name, argList=[], returnType=None): # parent scope and symbol table name
 		self.functions = Dictlist()
 		self.variables = {}
 		self.name = name
 		self.parent = parent
 		self.uid = SymbolTable.uid
 		self.argList = argList
+		self.returnType = returnType
 		SymbolTable.uid = SymbolTable.uid+1
 
 	def LookUpVar(self, symbolName):
