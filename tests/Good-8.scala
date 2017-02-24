@@ -29,4 +29,3 @@ for(int i=0;i<5;i+)
 printf(" sum is  %d  && random value is %d",c,d);
 }
 */
-
