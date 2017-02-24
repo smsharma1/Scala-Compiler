@@ -186,19 +186,19 @@ def p_FuncArgumentListExtras(p):
 	if(p[1] == None):
 		pass
 	else:
-		p[0] = Node("FuncArgumentListExtras", [p[1]],[], order="c") 
+		p[0] = Node("FuncArgumentListExtras", [p[1]],[],typelist = p[1].typelist, order="c") 
 
 def p_VariableDeclarators(p):
 	'''VariableDeclarators : VariableDeclarator
 						| VariableDeclarator COMMA VariableDeclarators'''
 	if len(p)==4:
-		p[0] = Node("VariableDeclarators", [p[1], p[3]],[p[2]], order="clc") 
+		p[0] = Node("VariableDeclarators", [p[1], p[3]],[p[2]],typelist = p[1].typelist + p[3].typelist, order="clc") 
 	else:
-		p[0] = Node("VariableDeclarators", [p[1]],[], order="c") 
+		p[0] = Node("VariableDeclarators", [p[1]],[],typelist = p[1].typelist, order="c") 
 						
 def p_VariableDeclarator(p):
 	'''VariableDeclarator : ID COLON Type '''
-	p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]], order="llc") 
+	p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]],typelist = p[3].typelist, order="llc") 
 
 def p_VariableInitializer(p):
 	'''VariableInitializer : ArrayInitializer
@@ -262,27 +262,27 @@ def p_Type(p):
 	'''Type : PrimitiveType 
 		| ReferenceType'''
 	if "PrimitiveType" in p[1]:
-		p[0] = Node("Type", [p[1]],[], order="c") 
+		p[0] = Node("Type", [p[1]],[],typelist = p[1].typelist, order="c") 
 	else:
-		p[0] = Node("Type", [p[1]],[], order="c") 
+		p[0] = Node("Type", [p[1]],[],typelist = p[1].typelist, order="c") 
 
 #<primitive type> ::= <numeric type> | boolean
 def p_PrimitiveType(p):
 	'''PrimitiveType : NumericType 
 					| R_BOOLEAN'''
 	if "NumericType" in p[1]:
-		p[0] = Node("PrimitiveType", [p[1]],[], order="c") 
+		p[0] = Node("PrimitiveType", [p[1]],[],typelist = p[1].typelist, order="c") 
 	else:
-		p[0] = Node("PrimitiveType", [],[p[1]], order="l") 
+		p[0] = Node("PrimitiveType", [],[p[1]],['BOOL'] order="l") 
 
 #<numeric type> ::= <integral type> | <floating-point type>
 def p_NumericType(p):
 	'''NumericType : IntegralType
 				| FloatingPointType'''
 	if "IntegralType" in p[1]:
-		p[0] = Node("NumericType", [p[1]],[], order="c") 
+		p[0] = Node("NumericType", [p[1]],[],typelist = p[1].typelist, order="c") 
 	else:
-		p[0] = Node("NumericType", [p[1]],[], order="c") 
+		p[0] = Node("NumericType", [p[1]],[],typelist = p[1].typelist, order="c") 
 
 #<integral type> ::= byte | short | int | long | char
 
@@ -294,19 +294,34 @@ def p_IntegralType(p):
 				 | R_CHAR
 				 | R_STRING
 				 | R_UNIT'''
-	p[0] = Node("IntegralType", [],[p[1]], order="l") 
-
+	if 'Byte' in p[1]:
+		p[0] = Node("IntegralType", [],[p[1]],typelist = ['BYTE'], order="l") 
+	elif 'Short' in p[1]:
+		p[0] = Node("IntegralType", [],[p[1]],typelist = ['SHORT'], order="l")
+	elif 'Int' in p[1]:
+		p[0] = Node("IntegralType", [],[p[1]],typelist = ['INT'], order="l")
+	elif 'Long' in p[1]:
+		p[0] = Node("IntegralType", [],[p[1]],typelist = ['LONG'], order="l")
+	elif 'Char' in p[1]:
+		p[0] = Node("IntegralType", [],[p[1]],typelist = ['CHAR'], order="l")
+	elif 'String' in p[1]:
+		p[0] = Node("IntegralType", [],[p[1]],typelist = ['STRING'], order="l")
+	else:
+		p[0] = Node("IntegralType", [],[p[1]],typelist = ['UNIT'], order="l")
 #<floating-point type> ::= float | double
 def p_FloatingPointType(p):
 	'''FloatingPointType : R_FLOAT 
 						| R_DOUBLE'''
-	p[0] = Node("FloatingPointType", [],[p[1]], order="l") 
+	if 'Float' in p[1]:
+		p[0] = Node("FloatingPointType", [],[p[1]],typelist = ['FLOAT'], order="l")
+	else:
+		p[0] = Node("FloatingPointType", [],[p[1]],typelist = ['DOUBLE'], order="l")
 
 #<reference type> ::= <class type> | <array type>
 def p_ReferenceType(p):
 	'''ReferenceType : ArrayType'''
 	if "ArrayType" in p[1]:
-		p[0] = Node("ReferenceType", [p[1]],[], order="c") 
+		p[0] = Node("ReferenceType", [p[1]],[],typelist = p[1].typelist order="c") 
 	# else:
 	# 	p[0] = Node("ReferenceType", [],[p[1]], order="l") 
 
@@ -322,7 +337,7 @@ def p_ClassType(p):
 def p_ArrayType(p):
 	'''ArrayType : R_ARRAY LSQRB Type RSQRB
 				| R_LIST LSQRB Type RSQRB'''
-	p[0] = Node("ArrayType", [p[3]],[p[1], p[2], p[4]], order="llcl") 
+	p[0] = Node("ArrayType", [p[3]],[p[1], p[2], p[4]],typelist = p[3].typelist, order="llcl") 
 
 #<block> ::= { <block statements>? }
 def p_Block(p):
