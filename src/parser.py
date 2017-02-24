@@ -233,7 +233,7 @@ def p_MethodDeclarator(p):
 	# if len(p)==4:
 	# 	p[0] = Node("MethodDeclarator", [p[1]],[p[2], p[3]])
 	# else:
-	p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]],typelist= p[3].typelist, order="llcl")
+	p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]],typelist=[p[1]] + p[3].typelist, order="llcl")
 
 def p_MethodReturnTypeExtras(p):
 	'''MethodReturnTypeExtras : COLON MethodReturnType EQUALASS
@@ -262,7 +262,7 @@ def p_MethodBody(p):
 def p_Type(p):
 	'''Type : PrimitiveType
 		| ReferenceType'''
-	if "PrimitiveType" in p[1]:
+	if "PrimitiveType" in p[1].type:
 		p[0] = Node("Type", [p[1]],[],typelist = p[1].typelist, order="c") 
 	else:
 		p[0] = Node("Type", [p[1]],[],typelist = p[1].typelist, order="c") 
@@ -271,16 +271,16 @@ def p_Type(p):
 def p_PrimitiveType(p):
 	'''PrimitiveType : NumericType
 					| R_BOOLEAN'''
-	if "NumericType" in p[1]:
+	if "NumericType" in p[1].type:
 		p[0] = Node("PrimitiveType", [p[1]],[],typelist = p[1].typelist, order="c") 
 	else:
-		p[0] = Node("PrimitiveType", [],[p[1]],['BOOL'] order="l") 
+		p[0] = Node("PrimitiveType", [],[p[1]],['BOOL'] ,order="l") 
 
 #<numeric type> ::= <integral type> | <floating-point type>
 def p_NumericType(p):
 	'''NumericType : IntegralType
 				| FloatingPointType'''
-	if "IntegralType" in p[1]:
+	if "IntegralType" in p[1].type:
 		p[0] = Node("NumericType", [p[1]],[],typelist = p[1].typelist, order="c") 
 	else:
 		p[0] = Node("NumericType", [p[1]],[],typelist = p[1].typelist, order="c") 
@@ -322,8 +322,8 @@ def p_FloatingPointType(p):
 #<reference type> ::= <class type> | <array type>
 def p_ReferenceType(p):
 	'''ReferenceType : ArrayType'''
-	if "ArrayType" in p[1]:
-		p[0] = Node("ReferenceType", [p[1]],[],typelist = p[1].typelist order="c") 
+	if "ArrayType" in p[1].type:
+		p[0] = Node("ReferenceType", [p[1]],[],typelist = p[1].typelist ,order="c") 
 	# else:
 	# 	p[0] = Node("ReferenceType", [],[p[1]], order="l")
 
