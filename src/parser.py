@@ -2,9 +2,11 @@
 import ply.yacc as yacc
 import pydot
 import sys
+import Symboltable
 # Get the token map from the lexer.  This is required.
 from lexer import tokens
 graph = pydot.Dot(graph_type='digraph')
+currentScope = SymbolTable(None, "root")
 
 class Node:
 	uid=0
@@ -14,7 +16,7 @@ class Node:
 		Node.uid = Node.uid + 1
 		self.uid = Node.uid
 		self.name = type+"##"+str(self.uid)
-		print self.name, " ", typelist
+		# print self.name, " ", typelist
 		if isLeaf:
 			self.node = pydot.Node(self.name, style="filled", fillcolor="green", myNo = seqNo)
 		else:
@@ -226,14 +228,20 @@ def p_MethodDeclaration(p):
 #<method header> ::= def <method declarator> : <type> = | def <method declarator> =
 def p_MethodHeader(p):
 	'''MethodHeader : R_DEF MethodDeclarator MethodReturnTypeExtras'''
+	if(currentScope = currentScope.InsertFunc(p[2].typelist[1], p[2].typelist[1:], p[3].typelist))
 	p[0] = Node("MethodHeader", [p[2], p[3]],[p[1]],typelist = p[2].typelist + p[3].typelist,order="lcc")
+
 #<method declarator> ::= <identifier> ( <formal parameter list>? )
 def p_MethodDeclarator(p):
 	'''MethodDeclarator : ID LPARAN FuncArgumentListExtras RPARAN'''
 	# if len(p)==4:
 	# 	p[0] = Node("MethodDeclarator", [p[1]],[p[2], p[3]])
 	# else:
+<<<<<<< HEAD
+	p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]],typelist=[p[1]] +  p[3].typelist, order="llcl")
+=======
 	p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]],typelist=[p[1]] + p[3].typelist, order="llcl")
+>>>>>>> 6bf95f73ea36e6f0aa3df90d4ac2692edef3f971
 
 def p_MethodReturnTypeExtras(p):
 	'''MethodReturnTypeExtras : COLON MethodReturnType EQUALASS
