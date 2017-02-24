@@ -228,7 +228,10 @@ def p_MethodDeclaration(p):
 #<method header> ::= def <method declarator> : <type> = | def <method declarator> =
 def p_MethodHeader(p):
 	'''MethodHeader : R_DEF MethodDeclarator MethodReturnTypeExtras'''
-	if(currentScope = currentScope.InsertFunc(p[2].typelist[1], p[2].typelist[1:], p[3].typelist))
+	if(currentScope.LookUpFunc(p[2].typelist[1], p[2].typelist[1:])):
+		return sys.exit("Method declaration error")
+	else:
+		currentScope = currentScope.InsertFunc(p[2].typelist[1], p[2].typelist[1:], p[3].typelist)
 	p[0] = Node("MethodHeader", [p[2], p[3]],[p[1]],typelist = p[2].typelist + p[3].typelist,order="lcc")
 
 #<method declarator> ::= <identifier> ( <formal parameter list>? )
@@ -706,6 +709,8 @@ def p_MethodInvocation(p):
 						# | AmbiguousName LPARAN RPARAN
 						# | Primary DOT Identifier LPARAN RPARAN
 #	print p[3].typelist
+	if (!currentScope.LookUpFunc(p[2].typelist[1], p[2].typelist[1:])):
+		return sys.exit("Method declaration error")
 	if len(p) ==  5:
 		p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]],typelist = p[3].typelist , order='clcl')
 	# elif len(p) ==  4:

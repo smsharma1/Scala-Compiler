@@ -37,12 +37,12 @@ class SymbolTable:
 		else:
 			self.variables[symbolName] = val
 
-	def InsertFunc(self, symbolName, argList):
+	def InsertFunc(self, symbolName, argList, returnType):
 		if symbolName in self.functions:
 			for func in self.functions[symbolName]:
-				if argList == func.argList:
+				if argList == func.argList and self.returnType == returnType:
 					return False
-			self.functions[symbolName] = SymbolTable(self.name, symbolName, argList=argList)
+			self.functions[symbolName] = SymbolTable(self.name, symbolName, argList=argList, returnType)
 		else:
-			self.functions[symbolName] = SymbolTable(self.name, symbolName, argList=argList)
+			self.functions[symbolName] = SymbolTable(self.name, symbolName, argList=argList, returnType)
 			
