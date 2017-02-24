@@ -12,9 +12,7 @@ printf(" sum is  %d  && random value is %d",c,d);
 */
 
 object Good8 {
-    def main(args: Array[String]) {
-            var a = new Array[Int](4);
-            var b = a[i];
-	    	a[i] = 10;
+    def main() {
+	var a = 10;
     }
 }
