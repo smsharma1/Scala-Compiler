@@ -237,11 +237,8 @@ def p_MethodDeclarator(p):
 	# if len(p)==4:
 	# 	p[0] = Node("MethodDeclarator", [p[1]],[p[2], p[3]])
 	# else:
-<<<<<<< HEAD
-	p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]],typelist=[p[1]] +  p[3].typelist, order="llcl")
-=======
 	p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]],typelist=[p[1]] + p[3].typelist, order="llcl")
->>>>>>> 6bf95f73ea36e6f0aa3df90d4ac2692edef3f971
+
 
 def p_MethodReturnTypeExtras(p):
 	'''MethodReturnTypeExtras : COLON MethodReturnType EQUALASS
