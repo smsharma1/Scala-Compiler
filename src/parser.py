@@ -189,19 +189,19 @@ def p_FuncArgumentListExtras(p):
 	if(p[1] == None):
 		pass
 	else:
-		p[0] = Node("FuncArgumentListExtras", [p[1]],[], order="c")
+		p[0] = Node("FuncArgumentListExtras", [p[1]],[],typelist = p[1].typelist, order="c") 
 
 def p_VariableDeclarators(p):
 	'''VariableDeclarators : VariableDeclarator
 						| VariableDeclarator COMMA VariableDeclarators'''
 	if len(p)==4:
-		p[0] = Node("VariableDeclarators", [p[1], p[3]],[p[2]], order="clc")
+		p[0] = Node("VariableDeclarators", [p[1], p[3]],[p[2]],typelist = p[1].typelist + p[3].typelist, order="clc") 
 	else:
-		p[0] = Node("VariableDeclarators", [p[1]],[], order="c")
-
+		p[0] = Node("VariableDeclarators", [p[1]],[],typelist = p[1].typelist, order="c") 
+						
 def p_VariableDeclarator(p):
 	'''VariableDeclarator : ID COLON Type '''
-	p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]], order="llc")
+	p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]],typelist = p[3].typelist, order="llc") 
 
 def p_VariableInitializer(p):
 	'''VariableInitializer : ArrayInitializer
@@ -228,15 +228,16 @@ def p_MethodDeclaration(p):
 #<method header> ::= def <method declarator> : <type> = | def <method declarator> =
 def p_MethodHeader(p):
 	'''MethodHeader : R_DEF MethodDeclarator MethodReturnTypeExtras'''
-	if( currentScope.InsertFunc(p[2].))
-	p[0] = Node("MethodHeader", [p[2], p[3]],[p[1]], order="lcc")
+	if(currentScope = currentScope.InsertFunc(p[2].typelist[1], p[2].typelist[1:], p[3].typelist))
+	p[0] = Node("MethodHeader", [p[2], p[3]],[p[1]],typelist = p[2].typelist + p[3].typelist,order="lcc")
+
 #<method declarator> ::= <identifier> ( <formal parameter list>? )
 def p_MethodDeclarator(p):
 	'''MethodDeclarator : ID LPARAN FuncArgumentListExtras RPARAN'''
 	# if len(p)==4:
 	# 	p[0] = Node("MethodDeclarator", [p[1]],[p[2], p[3]])
 	# else:
-	p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]], order="llcl")
+	p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]],typelist=[p[1]] +  p[3].typelist, order="llcl")
 
 def p_MethodReturnTypeExtras(p):
 	'''MethodReturnTypeExtras : COLON MethodReturnType EQUALASS
@@ -245,16 +246,16 @@ def p_MethodReturnTypeExtras(p):
 	if(p[1] == None):
 		pass
 	elif len(p)==4:
-		p[0] = Node("MethodReturnTypeExtras", [p[2]],[p[1], p[3]], order="lcl")
+		p[0] = Node("MethodReturnTypeExtras", [p[2]],[p[1], p[3]],typelist = p[2].typelist, order="lcl")
 	elif "=" in p[1].name:
 		p[0] = Node("MethodReturnTypeExtras", [],[p[1]], order="l")
 
 def  p_MethodReturnType(p):
 	'''MethodReturnType : Type'''
 	if "Type" in p[1].name:
-		p[0] = Node("MethodReturnType", [p[1]],[], order="c")
-	else:
-		p[0] = Node("MethodReturnType", [],[p[1]], order="l")
+		p[0] = Node("MethodReturnType", [p[1]],[],typelist = p[1].typelist, order="c")
+	# else:
+	# 	p[0] = Node("MethodReturnType", [],[p[1]], order="l")
 
 #<method body> ::= <block> | ;
 def p_MethodBody(p):
@@ -265,28 +266,28 @@ def p_MethodBody(p):
 def p_Type(p):
 	'''Type : PrimitiveType
 		| ReferenceType'''
-	if "PrimitiveType" in p[1].name:
-		p[0] = Node("Type", [p[1]],[], order="c")
+	if "PrimitiveType" in p[1]:
+		p[0] = Node("Type", [p[1]],[],typelist = p[1].typelist, order="c") 
 	else:
-		p[0] = Node("Type", [p[1]],[], order="c")
+		p[0] = Node("Type", [p[1]],[],typelist = p[1].typelist, order="c") 
 
 #<primitive type> ::= <numeric type> | boolean
 def p_PrimitiveType(p):
 	'''PrimitiveType : NumericType
 					| R_BOOLEAN'''
-	if "NumericType" in p[1].name:
-		p[0] = Node("PrimitiveType", [p[1]],[], order="c")
+	if "NumericType" in p[1]:
+		p[0] = Node("PrimitiveType", [p[1]],[],typelist = p[1].typelist, order="c") 
 	else:
-		p[0] = Node("PrimitiveType", [],[p[1]], order="l")
+		p[0] = Node("PrimitiveType", [],[p[1]],['BOOL'] order="l") 
 
 #<numeric type> ::= <integral type> | <floating-point type>
 def p_NumericType(p):
 	'''NumericType : IntegralType
 				| FloatingPointType'''
-	if "IntegralType" in p[1].name:
-		p[0] = Node("NumericType", [p[1]],[], order="c")
+	if "IntegralType" in p[1]:
+		p[0] = Node("NumericType", [p[1]],[],typelist = p[1].typelist, order="c") 
 	else:
-		p[0] = Node("NumericType", [p[1]],[], order="c")
+		p[0] = Node("NumericType", [p[1]],[],typelist = p[1].typelist, order="c") 
 
 #<integral type> ::= byte | short | int | long | char
 
@@ -298,19 +299,35 @@ def p_IntegralType(p):
 				 | R_CHAR
 				 | R_STRING
 				 | R_UNIT'''
-	p[0] = Node("IntegralType", [],[p[1]], order="l")
+	if 'Byte' in p[1]:
+		p[0] = Node("IntegralType", [],[p[1]],typelist = ['BYTE'], order="l") 
+	elif 'Short' in p[1]:
+		p[0] = Node("IntegralType", [],[p[1]],typelist = ['SHORT'], order="l")
+	elif 'Int' in p[1]:
+		p[0] = Node("IntegralType", [],[p[1]],typelist = ['INT'], order="l")
+	elif 'Long' in p[1]:
+		p[0] = Node("IntegralType", [],[p[1]],typelist = ['LONG'], order="l")
+	elif 'Char' in p[1]:
+		p[0] = Node("IntegralType", [],[p[1]],typelist = ['CHAR'], order="l")
+	elif 'String' in p[1]:
+		p[0] = Node("IntegralType", [],[p[1]],typelist = ['STRING'], order="l")
+	else:
+		p[0] = Node("IntegralType", [],[p[1]],typelist = ['UNIT'], order="l")
 
 #<floating-point type> ::= float | double
 def p_FloatingPointType(p):
 	'''FloatingPointType : R_FLOAT
 						| R_DOUBLE'''
-	p[0] = Node("FloatingPointType", [],[p[1]], order="l")
+	if 'Float' in p[1]:
+		p[0] = Node("FloatingPointType", [],[p[1]],typelist = ['FLOAT'], order="l")
+	else:
+		p[0] = Node("FloatingPointType", [],[p[1]],typelist = ['DOUBLE'], order="l")
 
 #<reference type> ::= <class type> | <array type>
 def p_ReferenceType(p):
 	'''ReferenceType : ArrayType'''
-	if "ArrayType" in p[1].name:
-		p[0] = Node("ReferenceType", [p[1]],[], order="c")
+	if "ArrayType" in p[1]:
+		p[0] = Node("ReferenceType", [p[1]],[],typelist = p[1].typelist order="c") 
 	# else:
 	# 	p[0] = Node("ReferenceType", [],[p[1]], order="l")
 
@@ -326,7 +343,7 @@ def p_ClassType(p):
 def p_ArrayType(p):
 	'''ArrayType : R_ARRAY LSQRB Type RSQRB
 				| R_LIST LSQRB Type RSQRB'''
-	p[0] = Node("ArrayType", [p[3]],[p[1], p[2], p[4]], order="llcl")
+	p[0] = Node("ArrayType", [p[3]],[p[1], p[2], p[4]],typelist = p[3].typelist, order="llcl") 
 
 #<block> ::= { <block statements>? }
 def p_Block(p):
