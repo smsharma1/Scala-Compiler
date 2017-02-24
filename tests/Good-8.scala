@@ -1,5 +1,5 @@
 object Good8 {
-	 def add(arr: Array[Int]) {
+	 def add(arr: Array[Int]) : Int = {
 		var c = 0;
 		var i = 0;
 		while (i <= 4) {
@@ -7,13 +7,14 @@ object Good8 {
 				c = c + a[i];
 				i = i + 1;
     	}
+		return c;
 	 }
 	def main(args: Array[String]) {
         	var a = new Array[Int](4);
 			a[i] = 10;
 			var i = 0;
 			var c = 0;
-			add(a);
+			var d =add(a);
 	}
 }
 /*
