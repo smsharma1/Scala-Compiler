@@ -2,7 +2,7 @@
 import ply.yacc as yacc
 import pydot
 import sys
-import Symboltable
+from symboltable import *
 # Get the token map from the lexer.  This is required.
 from lexer import tokens
 graph = pydot.Dot(graph_type='digraph')
@@ -10,7 +10,7 @@ currentScope = SymbolTable(None, "root")
 
 class Node:
 	uid=0
-	def __init__(self,type,children,leaf,typelist=None,seqNo=1,order='',isLeaf=False):
+	def __init__(self,type,children,leaf,typelist='Unit',seqNo=1,order='',isLeaf=False):
 		self.type = type
 		self.typelist = typelist
 		Node.uid = Node.uid + 1
@@ -228,10 +228,11 @@ def p_MethodDeclaration(p):
 #<method header> ::= def <method declarator> : <type> = | def <method declarator> =
 def p_MethodHeader(p):
 	'''MethodHeader : R_DEF MethodDeclarator MethodReturnTypeExtras'''
-	if(currentScope.LookUpFunc(p[2].typelist[1], p[2].typelist[1:])):
+	global currentScope
+	if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
 		return sys.exit("Method declaration error")
 	else:
-		currentScope = currentScope.InsertFunc(p[2].typelist[1], p[2].typelist[1:], p[3].typelist)
+		currentScope.InsertFunc(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
 	p[0] = Node("MethodHeader", [p[2], p[3]],[p[1]],typelist = p[2].typelist + p[3].typelist,order="lcc")
 
 #<method declarator> ::= <identifier> ( <formal parameter list>? )
@@ -709,8 +710,11 @@ def p_MethodInvocation(p):
 						# | AmbiguousName LPARAN RPARAN
 						# | Primary DOT Identifier LPARAN RPARAN
 #	print p[3].typelist
-	if (!currentScope.LookUpFunc(p[2].typelist[1], p[2].typelist[1:])):
-		return sys.exit("Method declaration error")
+	global currentScope
+	if (currentScope.LookUpFunc(p[1].typelist[0], p[3].typelist[0:])==False):
+		return sys.exit("Method Invocation error")
+	else:
+		currentScope = currentScope.GetScope(p[1].typelist[0], p[3].typelist[0:])
 	if len(p) ==  5:
 		p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]],typelist = p[3].typelist , order='clcl')
 	# elif len(p) ==  4:
@@ -776,9 +780,9 @@ def p_AmbiguousName(p):
 	'''AmbiguousName : ID
 					| AmbiguousName DOT ID'''
 	if len(p)==2:
-		p[0] = Node('AmbiguousName',[],[p[1]],order='l')
+		p[0] = Node('AmbiguousName',[],[p[1]],typelist = [p[1]],order='l')
 	else:
-		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],order='cll')
+		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + [p[3]],order='cll')
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
 def p_Literal(p):

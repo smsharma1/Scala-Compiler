@@ -4,4 +4,5 @@ object add {
       sum = a + b;
       return sum;
    }
+   var a = addInt(1,2);
 }
