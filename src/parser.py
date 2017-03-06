@@ -110,6 +110,10 @@ def p_ClassDeclaration(p):
 def p_ClassBody(p):
 	'''ClassBody : Super BLOCKOPEN ClassBodyDeclarations BLOCKCLOSE
 					| Super BLOCKOPEN  BLOCKCLOSE'''
+	global currentScope
+	# print currentScope
+	currentScope = currentScope.parent
+	print currentScope.classes
 	if len(p) == 5:
 		p[0] = Node("ClassBody",[p[1],p[3]],[p[2],p[4]],order="clcl")
 	else:
@@ -136,16 +140,17 @@ def p_ClassHeader(p):
 	'''ClassHeader : R_CLASS ID LPARAN FormalParameterLists RPARAN'''
 	
 	global currentScope
+	# print currentScope
 	if p[4] != None:
 		if(currentScope.LookUpClass(p[2], p[4].typelist)):
 			return sys.exit("Method declaration error")
 		else:
-			currentScope.InsertClass(p[2],p[4].typelist)
+			currentScope = currentScope.InsertClass(p[2],p[4].typelist)
 	else:
 		if(currentScope.LookUpClass(p[2],[])):
 			return sys.exit("Method declaration error")
 		else:
-			currentScope.InsertClass(p[2],[])
+			currentScope = currentScope.InsertClass(p[2],[])
 
 	p[0] = Node("ClassHeader", [p[4]],[p[1], p[2],p[3],p[5]], order="lllcl")
 	
@@ -225,6 +230,8 @@ def p_VariableInitializer(p):
 	'''VariableInitializer : ArrayInitializer
 							| Expression
 							| ClassInstanceCreationExpression'''
+
+
 	p[0] = Node("VariableInitializer", [p[1]],[], order="c")
 
 def p_ArrayInitializer(p):
@@ -251,13 +258,13 @@ def p_MethodHeader(p):
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
 			return sys.exit("Method declaration error")
 		else:
-			currentScope.InsertFunc(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
+			currentScope = currentScope.InsertFunc(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
 		p[0] = Node("MethodHeader", [p[2], p[3]],[p[1]],typelist = p[2].typelist + p[3].typelist,order="lcc")
 	else:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
 			return sys.exit("Method declaration error")
 		else:
-			currentScope.InsertFunc(p[2].typelist[0], p[2].typelist[1:],[])
+			currentScope = currentScope.InsertFunc(p[2].typelist[0], p[2].typelist[1:],[])
 		p[0] = Node("MethodHeader", [p[2], p[3]],[p[1]],typelist = p[2].typelist + [] ,order="lcc")
 		
 
@@ -294,6 +301,9 @@ def  p_MethodReturnType(p):
 #<method body> ::= <block> | ;
 def p_MethodBody(p):
 	'''MethodBody : Block'''
+	global currentScope
+	currentScope = currentScope.parent
+	print currentScope.functions
 	p[0] = Node("MethodBody", [p[1]],[], order="c")
 
 #<type> ::= <primitive type> | <reference type>
@@ -781,6 +791,12 @@ def p_PrimaryNoNewArray(p):
 def p_ClassInstanceCreationExpression(p):
 	'''ClassInstanceCreationExpression : R_NEW AmbiguousName LPARAN ArgumentLists RPARAN'''
 								#		| R_NEW ClassType LPARAN RPARAN'''
+	global currentScope
+	if(p[4] != None):
+		if(currentScope.LookUpClass(p[2], p[4].typelist)):
+			return sys.exit(str(p[2])+"Class Not Found in currentScope")
+		# else:
+		# 	currentScope.InsertObject(p[2], p[4].typelist, []) #valList is to be sent here 
 	if len(p) ==6:
 		p[0] = Node('ClassInstanceCreationExpression',[p[2], p[4]],[p[1],p[3],p[5]],order='lclcl')
 	# else:

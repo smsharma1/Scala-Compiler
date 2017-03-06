@@ -21,7 +21,7 @@ class SymbolTable:
 		self.argList = argList
 		self.returnType = returnType
 		SymbolTable.uid = SymbolTable.uid+1
-		print self.argList
+		# print self.argList
 
 	def LookUpVar(self, symbolName):
 		if symbolName in self.variables:
@@ -30,8 +30,8 @@ class SymbolTable:
 			print "Variable not found"
 
 	def LookUpFunc(self, symbolName, argList):
-		print symbolName, " ", argList
-		print self.name, " ", self.functions
+		# print symbolName, " ", argList
+		# print self.name, " ", self.functions
 		if symbolName in self.functions:
 			for func in self.functions[symbolName]:
 				print func.argList
@@ -42,11 +42,11 @@ class SymbolTable:
 			return False
 	
 	def LookUpClass(self, symbolName, argList):
-		print symbolName, " ", argList
-		print self.name, " ", self.classes
+		# print symbolName, " ", argList
+		# print self.name, " ", self.classes
 		if symbolName in self.classes:
 			for class_name in self.classes[symbolName]:
-				print class_name.argList
+				# print class_name.argList
 				if argList == class_name.argList:
 					return True
 			return False
@@ -85,29 +85,31 @@ class SymbolTable:
 			self.variables[symbolName] = val
 
 	def InsertFunc(self, symbolName, argList, returnType):
-		print symbolName, " ", argList, " ", returnType
+		# print symbolName, " ", argList, " ", returnType
 		if symbolName in self.functions:
 			for func in self.functions[symbolName]:
 				if argList == func.argList and self.returnType == returnType:
 					return False
-			self.functions[symbolName] = SymbolTable(self.name, symbolName, argList=argList, returnType=returnType)
+			self.functions[symbolName] = SymbolTable(self, symbolName, argList=argList, returnType=returnType)
 		else:
-			self.functions[symbolName] = SymbolTable(self.name, symbolName, argList=argList, returnType=returnType)
-			print self.functions
+			self.functions[symbolName] = SymbolTable(self, symbolName, argList=argList, returnType=returnType)
+			# print self.functions
+		return self.functions[symbolName][0]
 	
 	def InsertClass(self, symbolName, argList):
-		print symbolName, " " , argList
+		# print symbolName, " " , argList
 		if symbolName in self.classes:
 			for class_name in self.classes[symbolName]:
 				if argList == class_name.argList:
 					return False
-			self.classes[symbolName] = SymbolTable(self.name, symbolName, argList=argList)
+			self.classes[symbolName] = SymbolTable(self, symbolName, argList=argList)
 		else:
-			self.classes[symbolName] = SymbolTable(self.name, symbolName, argList=argList)
-			print self.classes
+			self.classes[symbolName] = SymbolTable(self, symbolName, argList=argList)
+			# print self.classes
+		return self.classes[symbolName][0]
 	
 	def InsertObject(self, symbolName, className, valList):
-		print symbolName, " "
+		# print symbolName, " "
 		if className in self.classes:
 			class_name = self.classes[className]
 			self.objects[symbolName] = copy.deepcopy(class_name)
