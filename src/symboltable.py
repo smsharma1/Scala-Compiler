@@ -1,3 +1,5 @@
+import copy
+
 class Dictlist(dict):
 	def __setitem__(self, key, value):
 		try:
@@ -12,6 +14,7 @@ class SymbolTable:
 		self.functions = Dictlist()
 		self.variables = {}
 		self.classes = Dictlist()
+		self.objects = Dictlist()
 		self.name = name
 		self.parent = parent
 		self.uid = SymbolTable.uid
@@ -23,6 +26,8 @@ class SymbolTable:
 	def LookUpVar(self, symbolName):
 		if symbolName in self.variables:
 			return self.variables[symbolName]
+		else:
+			print "Variable not found"
 
 	def LookUpFunc(self, symbolName, argList):
 		print symbolName, " ", argList
@@ -34,6 +39,25 @@ class SymbolTable:
 					return True
 			return False
 		else:
+			return False
+	
+	def LookUpClass(self, symbolName, argList):
+		print symbolName, " ", argList
+		print self.name, " ", self.classes
+		if symbolName in self.classes:
+			for class_name in self.classes[symbolName]:
+				print class_name.argList
+				if argList == class_name.argList:
+					return True
+			return False
+		else:
+			return False
+
+	def LookUpObject(self, symbolName):
+		if symbolName in self.variables:
+			return self.variables[symbolName]
+		else:
+			print "Object not found"
 			return False
 
 	def GetFuncScope(self, symbolName, argList):
@@ -81,3 +105,16 @@ class SymbolTable:
 		else:
 			self.classes[symbolName] = SymbolTable(self.name, symbolName, argList=argList)
 			print self.classes
+	
+	def InsertObject(self, symbolName, className, valList):
+		print symbolName, " "
+		if className in self.classes:
+			class_name = self.classes[className]
+			self.objects[symbolName] = copy.deepcopy(class_name)
+			self.InvokeConstr(self.objects[symbolName], valList)
+		else:
+			print "%s not found" % (className)
+
+	def InvokeConstr(self, classScope, valList):
+		# you can get arglist from scope.arglist to parse valList
+		pass
