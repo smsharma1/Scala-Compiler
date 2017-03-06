@@ -456,6 +456,7 @@ def p_VariableDeclarationBody(p):
 	'''VariableDeclarationBody : ID COLON Type EQUALASS VariableInitializer
 		| ID EQUALASS VariableInitializer'''
 	global currentScope
+#	print "checking",p[3].typelist
 	if(currentScope.LookUpVar(p[1])):
 			return sys.exit(p[1] + " Variable Already Declared")
 	if len(p) == 6:
@@ -661,13 +662,14 @@ def p_Assignment(p):
 	'''Assignment : LeftHandSide AssignmentOperator OrExpression
 				| ArrayAccess EQUALASS OrExpression'''
 				#| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
+	print p[1].typelist," ",p[3].typelist
 	if p[2]=="=":
-		if allowed(p[1].typelist, p[3].typelist) :
+		if allowed(p[1].typelist[0], p[3].typelist[0]) :
 			p[0] = Node("Assignment", [p[1], p[3]],[p[2]], order="clc")
 		else:
 			return sys.exit("assignment mismatch error")
 	else:
-		if allowed(p[1].typelist, p[3].typelist) :
+		if allowed(p[1].typelist[0], p[3].typelist[0]) :
 			p[0] = Node("Assignment", [p[1], p[2], p[3]],[], order="ccc")
 		return sys.exit("assignment mismatch error")
 
@@ -856,11 +858,10 @@ def p_ArrayAccess(p):
 	'''ArrayAccess : AmbiguousName LSQRB Expression RSQRB
 					| AmbiguousName LSQRB Expression COMMA Expression RSQRB'''
 					# | PrimaryNoNewArray LSQRB Expression RSQRB'''
-	print p[1].typelist[:],"shubham"
 	if len(p) == 5:
-		p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]],typelist =p[1].typelist[0][5:] , order="clcl")
+		p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]],typelist =[p[1].typelist[0][5:]] , order="clcl")
 	else:
-		p[0] = Node('ArrayAccess',[p[1],p[3],p[5]],[p[2],p[4],p[6]],typelist=p[1].typelist[0][5:], order="clclcl")
+		p[0] = Node('ArrayAccess',[p[1],p[3],p[5]],[p[2],p[4],p[6]],typelist=[p[1].typelist[0][5:]], order="clclcl")
 
 def p_AmbiguousName(p):
 	'''AmbiguousName : ID
@@ -868,9 +869,9 @@ def p_AmbiguousName(p):
 	global currentScope
 
 	if len(p)==2:
-		p[0] = Node('AmbiguousName',[],[p[1]],typelist = [currentScope.LookUpSymbol(p[1])],order='l')
+		p[0] = Node('AmbiguousName',[],[p[1]],typelist = currentScope.LookUpSymbol(p[1]),order='l')
 	else:
-		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + [currentScope.LookUpSymbol(p[1])],order='cll')
+		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + currentScope.LookUpSymbol(p[1]),order='cll')
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
 def p_Literal(p):
