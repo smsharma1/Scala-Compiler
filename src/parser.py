@@ -856,7 +856,7 @@ def p_ArrayAccess(p):
 	'''ArrayAccess : AmbiguousName LSQRB Expression RSQRB
 					| AmbiguousName LSQRB Expression COMMA Expression RSQRB'''
 					# | PrimaryNoNewArray LSQRB Expression RSQRB'''
-	print p[1].typelist[0][5:],"shubham"
+	print p[1].typelist[:],"shubham"
 	if len(p) == 5:
 		p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]],typelist =p[1].typelist[0][5:] , order="clcl")
 	else:
@@ -868,9 +868,9 @@ def p_AmbiguousName(p):
 	global currentScope
 
 	if len(p)==2:
-		p[0] = Node('AmbiguousName',[],[p[1]],typelist = currentScope.LookUpSymbol(p[1]),order='l')
+		p[0] = Node('AmbiguousName',[],[p[1]],typelist = [currentScope.LookUpSymbol(p[1])],order='l')
 	else:
-		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + currentScope.LookUpSymbol(p[1]),order='cll')
+		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + [currentScope.LookUpSymbol(p[1])],order='cll')
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
 def p_Literal(p):
