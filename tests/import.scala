@@ -1,4 +1,4 @@
-import Arra
+import Arra.array
 
 object Good8 {
 }
