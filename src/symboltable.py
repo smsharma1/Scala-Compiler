@@ -117,6 +117,10 @@ class SymbolTable:
 		else:
 			print "%s not found" % (className)
 
+	def InsertSingletonObject(self, symbolName):
+		self.singletonObject = SymbolTable(self, symbolName)
+		return self.singletonObject
+
 	def InvokeConstr(self, classScope, valList):
 		# you can get arglist from scope.arglist to parse valList
 		pass
