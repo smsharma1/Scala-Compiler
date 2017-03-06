@@ -43,7 +43,7 @@ class Node:
 					# graph.write_png('debug.png')
 						if nodes.get_name() == children[childno].name:
 							nodes.set("myNo", count)
-							print(nodes.to_string())
+						#	print(nodes.to_string())
 					count = count + 1
 				childno = childno + 1
 
@@ -125,7 +125,7 @@ def p_ClassBody(p):
 	global currentScope
 	# print currentScope
 	currentScope = currentScope.parent
-	print currentScope.classes
+#	print currentScope.classes
 	if len(p) == 5:
 		p[0] = Node("ClassBody",[p[1],p[3]],[p[2],p[4]],order="clcl")
 	else:
@@ -264,9 +264,9 @@ def p_ArrayInitializer(p):
 	''' ArrayInitializer : R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT RPARAN
 							| R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT COMMA INT RPARAN'''
 	if len(p) == 9:
-		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8]],typelist = p[4].typelist, order="lllcllll")
+		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8]],typelist =['ARRAY' + p[4].typelist[0]], order="lllcllll")
 	else:
-		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8],p[9], p[10]], order="lllcllllll")
+		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8],p[9], p[10]],typelist=['ARRAYARRAY'+p[4].typelist[0]], order="lllcllllll")
 
 def p_EndStatement(p):
 	'''EndStatement : SEMICOLON
@@ -345,6 +345,7 @@ def p_MethodBody(p):
 def p_Type(p):
 	'''Type : PrimitiveType
 		| ReferenceType'''
+	print p[1].typelist
 	if "PrimitiveType" in p[1].type:
 		p[0] = Node("Type", [p[1]],[],typelist = p[1].typelist, order="c") 
 	else:
@@ -418,7 +419,7 @@ def p_ClassType(p):
 def p_ArrayType(p):
 	'''ArrayType : R_ARRAY LSQRB Type RSQRB
 				| R_LIST LSQRB Type RSQRB'''
-	p[0] = Node("ArrayType", [p[3]],[p[1], p[2], p[4]],typelist = p[3].typelist, order="llcl") 
+	p[0] = Node("ArrayType", [p[3]],[p[1], p[2], p[4]],typelist = ['ARRAY' + p[3].typelist[0]], order="llcl") 
 
 #<block> ::= { <block statements>? }
 def p_Block(p):
@@ -461,7 +462,7 @@ def p_VariableDeclarationBody(p):
 		currentScope.InsertVar(p[1],0,p[3].typelist)
 		p[0] = Node('VariableDeclarationBody',[p[3],p[5]],[p[1],p[2],p[4]], order="llclc")
 	else:
-		currentScope.InsertVar(p[1],0,'Var')
+		currentScope.InsertVar(p[1],0,p[3].typelist)
 		p[0] = Node('VariableDeclarationBody',[p[3]],[p[1],p[2]], order="llc")
 
 def p_Statement(p):
@@ -660,6 +661,7 @@ def p_Assignment(p):
 	'''Assignment : LeftHandSide AssignmentOperator OrExpression
 				| ArrayAccess EQUALASS OrExpression'''
 				#| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
+	print p[1].typelist,p[3].typelist 
 	if p[2]=="=":
 		p[0] = Node("Assignment",[p[1],p[3]],[p[2]], order="clc")
 	#elif len(p)==7 :
@@ -786,7 +788,7 @@ def p_MethodInvocation(p):
 						# | Primary DOT Identifier LPARAN RPARAN
 #	print p[3].typelist
 	global currentScope
-	print p[3].typelist
+	# print p[3].typelist
 	if (currentScope.LookUpFunc(p[1].name, p[3].typelist[0:])==False):
 		print "a"
 #		return sys.exit("Method Invocation error")
@@ -854,21 +856,22 @@ def p_ArrayAccess(p):
 	'''ArrayAccess : AmbiguousName LSQRB Expression RSQRB
 					| AmbiguousName LSQRB Expression COMMA Expression RSQRB'''
 					# | PrimaryNoNewArray LSQRB Expression RSQRB'''
+	print p[1].typelist[0][5:],"shubham"
 	if len(p) == 5:
-		p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]], order="clcl")
+		p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]],typelist =p[1].typelist[0][5:] , order="clcl")
 	else:
-		p[0] = Node('ArrayAccess',[p[1],p[3],p[5]],[p[2],p[4],p[6]], order="clclcl")
+		p[0] = Node('ArrayAccess',[p[1],p[3],p[5]],[p[2],p[4],p[6]],typelist=p[1].typelist[0][5:], order="clclcl")
 
 def p_AmbiguousName(p):
 	'''AmbiguousName : ID
 					| AmbiguousName DOT ID'''
 	global currentScope
 
-	print p[1]," ", currentScope.LookUpSymbol(p[1])
+	print p[1]," hello ", currentScope.LookUpSymbol(p[1])
 	if len(p)==2:
-		p[0] = Node('AmbiguousName',[],[p[1]],typelist = [currentScope.LookUpSymbol(p[1])],order='l')
+		p[0] = Node('AmbiguousName',[],[p[1]],typelist = currentScope.LookUpSymbol(p[1]),order='l')
 	else:
-		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + [currentScope.LookUpSymbol(p[1])],order='cll')
+		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + currentScope.LookUpSymbol(p[1]),order='cll')
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
 def p_Literal(p):
