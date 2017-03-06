@@ -781,7 +781,7 @@ def p_ArrayAccess(p):
 
 def p_AmbiguousName(p):
 	'''AmbiguousName : ID
-					| AmbiguousName ID DOT'''
+					| AmbiguousName DOT ID'''
 	if len(p)==2:
 		p[0] = Node('AmbiguousName',[],[p[1]],typelist = [p[1]],order='l')
 	else:
