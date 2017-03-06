@@ -27,7 +27,7 @@ class SymbolTable:
 		if symbolName in self.variables:
 			return self.variables[symbolName]
 		else:
-			print "Variable not found"
+			print symbolName, " Variable not found"
 
 	def LookUpFunc(self, symbolName, argList):
 		# print symbolName, " ", argList

@@ -199,11 +199,20 @@ def p_VariableDeclarator1(p):
 							| ID EQUALASS VariableInitializer
 							| ID COLON Type EQUALASS VariableInitializer COMMA VariableDeclarator1
 							| ID EQUALASS VariableInitializer COMMA VariableDeclarator1'''
+	global currentScope
+	if(currentScope.LookUpVar(p[1])):
+			return sys.exit("Variable Already Declared")
 	if len(p)==4:
+		currentScope.InsertVar(p[1],0,'Var')
 		p[0] = Node("VariableDeclarator1", [p[3]],[p[1],p[2]], order="llc")
 	elif len(p)==8:
+		currentScope.InsertVar(p[1],0,p[3].typelist)
 		p[0] = Node("VariableDeclarator1", [p[3], p[5], p[7]],[p[1],p[2], p[4], p[6]], order="llclclc")
+	elif p[2] == ':':
+		currentScope.InsertVar(p[1],0,p[3].typelist)
+		p[0] = Node("VariableDeclarator1", [p[3], p[5]],[p[1],p[2], p[4]], order="llclc")
 	else:
+		currentScope.InsertVar(p[1],0,'Var')
 		p[0] = Node("VariableDeclarator1", [p[3], p[5]],[p[1],p[2], p[4]], order="llclc")
 
 def p_FuncArgumentListExtras(p):
@@ -224,6 +233,11 @@ def p_VariableDeclarators(p):
 						
 def p_VariableDeclarator(p):
 	'''VariableDeclarator : ID COLON Type '''
+	global currentScope
+	if(currentScope.LookUpVar(p[1])):
+		return sys.exit("Variable Already Declared")
+	else:
+		currentScope.InsertVar(p[1],0,p[3].typelist)
 	p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]],typelist = p[3].typelist, order="llc") 
 
 def p_VariableInitializer(p):
@@ -423,10 +437,10 @@ def p_VariableDeclarationBody(p):
 	if(currentScope.LookUpVar(p[1])):
 			return sys.exit("Variable Already Declared")
 	if len(p) == 6:
-		currentScope.InsertVar(p[1],0,Type)
+		currentScope.InsertVar(p[1],0,p[3].typelist)
 		p[0] = Node('VariableDeclarationBody',[p[3],p[5]],[p[1],p[2],p[4]], order="llclc")
 	else:
-        currentScope.InsertVar(p[1],0,'Var')
+		currentScope.InsertVar(p[1],0,'Var')
 		p[0] = Node('VariableDeclarationBody',[p[3]],[p[1],p[2]], order="llc")
 
 def p_Statement(p):
