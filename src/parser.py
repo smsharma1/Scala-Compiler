@@ -280,11 +280,14 @@ def p_MethodDeclaration(p):
 def p_MethodHeader(p):
 	'''MethodHeader : MethodDefine MethodDeclarator MethodReturnTypeExtras'''
 	global currentScope
+	parentScope = currentScope.parent
+	parentScope.functions[p[2].typelist[0]] = currentScope
 	if p[3] != None:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
 			return sys.exit("Method declaration error")
 		else:
 			currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
+			
 		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + p[3].typelist,order="ccc")
 	else:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
@@ -335,7 +338,7 @@ def p_MethodBody(p):
 	'''MethodBody : Block'''
 	global currentScope
 	currentScope = currentScope.parent
-	print currentScope.functions
+	# print currentScope.functions
 	p[0] = Node("MethodBody", [p[1]],[], order="c")
 
 #<type> ::= <primitive type> | <reference type>
@@ -453,7 +456,7 @@ def p_VariableDeclarationBody(p):
 		| ID EQUALASS VariableInitializer'''
 	global currentScope
 	if(currentScope.LookUpVar(p[1])):
-			return sys.exit("Variable Already Declared")
+			return sys.exit(p[1] + " Variable Already Declared")
 	if len(p) == 6:
 		currentScope.InsertVar(p[1],0,p[3].typelist)
 		p[0] = Node('VariableDeclarationBody',[p[3],p[5]],[p[1],p[2],p[4]], order="llclc")
@@ -858,16 +861,12 @@ def p_AmbiguousName(p):
 	'''AmbiguousName : ID
 					| AmbiguousName DOT ID'''
 	global currentScope
-	for a in currentScope.variables:
-		print a
-	print p[1]
-	print p[1]," ", currentScope.LookUpVar(p[1])
-	ty = currentScope.LookUpVar(p[1])[0]
-	print ty
+
+	print p[1]," ", currentScope.LookUpSymbol(p[1])
 	if len(p)==2:
-		p[0] = Node('AmbiguousName',[],[p[1]],typelist = [currentScope.LookUpVar(p[1])[0][1]],order='l')
+		p[0] = Node('AmbiguousName',[],[p[1]],typelist = [currentScope.LookUpSymbol(p[1])],order='l')
 	else:
-		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + [currentScope.LookUpVar(p[1])[0][1]],order='cll')
+		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + [currentScope.LookUpSymbol(p[1])],order='cll')
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
 def p_Literal(p):

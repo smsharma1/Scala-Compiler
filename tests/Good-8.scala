@@ -1,5 +1,5 @@
 object Good8 {
-	/* def add(arr: Array[Int]) : Int = {
+	 /*def add(arr: Array[Int]) : Int = {
 		var c = 0;
 		var i = 0;
 		while (i <= 4) {
