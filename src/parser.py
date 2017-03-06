@@ -100,8 +100,8 @@ def p_ObjectDeclaration(p):
 #<class_declaration> ::= class <identifier> <class_header> <super>? { <class body declarations>? }
 
 def p_ClassDeclaration(p):
-	'''ClassDeclaration : R_CLASS ID ClassHeader ClassBody '''
-	p[0] = Node("ClassDeclaration", [p[3], p[4]],[p[1],p[2]], order="llcc") 
+	'''ClassDeclaration :  ClassHeader ClassBody '''
+	p[0] = Node("ClassDeclaration", [p[1], p[2]],[], order="cc") 
 					#  | R_CLASS ID ClassHeader Super BLOCKOPEN ClassBodyDeclarations BLOCKCLOSE
 					#  | R_CLASS ID ClassHeader Super BLOCKOPEN  BLOCKCLOSE'''
 	# R_CLASS Identifier ClassHeader BLOCKOPEN ClassBodyDeclarations BLOCKCLOSE
@@ -133,11 +133,11 @@ def p_Super(p):
 		p[0] = Node("Super", [p[2]],[p[1]], order="lc")
 #<class_header> ::= ( <formal parameter list>? )
 def p_ClassHeader(p):
-	'''ClassHeader : LPARAN FormalParameterLists RPARAN'''
+	'''ClassHeader : R_CLASS ID LPARAN FormalParameterLists RPARAN'''
 	# if len(p)==3:
 	# 	p[0] = Node("ClassHeader", [],[p[1], p[2]])
 	# else:
-	p[0] = Node("ClassHeader", [p[2]],[p[1], p[3]], order="lcl")
+	p[0] = Node("ClassHeader", [p[4]],[p[1], p[2],p[3],p[5]], order="lllcl")
 
 def p_FormalParameterLists(p):
 	'''FormalParameterLists : FormalParameterList
@@ -237,11 +237,19 @@ def p_MethodDeclaration(p):
 def p_MethodHeader(p):
 	'''MethodHeader : R_DEF MethodDeclarator MethodReturnTypeExtras'''
 	global currentScope
-	if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
-		return sys.exit("Method declaration error")
+	if p[3] != None:
+		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
+			return sys.exit("Method declaration error")
+		else:
+			currentScope.InsertFunc(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
+		p[0] = Node("MethodHeader", [p[2], p[3]],[p[1]],typelist = p[2].typelist + p[3].typelist,order="lcc")
 	else:
-		currentScope.InsertFunc(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
-	p[0] = Node("MethodHeader", [p[2], p[3]],[p[1]],typelist = p[2].typelist + p[3].typelist,order="lcc")
+		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
+			return sys.exit("Method declaration error")
+		else:
+			currentScope.InsertFunc(p[2].typelist[0], p[2].typelist[1:],[])
+		p[0] = Node("MethodHeader", [p[2], p[3]],[p[1]],typelist = p[2].typelist + [] ,order="lcc")
+		
 
 #<method declarator> ::= <identifier> ( <formal parameter list>? )
 def p_MethodDeclarator(p):
