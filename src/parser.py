@@ -94,8 +94,19 @@ def p_ClassAndObjectDeclaration(p):
 
 #<object_declaration> ::= object <identifier> <super>? { method_body }
 def p_ObjectDeclaration(p):
-	'''ObjectDeclaration :  R_OBJECT ID Super Block'''
-	p[0] = Node("ObjectDeclaration", [ p[3], p[4]],[p[1],p[2]], order="llcc")
+	'''ObjectDeclaration : ObjectHeader ObjectBody'''
+	p[0] = Node("ObjectDeclaration", [p[1], p[2]],[ ], order="cc")
+
+def p_ObjectHeader(p):
+	'''ObjectHeader : R_OBJECT ID Super'''
+	global currentScope
+	currentScope =  currentScope.InsertSingletonObject(p[1])
+	p[0] = Node("ObjectHeader",[p[3]],[p[1],p[2]],order="llc")
+
+def p_ObjectBody(p):
+	'''ObjectBody : Block'''
+	currentScope = currentScope.parent
+	p[0] = Node("ObjectBody",[p[1]],[],order='c')
 
 #<class_declaration> ::= class <identifier> <class_header> <super>? { <class body declarations>? }
 
