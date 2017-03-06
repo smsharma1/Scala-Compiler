@@ -11,6 +11,7 @@ class SymbolTable:
 	def __init__(self, parent, name, argList=[], returnType=None): # parent scope and symbol table name
 		self.functions = Dictlist()
 		self.variables = {}
+		self.classes = Dictlist()
 		self.name = name
 		self.parent = parent
 		self.uid = SymbolTable.uid
@@ -35,11 +36,20 @@ class SymbolTable:
 		else:
 			return False
 
-	def GetScope(self, symbolName, argList):
+	def GetFuncScope(self, symbolName, argList):
 		if symbolName in self.functions:
 			for func in self.functions[symbolName]:
 				if argList == func.argList:
 					return func
+			return False
+		else:
+			return False
+	
+	def GetClassScope(self, symbolName, argList):
+		if symbolName in self.classes:
+			for class_name in self.classes[symbolName]:
+				if argList == class_name.argList:
+					return class_name
 			return False
 		else:
 			return False
@@ -60,4 +70,14 @@ class SymbolTable:
 		else:
 			self.functions[symbolName] = SymbolTable(self.name, symbolName, argList=argList, returnType=returnType)
 			print self.functions
-			
+	
+	def InsertClass(self, symbolName, argList):
+		print symbolName, " " , argList
+		if symbolName in self.classes:
+			for class_name in self.classes[symbolName]:
+				if argList == class_name.argList:
+					return False
+			self.classes[symbolName] = SymbolTable(self.name, symbolName, argList=argList)
+		else:
+			self.classes[symbolName] = SymbolTable(self.name, symbolName, argList=argList)
+			print self.classes
