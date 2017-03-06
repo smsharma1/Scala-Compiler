@@ -241,7 +241,10 @@ def p_MethodDeclarator(p):
 	# if len(p)==4:
 	# 	p[0] = Node("MethodDeclarator", [p[1]],[p[2], p[3]])
 	# else:
-	p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]],typelist=[p[1]] + p[3].typelist, order="llcl")
+	if p[3] == None:
+		p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]],typelist=[p[1]], order="llcl")
+	else:
+		p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]],typelist=[p[1]] + p[3].typelist, order="llcl")
 
 
 def p_MethodReturnTypeExtras(p):
@@ -778,7 +781,7 @@ def p_ArrayAccess(p):
 
 def p_AmbiguousName(p):
 	'''AmbiguousName : ID
-					| AmbiguousName DOT ID'''
+					| AmbiguousName ID DOT'''
 	if len(p)==2:
 		p[0] = Node('AmbiguousName',[],[p[1]],typelist = [p[1]],order='l')
 	else:
@@ -841,7 +844,7 @@ parser = yacc.yacc()
 
 if __name__ == "__main__" :
 	filename = sys.argv[1]
-#	filename = "../tests/array.scala"
+#	filename = "../tests/import.scala"
 	programfile = open(filename)
 	data = programfile.read()
 	parser.parse(data)

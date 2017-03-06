@@ -1,6 +1,6 @@
 all: dir 
 
-dir: mkdir cplex cpparse binlex binparse
+dir: mkdir cplex cpparse cpsymboltab binlex binparse binsymboltable
 
 mkdir:
 	mkdir bin
@@ -11,11 +11,17 @@ cplex:
 cpparse:
 	cp src/parser.py bin/parser.py
 
+cpsymboltab:
+	cp src/symboltable.py bin/symboltable.py
+
 binlex:
 	chmod +x bin/lexer.py
 
 binparse:
 	chmod +x bin/parser.py 
+
+binsymboltable:
+	chmod +x bin/symboltable.py
 
 clean:
 	rm -r bin
