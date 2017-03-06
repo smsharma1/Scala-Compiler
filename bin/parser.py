@@ -2,19 +2,21 @@
 import ply.yacc as yacc
 import pydot
 import sys
+from symboltable import *
 # Get the token map from the lexer.  This is required.
 from lexer import tokens
 graph = pydot.Dot(graph_type='digraph')
+currentScope = SymbolTable(None, "root")
 
 class Node:
 	uid=0
-	def __init__(self,type,children,leaf,typelist=None,seqNo=1,order='',isLeaf=False):
+	def __init__(self,type,children,leaf,typelist='Unit',seqNo=1,order='',isLeaf=False):
 		self.type = type
 		self.typelist = typelist
 		Node.uid = Node.uid + 1
 		self.uid = Node.uid
 		self.name = type+"##"+str(self.uid)
-		print self.name, " ", typelist
+		# print self.name, " ", typelist
 		if isLeaf:
 			self.node = pydot.Node(self.name, style="filled", fillcolor="green", myNo = seqNo)
 		else:
@@ -226,14 +228,24 @@ def p_MethodDeclaration(p):
 #<method header> ::= def <method declarator> : <type> = | def <method declarator> =
 def p_MethodHeader(p):
 	'''MethodHeader : R_DEF MethodDeclarator MethodReturnTypeExtras'''
+	global currentScope
+	if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
+		return sys.exit("Method declaration error")
+	else:
+		currentScope.InsertFunc(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
 	p[0] = Node("MethodHeader", [p[2], p[3]],[p[1]],typelist = p[2].typelist + p[3].typelist,order="lcc")
+
 #<method declarator> ::= <identifier> ( <formal parameter list>? )
 def p_MethodDeclarator(p):
 	'''MethodDeclarator : ID LPARAN FuncArgumentListExtras RPARAN'''
 	# if len(p)==4:
 	# 	p[0] = Node("MethodDeclarator", [p[1]],[p[2], p[3]])
 	# else:
-	p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]],typelist=[p[1]] + p[3].typelist, order="llcl")
+	if p[3] == None:
+		p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]],typelist=[p[1]], order="llcl")
+	else:
+		p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]],typelist=[p[1]] + p[3].typelist, order="llcl")
+
 
 def p_MethodReturnTypeExtras(p):
 	'''MethodReturnTypeExtras : COLON MethodReturnType EQUALASS
@@ -701,6 +713,11 @@ def p_MethodInvocation(p):
 						# | AmbiguousName LPARAN RPARAN
 						# | Primary DOT Identifier LPARAN RPARAN
 #	print p[3].typelist
+	global currentScope
+	if (currentScope.LookUpFunc(p[1].typelist[0], p[3].typelist[0:])==False):
+		return sys.exit("Method Invocation error")
+	else:
+		currentScope = currentScope.GetScope(p[1].typelist[0], p[3].typelist[0:])
 	if len(p) ==  5:
 		p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]],typelist = p[3].typelist , order='clcl')
 	# elif len(p) ==  4:
@@ -764,11 +781,11 @@ def p_ArrayAccess(p):
 
 def p_AmbiguousName(p):
 	'''AmbiguousName : ID
-					| AmbiguousName DOT ID'''
+					| AmbiguousName ID DOT'''
 	if len(p)==2:
-		p[0] = Node('AmbiguousName',[],[p[1]],order='l')
+		p[0] = Node('AmbiguousName',[],[p[1]],typelist = [p[1]],order='l')
 	else:
-		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],order='cll')
+		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + [p[3]],order='cll')
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
 def p_Literal(p):
@@ -827,7 +844,7 @@ parser = yacc.yacc()
 
 if __name__ == "__main__" :
 	filename = sys.argv[1]
-#	filename = "../tests/array.scala"
+#	filename = "../tests/import.scala"
 	programfile = open(filename)
 	data = programfile.read()
 	parser.parse(data)
