@@ -12,7 +12,7 @@ class SymbolTable:
 	uid = 0
 	def __init__(self, parent, name, argList=[], returnType=None): # parent scope and symbol table name
 		self.functions = Dictlist()
-		self.variables = Dictlist()
+		self.variables = {}
 		self.classes = Dictlist()
 		self.objects = Dictlist()
 		self.name = name
@@ -24,23 +24,37 @@ class SymbolTable:
 		# print self.argList
 
 	def LookUpVar(self, symbolName):
-		if symbolName in self.variables:
-			return self.variables[symbolName]
-		else:
-			print symbolName, " Variable not found"
+		scope = self
+		while(scope):
+			if symbolName in scope.variables:
+				return scope.variables[symbolName]
+			scope = scope.parent
+		print symbolName, " Variable not found"
+		return False
 
 	def LookUpFunc(self, symbolName, argList):
-		# print symbolName, " ", argList
-		# print self.name, " ", self.functions
-		if symbolName in self.functions:
-			for func in self.functions[symbolName]:
-				print func.argList
-				if argList == func.argList:
-					return True
-			return False
-		else:
-			return False
+		print symbolName, " ", argList
+		print self.name, " ", self.functions
+		scope = self
+		while(scope):
+			if symbolName in scope.functions:
+				for func in scope.functions[symbolName]:
+					print func.argList
+					if argList == func.argList:
+						return True
+			scope = scope.parent
+		return False
 	
+	def LookUpSymbol(self, symbolName):
+		scope = self
+		while(scope):
+			if symbolName in scope.variables:
+				return scope.variables[symbolName][1]
+			elif symbolName in scope.functions:
+				return (scope.functions[symbolName])[0].returnType
+			scope = scope.parent
+		return False
+
 	def LookUpClass(self, symbolName, argList):
 		# print symbolName, " ", argList
 		# print self.name, " ", self.classes
@@ -85,7 +99,7 @@ class SymbolTable:
 			self.variables[symbolName] = [val, type_name]
 
 	def InsertFunc(self, symbolName, argList, returnType):
-		# print symbolName, " ", argList, " ", returnType
+		print symbolName, " ", argList, " ", returnType
 		if symbolName in self.functions:
 			for func in self.functions[symbolName]:
 				if argList == func.argList and self.returnType == returnType:
@@ -134,6 +148,7 @@ class SymbolTable:
 		return SymbolTable(self, "temp")
 
 	def InsertFuncDetails(self, symbolName, argList, returnType):
+		print symbolName, " ", argList, " ", returnType
 		self.argList = argList
 		self.name = symbolName
 		self.returnType = returnType
