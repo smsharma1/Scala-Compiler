@@ -3,18 +3,22 @@ object Good8 {
 		var c = 0;
 		var i = 0;
 		while (i <= 4) {
-                arr[i] = i+1;
-				c = c + a[i];
+               // arr[i] = i+1;
+			//	c = c + a[i];
 				i = i + 1;
     	}
 		return c;
 	 }
+	 def sub(a : Int) : Int = {
+		return a;
+	 }
 	def main(args: Array[String]) {
         	var a = new Array[Int](4);
-			a[i] = 10;
-			var i = 0;
-			var c = 0;
-			var d =add(a);
+	//		a[i] = 10;
+			var i : Int = 0;
+			var c : Int = 0;
+	//		var d =add(a);
+			var d = sub(i);
 	}
 }
 /*

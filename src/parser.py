@@ -215,7 +215,7 @@ def p_VariableDeclarator1(p):
 	if(currentScope.LookUpVar(p[1])):
 			return sys.exit("Variable Already Declared")
 	if len(p)==4:
-		currentScope.InsertVar(p[1],0,'Var')
+		currentScope.InsertVar(p[1],0,p[4].typelist)
 		p[0] = Node("VariableDeclarator1", [p[3]],[p[1],p[2]], order="llc")
 	elif len(p)==8:
 		currentScope.InsertVar(p[1],0,p[3].typelist)
@@ -224,7 +224,7 @@ def p_VariableDeclarator1(p):
 		currentScope.InsertVar(p[1],0,p[3].typelist)
 		p[0] = Node("VariableDeclarator1", [p[3], p[5]],[p[1],p[2], p[4]], order="llclc")
 	else:
-		currentScope.InsertVar(p[1],0,'Var')
+		currentScope.InsertVar(p[1],0,p[3].typelist)
 		p[0] = Node("VariableDeclarator1", [p[3], p[5]],[p[1],p[2], p[4]], order="llclc")
 
 def p_FuncArgumentListExtras(p):
@@ -258,13 +258,13 @@ def p_VariableInitializer(p):
 							| ClassInstanceCreationExpression'''
 
 
-	p[0] = Node("VariableInitializer", [p[1]],[], order="c")
+	p[0] = Node("VariableInitializer", [p[1]],[],typelist = p[1].typelist, order="c")
 
 def p_ArrayInitializer(p):
 	''' ArrayInitializer : R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT RPARAN
 							| R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT COMMA INT RPARAN'''
 	if len(p) == 9:
-		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8]], order="lllcllll")
+		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8]],typelist = p[4].typelist, order="lllcllll")
 	else:
 		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8],p[9], p[10]], order="lllcllllll")
 
@@ -775,8 +775,10 @@ def p_MethodInvocation(p):
 						# | Primary DOT Identifier LPARAN RPARAN
 #	print p[3].typelist
 	global currentScope
+	print p[3].typelist
 	if (currentScope.LookUpFunc(p[1].typelist[0], p[3].typelist[0:])==False):
-		return sys.exit("Method Invocation error")
+		print "a"
+#		return sys.exit("Method Invocation error")
 	else:
 		currentScope = currentScope.GetScope(p[1].typelist[0], p[3].typelist[0:])
 	if len(p) ==  5:
@@ -849,10 +851,13 @@ def p_ArrayAccess(p):
 def p_AmbiguousName(p):
 	'''AmbiguousName : ID
 					| AmbiguousName DOT ID'''
+	global currentScope
+	ty = currentScope.LookUpVar(p[1])[0]
+	print ty
 	if len(p)==2:
-		p[0] = Node('AmbiguousName',[],[p[1]],typelist = [p[1]],order='l')
+		p[0] = Node('AmbiguousName',[],[p[1]],typelist = [currentScope.LookUpVar(p[1])[0][1]],order='l')
 	else:
-		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + [p[3]],order='cll')
+		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + [currentScope.LookUpVar(p[1])[0][1]],order='cll')
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
 def p_Literal(p):
