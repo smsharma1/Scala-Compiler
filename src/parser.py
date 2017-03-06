@@ -134,11 +134,21 @@ def p_Super(p):
 #<class_header> ::= ( <formal parameter list>? )
 def p_ClassHeader(p):
 	'''ClassHeader : R_CLASS ID LPARAN FormalParameterLists RPARAN'''
-	# if len(p)==3:
-	# 	p[0] = Node("ClassHeader", [],[p[1], p[2]])
-	# else:
-	p[0] = Node("ClassHeader", [p[4]],[p[1], p[2],p[3],p[5]], order="lllcl")
+	
+	global currentScope
+	if p[4] != None:
+		if(currentScope.LookUpClass(p[2], p[4].typelist)):
+			return sys.exit("Method declaration error")
+		else:
+			currentScope.InsertClass(p[2],p[4].typelist)
+	else:
+		if(currentScope.LookUpClass(p[2],[])):
+			return sys.exit("Method declaration error")
+		else:
+			currentScope.InsertClass(p[2],[])
 
+	p[0] = Node("ClassHeader", [p[4]],[p[1], p[2],p[3],p[5]], order="lllcl")
+	
 def p_FormalParameterLists(p):
 	'''FormalParameterLists : FormalParameterList
 							| empty'''
