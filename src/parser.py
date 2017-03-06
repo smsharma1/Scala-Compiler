@@ -287,7 +287,7 @@ def p_MethodHeader(p):
 			return sys.exit("Method declaration error")
 		else:
 			currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
-			
+
 		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + p[3].typelist,order="ccc")
 	else:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
@@ -638,7 +638,7 @@ def p_Expression(p):
 def p_LeftHandSide(p):
 	'''LeftHandSide : AmbiguousName'''
 					# | FieldAccess
-	p[0] = Node("LeftHandSide", [p[1]],[],order='c')
+	p[0] = Node("LeftHandSide", [p[1]],[],typelist=p[1].type,order='c')
 
 def p_AssignmentOperator(p):
 	'''AssignmentOperator : EQUALASS
@@ -660,12 +660,14 @@ def p_Assignment(p):
 	'''Assignment : LeftHandSide AssignmentOperator OrExpression
 				| ArrayAccess EQUALASS OrExpression'''
 				#| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
-	if len(p)==4 :
-		p[0] = Node("Assignment", [p[1], p[2], p[3]],[], order="ccc")
+	if p[2]=="=":
+		p[0] = Node("Assignment",[p[1],p[3]],[p[2]], order="clc")
 	#elif len(p)==7 :
 	#	p[0] = Node("Assignment", [p[1], p[3], p[6]],[p[2], p[4], p[5]], order="clcllc")
 	else:
-		p[0] = Node("Assignment",[p[1],p[3]],[p[2]], order="clc")
+		if( p[1].typelist != p[3].typelist):
+			return sys.exit("assignment mismatch error")
+		p[0] = Node("Assignment", [p[1], p[2], p[3]],[], order="ccc")
 
 
 def p_OrExpression(p):
@@ -785,11 +787,11 @@ def p_MethodInvocation(p):
 #	print p[3].typelist
 	global currentScope
 	print p[3].typelist
-	if (currentScope.LookUpFunc(p[1].typelist[0], p[3].typelist[0:])==False):
+	if (currentScope.LookUpFunc(p[1].name, p[3].typelist[0:])==False):
 		print "a"
 #		return sys.exit("Method Invocation error")
 	else:
-		currentScope = currentScope.GetScope(p[1].typelist[0], p[3].typelist[0:])
+		currentScope = currentScope.GetScope(p[1].name, p[3].typelist[0:])
 	if len(p) ==  5:
 		p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]],typelist = p[3].typelist , order='clcl')
 	# elif len(p) ==  4:
