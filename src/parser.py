@@ -661,21 +661,11 @@ def p_Assignment(p):
 	'''Assignment : LeftHandSide AssignmentOperator OrExpression
 				| ArrayAccess EQUALASS OrExpression'''
 				#| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
-<<<<<<< HEAD
-	print p[1].typelist,p[3].typelist 
-=======
-
-	if len(p)==4 :
+	if p[2]=="=":
 		if allowed(p[1].typelist[0], p[2].typelist[0]) :
 			p[0] = Node("Assignment", [p[1], p[3]],[p[2]], order="clc")
 		else:
 			return sys.exit("assignment mismatch error")
->>>>>>> 1df623e1f6b013f9e05587a8509b150187ae1b6c
-	if p[2]=="=":
-		p[0] = Node("Assignment",[p[1],p[3]],[p[2]], order="clc")
-
-	#elif len(p)==7 :
-	#	p[0] = Node("Assignment", [p[1], p[3], p[6]],[p[2], p[4], p[5]], order="clcllc")
 	else:
 		if( p[1].typelist != p[3].typelist):
 			return sys.exit("assignment mismatch error")
