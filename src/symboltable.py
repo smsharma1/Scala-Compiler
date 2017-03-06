@@ -12,7 +12,7 @@ class SymbolTable:
 	uid = 0
 	def __init__(self, parent, name, argList=[], returnType=None): # parent scope and symbol table name
 		self.functions = Dictlist()
-		self.variables = {}
+		self.variables = Dictlist()
 		self.classes = Dictlist()
 		self.objects = Dictlist()
 		self.name = name
@@ -78,11 +78,11 @@ class SymbolTable:
 		else:
 			return False
 
-	def InsertVar(self, symbolName, val):
+	def InsertVar(self, symbolName, val, type_name):
 		if symbolName in self.variables:
-			return 0
+			return False
 		else:
-			self.variables[symbolName] = val
+			self.variables[symbolName] = [val, type_name]
 
 	def InsertFunc(self, symbolName, argList, returnType):
 		# print symbolName, " ", argList, " ", returnType
