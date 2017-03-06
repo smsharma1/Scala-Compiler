@@ -100,21 +100,29 @@ def p_ObjectDeclaration(p):
 #<class_declaration> ::= class <identifier> <class_header> <super>? { <class body declarations>? }
 
 def p_ClassDeclaration(p):
-	'''ClassDeclaration :  R_CLASS ID ClassHeader Super BLOCKOPEN ClassBodyDeclarations BLOCKCLOSE
-					 | R_CLASS ID ClassHeader Super BLOCKOPEN  BLOCKCLOSE'''
+	'''ClassDeclaration : R_CLASS ID ClassHeader ClassBody '''
+	p[0] = Node("ClassDeclaration", [p[3], p[4]],[p[1],p[2]], order="llcc") 
+					#  | R_CLASS ID ClassHeader Super BLOCKOPEN ClassBodyDeclarations BLOCKCLOSE
+					#  | R_CLASS ID ClassHeader Super BLOCKOPEN  BLOCKCLOSE'''
 	# R_CLASS Identifier ClassHeader BLOCKOPEN ClassBodyDeclarations BLOCKCLOSE
 	# 				 |
 	# 				 	 | R_CLASS Identifier ClassHeader BLOCKOPEN  BLOCKCLOSE
-
-	if len(p)==8:
-		p[0] = Node("ClassDeclaration", [p[3], p[4], p[6]],[p[1],p[2],p[5], p[7]], order="llcclcl")
-	# elif "Super" in p[4].name:
-	# 	p[0] = Node("ClassDeclaration", [p[2], p[3], p[4]],[p[1], p[5], p[6]])
-	elif len(p)==7:
-		p[0] = Node("ClassDeclaration", [p[3], p[4]],[p[1],p[2],p[5], p[6]], order="llccll")
-# 	else:
-# 		p[0] = Node("ClassDeclaration", [p[2], p[3]],[p[1], p[4], p[5]])
-# #<super> ::= extends <class type>
+def p_ClassBody(p):
+	'''ClassBody : Super BLOCKOPEN ClassBodyDeclarations BLOCKCLOSE
+					| Super BLOCKOPEN  BLOCKCLOSE'''
+	if len(p) == 5:
+		p[0] = Node("ClassBody",[p[1],p[3]],[p[2],p[4]],order="clcl")
+	else:
+		p[0] = Node("ClassBody",[p[1]],[p[2],p[3]],order="cll")
+# 	if len(p)==8:
+# 		
+# 	# elif "Super" in p[4].name:
+# 	# 	p[0] = Node("ClassDeclaration", [p[2], p[3], p[4]],[p[1], p[5], p[6]])
+# 	elif len(p)==7:
+# 		p[0] = Node("ClassDeclaration", [p[3], p[4]],[p[1],p[2],p[5], p[6]], order="llccll")
+# # 	else:
+# # 		p[0] = Node("ClassDeclaration", [p[2], p[3]],[p[1], p[4], p[5]])
+# # #<super> ::= extends <class type>
 
 def p_Super(p):
 	'''Super : R_EXTENDS ClassType
