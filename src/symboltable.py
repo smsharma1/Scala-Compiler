@@ -121,6 +121,23 @@ class SymbolTable:
 		self.singletonObject = SymbolTable(self, symbolName)
 		return self.singletonObject
 
+	# def setName(self, symbolName):
+	# 	self.name = symbolName
+
+	# def setArglist(self, argList):
+	# 	self.argList = argList
+
+	# def setReturnType(self, returnType):
+	# 	self.returnType = returnType
+
+	def NewFuncScope(self):
+		return SymbolTable(self, "temp")
+
+	def InsertFuncDetails(self, symbolName, argList, returnType):
+		self.argList = argList
+		self.name = symbolName
+		self.returnType = returnType
+
 	def InvokeConstr(self, classScope, valList):
 		# you can get arglist from scope.arglist to parse valList
 		pass

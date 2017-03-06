@@ -278,21 +278,27 @@ def p_MethodDeclaration(p):
 	p[0] = Node("MethodDeclaration", [p[1], p[2]],[], order="cc")
 #<method header> ::= def <method declarator> : <type> = | def <method declarator> =
 def p_MethodHeader(p):
-	'''MethodHeader : R_DEF MethodDeclarator MethodReturnTypeExtras'''
+	'''MethodHeader : MethodDefine MethodDeclarator MethodReturnTypeExtras'''
 	global currentScope
 	if p[3] != None:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
 			return sys.exit("Method declaration error")
 		else:
-			currentScope = currentScope.InsertFunc(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
-		p[0] = Node("MethodHeader", [p[2], p[3]],[p[1]],typelist = p[2].typelist + p[3].typelist,order="lcc")
+			currentScope = currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
+		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + p[3].typelist,order="ccc")
 	else:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
 			return sys.exit("Method declaration error")
 		else:
-			currentScope = currentScope.InsertFunc(p[2].typelist[0], p[2].typelist[1:],[])
-		p[0] = Node("MethodHeader", [p[2], p[3]],[p[1]],typelist = p[2].typelist + [] ,order="lcc")
-		
+			currentScope = currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:],[])
+		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + [] ,order="ccc")
+
+def p_MethodDefine(p):
+	'''MethodDefine : R_DEF'''
+	global currentScope
+	currentScope = currentScope.NewFuncScope()		
+	p[0] = Node("MethodDefine", [],[p[1]], order="l")
+	
 
 #<method declarator> ::= <identifier> ( <formal parameter list>? )
 def p_MethodDeclarator(p):
@@ -852,6 +858,8 @@ def p_AmbiguousName(p):
 	'''AmbiguousName : ID
 					| AmbiguousName DOT ID'''
 	global currentScope
+	print p[1]
+	print p[1]," ", currentScope.LookUpVar(p[1])
 	ty = currentScope.LookUpVar(p[1])[0]
 	print ty
 	if len(p)==2:
