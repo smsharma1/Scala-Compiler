@@ -661,9 +661,19 @@ def p_Assignment(p):
 	'''Assignment : LeftHandSide AssignmentOperator OrExpression
 				| ArrayAccess EQUALASS OrExpression'''
 				#| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
+<<<<<<< HEAD
 	print p[1].typelist,p[3].typelist 
+=======
+
+	if len(p)==4 :
+		if allowed(p[1].typelist[0], p[2].typelist[0]) :
+			p[0] = Node("Assignment", [p[1], p[3]],[p[2]], order="clc")
+		else:
+			return sys.exit("assignment mismatch error")
+>>>>>>> 1df623e1f6b013f9e05587a8509b150187ae1b6c
 	if p[2]=="=":
 		p[0] = Node("Assignment",[p[1],p[3]],[p[2]], order="clc")
+
 	#elif len(p)==7 :
 	#	p[0] = Node("Assignment", [p[1], p[3], p[6]],[p[2], p[4], p[5]], order="clcllc")
 	else:
@@ -867,7 +877,6 @@ def p_AmbiguousName(p):
 					| AmbiguousName DOT ID'''
 	global currentScope
 
-	print p[1]," hello ", currentScope.LookUpSymbol(p[1])
 	if len(p)==2:
 		p[0] = Node('AmbiguousName',[],[p[1]],typelist = currentScope.LookUpSymbol(p[1]),order='l')
 	else:
@@ -925,12 +934,30 @@ def p_error(p):
 	sys.exit("Syntax Error")
 parser = yacc.yacc()
 
+def allowed(type1, type2):
+	if(type1=="double" and (type2=="float" or type2 == "int")):
+		return True
+	elif(type1==type2):
+		return True
+	elif(value(type1) and value(type2) and value(type1)>value(type2)):
+		return True
 
+def value(type):
+	if(type == "byte"):
+		return 1
+	elif(type == "short") :
+		return 2
+	elif(type=="int") :
+		return 3
+	elif(type=="long") :
+		return 3
+	else :
+		return 0
 
 
 if __name__ == "__main__" :
 	filename = sys.argv[1]
-#	filename = "../tests/import.scala"
+	# filename = "../tests/Good-8.scala"
 	programfile = open(filename)
 	data = programfile.read()
 	parser.parse(data)
