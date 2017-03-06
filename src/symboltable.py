@@ -33,10 +33,11 @@ class SymbolTable:
 		return False
 
 	def LookUpFunc(self, symbolName, argList):
-		print symbolName, " ", argList
-		print self.name, " ", self.functions
+		# print symbolName, " ", argList
+		# print self.name, " ", self.functions
 		scope = self
 		while(scope):
+			print "scope.functions " , scope.functions
 			if symbolName in scope.functions:
 				for func in scope.functions[symbolName]:
 					print func.argList
@@ -51,6 +52,7 @@ class SymbolTable:
 			if symbolName in scope.variables:
 				return scope.variables[symbolName][1]
 			elif symbolName in scope.functions:
+				print symbolName, " *****************************************"
 				return (scope.functions[symbolName])[0].returnType
 			scope = scope.parent
 		return False

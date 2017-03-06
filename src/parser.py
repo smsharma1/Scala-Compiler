@@ -661,7 +661,9 @@ def p_Assignment(p):
 				| ArrayAccess EQUALASS OrExpression'''
 				#| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
 	if len(p)==4 :
-		p[0] = Node("Assignment", [p[1], p[2], p[3]],[], order="ccc")
+		if(higher(p[1].type, p[2]))
+		p[0] = Node("Assignment", [p[1], p[3]],[p[2]], order="clc")
+
 	#elif len(p)==7 :
 	#	p[0] = Node("Assignment", [p[1], p[3], p[6]],[p[2], p[4], p[5]], order="clcllc")
 	else:
@@ -785,7 +787,7 @@ def p_MethodInvocation(p):
 #	print p[3].typelist
 	global currentScope
 	print p[3].typelist
-	if (currentScope.LookUpFunc(p[1].typelist[0], p[3].typelist[0:])==False):
+	if (currentScope.LookUpFunc(p[1].name, p[3].typelist[0:])==False):
 		print "a"
 #		return sys.exit("Method Invocation error")
 	else:
@@ -861,7 +863,7 @@ def p_AmbiguousName(p):
 	'''AmbiguousName : ID
 					| AmbiguousName DOT ID'''
 	global currentScope
-	print p[1]," ", currentScope.LookUpSymbol(p[1])
+	# print p[1]," ", currentScope.LookUpSymbol(p[1])
 	if len(p)==2:
 		p[0] = Node('AmbiguousName',[],[p[1]],typelist = [currentScope.LookUpSymbol(p[1])],order='l')
 	else:
@@ -924,7 +926,7 @@ parser = yacc.yacc()
 
 if __name__ == "__main__" :
 	filename = sys.argv[1]
-#	filename = "../tests/import.scala"
+	# filename = "../tests/Good-8.scala"
 	programfile = open(filename)
 	data = programfile.read()
 	parser.parse(data)
