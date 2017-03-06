@@ -14,7 +14,7 @@ object Good8 {
 	 }
 	def main(args: Array[String]) {
         	var a = new Array[Int](4);
-			a[i] = 10.0;
+			a[i] = 10;
 			var i : Int = 0;
 			var c : Int = 0;
 	//		var d =add(a);
