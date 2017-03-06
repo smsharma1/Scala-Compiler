@@ -29,17 +29,17 @@ class SymbolTable:
 			if symbolName in scope.variables:
 				return scope.variables[symbolName]
 			scope = scope.parent
-		print symbolName, " Variable not found"
+#		print symbolName, " Variable not found"
 		return False
 
 	def LookUpFunc(self, symbolName, argList):
-		print symbolName, " ", argList
-		print self.name, " ", self.functions
+#		print symbolName, "hello ", argList
+#		print self.name, " ", self.functions
 		scope = self
 		while(scope):
 			if symbolName in scope.functions:
 				for func in scope.functions[symbolName]:
-					print func.argList
+				#	print func.argList
 					if argList == func.argList:
 						return True
 			scope = scope.parent
@@ -71,7 +71,7 @@ class SymbolTable:
 		if symbolName in self.variables:
 			return self.variables[symbolName]
 		else:
-			print "Object not found"
+		#print "Object not found"
 			return False
 
 	def GetFuncScope(self, symbolName, argList):
@@ -99,7 +99,7 @@ class SymbolTable:
 			self.variables[symbolName] = [val, type_name]
 
 	def InsertFunc(self, symbolName, argList, returnType):
-		print symbolName, " ", argList, " ", returnType
+#		print symbolName, " ", argList, " ", returnType
 		if symbolName in self.functions:
 			for func in self.functions[symbolName]:
 				if argList == func.argList and self.returnType == returnType:
@@ -148,7 +148,7 @@ class SymbolTable:
 		return SymbolTable(self, "temp")
 
 	def InsertFuncDetails(self, symbolName, argList, returnType):
-		print symbolName, " ", argList, " ", returnType
+#print symbolName, " ", argList, " ", returnType
 		self.argList = argList
 		self.name = symbolName
 		self.returnType = returnType
