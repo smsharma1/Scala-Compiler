@@ -280,14 +280,11 @@ def p_MethodDeclaration(p):
 def p_MethodHeader(p):
 	'''MethodHeader : MethodDefine MethodDeclarator MethodReturnTypeExtras'''
 	global currentScope
-	parentScope = currentScope.parent
-	parentScope.functions[p[2].typelist[0]] = currentScope
 	if p[3] != None:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
 			return sys.exit("Method declaration error")
 		else:
 			currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
-
 		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + p[3].typelist,order="ccc")
 	else:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
@@ -338,7 +335,7 @@ def p_MethodBody(p):
 	'''MethodBody : Block'''
 	global currentScope
 	currentScope = currentScope.parent
-	# print currentScope.functions
+	print currentScope.functions
 	p[0] = Node("MethodBody", [p[1]],[], order="c")
 
 #<type> ::= <primitive type> | <reference type>
@@ -456,7 +453,7 @@ def p_VariableDeclarationBody(p):
 		| ID EQUALASS VariableInitializer'''
 	global currentScope
 	if(currentScope.LookUpVar(p[1])):
-			return sys.exit(p[1] + " Variable Already Declared")
+			return sys.exit("Variable Already Declared")
 	if len(p) == 6:
 		currentScope.InsertVar(p[1],0,p[3].typelist)
 		p[0] = Node('VariableDeclarationBody',[p[3],p[5]],[p[1],p[2],p[4]], order="llclc")
@@ -638,7 +635,7 @@ def p_Expression(p):
 def p_LeftHandSide(p):
 	'''LeftHandSide : AmbiguousName'''
 					# | FieldAccess
-	p[0] = Node("LeftHandSide", [p[1]],[],typelist=p[1].type,order='c')
+	p[0] = Node("LeftHandSide", [p[1]],[],order='c')
 
 def p_AssignmentOperator(p):
 	'''AssignmentOperator : EQUALASS
@@ -660,21 +657,12 @@ def p_Assignment(p):
 	'''Assignment : LeftHandSide AssignmentOperator OrExpression
 				| ArrayAccess EQUALASS OrExpression'''
 				#| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
-<<<<<<< HEAD
 	if len(p)==4 :
-		if(higher(p[1].type, p[2]))
-		p[0] = Node("Assignment", [p[1], p[3]],[p[2]], order="clc")
-
-=======
-	if p[2]=="=":
-		p[0] = Node("Assignment",[p[1],p[3]],[p[2]], order="clc")
->>>>>>> e5ca476fb9b7a5309bf23a1908730da17cca7407
+		p[0] = Node("Assignment", [p[1], p[2], p[3]],[], order="ccc")
 	#elif len(p)==7 :
 	#	p[0] = Node("Assignment", [p[1], p[3], p[6]],[p[2], p[4], p[5]], order="clcllc")
 	else:
-		if( p[1].typelist != p[3].typelist):
-			return sys.exit("assignment mismatch error")
-		p[0] = Node("Assignment", [p[1], p[2], p[3]],[], order="ccc")
+		p[0] = Node("Assignment",[p[1],p[3]],[p[2]], order="clc")
 
 
 def p_OrExpression(p):
@@ -794,11 +782,11 @@ def p_MethodInvocation(p):
 #	print p[3].typelist
 	global currentScope
 	print p[3].typelist
-	if (currentScope.LookUpFunc(p[1].name, p[3].typelist[0:])==False):
+	if (currentScope.LookUpFunc(p[1].typelist[0], p[3].typelist[0:])==False):
 		print "a"
 #		return sys.exit("Method Invocation error")
 	else:
-		currentScope = currentScope.GetScope(p[1].name, p[3].typelist[0:])
+		currentScope = currentScope.GetScope(p[1].typelist[0], p[3].typelist[0:])
 	if len(p) ==  5:
 		p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]],typelist = p[3].typelist , order='clcl')
 	# elif len(p) ==  4:
@@ -870,16 +858,16 @@ def p_AmbiguousName(p):
 	'''AmbiguousName : ID
 					| AmbiguousName DOT ID'''
 	global currentScope
-<<<<<<< HEAD
-	# print p[1]," ", currentScope.LookUpSymbol(p[1])
-=======
-
-	print p[1]," ", currentScope.LookUpSymbol(p[1])
->>>>>>> e5ca476fb9b7a5309bf23a1908730da17cca7407
+	for a in currentScope.variables:
+		print a
+	print p[1]
+	print p[1]," ", currentScope.LookUpVar(p[1])
+	ty = currentScope.LookUpVar(p[1])[0]
+	print ty
 	if len(p)==2:
-		p[0] = Node('AmbiguousName',[],[p[1]],typelist = [currentScope.LookUpSymbol(p[1])],order='l')
+		p[0] = Node('AmbiguousName',[],[p[1]],typelist = [currentScope.LookUpVar(p[1])[0][1]],order='l')
 	else:
-		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + [currentScope.LookUpSymbol(p[1])],order='cll')
+		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + [currentScope.LookUpVar(p[1])[0][1]],order='cll')
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
 def p_Literal(p):
@@ -938,7 +926,7 @@ parser = yacc.yacc()
 
 if __name__ == "__main__" :
 	filename = sys.argv[1]
-	# filename = "../tests/Good-8.scala"
+#	filename = "../tests/import.scala"
 	programfile = open(filename)
 	data = programfile.read()
 	parser.parse(data)
