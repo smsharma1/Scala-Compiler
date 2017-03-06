@@ -367,15 +367,11 @@ def p_FloatingPointType(p):
 	else:
 		p[0] = Node("FloatingPointType", [],[p[1]],typelist = ['DOUBLE'], order="l")
 
-#<reference type> ::= <class type> | <array type>
 def p_ReferenceType(p):
 	'''ReferenceType : ArrayType'''
 	if "ArrayType" in p[1].type:
 		p[0] = Node("ReferenceType", [p[1]],[],typelist = p[1].typelist ,order="c") 
-	# else:
-	# 	p[0] = Node("ReferenceType", [],[p[1]], order="l")
 
-#<class type> ::= <type name>
 def p_ClassType(p):
 	'''ClassType : ID
 				 |	R_WITH ClassType'''
@@ -405,17 +401,17 @@ def p_BlockStatements(p):
 		p[0] = Node("BlockStatements", [p[1]],[], order="c")
 	else:
 		p[0] = Node("BlockStatements", [p[1],p[2]],[], order="cc")
-#<block statement> ::= <local variable declaration statement> | <statement>
+
 def p_BlockStatement(p):
 	'''BlockStatement : LocalVariableDeclarationStatement
 					| Statement
 					| MethodDeclaration'''
 	p[0] = Node("BlockStatement", [p[1]],[], order="c")
-#<local variable declaration statement> ::= <local variable declaration> ;
+
 def p_LocalVariableDeclarationStatement(p):
 	'LocalVariableDeclarationStatement : LocalVariableDeclaration EndStatement'
 	p[0] = Node("LocalVariableDeclarationStatement", [p[1],p[2]],[], order="cc")
-#<local variable declaration> ::= <type> <variable declarators>
+
 def p_LocalVariableDeclaration(p):
 	'''LocalVariableDeclaration : VariableHeader VariableDeclarationBody'''
 	p[0] = Node("LocalVariableDeclaration", [p[1],p[2]],[], order="cc")
@@ -423,12 +419,16 @@ def p_LocalVariableDeclaration(p):
 def p_VariableDeclarationBody(p):
 	'''VariableDeclarationBody : ID COLON Type EQUALASS VariableInitializer
 		| ID EQUALASS VariableInitializer'''
+	global currentScope
+	if(currentScope.LookUpVar(p[1])):
+			return sys.exit("Variable Already Declared")
 	if len(p) == 6:
+		currentScope.InsertVar(p[1],0,Type)
 		p[0] = Node('VariableDeclarationBody',[p[3],p[5]],[p[1],p[2],p[4]], order="llclc")
 	else:
+        currentScope.InsertVar(p[1],0,'Var')
 		p[0] = Node('VariableDeclarationBody',[p[3]],[p[1],p[2]], order="llc")
-#<statement> ::= <statement without trailing substatement> | <if then statement> | <if then else statement>
-# | <while statement> | <for statement>
+
 def p_Statement(p):
 	'''Statement : StatementWithoutTrailingSubstatement
 				| IfThenStatement
@@ -437,8 +437,7 @@ def p_Statement(p):
 				| ForStatement'''
 	p[0] = Node("Statement", [p[1]],[],order='c')
 
-#<statement without trailing substatement> ::= <block> | <empty statement> | <expression statement>
-# | <switch statement> | <break statement> | <continue statement> | <return statement>
+
 def p_StatementWithoutTrailingSubstatement(p):
 	'''StatementWithoutTrailingSubstatement : Block
 										| EmptyStatement
