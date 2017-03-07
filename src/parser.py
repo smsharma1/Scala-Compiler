@@ -10,7 +10,7 @@ currentScope = SymbolTable(None, "root")
 
 class Node:
 	uid=0
-	def __init__(self,type,children,leaf,typelist='Unit',seqNo=1,order='',isLeaf=False):
+	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False):
 		self.type = type
 		self.typelist = typelist
 		Node.uid = Node.uid + 1
@@ -275,7 +275,8 @@ def p_ArrayInitializer(p):
 def p_EndStatement(p):
 	'''EndStatement : SEMICOLON
 					| LINEFEED'''
-	p[0] = Node("EndStatement", [],[p[1]], order="l")
+	p[0] = Node(p[1], [], [], isLeaf=True)
+	# p[0] = Node("EndStatement", [],[p[1]], order="l")
 #<method declaration> ::= <method header> <method body>
 def p_MethodDeclaration(p):
 	'MethodDeclaration : MethodHeader MethodBody'
@@ -362,7 +363,10 @@ def p_Type(p):
 def p_PrimitiveType(p):
 	'''PrimitiveType : NumericType
 					| R_BOOLEAN'''
-	p[0] = p[1]
+	if p[1] == 'Boolean':
+		p[0] = Node(p[1], [], [], typelist = ['BOOL'], isLeaf=True)
+	else:
+		p[0] = p[1]
 	# if "NumericType" in p[1].type:
 	# 	p[0] = Node("PrimitiveType", [p[1]],[],typelist = p[1].typelist, order="c") 
 	# else:
@@ -389,19 +393,26 @@ def p_IntegralType(p):
 				 | R_STRING
 				 | R_UNIT'''
 	if 'Byte' in p[1]:
-		p[0] = Node("IntegralType", [],[p[1]],typelist = ['BYTE'], order="l") 
+		p[0] = Node(p[1], [], [], typelist = ['BYTE'], isLeaf=True)
+		# p[0] = Node("IntegralType", [],[p[1]],typelist = ['BYTE'], order="l") 
 	elif 'Short' in p[1]:
-		p[0] = Node("IntegralType", [],[p[1]],typelist = ['SHORT'], order="l")
+		p[0] = Node(p[1], [], [], typelist = ['SHORT'], isLeaf=True)
+		# p[0] = Node("IntegralType", [],[p[1]],typelist = ['SHORT'], order="l")
 	elif 'Int' in p[1]:
-		p[0] = Node("IntegralType", [],[p[1]],typelist = ['INT'], order="l")
+		p[0] = Node(p[1], [], [], typelist = ['INT'], isLeaf=True)
+		# p[0] = Node("IntegralType", [],[p[1]],typelist = ['INT'], order="l")
 	elif 'Long' in p[1]:
-		p[0] = Node("IntegralType", [],[p[1]],typelist = ['LONG'], order="l")
+		p[0] = Node(p[1], [], [], typelist = ['LONG'], isLeaf=True)
+		# p[0] = Node("IntegralType", [],[p[1]],typelist = ['LONG'], order="l")
 	elif 'Char' in p[1]:
-		p[0] = Node("IntegralType", [],[p[1]],typelist = ['CHAR'], order="l")
+		p[0] = Node(p[1], [], [], typelist = ['CHAR'], isLeaf=True)
+		# p[0] = Node("IntegralType", [],[p[1]],typelist = ['CHAR'], order="l")
 	elif 'String' in p[1]:
-		p[0] = Node("IntegralType", [],[p[1]],typelist = ['STRING'], order="l")
+		p[0] = Node(p[1], [], [], typelist = ['STRING'], isLeaf=True)
+		# p[0] = Node("IntegralType", [],[p[1]],typelist = ['STRING'], order="l")
 	else:
-		p[0] = Node("IntegralType", [],[p[1]],typelist = ['UNIT'], order="l")
+		p[0] = Node(p[1], [], [], typelist = ['UNIT'], isLeaf=True)
+		# p[0] = Node("IntegralType", [],[p[1]],typelist = ['UNIT'], order="l")
 
 #<floating-point type> ::= float | double
 def p_FloatingPointType(p):
@@ -884,7 +895,8 @@ def p_AmbiguousName(p):
 	global currentScope
 #	print p[1],"hello",currentScope.LookUpSymbol(p[1])
 	if len(p)==2:
-		p[0] = Node('AmbiguousName',[],[p[1]],typelist = currentScope.LookUpSymbol(p[1]),order='l')
+		p[0] = Node(p[1], [], [], typelist = currentScope.LookUpSymbol(p[1]), isLeaf=True)
+		# p[0] = Node('AmbiguousName',[],[p[1]],typelist = currentScope.LookUpSymbol(p[1]),order='l')
 	else:
 		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + currentScope.LookUpSymbol(p[1]),order='cll')
 
@@ -903,34 +915,41 @@ def p_Literal(p):
 
 def p_BooleanLiteral(p):
 	'BooleanLiteral : BOOL'
-	p[0] = Node('BooleanLiteral',[],[p[1]],typelist = ['BOOL'],order='l')
+	p[0] = Node(p[1], [], [], typelist = ['BOOL'], isLeaf=True)
+	# p[0] = Node('BooleanLiteral',[],[p[1]],typelist = ['BOOL'],order='l')
 
 def p_IntegerLiteral(p):
 	 'IntegerLiteral : INT'
-	 p[0] = Node('IntegerLiteral',[],[p[1]],typelist = ['INT'],order='l')
+	 p[0] = Node(p[1], [], [], typelist = ['INT'], isLeaf=True)
+	#  p[0] = Node('IntegerLiteral',[],[p[1]],typelist = ['INT'],order='l')
 
 def p_FloatingPointLiteral(p):
 	'FloatingPointLiteral : FLOAT'
-	p[0] = Node('FloatingPointLiteral',[],[p[1]],typelist =['FLOAT'],order='l')
+	p[0] = Node(p[1], [], [], typelist = ['FLOAT'], isLeaf=True)
+	# p[0] = Node('FloatingPointLiteral',[],[p[1]],typelist =['FLOAT'],order='l')
 
 def p_CharacterLiteral(p):
 	'CharacterLiteral : CHAR'
-	p[0] = Node('CharacterLiteral',[],[p[1]],typelist =['CHAR'],order='l')
+	p[0] = Node(p[1], [], [], typelist = ['CHAR'], isLeaf=True)
+	# p[0] = Node('CharacterLiteral',[],[p[1]],typelist =['CHAR'],order='l')
 
 def p_StringLiteral(p):
 	'StringLiteral : STRING'
-	p[0] = Node('StringLiteral',[],[p[1]],typelist = ['STRING'],order='l')
+	p[0] = Node(p[1], [], [], typelist = ['STRING'], isLeaf=True)
+	# p[0] = Node('StringLiteral',[],[p[1]],typelist = ['STRING'],order='l')
 
 
 # # # <null literal> ::= null
 def p_NullLiteral(p):
 	'NullLiteral : R_NULL'
-	p[0] = Node("NullLiteral", [],[p[1]],typelist = ['NULL'],order='l')
+	p[0] = Node(p[1], [], [], typelist = ['NULL'], isLeaf=True)
+	# p[0] = Node("NullLiteral", [],[p[1]],typelist = ['NULL'],order='l')
 
 #<empty statement> ::= ;
 def p_EmptyStatement(p):
 	'EmptyStatement : EndStatement'
-	p[0] = Node("EmptyStatement", [p[1]],[],order='c')
+	p[0] = p[1]
+	# p[0] = Node("EmptyStatement", [p[1]],[],order='c')
 
 
 def p_empty(p):
