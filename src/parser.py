@@ -691,13 +691,13 @@ def p_OrExpression(p):
 	if(len(p)==2):
 		p[0] = p[1]
 	else:
-		p[0] = Node("OrExpression", [p[1], p[3]],[p[2]],order='clc')
+		p[0] = Node("||", [p[1], p[3]], [],order='cc',isLeaf=True)
 
 def p_AndExpression(p):
 	'''AndExpression : XorExpression
 					| AndExpression AND XorExpression'''
 	if len(p) ==  4:
-		p[0] = Node("AndExpression", [p[1],p[3]], [p[2]],order='clc')
+		p[0] = Node("&&", [p[1], p[3]], [],order='cc',isLeaf=True)
 	else:
 		p[0] = p[1]
 
@@ -707,7 +707,7 @@ def p_XorExpression(p):
 	if len(p) == 2:
 		p[0] = p[1]
 	else :
-		p[0] = Node('XorExpression',[p[1],p[3]],[p[2]],order='clc')
+		p[0] = Node("^", [p[1], p[3]], [],order='cc',isLeaf=True)
 
 
 
@@ -716,7 +716,10 @@ def p_EqualityExpression(p):
 						 | EqualityExpression EQUAL RelationalExpression
 						| EqualityExpression NOTEQUAL RelationalExpression'''
 	if len(p) ==  4:
-		p[0] = Node("EqualityExpression", [p[1], p[3]], [p[2]],order='clc')
+		if p[2] == "==":
+			p[0] = Node("==", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == "!=":
+			p[0] = Node("!=", [p[1], p[3]], [],order='cc',isLeaf=True)	
 	else:
 		p[0] = p[1]
 
@@ -728,7 +731,16 @@ def p_RelationalExpression(p):
 						| RelationalExpression GE ShiftExpression
 						| RelationalExpression R_INSTANCEOF ReferenceType'''
 	if len(p) ==  4:
-		p[0] = Node("RelationalExpression", [p[1],p[3]], [p[2]],order='clc')
+		if p[2] == "<":
+			p[0] = Node("<", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == ">":
+			p[0] = Node(">", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == "<=":
+			p[0] = Node("<=", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == ">=":
+			p[0] = Node(">=", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == "instanceof":
+			p[0] = Node("instanceof", [p[1], p[3]], [],order='cc',isLeaf=True)
 	else:
 		p[0] = p[1]
 
@@ -738,7 +750,12 @@ def p_ShiftExpression(p):
 					| ShiftExpression BITRSHIFT AdditiveExpression
 					| ShiftExpression BITRSFILL AdditiveExpression'''
 	if len(p) ==  4:
-		p[0] = Node("ShiftExpression", [p[1], p[3]], [p[2]],order='clc')
+		if p[2] == "<<":
+			p[0] = Node("<<", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == ">>":
+			p[0] = Node("<<", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == ">>>":
+			p[0] = Node(">>>", [p[1], p[3]], [],order='cc',isLeaf=True)
 	else:
 		p[0] = p[1]
 
@@ -748,7 +765,10 @@ def p_AdditiveExpression(p):
 							| AdditiveExpression PLUS MultiplicativeExpression
 							| AdditiveExpression MINUS MultiplicativeExpression'''
 	if len(p) ==  4:
-		p[0] = Node("AdditiveExpression", [p[1],p[3]], [p[2]],order='clc')
+		if p[2] == "+":
+			p[0] = Node("+", [p[1],p[3]], [ ],order='cc',isLeaf=True)
+		else:
+			p[0] = Node("-", [p[1],p[3]], [ ],order='cc',isLeaf=True)
 	else:
 		p[0] = p[1]
 
@@ -759,7 +779,12 @@ def p_MultiplicativeExpression(p):
 								| MultiplicativeExpression DIVISION UnaryExpression
 								| MultiplicativeExpression MODULUS UnaryExpression'''
 	if len(p) ==  4:
-		p[0] = Node("MultiplicativeExpression", [p[1], p[3]], [p[2]],order='clc')
+		if p[2] == "*":
+			p[0] = Node("*", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == "%":
+			p[0] = Node("%", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == "/":
+			p[0] = Node("/", [p[1], p[3]], [],order='cc',isLeaf=True)
 	else:
 		p[0] = p[1]
 
@@ -770,7 +795,10 @@ def p_UnaryExpression(p):
 						# | PreincrementExpression
 						# | PredecrementExpression'''
 	if len(p) ==  3:
-		p[0] = Node("MultiplicativeExpression", [p[2]], [p[1]],order='lc')
+		if p[1] == "+":
+			p[0] = Node("+", [p[2]], [],order='c',isLeaf=True)
+		elif p[1] == "-":
+			p[0] = Node("-", [p[2]], [],order='c',isLeaf=True)
 	else:
 		p[0] = p[1]
 
@@ -780,7 +808,7 @@ def p_UnaryExpressionNotPlusMinus(p):
 									#| CastExpression'''
 									#| BITNEG UnaryExpression
 	if len(p) ==  3:
-		p[0] = Node("UnaryExpressionNotPlusMinus", [p[2]], [p[1]],order='lc')
+		p[0] = Node("!", [p[2]], [],order='c',isLeaf=True)
 	else:
 		p[0] = p[1]
 def p_PostfixExpression(p):
