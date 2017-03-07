@@ -235,7 +235,8 @@ def p_FuncArgumentListExtras(p):
 	if(p[1] == None):
 		pass
 	else:
-		p[0] = Node("FuncArgumentListExtras", [p[1]],[],typelist = p[1].typelist, order="c") 
+		p[0]= p[1]
+		# p[0] = Node("FuncArgumentListExtras", [p[1]],[],typelist = p[1].typelist, order="c") 
 
 def p_VariableDeclarators(p):
 	'''VariableDeclarators : VariableDeclarator
@@ -243,7 +244,8 @@ def p_VariableDeclarators(p):
 	if len(p)==4:
 		p[0] = Node("VariableDeclarators", [p[1], p[3]],[p[2]],typelist = p[1].typelist + p[3].typelist, order="clc") 
 	else:
-		p[0] = Node("VariableDeclarators", [p[1]],[],typelist = p[1].typelist, order="c") 
+		p[0] = p[1]
+		# p[0] = Node("VariableDeclarators", [p[1]],[],typelist = p[1].typelist, order="c") 
 						
 def p_VariableDeclarator(p):
 	'''VariableDeclarator : ID COLON Type '''
@@ -259,8 +261,8 @@ def p_VariableInitializer(p):
 							| Expression
 							| ClassInstanceCreationExpression'''
 
-
-	p[0] = Node("VariableInitializer", [p[1]],[],typelist = p[1].typelist, order="c")
+	p[0] = p[1]
+	# p[0] = Node("VariableInitializer", [p[1]],[],typelist = p[1].typelist, order="c")
 
 def p_ArrayInitializer(p):
 	''' ArrayInitializer : R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT RPARAN
@@ -330,8 +332,8 @@ def p_MethodReturnTypeExtras(p):
 
 def  p_MethodReturnType(p):
 	'''MethodReturnType : Type'''
-	if "Type" in p[1].name:
-		p[0] = Node("MethodReturnType", [p[1]],[],typelist = p[1].typelist, order="c")
+	p[0] = p[1]
+	# p[0] = Node("MethodReturnType", [p[1]],[],typelist = p[1].typelist, order="c")
 	# else:
 	# 	p[0] = Node("MethodReturnType", [],[p[1]], order="l")
 
@@ -341,7 +343,8 @@ def p_MethodBody(p):
 	global currentScope
 	currentScope = currentScope.parent
 	# print currentScope.functions
-	p[0] = Node("MethodBody", [p[1]],[], order="c")
+	p[0] = p[1]
+	# p[0] = Node("MethodBody", [p[1]],[], order="c")
 
 #<type> ::= <primitive type> | <reference type>
 def p_Type(p):
@@ -634,7 +637,8 @@ def p_ReturnStatement(p):
 
 def p_Expression(p):
 	'''Expression : OrExpression'''
-	p[0] = Node("Expression", [p[1]],[],typelist = p[1].typelist,order='c')
+	p[0] = p[1]
+	# p[0] = Node("Expression", [p[1]],[],typelist = p[1].typelist,order='c')
 
 
 # def p_CondititionalExpression(p):
@@ -810,10 +814,13 @@ def p_MethodInvocation(p):
 def p_ArgumentLists(p):
 	'''ArgumentLists : ArgumentList
 						| empty'''
+	print "i ma here"
 	if(p[1] == None):
+		print "i ma here"
 		pass
-	elif 'ArgumentList' in p[1].name:
+	else:
 		p[0] = p[1]
+		print p[1].typelist, " argumentlists"
 
 def p_Primary(p):
 	'''Primary : PrimaryNoNewArray'''
@@ -855,7 +862,9 @@ def p_ArgumentList(p):
 	'''ArgumentList : Expression
 					| ArgumentList COMMA Expression'''
 	if len(p) == 2:
-		p[0] = Node('ArgumentList',[p[1]],[],typelist = p[1].typelist,order='c')
+		print p[1].typelist, " p[1].typelist"
+		p[0] = p[1]
+		# p[0] = Node('ArgumentList',[p[1]],[],typelist = p[1].typelist,order='c')
 	else :
 		p[0] = Node('ArgumentList',[p[1],p[3]],[p[2]],typelist = p[1].typelist + p[3].typelist,order='clc')
 
@@ -887,8 +896,9 @@ def p_Literal(p):
 				| CharacterLiteral
 				| StringLiteral
 				| NullLiteral'''
-
-	p[0] = Node("Literal", [p[1]],[],typelist = p[1].typelist,order='c')
+	
+	p[0] = p[1]
+	# p[0] = Node("Literal", [p[1]],[],typelist = p[1].typelist,order='c')
 # <integer literal> ::= <decimal integer literal> | <hex integer literal> | <octal integer literal>
 
 def p_BooleanLiteral(p):
