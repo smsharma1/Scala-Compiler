@@ -60,7 +60,8 @@ def p_ImportDeclarationss(p):
 	if(p[1] == None):
 		pass
 	elif "ImportDeclarations" in p[1].name:
-		p[0] = Node("ImportDeclarationss",[p[1]],[], order="c")
+		p[0] = p[1]
+		# p[0] = Node("ImportDeclarationss",[p[1]],[], order="c")
 #<import declarations> ::= <import declaration> | <import declarations> <import declaration>
 
 def p_ImportDeclarations(p):
@@ -82,14 +83,14 @@ def p_ClassObjectsList(p):
 	'''ClassObjectsList : ClassObjectsList ClassAndObjectDeclaration
 						| ClassAndObjectDeclaration'''
 	if len(p) ==2:
-		p[0] = Node('ClassObjectsList',[p[1]],[], order="c")
+		p[0] = p[1] #Node('ClassObjectsList',[p[1]],[], order="c")
 	else:
 		p[0] = Node('ClassObjectsList',[p[1],p[2]],[], order = "cc")
 #<classes_objects> ::= <class_object> | <class_object> <classes_objects>
 def p_ClassAndObjectDeclaration(p):
 	'''ClassAndObjectDeclaration : ObjectDeclaration
 								| ClassDeclaration'''
-	p[0] = Node('ClassAndObjectDeclaration',[p[1]],[], order="c")
+	p[0] = p[1] #Node('ClassAndObjectDeclaration',[p[1]],[], order="c")
 
 
 #<object_declaration> ::= object <identifier> <super>? { method_body }
@@ -185,11 +186,12 @@ def p_ClassBodyDeclarations(p):
 #<class body declaration> ::= <field declaration> | <method declaration>
 def p_ClassBodyDeclaration(p):
 	'''ClassBodyDeclaration : FieldDeclaration
-							| MethodDeclaration'''
-	if "FieldDeclaration" in p[1].name:
-		p[0] = Node("ClassBodyDeclaration", [p[1]],[], order="c")
-	else:
-		p[0] = Node("ClassBodyDeclaration", [p[1]],[], order="c")
+						| MethodDeclaration'''
+	p[0] = p[1]
+	# if "FieldDeclaration" in p[1].name:
+	# 	p[0] = Node("ClassBodyDeclaration", [p[1]],[], order="c")
+	# else:
+	# 	p[0] = Node("ClassBodyDeclaration", [p[1]],[], order="c")
 
 #<formal parameter list> ::= <formal parameter> | <formal parameter list> , <formal parameter>
 def p_FormalParameterList(p):
@@ -434,7 +436,7 @@ def p_BlockStatements(p):
 	'''BlockStatements : BlockStatement
 					| BlockStatements BlockStatement'''
 	if len(p)==2:
-		p[0] = Node("BlockStatements", [p[1]],[], order="c")
+		p[0] = p[1]
 	else:
 		p[0] = Node("BlockStatements", [p[1],p[2]],[], order="cc")
 
@@ -442,7 +444,7 @@ def p_BlockStatement(p):
 	'''BlockStatement : LocalVariableDeclarationStatement
 					| Statement
 					| MethodDeclaration'''
-	p[0] = Node("BlockStatement", [p[1]],[], order="c")
+	p[0] = p[1]
 
 def p_LocalVariableDeclarationStatement(p):
 	'LocalVariableDeclarationStatement : LocalVariableDeclaration EndStatement'
@@ -472,7 +474,7 @@ def p_Statement(p):
 				| IfThenElseStatement
 				| WhileStatement
 				| ForStatement'''
-	p[0] = Node("Statement", [p[1]],[],order='c')
+	p[0] = p[1]
 
 
 def p_StatementWithoutTrailingSubstatement(p):
@@ -483,7 +485,7 @@ def p_StatementWithoutTrailingSubstatement(p):
 										| BreakStatement
 										| ContinueStatement
 										| ReturnStatement'''
-	p[0] = Node("StatementWithoutTrailingSubstatement", [p[1]],[],order='c')
+	p[0] = p[1]
 
 # <statement no short if> ::= <statement without trailing substatement> | <if then else statement no short if>
 # | <while statement no short if> | <for statement no short if>

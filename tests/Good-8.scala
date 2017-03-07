@@ -1,3 +1,4 @@
+import Arrr.ggg
 object Good8 {
 	 /*def add(arr: Array[Int]) : Int = {
 		var c = 0;
