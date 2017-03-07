@@ -59,7 +59,7 @@ def p_ImportDeclarationss(p):
 							| empty'''
 	if(p[1] == None):
 		pass
-	elif "ImportDeclarations" in p[1].name:
+	else:
 		p[0] = p[1]
 		# p[0] = Node("ImportDeclarationss",[p[1]],[], order="c")
 #<import declarations> ::= <import declaration> | <import declarations> <import declaration>
@@ -70,7 +70,8 @@ def p_ImportDeclarations(p):
 	if len(p)==3:
 		p[0] = Node("ImportDeclarations", [p[1], p[2]],[], order="cc")
 	else:
-		p[0] = Node("ImportDeclarations", [p[1]],[], order="c")
+		p[0] = p[1]
+		#Node("ImportDeclarations", [p[1]],[], order="c")
 
 #<import declaration> ::= import <type name> ;
 
@@ -351,7 +352,7 @@ def p_Type(p):
 	'''Type : PrimitiveType
 		| ReferenceType'''
 	# print p[1].typelist
-	print p[1]
+	#print p[1]
 	p[0] = p[1]
 	# if "PrimitiveType" in p[1].type:
 	# 	p[0] = Node("Type", [p[1]],[],typelist = p[1].typelist, order="c") 
@@ -862,7 +863,7 @@ def p_ArgumentList(p):
 	'''ArgumentList : Expression
 					| ArgumentList COMMA Expression'''
 	if len(p) == 2:
-		print p[1].typelist, " p[1].typelist"
+		# print p[1].typelist, " p[1].typelist"
 		p[0] = p[1]
 		# p[0] = Node('ArgumentList',[p[1]],[],typelist = p[1].typelist,order='c')
 	else :
