@@ -347,29 +347,33 @@ def p_MethodBody(p):
 def p_Type(p):
 	'''Type : PrimitiveType
 		| ReferenceType'''
-	print p[1].typelist
-	if "PrimitiveType" in p[1].type:
-		p[0] = Node("Type", [p[1]],[],typelist = p[1].typelist, order="c") 
-	else:
-		p[0] = Node("Type", [p[1]],[],typelist = p[1].typelist, order="c") 
+	# print p[1].typelist
+	print p[1]
+	p[0] = p[1]
+	# if "PrimitiveType" in p[1].type:
+	# 	p[0] = Node("Type", [p[1]],[],typelist = p[1].typelist, order="c") 
+	# else:
+	# 	p[0] = Node("Type", [p[1]],[],typelist = p[1].typelist, order="c") 
 
 #<primitive type> ::= <numeric type> | boolean
 def p_PrimitiveType(p):
 	'''PrimitiveType : NumericType
 					| R_BOOLEAN'''
-	if "NumericType" in p[1].type:
-		p[0] = Node("PrimitiveType", [p[1]],[],typelist = p[1].typelist, order="c") 
-	else:
-		p[0] = Node("PrimitiveType", [],[p[1]],['BOOL'] ,order="l") 
+	p[0] = p[1]
+	# if "NumericType" in p[1].type:
+	# 	p[0] = Node("PrimitiveType", [p[1]],[],typelist = p[1].typelist, order="c") 
+	# else:
+	# 	p[0] = Node("PrimitiveType", [],[p[1]],['BOOL'] ,order="l") 
 
 #<numeric type> ::= <integral type> | <floating-point type>
 def p_NumericType(p):
 	'''NumericType : IntegralType
 				| FloatingPointType'''
-	if "IntegralType" in p[1].type:
-		p[0] = Node("NumericType", [p[1]],[],typelist = p[1].typelist, order="c") 
-	else:
-		p[0] = Node("NumericType", [p[1]],[],typelist = p[1].typelist, order="c") 
+	p[0] = p[1]
+	# if "IntegralType" in p[1].type:
+	# 	p[0] = Node("NumericType", [p[1]],[],typelist = p[1].typelist, order="c") 
+	# else:
+	# 	p[0] = Node("NumericType", [p[1]],[],typelist = p[1].typelist, order="c") 
 
 #<integral type> ::= byte | short | int | long | char
 
@@ -792,7 +796,7 @@ def p_MethodInvocation(p):
 						# | Primary DOT Identifier LPARAN RPARAN
 #	print p[3].typelist
 	global currentScope
-	# print p[3].typelist
+	print p[3].typelist
 	if (currentScope.LookUpFunc(p[1].name, p[3].typelist[0:])==False):
 		print "a"
 #		return sys.exit("Method Invocation error")

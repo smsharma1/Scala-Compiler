@@ -51,7 +51,7 @@ class SymbolTable:
 				print "inupsymbol",scope.variables[symbolName][1]
 				return scope.variables[symbolName][1]
 			elif symbolName in scope.functions:
-				print symbolName, " *****************************************"
+				print symbolName, " *******", (scope.functions[symbolName])[0].returnType  
 				return (scope.functions[symbolName])[0].returnType
 			scope = scope.parent
 		return False
