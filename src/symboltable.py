@@ -35,7 +35,7 @@ class SymbolTable:
 	def LookUpFunc(self, symbolName, argList):
 		scope = self
 		while(scope):
-			print "scope.functions " , scope.functions
+		#	print "scope.functions " , scope.functions
 			if symbolName in scope.functions:
 				for func in scope.functions[symbolName]:
 				#	print func.argList
