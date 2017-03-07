@@ -678,7 +678,7 @@ def p_OrExpression(p):
 	'''OrExpression : AndExpression
 				  | AndExpression OR OrExpression'''
 	if(len(p)==2):
-		p[0] = Node("OrExpression", [p[1]],[],typelist = p[1].typelist, order='c')
+		p[0] = p[1]
 	else:
 		p[0] = Node("OrExpression", [p[1], p[3]],[p[2]],order='clc')
 
@@ -790,7 +790,7 @@ def p_MethodInvocation(p):
 						# | Primary DOT Identifier LPARAN RPARAN
 #	print p[3].typelist
 	global currentScope
-	# print p[3].typelist
+	print p[3].typelist
 	if (currentScope.LookUpFunc(p[1].name, p[3].typelist[0:])==False):
 		print "a"
 #		return sys.exit("Method Invocation error")
