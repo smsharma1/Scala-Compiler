@@ -678,7 +678,7 @@ def p_OrExpression(p):
 	'''OrExpression : AndExpression
 				  | AndExpression OR OrExpression'''
 	if(len(p)==2):
-		p[0] = Node("OrExpression", [p[1]],[],typelist = p[1].typelist, order='c')
+		p[0] = p[1]
 	else:
 		p[0] = Node("OrExpression", [p[1], p[3]],[p[2]],order='clc')
 
@@ -688,13 +688,13 @@ def p_AndExpression(p):
 	if len(p) ==  4:
 		p[0] = Node("AndExpression", [p[1],p[3]], [p[2]],order='clc')
 	else:
-		p[0] = Node("AndExpression", [p[1]],[],typelist = p[1].typelist, order='c')
+		p[0] = p[1]
 
 def p_XorExpression(p):
 	'''XorExpression : EqualityExpression
 					| XorExpression BITXOR EqualityExpression'''
 	if len(p) == 2:
-		p[0] = Node('XorExpression',[p[1]],[],typelist = p[1].typelist,order='c')
+		p[0] = p[1]
 	else :
 		p[0] = Node('XorExpression',[p[1],p[3]],[p[2]],order='clc')
 
@@ -707,7 +707,7 @@ def p_EqualityExpression(p):
 	if len(p) ==  4:
 		p[0] = Node("EqualityExpression", [p[1], p[3]], [p[2]],order='clc')
 	else:
-		p[0] = Node("EqualityExpression", [p[1]],[],typelist=p[1].typelist,order='c')
+		p[0] = p[1]
 
 def p_RelationalExpression(p):
 	'''RelationalExpression : ShiftExpression
@@ -719,7 +719,7 @@ def p_RelationalExpression(p):
 	if len(p) ==  4:
 		p[0] = Node("RelationalExpression", [p[1],p[3]], [p[2]],order='clc')
 	else:
-		p[0] = Node("RelationalExpression", [p[1]],[],typelist = p[1].typelist,order='c')
+		p[0] = p[1]
 
 def p_ShiftExpression(p):
 	'''ShiftExpression : AdditiveExpression
@@ -729,7 +729,7 @@ def p_ShiftExpression(p):
 	if len(p) ==  4:
 		p[0] = Node("ShiftExpression", [p[1], p[3]], [p[2]],order='clc')
 	else:
-		p[0] = Node("ShiftExpression", [p[1]],[],typelist = p[1].typelist,order='c')
+		p[0] = p[1]
 
 # <additive expression> ::= <multiplicative expression> | <additive expression> + <multiplicative expression> | <additive expression> - <multiplicative expression>
 def p_AdditiveExpression(p):
@@ -739,7 +739,7 @@ def p_AdditiveExpression(p):
 	if len(p) ==  4:
 		p[0] = Node("AdditiveExpression", [p[1],p[3]], [p[2]],order='clc')
 	else:
-		p[0] = Node("AdditiveExpression", [p[1]],[],typelist = p[1].typelist,order='c')
+		p[0] = p[1]
 
 # <multiplicative expression> ::= <unary expression> | <multiplicative expression> * <unary expression> | <multiplicative expression> / <unary expression> | <multiplicative expression> % <unary expression>
 def p_MultiplicativeExpression(p):
@@ -750,7 +750,7 @@ def p_MultiplicativeExpression(p):
 	if len(p) ==  4:
 		p[0] = Node("MultiplicativeExpression", [p[1], p[3]], [p[2]],order='clc')
 	else:
-		p[0] = Node("MultiplicativeExpression", [p[1]],[],typelist = p[1].typelist,order='c')
+		p[0] = p[1]
 
 def p_UnaryExpression(p):
 	'''UnaryExpression :  PLUS UnaryExpression
@@ -761,7 +761,7 @@ def p_UnaryExpression(p):
 	if len(p) ==  3:
 		p[0] = Node("MultiplicativeExpression", [p[2]], [p[1]],order='lc')
 	else:
-		p[0] = Node("MultiplicativeExpression", [p[1]],[],typelist = p[1].typelist,order='c')
+		p[0] = p[1]
 
 def p_UnaryExpressionNotPlusMinus(p):
 	'''UnaryExpressionNotPlusMinus : PostfixExpression
@@ -771,13 +771,13 @@ def p_UnaryExpressionNotPlusMinus(p):
 	if len(p) ==  3:
 		p[0] = Node("UnaryExpressionNotPlusMinus", [p[2]], [p[1]],order='lc')
 	else:
-		p[0] = Node("UnaryExpressionNotPlusMinus", [p[1]],[],typelist = p[1].typelist,order='c')
+		p[0] = p[1]
 def p_PostfixExpression(p):
 	'''PostfixExpression : Primary
 							| AmbiguousName'''
 							# | PostincrementExpression
 							# | PostdecrementExpression'''
-	p[0] = Node("PostfixExpression", [p[1]],[],typelist = p[1].typelist,order='c')
+	p[0] = p[1]
 # <method invocation> ::= <method name> ( <argument list>? ) | <primary> . <identifier> ( <argument list>? ) | super . <identifier> ( <argument list>? )
 #'''method_invocation : ambiguous_name LPAREN argument_list_extras RPAREN '''
 def p_MethodInvocation(p):
@@ -807,12 +807,12 @@ def p_ArgumentLists(p):
 	if(p[1] == None):
 		pass
 	elif 'ArgumentList' in p[1].name:
-		p[0] = Node('ArgumentLists',[p[1]],[],typelist = p[1].typelist,order='c')
+		p[0] = p[1]
 
 def p_Primary(p):
 	'''Primary : PrimaryNoNewArray'''
 				# | ArrayCreationExpression'''
-	p[0] = Node('Primary',[p[1]],[],typelist = p[1].typelist,order='c')
+	p[0] = p[1]
 
 # <primary no new array> ::= <literal> | this | ( <expression> ) | <class instance creation expression>
 # | <field access> | <method invocation> | <array access>
@@ -827,7 +827,7 @@ def p_PrimaryNoNewArray(p):
 	if len(p) == 3:
 		p[0] = Node('PrimaryNoNewArray',[p[2]],[p[1],p[3]],typelist = p[2].typelist,order='lcl')
 	else:
-		p[0] = Node('PrimaryNoNewArray',[p[1]],[],typelist = p[1].typelist,order='c')
+		p[0] = p[1]
 # <class instance creation expression> ::= new <class type> ( <argument list>? )
 
 def p_ClassInstanceCreationExpression(p):
@@ -867,7 +867,7 @@ def p_AmbiguousName(p):
 	'''AmbiguousName : ID
 					| AmbiguousName DOT ID'''
 	global currentScope
-
+#	print p[1],"hello",currentScope.LookUpSymbol(p[1])
 	if len(p)==2:
 		p[0] = Node('AmbiguousName',[],[p[1]],typelist = currentScope.LookUpSymbol(p[1]),order='l')
 	else:
