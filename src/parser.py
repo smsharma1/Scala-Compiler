@@ -109,7 +109,7 @@ def p_ObjectBody(p):
 	'''ObjectBody : Block'''
 	global currentScope
 	currentScope = currentScope.parent
-	p[0] = Node("ObjectBody",[p[1]],[],order='c')
+	p[0] = p[1] #Node("ObjectBody",[p[1]],[],order='c')
 
 #<class_declaration> ::= class <identifier> <class_header> <super>? { <class body declarations>? }
 
