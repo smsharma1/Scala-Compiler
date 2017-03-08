@@ -48,13 +48,13 @@ class SymbolTable:
 		scope = self
 		if symbolName in scope.variables:
 			# print "inupsymbol",scope.variables[symbolName][1]
-			return "variable"
+			return [self.variables[symbolName][1]]
 		elif symbolName in scope.functions:
-			return "function"
+			return [self.functions[symbolName][0].returnType]
 		elif symbolName in scope.classes:
-			return "class"
+			return ['class', self.classes[symbolName][0].name]
 		elif symbolName in scope.objects:
-			return "object"
+			return ['object', self.objects[symbolName][0].name]
 		else:
 			return False
 
@@ -71,8 +71,8 @@ class SymbolTable:
 		return False
 
 	def LookUpClass(self, symbolName, argList):
-		# print symbolName, " ", argList
-		# print self.name, " ", self.classes
+		print symbolName, " ", argList
+		print self.name, " ", self.classes
 		if symbolName in self.classes:
 			for class_name in self.classes[symbolName]:
 				# print class_name.argList
@@ -118,6 +118,46 @@ class SymbolTable:
 		else:
 			return False
 
+	def LookDotThing(self,rootScope,symbolName):
+		looklist = symbolName.split('.')
+		name = ""
+		myobject = self.LookUpObject(looklist[0])
+		print myobject," myobject ",looklist[0]
+		if myobject :
+			if looklist[1] in myobject.functions:
+				return myobject.functions[looklist[1]][0].returnType
+			elif looklist[1] in myobject.variables:
+				return myobject.variables[looklist[1]][1]		
+		else:
+			for name in looklist[:-1]:
+				print name," inelse ",rootscope.classes
+				if name in rootScope.classes:
+					rootScope = rootScope.classes[name]
+				else:
+					return False
+			if name in rootScope.functions:
+				for func in rootScope.functions[symbolName]:
+					return func.returnType
+			else:
+				return False
+		return False
+
+	def LookUpSymbolType(self, symbolName):
+		scope = self
+		while(scope is not None):
+			value = scope.LookUpCurrentScope(symbolName)
+			if(value):
+				return value
+			else:
+				scope = scope.parent
+		return False
+
+	def SetObjectName(self, currentName, newName):
+		print "Inselfobjectname", currentName," ",newName
+		myobject = self.LookUpObject(currentName)
+		self.objects[newName] = copy.deepcopy(myobject)
+		self.objects.pop(currentName, None)
+
 	def InsertVar(self, symbolName, val, type_name):
 	#	print "testing",type_name
 		if symbolName in self.variables:
@@ -150,17 +190,18 @@ class SymbolTable:
 		return self.classes[symbolName][0]
 	
 	def InsertObject(self, symbolName, className, valList):
-		print symbolName, "asdasda " , className
+		print symbolName, " ", className, " insert object***************"
 		if self.LookUpCurrentScope(symbolName):
 			return False
 		scope = self
 		while(scope):
 			if className in scope.classes:
+				print  "className"
 				class_name = scope.classes[className]
 				self.objects[symbolName] = copy.deepcopy(class_name) #notice that we actually need self here instead of scope
 				self.InvokeConstr(self.objects[symbolName], valList)
 				return True
-			scope=scope.parent 
+			scope = scope.parent
 		print "%s not found" % (className)
 		return False
 

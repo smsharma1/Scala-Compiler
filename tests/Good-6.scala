@@ -16,5 +16,6 @@ class node () {
 object Good6 {
    def main(args: Array[String]) {
       val n = new node(10, 20);
+      var y:Int = n.x;
    }
 }
