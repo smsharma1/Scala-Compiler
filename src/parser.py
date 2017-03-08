@@ -531,11 +531,11 @@ def p_StatementExpression(p):
 						# | PostincrementExpression
 						# | PredecrementExpression
 						# | PostdecrementExpression
-	p[0] = Node("StatementExpression", [p[1]],[],order='c')
+	p[0] =p[1] #Node("StatementExpression", [p[1]],[],order='c')
 
 def p_IfThenStatement(p):
 	'IfThenStatement : R_IF LPARAN Expression RPARAN Statement'
-	p[0] = Node("IfThenStatement", [p[3], p[5]],[p[1], p[2], p[4]],order='llclc')
+	p[0] = Node(p[1], [p[3], p[5]],[p[2], p[4]],order='lclc',isLeaf=True)
 
 def p_IfThenElseStatement(p):
 	'IfThenElseStatement : R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE Statement'
