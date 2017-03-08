@@ -8,6 +8,7 @@ from lexer import tokens
 graph = pydot.Dot(graph_type='digraph')
 rootScope = SymbolTable(None, "root")
 currentScope = rootScope
+symbol_file = open("Symbols.csv", "w+")
 class Node:
 	uid=0
 	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False):
@@ -110,7 +111,10 @@ def p_ObjectHeader(p):
 def p_ObjectBody(p):
 	'''ObjectBody : Block'''
 	global currentScope
+	global symbol_file
+	currentScope.Dumper(currentScope, symbol_file)
 	currentScope = currentScope.parent
+
 	p[0] = p[1] #Node("ObjectBody",[p[1]],[],order='c')
 
 #<class_declaration> ::= class <identifier> <class_header> <super>? { <class body declarations>? }
@@ -219,13 +223,17 @@ def p_VariableDeclarator1(p):
 							| ID COLON Type EQUALASS VariableInitializer COMMA VariableDeclarator1
 							| ID EQUALASS VariableInitializer COMMA VariableDeclarator1'''
 	global currentScope
+	global symbol_file
 	if(currentScope.LookUpVar(p[1])):
 			return sys.exit("Variable Already Declared")
 	if len(p)==4:
 		if(p[3].typelist[0] == 'object'):
 			currentScope.SetObjectName("temp", p[1])
+			# print self.LookUpObject(p[1]).name, " ", self.LookUpObject(p[1]).variables, "before dumper is called"
+			currentScope.Dumper(currentScope.LookUpObject(p[1]),symbol_file)
 		else:
-			currentScope.InsertVar(p[1],0,p[4].typelist[0])
+			print p[3].typelist, " in variabledeclarator1"
+			currentScope.InsertVar(p[1],0,p[4].typelist[0], length= p[3].typelist[1])
 		p[0] = Node("VariableDeclarator1", [p[3]],[p[1],p[2]], order="llc")
 	elif len(p)==8:
 		currentScope.InsertVar(p[1],0,p[3].typelist[0])
@@ -236,6 +244,7 @@ def p_VariableDeclarator1(p):
 	else:
 		if(p[3].typelist[0] == 'object'):
 			currentScope.SetObjectName("temp", p[1])
+			currentScope.Dumper(currentScope.LookUpObject(p[1]),symbol_file)
 		else:
 			currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node("VariableDeclarator1", [p[3], p[5]],[p[1],p[2], p[4]], order="llclc")
@@ -280,9 +289,9 @@ def p_ArrayInitializer(p):
 	''' ArrayInitializer : R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT RPARAN
 							| R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT COMMA INT RPARAN'''
 	if len(p) == 9:
-		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8]],typelist =['ARRAY' + p[4].typelist[0]], order="lllcllll")
+		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8]],typelist =['ARRAY' + p[4].typelist[0], int(p[7])], order="lllcllll")
 	else:
-		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8],p[9], p[10]],typelist=['ARRAYARRAY'+p[4].typelist[0]], order="lllcllllll")
+		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8],p[9], p[10]],typelist=['ARRAYARRAY'+p[4].typelist[0], int(p[7])*int(p[9])], order="lllcllllll")
 
 def p_EndStatement(p):
 	'''EndStatement : SEMICOLON
@@ -354,6 +363,8 @@ def  p_MethodReturnType(p):
 def p_MethodBody(p):
 	'''MethodBody : Block'''
 	global currentScope
+	global symbol_file
+	currentScope.Dumper(currentScope, symbol_file)
 	currentScope = currentScope.parent
 	# print currentScope.functions
 	p[0] = p[1]
@@ -488,6 +499,7 @@ def p_VariableDeclarationBody(p):
 	'''VariableDeclarationBody : ID COLON Type EQUALASS VariableInitializer
 		| ID EQUALASS VariableInitializer'''
 	global currentScope
+	global symbol_file
 	if(currentScope.LookUpVar(p[1])):
 		return sys.exit(p[1] + " Variable Already Declared")
 	if len(p) == 6:
@@ -499,8 +511,9 @@ def p_VariableDeclarationBody(p):
 	else:
 		if(p[3].typelist[0] == 'object'):
 			currentScope.SetObjectName("temp", p[1])
+			currentScope.Dumper(currentScope.LookUpObject(p[1]),symbol_file)
 		else:
-			currentScope.InsertVar(p[1],0,p[3].typelist[0])
+			currentScope.InsertVar(p[1],0,p[3].typelist[0], length= p[3].typelist[1])
 		p[0] = Node(p[2],[p[3]],[p[1]], order="lc",isLeaf=True)
 
 
@@ -645,7 +658,7 @@ def p_N(p):
 def p_ForVariables(p):
 	'ForVariables : DeclarationKeywordExtras ID LEFTARROW Expression ForUntilTo Expression'
 	if(p[1] == None):
-		print "For variables ",currentScope.LookUpVar(p[2])[1]
+		# print "For variables ",currentScope.LookUpVar(p[2])[1]
 		if(not (currentScope.LookUpVar(p[2])[1] == p[4].typelist[0] and p[4].typelist[0]==p[6].typelist[0]) ):
 			sys.exit("Error: ", p[2], "<-", p[4], " For Until To ", p[6], " type mismatch" )
 	else:
@@ -808,7 +821,7 @@ def p_RelationalExpression(p):
 						| RelationalExpression R_INSTANCEOF ReferenceType'''
 	if len(p) ==  4:
 		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
-		print p[1].typelist[0],"jjfjfjfj"
+		# print p[1].typelist[0],"jjfjfjfj"
 		if(not type_here):
 			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "<":
@@ -866,7 +879,7 @@ def p_MultiplicativeExpression(p):
 								| MultiplicativeExpression MODULUS UnaryExpression'''
 	if len(p) ==  4:
 		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
-		print p[1].typelist, "multiplicativeerror" , p[3].typelist
+		# print p[1].typelist, "multiplicativeerror" , p[3].typelist
 		if(not type_here):
 			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "*":
@@ -1083,7 +1096,8 @@ def p_CharacterLiteral(p):
 
 def p_StringLiteral(p):
 	'StringLiteral : STRING'
-	p[0] = Node(p[1], [], [], typelist = ['STRING'], isLeaf=True)
+	length = len(p[1])
+	p[0] = Node(p[1], [], [], typelist = ['STRING', length], isLeaf=True)
 	# p[0] = Node('StringLiteral',[],[p[1]],typelist = ['STRING'],order='l')
 
 
