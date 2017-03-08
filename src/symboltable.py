@@ -150,7 +150,7 @@ class SymbolTable:
 		return self.classes[symbolName][0]
 	
 	def InsertObject(self, symbolName, className, valList):
-		# print symbolName, " "
+		print symbolName, "asdasda " , className
 		if self.LookUpCurrentScope(symbolName):
 			return False
 		scope = self
@@ -160,9 +160,9 @@ class SymbolTable:
 				self.objects[symbolName] = copy.deepcopy(class_name) #notice that we actually need self here instead of scope
 				self.InvokeConstr(self.objects[symbolName], valList)
 				return True
-		else:
-			print "%s not found" % (className)
-			return False
+			scope=scope.parent 
+		print "%s not found" % (className)
+		return False
 
 	def InsertSingletonObject(self, symbolName):
 		self.singletonObject = SymbolTable(self, symbolName)

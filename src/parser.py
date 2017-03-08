@@ -749,15 +749,15 @@ def p_OrExpression(p):
 	else:
 		if (not (p[1].typelist[0] == 'BOOL' and p[3].typelist[0] ==  'BOOL')):
 			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
-		p[0] = Node("||", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
+		p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 
 def p_AndExpression(p):
 	'''AndExpression : XorExpression
 					| AndExpression AND XorExpression'''
 	if len(p) ==  4:
 		if (not (p[1].typelist[0] == 'BOOL' and p[3].typelist[0] ==  'BOOL')):
-			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
-		p[0] = Node("&&", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
+			sys.exit("Error: " + p[1].typelist[0] + " " + p[3].typelist[0] + " type mismatch")
+		p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 	else:
 		p[0] = p[1]
 
@@ -769,7 +769,7 @@ def p_XorExpression(p):
 	else :
 		if(not (p[1].typelist[0]=='BOOL' and p[3].typelist[0]=='BOOL')):
 			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
-		p[0] = Node("^", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
+		p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 
 
 
@@ -781,9 +781,9 @@ def p_EqualityExpression(p):
 		if(not p[1].typelist[0] == p[3].typelist[0]):
 			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "==":
-			p[0] = Node("==", [p[1], p[3]], [],typelist = ['BOOL'],order='cc',isLeaf=True)
+			p[0] = Node(p[2], [p[1], p[3]], [],typelist = ['BOOL'],order='cc',isLeaf=True)
 		elif p[2] == "!=":
-			p[0] = Node("!=", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)	
+			p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)	
 	else:
 		p[0] = p[1]
 
@@ -799,7 +799,7 @@ def p_RelationalExpression(p):
 		if(not type_here):
 			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "<":
-			p[0] = Node("<", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
+			p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 		elif p[2] == ">":
 			p[0] = Node(">", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 		elif p[2] == "<=":
