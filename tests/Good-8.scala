@@ -21,7 +21,26 @@ object Good8 {
 			var c : Int = 0;
 	//		var d =add(a);
 			var d : Int = sub(i);
-			 d = sub(i);
+			d = sub(i);
+			var x : Int = 0;
+      		// An infinite loop.
+      		while( true )
+			{
+         		if( x == 2 )
+				 {
+            	//	x = x + 1;
+         		}
+				else
+				{
+
+				}
+     		 }
+			for ( x <- 1 until 10 )
+			{
+				continue x;
+				break x;
+         		//println( "Value of a: " + a );
+      		}
 	//	    var f = sub(i);
 	//	    var g = sub(i/c);
 		//    d = sub(i%c);

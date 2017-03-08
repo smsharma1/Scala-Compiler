@@ -58,7 +58,6 @@ reserved = {
 	'null' : 'R_NULL',
 #	'\u21D2' : 'R_IMPLIES',
 #	'\u2190' : 'R_LEFTARROW',
-	'<-' : 'R_LEFTARROW1',
 	#'<:' : 'R_OBSCURE',
 	#'#' : 'R_HASH',
 	# '@' : 'R_ATTHERATE',
@@ -148,6 +147,7 @@ tokens =list(reserved.values()) +  [
 #	'UNDERSCORE',
 	#'QUESTION',
 	'BITRSFILLASS',
+	'LEFTARROW'
 	# 'HEXDIGIT',
 	# 'ZERO',
 #	'INTERGERTYPESUFFIX',
@@ -172,6 +172,7 @@ def t_ID(t):
 #t_QUESTION = r'\?'
 # t_HEXDIGIT = r'[0-9a-fA-F]'
 #t_INTERGERTYPESUFFIX = r'[lL]'
+t_LEFTARROW = r'<-'
 t_GT = r'>'
 t_GE = r'>='
 t_LT = r'<'
