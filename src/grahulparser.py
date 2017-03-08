@@ -10,7 +10,7 @@ currentScope = SymbolTable(None, "root")
 
 class Node:
 	uid=0
-	def __init__(self,type,children,leaf,typelist='Unit',seqNo=1,order='',isLeaf=False):
+	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False):
 		self.type = type
 		self.typelist = typelist
 		Node.uid = Node.uid + 1
@@ -43,7 +43,7 @@ class Node:
 					# graph.write_png('debug.png')
 						if nodes.get_name() == children[childno].name:
 							nodes.set("myNo", count)
-							print(nodes.to_string())
+						#	print(nodes.to_string())
 					count = count + 1
 				childno = childno + 1
 
@@ -59,8 +59,9 @@ def p_ImportDeclarationss(p):
 							| empty'''
 	if(p[1] == None):
 		pass
-	elif "ImportDeclarations" in p[1].name:
-		p[0] = Node("ImportDeclarationss",[p[1]],[], order="c")
+	else:
+		p[0] = p[1]
+		# p[0] = Node("ImportDeclarationss",[p[1]],[], order="c")
 #<import declarations> ::= <import declaration> | <import declarations> <import declaration>
 
 def p_ImportDeclarations(p):
@@ -69,7 +70,8 @@ def p_ImportDeclarations(p):
 	if len(p)==3:
 		p[0] = Node("ImportDeclarations", [p[1], p[2]],[], order="cc")
 	else:
-		p[0] = Node("ImportDeclarations", [p[1]],[], order="c")
+		p[0] = p[1]
+		#Node("ImportDeclarations", [p[1]],[], order="c")
 
 #<import declaration> ::= import <type name> ;
 
@@ -82,14 +84,14 @@ def p_ClassObjectsList(p):
 	'''ClassObjectsList : ClassObjectsList ClassAndObjectDeclaration
 						| ClassAndObjectDeclaration'''
 	if len(p) ==2:
-		p[0] = Node('ClassObjectsList',[p[1]],[], order="c")
+		p[0] = p[1] #Node('ClassObjectsList',[p[1]],[], order="c")
 	else:
 		p[0] = Node('ClassObjectsList',[p[1],p[2]],[], order = "cc")
 #<classes_objects> ::= <class_object> | <class_object> <classes_objects>
 def p_ClassAndObjectDeclaration(p):
 	'''ClassAndObjectDeclaration : ObjectDeclaration
 								| ClassDeclaration'''
-	p[0] = Node('ClassAndObjectDeclaration',[p[1]],[], order="c")
+	p[0] = p[1] #Node('ClassAndObjectDeclaration',[p[1]],[], order="c")
 
 
 #<object_declaration> ::= object <identifier> <super>? { method_body }
@@ -107,7 +109,7 @@ def p_ObjectBody(p):
 	'''ObjectBody : Block'''
 	global currentScope
 	currentScope = currentScope.parent
-	p[0] = Node("ObjectBody",[p[1]],[],order='c')
+	p[0] = p[1] #Node("ObjectBody",[p[1]],[],order='c')
 
 #<class_declaration> ::= class <identifier> <class_header> <super>? { <class body declarations>? }
 
@@ -125,7 +127,7 @@ def p_ClassBody(p):
 	global currentScope
 	# print currentScope
 	currentScope = currentScope.parent
-	print currentScope.classes
+#	print currentScope.classes
 	if len(p) == 5:
 		p[0] = Node("ClassBody",[p[1],p[3]],[p[2],p[4]],order="clcl")
 	else:
@@ -171,8 +173,10 @@ def p_FormalParameterLists(p):
 							| empty'''
 	if(p[1] == None):
 		pass
-	elif 'FormalParameterList' in p[1].name:
-		p[0] = Node('FormalParameterList',[p[1]],[],order="c")
+	else:
+		p[0] = p[1]
+	# elif 'FormalParameterList' in p[1].name:
+	# 	p[0] = Node('FormalParameterList',[p[1]],[],order="c")
 
 #<class body declarations> ::= <class body declaration> | <class body declarations> <class body declaration>
 def p_ClassBodyDeclarations(p):
@@ -185,11 +189,12 @@ def p_ClassBodyDeclarations(p):
 #<class body declaration> ::= <field declaration> | <method declaration>
 def p_ClassBodyDeclaration(p):
 	'''ClassBodyDeclaration : FieldDeclaration
-							| MethodDeclaration'''
-	if "FieldDeclaration" in p[1].name:
-		p[0] = Node("ClassBodyDeclaration", [p[1]],[], order="c")
-	else:
-		p[0] = Node("ClassBodyDeclaration", [p[1]],[], order="c")
+						| MethodDeclaration'''
+	p[0] = p[1]
+	# if "FieldDeclaration" in p[1].name:
+	# 	p[0] = Node("ClassBodyDeclaration", [p[1]],[], order="c")
+	# else:
+	# 	p[0] = Node("ClassBodyDeclaration", [p[1]],[], order="c")
 
 #<formal parameter list> ::= <formal parameter> | <formal parameter list> , <formal parameter>
 def p_FormalParameterList(p):
@@ -233,7 +238,8 @@ def p_FuncArgumentListExtras(p):
 	if(p[1] == None):
 		pass
 	else:
-		p[0] = Node("FuncArgumentListExtras", [p[1]],[],typelist = p[1].typelist, order="c") 
+		p[0]= p[1]
+		# p[0] = Node("FuncArgumentListExtras", [p[1]],[],typelist = p[1].typelist, order="c") 
 
 def p_VariableDeclarators(p):
 	'''VariableDeclarators : VariableDeclarator
@@ -241,7 +247,8 @@ def p_VariableDeclarators(p):
 	if len(p)==4:
 		p[0] = Node("VariableDeclarators", [p[1], p[3]],[p[2]],typelist = p[1].typelist + p[3].typelist, order="clc") 
 	else:
-		p[0] = Node("VariableDeclarators", [p[1]],[],typelist = p[1].typelist, order="c") 
+		p[0] = p[1]
+		# p[0] = Node("VariableDeclarators", [p[1]],[],typelist = p[1].typelist, order="c") 
 						
 def p_VariableDeclarator(p):
 	'''VariableDeclarator : ID COLON Type '''
@@ -257,21 +264,22 @@ def p_VariableInitializer(p):
 							| Expression
 							| ClassInstanceCreationExpression'''
 
-
-	p[0] = Node("VariableInitializer", [p[1]],[],typelist = p[1].typelist, order="c")
+	p[0] = p[1]
+	# p[0] = Node("VariableInitializer", [p[1]],[],typelist = p[1].typelist, order="c")
 
 def p_ArrayInitializer(p):
 	''' ArrayInitializer : R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT RPARAN
 							| R_NEW R_ARRAY LSQRB Type RSQRB LPARAN INT COMMA INT RPARAN'''
 	if len(p) == 9:
-		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8]],typelist = p[4].typelist, order="lllcllll")
+		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8]],typelist =['ARRAY']+p[4].typelist[0], order="lllcllll")
 	else:
-		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8],p[9], p[10]], order="lllcllllll")
+		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8],p[9], p[10]],typelist=['ARRAYARRAY'] + p[4].typelist[0], order="lllcllllll")
 
 def p_EndStatement(p):
 	'''EndStatement : SEMICOLON
 					| LINEFEED'''
-	p[0] = Node("EndStatement", [],[p[1]], order="l")
+	p[0] = Node(p[1], [], [], isLeaf=True)
+	# p[0] = Node("EndStatement", [],[p[1]], order="l")
 #<method declaration> ::= <method header> <method body>
 def p_MethodDeclaration(p):
 	'MethodDeclaration : MethodHeader MethodBody'
@@ -280,11 +288,14 @@ def p_MethodDeclaration(p):
 def p_MethodHeader(p):
 	'''MethodHeader : MethodDefine MethodDeclarator MethodReturnTypeExtras'''
 	global currentScope
+	parentScope = currentScope.parent
+	parentScope.functions[p[2].typelist[0]] = currentScope
 	if p[3] != None:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
 			return sys.exit("Method declaration error")
 		else:
 			currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
+
 		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + p[3].typelist,order="ccc")
 	else:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
@@ -320,13 +331,13 @@ def p_MethodReturnTypeExtras(p):
 		pass
 	elif len(p)==4:
 		p[0] = Node("MethodReturnTypeExtras", [p[2]],[p[1], p[3]],typelist = p[2].typelist, order="lcl")
-	elif "=" in p[1].name:
+	elif "=" in p[1]:
 		p[0] = Node("MethodReturnTypeExtras", [],[p[1]], order="l")
 
 def  p_MethodReturnType(p):
 	'''MethodReturnType : Type'''
-	if "Type" in p[1].name:
-		p[0] = Node("MethodReturnType", [p[1]],[],typelist = p[1].typelist, order="c")
+	p[0] = p[1]
+	# p[0] = Node("MethodReturnType", [p[1]],[],typelist = p[1].typelist, order="c")
 	# else:
 	# 	p[0] = Node("MethodReturnType", [],[p[1]], order="l")
 
@@ -335,35 +346,44 @@ def p_MethodBody(p):
 	'''MethodBody : Block'''
 	global currentScope
 	currentScope = currentScope.parent
-	print currentScope.functions
-	p[0] = Node("MethodBody", [p[1]],[], order="c")
+	# print currentScope.functions
+	p[0] = p[1]
+	# p[0] = Node("MethodBody", [p[1]],[], order="c")
 
 #<type> ::= <primitive type> | <reference type>
 def p_Type(p):
 	'''Type : PrimitiveType
 		| ReferenceType'''
-	if "PrimitiveType" in p[1].type:
-		p[0] = Node("Type", [p[1]],[],typelist = p[1].typelist, order="c") 
-	else:
-		p[0] = Node("Type", [p[1]],[],typelist = p[1].typelist, order="c") 
+	# print p[1].typelist
+	#print p[1]
+	p[0] = p[1]
+	# if "PrimitiveType" in p[1].type:
+	# 	p[0] = Node("Type", [p[1]],[],typelist = p[1].typelist, order="c") 
+	# else:
+	# 	p[0] = Node("Type", [p[1]],[],typelist = p[1].typelist, order="c") 
 
 #<primitive type> ::= <numeric type> | boolean
 def p_PrimitiveType(p):
 	'''PrimitiveType : NumericType
 					| R_BOOLEAN'''
-	if "NumericType" in p[1].type:
-		p[0] = Node("PrimitiveType", [p[1]],[],typelist = p[1].typelist, order="c") 
+	if p[1] == 'Boolean':
+		p[0] = Node(p[1], [], [], typelist = ['BOOL'], isLeaf=True)
 	else:
-		p[0] = Node("PrimitiveType", [],[p[1]],['BOOL'] ,order="l") 
+		p[0] = p[1]
+	# if "NumericType" in p[1].type:
+	# 	p[0] = Node("PrimitiveType", [p[1]],[],typelist = p[1].typelist, order="c") 
+	# else:
+	# 	p[0] = Node("PrimitiveType", [],[p[1]],['BOOL'] ,order="l") 
 
 #<numeric type> ::= <integral type> | <floating-point type>
 def p_NumericType(p):
 	'''NumericType : IntegralType
 				| FloatingPointType'''
-	if "IntegralType" in p[1].type:
-		p[0] = Node("NumericType", [p[1]],[],typelist = p[1].typelist, order="c") 
-	else:
-		p[0] = Node("NumericType", [p[1]],[],typelist = p[1].typelist, order="c") 
+	p[0] = p[1]
+	# if "IntegralType" in p[1].type:
+	# 	p[0] = Node("NumericType", [p[1]],[],typelist = p[1].typelist, order="c") 
+	# else:
+	# 	p[0] = Node("NumericType", [p[1]],[],typelist = p[1].typelist, order="c") 
 
 #<integral type> ::= byte | short | int | long | char
 
@@ -376,19 +396,26 @@ def p_IntegralType(p):
 				 | R_STRING
 				 | R_UNIT'''
 	if 'Byte' in p[1]:
-		p[0] = Node("IntegralType", [],[p[1]],typelist = ['BYTE'], order="l") 
+		p[0] = Node(p[1], [], [], typelist = ['BYTE'], isLeaf=True)
+		# p[0] = Node("IntegralType", [],[p[1]],typelist = ['BYTE'], order="l") 
 	elif 'Short' in p[1]:
-		p[0] = Node("IntegralType", [],[p[1]],typelist = ['SHORT'], order="l")
+		p[0] = Node(p[1], [], [], typelist = ['SHORT'], isLeaf=True)
+		# p[0] = Node("IntegralType", [],[p[1]],typelist = ['SHORT'], order="l")
 	elif 'Int' in p[1]:
-		p[0] = Node("IntegralType", [],[p[1]],typelist = ['INT'], order="l")
+		p[0] = Node(p[1], [], [], typelist = ['INT'], isLeaf=True)
+		# p[0] = Node("IntegralType", [],[p[1]],typelist = ['INT'], order="l")
 	elif 'Long' in p[1]:
-		p[0] = Node("IntegralType", [],[p[1]],typelist = ['LONG'], order="l")
+		p[0] = Node(p[1], [], [], typelist = ['LONG'], isLeaf=True)
+		# p[0] = Node("IntegralType", [],[p[1]],typelist = ['LONG'], order="l")
 	elif 'Char' in p[1]:
-		p[0] = Node("IntegralType", [],[p[1]],typelist = ['CHAR'], order="l")
+		p[0] = Node(p[1], [], [], typelist = ['CHAR'], isLeaf=True)
+		# p[0] = Node("IntegralType", [],[p[1]],typelist = ['CHAR'], order="l")
 	elif 'String' in p[1]:
-		p[0] = Node("IntegralType", [],[p[1]],typelist = ['STRING'], order="l")
+		p[0] = Node(p[1], [], [], typelist = ['STRING'], isLeaf=True)
+		# p[0] = Node("IntegralType", [],[p[1]],typelist = ['STRING'], order="l")
 	else:
-		p[0] = Node("IntegralType", [],[p[1]],typelist = ['UNIT'], order="l")
+		p[0] = Node(p[1], [], [], typelist = ['UNIT'], isLeaf=True)
+		# p[0] = Node("IntegralType", [],[p[1]],typelist = ['UNIT'], order="l")
 
 #<floating-point type> ::= float | double
 def p_FloatingPointType(p):
@@ -415,7 +442,7 @@ def p_ClassType(p):
 def p_ArrayType(p):
 	'''ArrayType : R_ARRAY LSQRB Type RSQRB
 				| R_LIST LSQRB Type RSQRB'''
-	p[0] = Node("ArrayType", [p[3]],[p[1], p[2], p[4]],typelist = p[3].typelist, order="llcl") 
+	p[0] = Node("ArrayType", [p[3]],[p[1], p[2], p[4]],typelist = ['ARRAY' + p[3].typelist[0]], order="llcl") 
 
 #<block> ::= { <block statements>? }
 def p_Block(p):
@@ -430,7 +457,7 @@ def p_BlockStatements(p):
 	'''BlockStatements : BlockStatement
 					| BlockStatements BlockStatement'''
 	if len(p)==2:
-		p[0] = Node("BlockStatements", [p[1]],[], order="c")
+		p[0] = p[1]
 	else:
 		p[0] = Node("BlockStatements", [p[1],p[2]],[], order="cc")
 
@@ -438,7 +465,7 @@ def p_BlockStatement(p):
 	'''BlockStatement : LocalVariableDeclarationStatement
 					| Statement
 					| MethodDeclaration'''
-	p[0] = Node("BlockStatement", [p[1]],[], order="c")
+	p[0] = p[1]
 
 def p_LocalVariableDeclarationStatement(p):
 	'LocalVariableDeclarationStatement : LocalVariableDeclaration EndStatement'
@@ -452,13 +479,19 @@ def p_VariableDeclarationBody(p):
 	'''VariableDeclarationBody : ID COLON Type EQUALASS VariableInitializer
 		| ID EQUALASS VariableInitializer'''
 	global currentScope
+#	print "checking",p[3].typelist
 	if(currentScope.LookUpVar(p[1])):
-			return sys.exit("Variable Already Declared")
+			return sys.exit(p[1] + " Variable Already Declared")
 	if len(p) == 6:
 		currentScope.InsertVar(p[1],0,p[3].typelist)
 		p[0] = Node('VariableDeclarationBody',[p[3],p[5]],[p[1],p[2],p[4]], order="llclc")
 	else:
-		currentScope.InsertVar(p[1],0,'Var')
+		if(p[3].typelist[0] == "ARRAY"):
+			value = currentScope.InsertArray(p[1],p[3].typelist[1])
+			if(value == False) :
+				sys.exit("Array name already used for some symbol in currentScope")
+		else:
+			currentScope.InsertVar(p[1],0,p[3].typelist)
 		p[0] = Node('VariableDeclarationBody',[p[3]],[p[1],p[2]], order="llc")
 
 def p_Statement(p):
@@ -467,7 +500,7 @@ def p_Statement(p):
 				| IfThenElseStatement
 				| WhileStatement
 				| ForStatement'''
-	p[0] = Node("Statement", [p[1]],[],order='c')
+	p[0] = p[1]
 
 
 def p_StatementWithoutTrailingSubstatement(p):
@@ -478,7 +511,7 @@ def p_StatementWithoutTrailingSubstatement(p):
 										| BreakStatement
 										| ContinueStatement
 										| ReturnStatement'''
-	p[0] = Node("StatementWithoutTrailingSubstatement", [p[1]],[],order='c')
+	p[0] = p[1]
 
 # <statement no short if> ::= <statement without trailing substatement> | <if then else statement no short if>
 # | <while statement no short if> | <for statement no short if>
@@ -582,8 +615,10 @@ def p_DeclarationKeywordExtras(p):
 								| empty'''
 	if(p[1] == None):
 		pass
-	elif 'VariableHeader' in p[1].name:
-		p[0] = Node('DeclarationKeywordExtras',[p[1]],[],order='c')
+	# elif 'VariableHeader' in p[1].name:
+	# 	p[0] = Node('DeclarationKeywordExtras',[p[1]],[],order='c')
+	else:
+		p[0] = p[1]
 
 def p_VariableHeader(p):
 	'''VariableHeader : R_VAL
@@ -623,7 +658,9 @@ def p_ReturnStatement(p):
 
 def p_Expression(p):
 	'''Expression : OrExpression'''
-	p[0] = Node("Expression", [p[1]],[],typelist = p[1].typelist,order='c')
+	p[0] = p[1]
+	print p[1].typelist , "In expression"
+	# p[0] = Node("Expression", [p[1]],[],typelist = p[1].typelist,order='c')
 
 
 # def p_CondititionalExpression(p):
@@ -635,7 +672,7 @@ def p_Expression(p):
 def p_LeftHandSide(p):
 	'''LeftHandSide : AmbiguousName'''
 					# | FieldAccess
-	p[0] = Node("LeftHandSide", [p[1]],[],order='c')
+	p[0] = p[1] #Node("LeftHandSide", [p[1]],[],typelist=p[1].type,order='c')
 
 def p_AssignmentOperator(p):
 	'''AssignmentOperator : EQUALASS
@@ -657,37 +694,41 @@ def p_Assignment(p):
 	'''Assignment : LeftHandSide AssignmentOperator OrExpression
 				| ArrayAccess EQUALASS OrExpression'''
 				#| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
-	if len(p)==4 :
-		p[0] = Node("Assignment", [p[1], p[2], p[3]],[], order="ccc")
-	#elif len(p)==7 :
-	#	p[0] = Node("Assignment", [p[1], p[3], p[6]],[p[2], p[4], p[5]], order="clcllc")
+	print p[1].typelist,"hello ",p[3].typelist
+	if p[2]=="=":
+		if allowed(p[1].typelist[0], p[3].typelist[0]) :
+			p[0] = Node("Assignment", [p[1], p[3]],[p[2]], order="clc")
+		else:
+			return sys.exit("assignment mismatch error")
 	else:
-		p[0] = Node("Assignment",[p[1],p[3]],[p[2]], order="clc")
+		if allowed(p[1].typelist[0], p[3].typelist[0]) :
+			p[0] = Node("Assignment", [p[1], p[2], p[3]],[], order="ccc")
+		return sys.exit("assignment mismatch error")
 
 
 def p_OrExpression(p):
 	'''OrExpression : AndExpression
 				  | AndExpression OR OrExpression'''
 	if(len(p)==2):
-		p[0] = Node("OrExpression", [p[1]],[],typelist = p[1].typelist, order='c')
+		p[0] = p[1]
 	else:
-		p[0] = Node("OrExpression", [p[1], p[3]],[p[2]],order='clc')
+		p[0] = Node("||", [p[1], p[3]], [],order='cc',isLeaf=True)
 
 def p_AndExpression(p):
 	'''AndExpression : XorExpression
 					| AndExpression AND XorExpression'''
 	if len(p) ==  4:
-		p[0] = Node("AndExpression", [p[1],p[3]], [p[2]],order='clc')
+		p[0] = Node("&&", [p[1], p[3]], [],order='cc',isLeaf=True)
 	else:
-		p[0] = Node("AndExpression", [p[1]],[],typelist = p[1].typelist, order='c')
+		p[0] = p[1]
 
 def p_XorExpression(p):
 	'''XorExpression : EqualityExpression
 					| XorExpression BITXOR EqualityExpression'''
 	if len(p) == 2:
-		p[0] = Node('XorExpression',[p[1]],[],typelist = p[1].typelist,order='c')
+		p[0] = p[1]
 	else :
-		p[0] = Node('XorExpression',[p[1],p[3]],[p[2]],order='clc')
+		p[0] = Node("^", [p[1], p[3]], [],order='cc',isLeaf=True)
 
 
 
@@ -696,9 +737,12 @@ def p_EqualityExpression(p):
 						 | EqualityExpression EQUAL RelationalExpression
 						| EqualityExpression NOTEQUAL RelationalExpression'''
 	if len(p) ==  4:
-		p[0] = Node("EqualityExpression", [p[1], p[3]], [p[2]],order='clc')
+		if p[2] == "==":
+			p[0] = Node("==", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == "!=":
+			p[0] = Node("!=", [p[1], p[3]], [],order='cc',isLeaf=True)	
 	else:
-		p[0] = Node("EqualityExpression", [p[1]],[],typelist=p[1].typelist,order='c')
+		p[0] = p[1]
 
 def p_RelationalExpression(p):
 	'''RelationalExpression : ShiftExpression
@@ -708,9 +752,18 @@ def p_RelationalExpression(p):
 						| RelationalExpression GE ShiftExpression
 						| RelationalExpression R_INSTANCEOF ReferenceType'''
 	if len(p) ==  4:
-		p[0] = Node("RelationalExpression", [p[1],p[3]], [p[2]],order='clc')
+		if p[2] == "<":
+			p[0] = Node("<", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == ">":
+			p[0] = Node(">", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == "<=":
+			p[0] = Node("<=", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == ">=":
+			p[0] = Node(">=", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == "instanceof":
+			p[0] = Node("instanceof", [p[1], p[3]], [],order='cc',isLeaf=True)
 	else:
-		p[0] = Node("RelationalExpression", [p[1]],[],typelist = p[1].typelist,order='c')
+		p[0] = p[1]
 
 def p_ShiftExpression(p):
 	'''ShiftExpression : AdditiveExpression
@@ -718,9 +771,14 @@ def p_ShiftExpression(p):
 					| ShiftExpression BITRSHIFT AdditiveExpression
 					| ShiftExpression BITRSFILL AdditiveExpression'''
 	if len(p) ==  4:
-		p[0] = Node("ShiftExpression", [p[1], p[3]], [p[2]],order='clc')
+		if p[2] == "<<":
+			p[0] = Node("<<", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == ">>":
+			p[0] = Node("<<", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == ">>>":
+			p[0] = Node(">>>", [p[1], p[3]], [],order='cc',isLeaf=True)
 	else:
-		p[0] = Node("ShiftExpression", [p[1]],[],typelist = p[1].typelist,order='c')
+		p[0] = p[1]
 
 # <additive expression> ::= <multiplicative expression> | <additive expression> + <multiplicative expression> | <additive expression> - <multiplicative expression>
 def p_AdditiveExpression(p):
@@ -728,9 +786,12 @@ def p_AdditiveExpression(p):
 							| AdditiveExpression PLUS MultiplicativeExpression
 							| AdditiveExpression MINUS MultiplicativeExpression'''
 	if len(p) ==  4:
-		p[0] = Node("AdditiveExpression", [p[1],p[3]], [p[2]],order='clc')
+		if p[2] == "+":
+			p[0] = Node("+", [p[1],p[3]], [ ],order='cc',isLeaf=True)
+		else:
+			p[0] = Node("-", [p[1],p[3]], [ ],order='cc',isLeaf=True)
 	else:
-		p[0] = Node("AdditiveExpression", [p[1]],[],typelist = p[1].typelist,order='c')
+		p[0] = p[1]
 
 # <multiplicative expression> ::= <unary expression> | <multiplicative expression> * <unary expression> | <multiplicative expression> / <unary expression> | <multiplicative expression> % <unary expression>
 def p_MultiplicativeExpression(p):
@@ -739,9 +800,14 @@ def p_MultiplicativeExpression(p):
 								| MultiplicativeExpression DIVISION UnaryExpression
 								| MultiplicativeExpression MODULUS UnaryExpression'''
 	if len(p) ==  4:
-		p[0] = Node("MultiplicativeExpression", [p[1], p[3]], [p[2]],order='clc')
+		if p[2] == "*":
+			p[0] = Node("*", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == "%":
+			p[0] = Node("%", [p[1], p[3]], [],order='cc',isLeaf=True)
+		elif p[2] == "/":
+			p[0] = Node("/", [p[1], p[3]], [],order='cc',isLeaf=True)
 	else:
-		p[0] = Node("MultiplicativeExpression", [p[1]],[],typelist = p[1].typelist,order='c')
+		p[0] = p[1]
 
 def p_UnaryExpression(p):
 	'''UnaryExpression :  PLUS UnaryExpression
@@ -750,9 +816,13 @@ def p_UnaryExpression(p):
 						# | PreincrementExpression
 						# | PredecrementExpression'''
 	if len(p) ==  3:
-		p[0] = Node("MultiplicativeExpression", [p[2]], [p[1]],order='lc')
+		if p[1] == "+":
+			p[0] = Node("+", [p[2]], [],order='c',isLeaf=True)
+		elif p[1] == "-":
+			p[0] = Node("-", [p[2]], [],order='c',isLeaf=True)
 	else:
-		p[0] = Node("MultiplicativeExpression", [p[1]],[],typelist = p[1].typelist,order='c')
+		p[0] = p[1]
+		print p[1].typelist,"Unaryexpression"
 
 def p_UnaryExpressionNotPlusMinus(p):
 	'''UnaryExpressionNotPlusMinus : PostfixExpression
@@ -760,15 +830,16 @@ def p_UnaryExpressionNotPlusMinus(p):
 									#| CastExpression'''
 									#| BITNEG UnaryExpression
 	if len(p) ==  3:
-		p[0] = Node("UnaryExpressionNotPlusMinus", [p[2]], [p[1]],order='lc')
+		p[0] = Node("!", [p[2]], [],order='c',isLeaf=True)
 	else:
-		p[0] = Node("UnaryExpressionNotPlusMinus", [p[1]],[],typelist = p[1].typelist,order='c')
+		p[0] = p[1]
 def p_PostfixExpression(p):
 	'''PostfixExpression : Primary
 							| AmbiguousName'''
 							# | PostincrementExpression
 							# | PostdecrementExpression'''
-	p[0] = Node("PostfixExpression", [p[1]],[],typelist = p[1].typelist,order='c')
+	p[0] = p[1]
+	print p[1].type, p[1].typelist, "in postfixexpression"
 # <method invocation> ::= <method name> ( <argument list>? ) | <primary> . <identifier> ( <argument list>? ) | super . <identifier> ( <argument list>? )
 #'''method_invocation : ambiguous_name LPAREN argument_list_extras RPAREN '''
 def p_MethodInvocation(p):
@@ -781,29 +852,38 @@ def p_MethodInvocation(p):
 						# | Primary DOT Identifier LPARAN RPARAN
 #	print p[3].typelist
 	global currentScope
-	print p[3].typelist
-	if (currentScope.LookUpFunc(p[1].typelist[0], p[3].typelist[0:])==False):
+	print p[1].type,"name",currentScope.name
+	print p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist[0:])
+	if (currentScope.LookUpFunc(p[1].type, p[3].typelist[0:])==False):
 		print "a"
 #		return sys.exit("Method Invocation error")
-	else:
-		currentScope = currentScope.GetScope(p[1].typelist[0], p[3].typelist[0:])
+	# else:
+	# 	currentScope = currentScope.GetScope(p[1].name, p[3].typelist[0:])
 	if len(p) ==  5:
-		p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]],typelist = p[3].typelist , order='clcl')
+		if(currentScope.LookUpSymbol(p[1].type) == "function"):
+			funcScope = currentScope.LookUpFunc(p[1].type, p[3].typelist)
+			if funcScope :
+				p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]],typelist = funcScope.returnType , order='clcl')
+		else:
+			sys.exit("Error:" ,p[1].type," Not a function")
 	# elif len(p) ==  4:
 	# 	p[0] = Node("MethodInvocation", [p[1]], [p[2], p[3]])
 
 def p_ArgumentLists(p):
 	'''ArgumentLists : ArgumentList
 						| empty'''
+	print "i ma here"
 	if(p[1] == None):
+		print "i ma here"
 		pass
-	elif 'ArgumentList' in p[1].name:
-		p[0] = Node('ArgumentLists',[p[1]],[],typelist = p[1].typelist,order='c')
+	else:
+		p[0] = p[1]
+		print p[1].typelist, " argumentlists"
 
 def p_Primary(p):
 	'''Primary : PrimaryNoNewArray'''
 				# | ArrayCreationExpression'''
-	p[0] = Node('Primary',[p[1]],[],typelist = p[1].typelist,order='c')
+	p[0] = p[1]
 
 # <primary no new array> ::= <literal> | this | ( <expression> ) | <class instance creation expression>
 # | <field access> | <method invocation> | <array access>
@@ -818,7 +898,7 @@ def p_PrimaryNoNewArray(p):
 	if len(p) == 3:
 		p[0] = Node('PrimaryNoNewArray',[p[2]],[p[1],p[3]],typelist = p[2].typelist,order='lcl')
 	else:
-		p[0] = Node('PrimaryNoNewArray',[p[1]],[],typelist = p[1].typelist,order='c')
+		p[0] = p[1]
 # <class instance creation expression> ::= new <class type> ( <argument list>? )
 
 def p_ClassInstanceCreationExpression(p):
@@ -840,7 +920,9 @@ def p_ArgumentList(p):
 	'''ArgumentList : Expression
 					| ArgumentList COMMA Expression'''
 	if len(p) == 2:
-		p[0] = Node('ArgumentList',[p[1]],[],typelist = p[1].typelist,order='c')
+		print p[1].typelist, " p[1].typelist in ArgumentList"
+		p[0] = p[1]
+		# p[0] = Node('ArgumentList',[p[1]],[],typelist = p[1].typelist,order='c')
 	else :
 		p[0] = Node('ArgumentList',[p[1],p[3]],[p[2]],typelist = p[1].typelist + p[3].typelist,order='clc')
 
@@ -850,24 +932,23 @@ def p_ArrayAccess(p):
 					| AmbiguousName LSQRB Expression COMMA Expression RSQRB'''
 					# | PrimaryNoNewArray LSQRB Expression RSQRB'''
 	if len(p) == 5:
-		p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]], order="clcl")
+		p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]],typelist =p[1].typelist , order="clcl")
 	else:
-		p[0] = Node('ArrayAccess',[p[1],p[3],p[5]],[p[2],p[4],p[6]], order="clclcl")
+		p[0] = Node('ArrayAccess',[p[1],p[3],p[5]],[p[2],p[4],p[6]],typelist=p[1].typelist, order="clclcl")
 
 def p_AmbiguousName(p):
 	'''AmbiguousName : ID
 					| AmbiguousName DOT ID'''
 	global currentScope
-	for a in currentScope.variables:
-		print a
-	print p[1]
-	print p[1]," ", currentScope.LookUpVar(p[1])
-	ty = currentScope.LookUpVar(p[1])[0]
-	print ty
+	print p[1],"hello i am here",currentScope.LookUpSymbol(p[1])
 	if len(p)==2:
-		p[0] = Node('AmbiguousName',[],[p[1]],typelist = [currentScope.LookUpVar(p[1])[0][1]],order='l')
+		if(currentScope.LookUpSymbol(p[1])=="variable"):
+			type_value = currentScope.LookUpVar(p[1])[1]
+		elif()
+		p[0] = Node(p[1], [], [], typelist = currentScope.LookUpSymbol(p[1]), isLeaf=True)
+		# p[0] = Node('AmbiguousName',[],[p[1]],typelist = currentScope.LookUpSymbol(p[1]),order='l')
 	else:
-		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + [currentScope.LookUpVar(p[1])[0][1]],order='cll')
+		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + currentScope.LookUpSymbol(p[1]),order='cll')
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
 def p_Literal(p):
@@ -877,40 +958,48 @@ def p_Literal(p):
 				| CharacterLiteral
 				| StringLiteral
 				| NullLiteral'''
-
-	p[0] = Node("Literal", [p[1]],[],typelist = p[1].typelist,order='c')
+	
+	p[0] = p[1]
+	# p[0] = Node("Literal", [p[1]],[],typelist = p[1].typelist,order='c')
 # <integer literal> ::= <decimal integer literal> | <hex integer literal> | <octal integer literal>
 
 def p_BooleanLiteral(p):
 	'BooleanLiteral : BOOL'
-	p[0] = Node('BooleanLiteral',[],[p[1]],typelist = ['BOOL'],order='l')
+	p[0] = Node(p[1], [], [], typelist = ['BOOL'], isLeaf=True)
+	# p[0] = Node('BooleanLiteral',[],[p[1]],typelist = ['BOOL'],order='l')
 
 def p_IntegerLiteral(p):
 	 'IntegerLiteral : INT'
-	 p[0] = Node('IntegerLiteral',[],[p[1]],typelist = ['INT'],order='l')
+	 p[0] = Node(p[1], [], [], typelist = ['INT'], isLeaf=True)
+	#  p[0] = Node('IntegerLiteral',[],[p[1]],typelist = ['INT'],order='l')
 
 def p_FloatingPointLiteral(p):
 	'FloatingPointLiteral : FLOAT'
-	p[0] = Node('FloatingPointLiteral',[],[p[1]],typelist =['FLOAT'],order='l')
+	p[0] = Node(p[1], [], [], typelist = ['FLOAT'], isLeaf=True)
+	# p[0] = Node('FloatingPointLiteral',[],[p[1]],typelist =['FLOAT'],order='l')
 
 def p_CharacterLiteral(p):
 	'CharacterLiteral : CHAR'
-	p[0] = Node('CharacterLiteral',[],[p[1]],typelist =['CHAR'],order='l')
+	p[0] = Node(p[1], [], [], typelist = ['CHAR'], isLeaf=True)
+	# p[0] = Node('CharacterLiteral',[],[p[1]],typelist =['CHAR'],order='l')
 
 def p_StringLiteral(p):
 	'StringLiteral : STRING'
-	p[0] = Node('StringLiteral',[],[p[1]],typelist = ['STRING'],order='l')
+	p[0] = Node(p[1], [], [], typelist = ['STRING'], isLeaf=True)
+	# p[0] = Node('StringLiteral',[],[p[1]],typelist = ['STRING'],order='l')
 
 
 # # # <null literal> ::= null
 def p_NullLiteral(p):
 	'NullLiteral : R_NULL'
-	p[0] = Node("NullLiteral", [],[p[1]],typelist = ['NULL'],order='l')
+	p[0] = Node(p[1], [], [], typelist = ['NULL'], isLeaf=True)
+	# p[0] = Node("NullLiteral", [],[p[1]],typelist = ['NULL'],order='l')
 
 #<empty statement> ::= ;
 def p_EmptyStatement(p):
 	'EmptyStatement : EndStatement'
-	p[0] = Node("EmptyStatement", [p[1]],[],order='c')
+	p[0] = p[1]
+	# p[0] = Node("EmptyStatement", [p[1]],[],order='c')
 
 
 def p_empty(p):
@@ -921,12 +1010,30 @@ def p_error(p):
 	sys.exit("Syntax Error")
 parser = yacc.yacc()
 
+def allowed(type1, type2):
+	if(type1=="double" and (type2=="float" or type2 == "int")):
+		return True
+	elif(type1==type2):
+		return True
+	elif(value(type1) and value(type2) and value(type1)>value(type2)):
+		return True
 
+def value(type):
+	if(type == "byte"):
+		return 1
+	elif(type == "short") :
+		return 2
+	elif(type=="int") :
+		return 3
+	elif(type=="long") :
+		return 3
+	else :
+		return 0
 
 
 if __name__ == "__main__" :
 	filename = sys.argv[1]
-#	filename = "../tests/import.scala"
+	# filename = "../tests/Good-8.scala"
 	programfile = open(filename)
 	data = programfile.read()
 	parser.parse(data)

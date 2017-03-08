@@ -35,7 +35,7 @@ class SymbolTable:
 	def LookUpFunc(self, symbolName, argList):
 		scope = self
 		while(scope):
-			print "scope.functions " , scope.functions
+		#	print "scope.functions " , scope.functions
 			if symbolName in scope.functions:
 				for func in scope.functions[symbolName]:
 				#	print func.argList
@@ -44,6 +44,20 @@ class SymbolTable:
 			scope = scope.parent
 		return False
 	
+	def LookUpCurrentScope(self, symbolName):
+		scope = self
+		if symbolName in scope.variables:
+			# print "inupsymbol",scope.variables[symbolName][1]
+			return "variable"
+		elif symbolName in scope.functions:
+			return "function"
+		elif symbolName in scope.classes:
+			return "class"
+		elif symbolName in scope.objects:
+			return "object"
+		else:
+			return False
+
 	def LookUpSymbol(self, symbolName):
 		scope = self
 		while(scope):
@@ -76,13 +90,17 @@ class SymbolTable:
 			return False
 
 	def GetFuncScope(self, symbolName, argList):
-		if symbolName in self.functions:
-			for func in self.functions[symbolName]:
-				if argList == func.argList:
-					return func
-			return False
-		else:
-			return False
+		scope = self
+		while(scope):
+		#	print "scope.functions " , scope.functions
+			if symbolName in scope.functions:
+				for func in scope.functions[symbolName]:
+				#	print func.argList
+					#print argList, " ", func.argList, "arglists in getfuncscope"
+					if argList == func.argList:
+						return func
+			scope = scope.parent
+		return False
 	
 	def GetClassScope(self, symbolName, argList):
 		if symbolName in self.classes:

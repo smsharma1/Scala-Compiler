@@ -17,12 +17,13 @@ object Good8 {
         	var a = new Array[Int](4);
 			a[i] = 10;
 			var i : Int = 0;
+		//	i = 10;
 			var c : Int = 0;
 	//		var d =add(a);
-			var d : Int = sub(i+c);
-			var e = sub(i-c);
-		    var f = sub(i*c);
-		    var g = sub(i/c);
+			var d : Int = sub(i);
+			 d = sub(i);
+	//	    var f = sub(i);
+	//	    var g = sub(i/c);
 		//    d = sub(i%c);
 		//    d = sub(i<<c);
 		//    d = sub(i&&c);

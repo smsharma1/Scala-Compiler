@@ -173,8 +173,10 @@ def p_FormalParameterLists(p):
 							| empty'''
 	if(p[1] == None):
 		pass
-	elif 'FormalParameterList' in p[1].name:
-		p[0] = Node('FormalParameterList',[p[1]],[],order="c")
+	else:
+		p[0] = p[1]
+	# elif 'FormalParameterList' in p[1].name:
+	# 	p[0] = Node('FormalParameterList',[p[1]],[],order="c")
 
 #<class body declarations> ::= <class body declaration> | <class body declarations> <class body declaration>
 def p_ClassBodyDeclarations(p):
@@ -329,7 +331,7 @@ def p_MethodReturnTypeExtras(p):
 		pass
 	elif len(p)==4:
 		p[0] = Node("MethodReturnTypeExtras", [p[2]],[p[1], p[3]],typelist = p[2].typelist, order="lcl")
-	elif "=" in p[1].name:
+	elif "=" in p[1]:
 		p[0] = Node("MethodReturnTypeExtras", [],[p[1]], order="l")
 
 def  p_MethodReturnType(p):
@@ -608,8 +610,10 @@ def p_DeclarationKeywordExtras(p):
 								| empty'''
 	if(p[1] == None):
 		pass
-	elif 'VariableHeader' in p[1].name:
-		p[0] = Node('DeclarationKeywordExtras',[p[1]],[],order='c')
+	# elif 'VariableHeader' in p[1].name:
+	# 	p[0] = Node('DeclarationKeywordExtras',[p[1]],[],order='c')
+	else:
+		p[0] = p[1]
 
 def p_VariableHeader(p):
 	'''VariableHeader : R_VAL
@@ -650,6 +654,7 @@ def p_ReturnStatement(p):
 def p_Expression(p):
 	'''Expression : OrExpression'''
 	p[0] = p[1]
+	print p[1].typelist , "In expression"
 	# p[0] = Node("Expression", [p[1]],[],typelist = p[1].typelist,order='c')
 
 
@@ -662,7 +667,7 @@ def p_Expression(p):
 def p_LeftHandSide(p):
 	'''LeftHandSide : AmbiguousName'''
 					# | FieldAccess
-	p[0] = Node("LeftHandSide", [p[1]],[],typelist=p[1].type,order='c')
+	p[0] = p[1] #Node("LeftHandSide", [p[1]],[],typelist=p[1].type,order='c')
 
 def p_AssignmentOperator(p):
 	'''AssignmentOperator : EQUALASS
@@ -684,7 +689,7 @@ def p_Assignment(p):
 	'''Assignment : LeftHandSide AssignmentOperator OrExpression
 				| ArrayAccess EQUALASS OrExpression'''
 				#| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
-	print p[1].typelist," ",p[3].typelist
+	print p[1].typelist,"hello ",p[3].typelist
 	if p[2]=="=":
 		if allowed(p[1].typelist[0], p[3].typelist[0]) :
 			p[0] = Node("Assignment", [p[1], p[3]],[p[2]], order="clc")
@@ -693,7 +698,8 @@ def p_Assignment(p):
 	else:
 		if allowed(p[1].typelist[0], p[3].typelist[0]) :
 			p[0] = Node("Assignment", [p[1], p[2], p[3]],[], order="ccc")
-		return sys.exit("assignment mismatch error")
+		else:
+			return sys.exit("assignment mismatch error")
 
 
 def p_OrExpression(p):
@@ -812,6 +818,7 @@ def p_UnaryExpression(p):
 			p[0] = Node("-", [p[2]], [],order='c',isLeaf=True)
 	else:
 		p[0] = p[1]
+		print p[1].typelist,"Unaryexpression"
 
 def p_UnaryExpressionNotPlusMinus(p):
 	'''UnaryExpressionNotPlusMinus : PostfixExpression
@@ -828,6 +835,7 @@ def p_PostfixExpression(p):
 							# | PostincrementExpression
 							# | PostdecrementExpression'''
 	p[0] = p[1]
+	print p[1].type, p[1].typelist, "in postfixexpression"
 # <method invocation> ::= <method name> ( <argument list>? ) | <primary> . <identifier> ( <argument list>? ) | super . <identifier> ( <argument list>? )
 #'''method_invocation : ambiguous_name LPAREN argument_list_extras RPAREN '''
 def p_MethodInvocation(p):
@@ -840,14 +848,20 @@ def p_MethodInvocation(p):
 						# | Primary DOT Identifier LPARAN RPARAN
 #	print p[3].typelist
 	global currentScope
-	print p[3].typelist
-	if (currentScope.LookUpFunc(p[1].name, p[3].typelist[0:])==False):
-		print "a"
+	print p[1].type,"name",currentScope.name
+	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
+	if (currentScope.LookUpFunc(p[1].type, p[3].typelist[0:])==False):
+		print ""
 #		return sys.exit("Method Invocation error")
-	else:
-		currentScope = currentScope.GetScope(p[1].name, p[3].typelist[0:])
+	# else:
+	# 	currentScope = currentScope.GetScope(p[1].name, p[3].typelist[0:])
 	if len(p) ==  5:
-		p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]],typelist = p[3].typelist , order='clcl')
+		
+		value = currentScope.GetFuncScope(p[1].type,p[3].typelist)
+		if(value == False):
+			sys.exit("Method" + p[1].type + " does not found")
+		else:
+			p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]],typelist = value.returnType , order='clcl')
 	# elif len(p) ==  4:
 	# 	p[0] = Node("MethodInvocation", [p[1]], [p[2], p[3]])
 
@@ -880,6 +894,7 @@ def p_PrimaryNoNewArray(p):
 	if len(p) == 3:
 		p[0] = Node('PrimaryNoNewArray',[p[2]],[p[1],p[3]],typelist = p[2].typelist,order='lcl')
 	else:
+		print p[1].type,"we are in p_PrimaryNoNewArray", p[1].typelist
 		p[0] = p[1]
 # <class instance creation expression> ::= new <class type> ( <argument list>? )
 
@@ -902,7 +917,7 @@ def p_ArgumentList(p):
 	'''ArgumentList : Expression
 					| ArgumentList COMMA Expression'''
 	if len(p) == 2:
-		# print p[1].typelist, " p[1].typelist"
+		print p[1].typelist, " p[1].typelist in ArgumentList"
 		p[0] = p[1]
 		# p[0] = Node('ArgumentList',[p[1]],[],typelist = p[1].typelist,order='c')
 	else :
@@ -922,7 +937,7 @@ def p_AmbiguousName(p):
 	'''AmbiguousName : ID
 					| AmbiguousName DOT ID'''
 	global currentScope
-#	print p[1],"hello",currentScope.LookUpSymbol(p[1])
+	print p[1],"hello i am here",currentScope.LookUpSymbol(p[1])
 	if len(p)==2:
 		p[0] = Node(p[1], [], [], typelist = currentScope.LookUpSymbol(p[1]), isLeaf=True)
 		# p[0] = Node('AmbiguousName',[],[p[1]],typelist = currentScope.LookUpSymbol(p[1]),order='l')
