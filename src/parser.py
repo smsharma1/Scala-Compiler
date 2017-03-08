@@ -6,8 +6,8 @@ from symboltable import *
 # Get the token map from the lexer.  This is required.
 from lexer import tokens
 graph = pydot.Dot(graph_type='digraph')
-currentScope = SymbolTable(None, "root")
-
+rootScope = SymbolTable(None, "root")
+currentScope = rootScope
 class Node:
 	uid=0
 	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False):
@@ -220,7 +220,10 @@ def p_VariableDeclarator1(p):
 	if(currentScope.LookUpVar(p[1])):
 			return sys.exit("Variable Already Declared")
 	if len(p)==4:
-		currentScope.InsertVar(p[1],0,p[4].typelist)
+		if(p[3].typelist[0] == 'object'):
+			currentScope.SetObjectName("temp", p[1])
+		else:
+			currentScope.InsertVar(p[1],0,p[4].typelist)
 		p[0] = Node("VariableDeclarator1", [p[3]],[p[1],p[2]], order="llc")
 	elif len(p)==8:
 		currentScope.InsertVar(p[1],0,p[3].typelist)
@@ -229,7 +232,10 @@ def p_VariableDeclarator1(p):
 		currentScope.InsertVar(p[1],0,p[3].typelist)
 		p[0] = Node("VariableDeclarator1", [p[3], p[5]],[p[1],p[2], p[4]], order="llclc")
 	else:
-		currentScope.InsertVar(p[1],0,p[3].typelist)
+		if(p[3].typelist[0] == 'object'):
+			currentScope.SetObjectName("temp", p[1])
+		else:
+			currentScope.InsertVar(p[1],0,p[3].typelist)
 		p[0] = Node("VariableDeclarator1", [p[3], p[5]],[p[1],p[2], p[4]], order="llclc")
 
 def p_FuncArgumentListExtras(p):
@@ -265,6 +271,7 @@ def p_VariableInitializer(p):
 							| ClassInstanceCreationExpression'''
 
 	p[0] = p[1]
+	print p[1].type,"VariableInitializer"
 	# p[0] = Node("VariableInitializer", [p[1]],[],typelist = p[1].typelist, order="c")
 
 def p_ArrayInitializer(p):
@@ -479,10 +486,10 @@ def p_VariableDeclarationBody(p):
 	'''VariableDeclarationBody : ID COLON Type EQUALASS VariableInitializer
 		| ID EQUALASS VariableInitializer'''
 	global currentScope
-#	print "checking",p[3].typelist
 	if(currentScope.LookUpVar(p[1])):
 		return sys.exit(p[1] + " Variable Already Declared")
 	if len(p) == 6:
+		print "checking ",p[3].type," ",p[5].type
 		if(not allowed(p[3].typelist[0], p[5].typelist[0])):
 			sys.exit("Error: ", p[1]," : ", p[3].typelist[0], " = ", p[5].typelist[0], " type mismatch")
 		currentScope.InsertVar(p[1],0,p[3].typelist)
@@ -945,16 +952,19 @@ def p_ClassInstanceCreationExpression(p):
 								#		| R_NEW ClassType LPARAN RPARAN'''
 	global currentScope
 	if(p[4] != None):
-		if(currentScope.LookUpClass(p[2], p[4].typelist)):
+		print p[2].type,"inclassinstance",p[4].typelist
+		if(currentScope.LookUpClass(p[2].type, p[4].typelist)):
 			return sys.exit(str(p[2])+"Class Not Found in currentScope")
 		else:
-			if(currentScope.InsertObject(p[2], p[4].typelist, [])): #valList is to be sent here 
+			print p[2].type, " " , p[4].typelist, " creating object"
+			if(currentScope.InsertObject("temp", p[2].type, [])): #valList is to be sent here 
 				pass
 			else:
-				print("Error: ", p[2], " alreay declared in currentScope" )
+				print("Error: ", p[2].type, " alreay declared in currentScope" )
 
 	if len(p) ==6:
-		p[0] = Node('ClassInstanceCreationExpression',[p[2], p[4]],[p[1],p[3],p[5]],typelist = ['object', p[2]], order='lclcl')
+		print p[2].type,"inclassinstanceasdasdadsasda",p[4].typelist
+		p[0] = Node('ClassInstanceCreationExpression',[p[2], p[4]],[p[1],p[3],p[5]],typelist = ['object', p[2].type], order='lclcl')
 	# else:
 	# 	p[0] = Node('ClassInstanceCreationExpression',[p[2]],[p[1],p[3],p[4]])
 
@@ -984,11 +994,30 @@ def p_AmbiguousName(p):
 					| AmbiguousName DOT ID'''
 	global currentScope
 	#print p[1],"hello i am here",currentScope.LookUpSymbol(p[1])
+	
 	if len(p)==2:
-		p[0] = Node(p[1], [], [], typelist = currentScope.LookUpSymbol(p[1]), isLeaf=True)
+		returnType = currentScope.LookUpSymbolType(p[1])
+		# if(t=="variable"):
+		# 	returnType = currentScope.LookUpVar(p[1])[1]
+		# elif(t=="function"):
+		# 	returnType = currentScope.LookUpFunc(p[1]).returnType
+		# elif(t=="class"):
+		# 	returnType = ['class',currentScope.LookUpClass(p[1]).name]
+		# elif(t=="object"):
+		# 	returnType = ['object', currentScope.LookUpObject(p[1]).name]
+		# else:
+		# 	returnType = False
+
+		if(returnType):
+			p[0] = Node(p[1], [], [], typelist = returnType, isLeaf=True)
+		else:
+			sys.exit("No symbol found for "+str(p[1]))
 		# p[0] = Node('AmbiguousName',[],[p[1]],typelist = currentScope.LookUpSymbol(p[1]),order='l')
 	else:
-		p[0] = Node(p[1].name+"."+p[3],[p[1]],[p[2],p[3]],typelist = p[1].typelist + currentScope.LookUpSymbol(p[1]),order='cll')
+		thing = currentScope.LookDotThing(rootScope, p[1].type+"."+p[3])
+		print "here **************************",thing
+		if(thing):
+			p[0] = Node(p[1].type+"."+p[3],[p[1]],[p[2],p[3]],typelist = [thing], order='cll')
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
 def p_Literal(p):
