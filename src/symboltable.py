@@ -27,6 +27,7 @@ class SymbolTable:
 		scope = self
 		while(scope):
 			if symbolName in scope.variables:
+				print "hola ", scope.variables[symbolName]
 				return scope.variables[symbolName]
 			scope = scope.parent
 #		print symbolName, " Variable not found"
@@ -46,6 +47,7 @@ class SymbolTable:
 	
 	def LookUpCurrentScope(self, symbolName):
 		scope = self
+		print symbolName
 		if symbolName in scope.variables:
 			# print "inupsymbol",scope.variables[symbolName][1]
 			return [self.variables[symbolName][1]]
@@ -54,6 +56,7 @@ class SymbolTable:
 		elif symbolName in scope.classes:
 			return ['class', self.classes[symbolName][0].name]
 		elif symbolName in scope.objects:
+			print self.objects[symbolName]
 			return ['object', self.objects[symbolName][0].name]
 		else:
 			return False
@@ -91,7 +94,7 @@ class SymbolTable:
 				return False
 		while(scope):
 			if symbolName in scope.objects:
-				return scope.objects[symbolName]
+				return scope.objects[symbolName][0]
 			scope = scope.parent
 #		print symbolName, " Variable not found"
 		return False
@@ -130,7 +133,7 @@ class SymbolTable:
 				return myobject.variables[looklist[1]][1]		
 		else:
 			for name in looklist[:-1]:
-				print name," inelse ",rootscope.classes
+				print name," inelse ",rootScope.classes
 				if name in rootScope.classes:
 					rootScope = rootScope.classes[name]
 				else:
@@ -144,12 +147,13 @@ class SymbolTable:
 
 	def LookUpSymbolType(self, symbolName):
 		scope = self
-		while(scope is not None):
+		print "ddddddd",symbolName
+		while(scope):
 			value = scope.LookUpCurrentScope(symbolName)
 			if(value):
+				print value
 				return value
-			else:
-				scope = scope.parent
+			scope = scope.parent
 		return False
 
 	def SetObjectName(self, currentName, newName):
@@ -159,7 +163,7 @@ class SymbolTable:
 		self.objects.pop(currentName, None)
 
 	def InsertVar(self, symbolName, val, type_name):
-	#	print "testing",type_name
+		print "testing",type_name
 		if symbolName in self.variables:
 			return False
 		else:
@@ -197,9 +201,9 @@ class SymbolTable:
 		while(scope):
 			if className in scope.classes:
 				print  "className"
-				class_name = scope.classes[className]
+				class_name = scope.classes[className][0]
 				self.objects[symbolName] = copy.deepcopy(class_name) #notice that we actually need self here instead of scope
-				self.InvokeConstr(self.objects[symbolName], valList)
+			#	self.InvokeConstr(self.objects[symbolName], valList)
 				return True
 			scope = scope.parent
 		print "%s not found" % (className)

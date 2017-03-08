@@ -1,4 +1,4 @@
-import Arrr.ggg
+//import Arrr.ggg
 object Good8 {
 	 def add(arr1: Int) : Int = {
 		var arr = new Array[Int](4);
@@ -30,7 +30,7 @@ object Good8 {
          		if( x == 2 )
 				 {
 					a[i] = x;
-            		x = x + 1 * 4.0;
+            		x = x + 1 * 4;
          		}
 				else
 				{
