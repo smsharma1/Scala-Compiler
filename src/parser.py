@@ -273,7 +273,7 @@ def p_VariableInitializer(p):
 							| ClassInstanceCreationExpression'''
 
 	p[0] = p[1]
-	print p[1].type,"VariableInitializer"
+	print p[1].typelist,"VariableInitializer"
 	# p[0] = Node("VariableInitializer", [p[1]],[],typelist = p[1].typelist, order="c")
 
 def p_ArrayInitializer(p):
@@ -502,6 +502,7 @@ def p_VariableDeclarationBody(p):
 		else:
 			currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node(p[2],[p[3]],[p[1]], order="lc",isLeaf=True)
+
 
 def p_Statement(p):
 	'''Statement : StatementWithoutTrailingSubstatement
@@ -1018,6 +1019,7 @@ def p_AmbiguousName(p):
 	'''AmbiguousName : ID
 					| AmbiguousName DOT ID'''
 	global currentScope
+	global rootScope
 	#print p[1],"hello i am here",currentScope.LookUpSymbol(p[1])
 	
 	if len(p)==2:

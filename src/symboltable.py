@@ -52,6 +52,7 @@ class SymbolTable:
 			# print "inupsymbol",scope.variables[symbolName][1]
 			return [self.variables[symbolName][1]]
 		elif symbolName in scope.functions:
+			print self.functions[symbolName][0].returnType, " return type look up current scope"
 			return [self.functions[symbolName][0].returnType]
 		elif symbolName in scope.classes:
 			return ['class', self.classes[symbolName][0].name]
@@ -157,10 +158,11 @@ class SymbolTable:
 		return False
 
 	def SetObjectName(self, currentName, newName):
-		print "Inselfobjectname", currentName," ",newName
+		print "Insetobjectname", currentName," ",newName
 		myobject = self.LookUpObject(currentName)
 		self.objects[newName] = copy.deepcopy(myobject)
 		self.objects.pop(currentName, None)
+		print self.objects[newName][0], "last line in set object name"
 
 	def InsertVar(self, symbolName, val, type_name):
 		print "testing",type_name
@@ -203,7 +205,8 @@ class SymbolTable:
 				print  "className"
 				class_name = scope.classes[className][0]
 				self.objects[symbolName] = copy.deepcopy(class_name) #notice that we actually need self here instead of scope
-			#	self.InvokeConstr(self.objects[symbolName], valList)
+				# print class_name, " ", self.objects[symbolName],"after deepcopy"
+				# self.InvokeConstr(self.objects[symbolName], valList)
 				return True
 			scope = scope.parent
 		print "%s not found" % (className)
