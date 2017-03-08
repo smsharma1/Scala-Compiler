@@ -589,10 +589,20 @@ def p_WhileStatement(p):
 	p[0] = Node(p[1], [p[3], p[5]],[p[2], p[4]],order='lclc',isLeaf=True)
 
 def p_ForStatement(p):
-	'ForStatement : R_FOR LPARAN ForVariables RPARAN Statement'
-	p[0] = Node(p[1], [p[3], p[5]],[p[2], p[4]],order='lclc',isLeaf=True)
+	'ForStatement : M R_FOR LPARAN ForVariables RPARAN Statement N'
 
+	p[0] = Node(p[2], [p[4], p[6]],[p[3], p[5]],order='lclc',isLeaf=True)
 
+def p_M(p):
+	'M : empty'
+	global currentScope
+	newscope = currentScope.NewFuncScope()
+	newscope.parent = currentScope
+	currentScope = newscope
+def p_N(p):
+	'N : empty'
+	global currentScope
+	currentScope = currentScope.parent
 # def p_ForExprs(p):
 # 	'''ForExprs :  ForVariables EndStatement ForExprs
 # 			| ForVariables'''
@@ -604,6 +614,14 @@ def p_ForStatement(p):
 #''' for_variables : declaration_keyword_extras IDENTIFIER IN expression for_untilTo expression '''
 def p_ForVariables(p):
 	'ForVariables : DeclarationKeywordExtras ID LEFTARROW Expression ForUntilTo Expression'
+	if(p[1] == None):
+		if(not (currentScope.LookUpVar(p[2])[1] == p[4].typelist and p[4].typelist==p[6].typelist) ):
+			sys.exit("Error: ", p[2], "<-", p[4], " For Until To ", p[6], " type mismatch" )
+	else:
+		if(not (p[4].typelist == p[6].typelist)):
+			sys.exit("Error: ", p[2], "<-", p[4], " For Until To ", p[6], " type mismatch" )
+		else:
+			currentScope.InsertVar(p[2], p[4].typelist)
 	p[0] = Node("ForVariables", [p[1],p[4],p[5],p[6]], [p[2],p[3]],order='cllccc')
  #'''declaration_keyword_extras : variable_header | empty'''
 #'''variable_header : K_VAL | K_VAR '''
@@ -831,7 +849,13 @@ def p_UnaryExpression(p):
 	'''UnaryExpression :  UnaryExpressionNotPlusMinus'''
 						# | PreincrementExpression
 						# | PredecrementExpression'''
-	p[0] = p[1]
+	if len(p) ==  3:
+		if p[1] == "+":
+			p[0] = Node("+", [p[2]], [],order='c',isLeaf=True)
+		elif p[1] == "-":
+			p[0] = Node("-", [p[2]], [],order='c',isLeaf=True)
+	else:
+		p[0] = p[1]
 		#print p[1].typelist,"Unaryexpression"
 
 def p_UnaryExpressionNotPlusMinus(p):
@@ -870,7 +894,7 @@ def p_MethodInvocation(p):
 #	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
 	if (currentScope.LookUpFunc(p[1].type, p[3].typelist[0:])==False):
 		print ""
-#		return sys.exit("Method Invocation error")
+		sys.exit("Error: ",p[1].type, p[3].typelist[0:], " Method Invocation error")
 	# else:
 	# 	currentScope = currentScope.GetScope(p[1].name, p[3].typelist[0:])
 	if len(p) ==  5:
@@ -964,7 +988,7 @@ def p_AmbiguousName(p):
 		p[0] = Node(p[1], [], [], typelist = currentScope.LookUpSymbol(p[1]), isLeaf=True)
 		# p[0] = Node('AmbiguousName',[],[p[1]],typelist = currentScope.LookUpSymbol(p[1]),order='l')
 	else:
-		p[0] = Node('AmbiguousName',[p[1]],[p[2],p[3]],typelist = p[1].typelist + currentScope.LookUpSymbol(p[1]),order='cll')
+		p[0] = Node(p[1].name+"."+p[3],[p[1]],[p[2],p[3]],typelist = p[1].typelist + currentScope.LookUpSymbol(p[1]),order='cll')
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
 def p_Literal(p):
