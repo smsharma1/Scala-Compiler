@@ -603,8 +603,8 @@ def p_SwitchBlock(p):
 		p[0] = Node("SwitchBlock", [p[1], p[2]],[],order='cc')
 
 def p_SwitchBlockHeader(p):
-	'SwitchBlockHeader : R_CASE Expression IMPLIES1'
-	p[0] = Node(p[1], [p[2]],[p[3]],order='cl',isLeaf=True)
+	'SwitchBlockHeader : R_CASE ID IMPLIES1'
+	p[0] = Node(p[1],[ ],[p[2],p[3]],order='ll',isLeaf=True)
 
 def p_SwitchBlockBody(p):
 	'''SwitchBlockBody : Expression
@@ -644,10 +644,11 @@ def p_N(p):
 def p_ForVariables(p):
 	'ForVariables : DeclarationKeywordExtras ID LEFTARROW Expression ForUntilTo Expression'
 	if(p[1] == None):
-		if(not (currentScope.LookUpVar(p[2])[1] == p[4].typelist and p[4].typelist==p[6].typelist) ):
+		print "For variables ",currentScope.LookUpVar(p[2])[1]
+		if(not (currentScope.LookUpVar(p[2])[1] == p[4].typelist[0] and p[4].typelist[0]==p[6].typelist[0]) ):
 			sys.exit("Error: ", p[2], "<-", p[4], " For Until To ", p[6], " type mismatch" )
 	else:
-		if(not (p[4].typelist == p[6].typelist)):
+		if(not (p[4].typelist[0] == p[6].typelist[0])):
 			sys.exit("Error: ", p[2], "<-", p[4], " For Until To ", p[6], " type mismatch" )
 		else:
 			currentScope.InsertVar(p[2], p[4].typelist[0])

@@ -45,9 +45,9 @@ object Good8 {
       		}
 			x  match 
 			{
-      			case 1 => "one"
-				case 2 => "two"
-				case _ => "three"
+      			case c1 => "one"
+				case c2 => "two"
+				case c3 => "three"
    			}
 		    var f : Int  = sub(i);
 		    var g : Int = sub(i/c);
