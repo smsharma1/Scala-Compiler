@@ -796,12 +796,15 @@ def p_MultiplicativeExpression(p):
 								| MultiplicativeExpression DIVISION UnaryExpression
 								| MultiplicativeExpression MODULUS UnaryExpression'''
 	if len(p) ==  4:
+		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
+		if(not type_here):
+			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "*":
-			p[0] = Node("*", [p[1], p[3]], [],order='cc',isLeaf=True)
+			p[0] = Node("*", [p[1], p[3]], [], typelist = [type_here], order='cc',isLeaf=True)
 		elif p[2] == "%":
-			p[0] = Node("%", [p[1], p[3]], [],order='cc',isLeaf=True)
+			p[0] = Node("%", [p[1], p[3]], [],order='cc',typelist = [type_here], isLeaf=True)
 		elif p[2] == "/":
-			p[0] = Node("/", [p[1], p[3]], [],order='cc',isLeaf=True)
+			p[0] = Node("/", [p[1], p[3]], [],order='cc', typelist = [type_here],isLeaf=True)
 	else:
 		p[0] = p[1]
 
@@ -1009,7 +1012,7 @@ def p_error(p):
 parser = yacc.yacc()
 
 def allowed(type1, type2):
-	if(type1=="double" and (type2=="float" or type2 == "int")):
+	if(type1=="DOUBLE" and (type2=="FLOAT" or type2 == "INT")):
 		return True
 	elif(type1==type2):
 		return True
@@ -1018,15 +1021,24 @@ def allowed(type1, type2):
 	else:
 		return False
 
+def higher(type1, type2):
+	if((type1=="DOUBLE" and (type2=="FLOAT" or type2 == "INT")) or (type2=="DOUBLE" and (type1=="FLOAT" or type1 == "INT"))):
+		return "DOUBLE"
+	elif(value(type1) and value(type2) and value(type1)>=value(type2)):
+		return type1
+	elif(value(type1) and value(type2) and value(type2)>=value(type1)):
+		return type2
+	else:
+		return False
 
 def value(type):
-	if(type == "byte"):
+	if(type == "BYTE"):
 		return 1
-	elif(type == "short") :
+	elif(type == "SHORT") :
 		return 2
-	elif(type=="int") :
+	elif(type=="INT") :
 		return 3
-	elif(type=="long") :
+	elif(type=="LONG") :
 		return 3
 	else :
 		return 0
