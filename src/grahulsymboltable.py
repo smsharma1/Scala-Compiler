@@ -13,6 +13,7 @@ class SymbolTable:
 	def __init__(self, parent, name, argList=[], returnType=None): # parent scope and symbol table name
 		self.functions = Dictlist()
 		self.variables = {}
+		self.arrays = {}
 		self.classes = Dictlist()
 		self.objects = Dictlist()
 		self.name = name
@@ -35,22 +36,47 @@ class SymbolTable:
 	def LookUpFunc(self, symbolName, argList):
 		scope = self
 		while(scope):
-		#	print "scope.functions " , scope.functions
+			print "scope.functions " , scope.functions
 			if symbolName in scope.functions:
 				for func in scope.functions[symbolName]:
 				#	print func.argList
 					if argList == func.argList:
-						return True
+						return scope
 			scope = scope.parent
 		return False
 	
+	# def LookUpArr(self, symbolName, argList):
+	# 	scope = self
+	# 	while(scope):
+	# 		print "scope.arrays " , scope.functions
+	# 		if symbolName in scope.arrays:
+	# 			for array in scope.arrays[symbolName]:
+	# 			#	print func.argList
+	# 				if argList == array.argList:
+	# 					return True
+	# 		scope = scope.parent
+	# 	return False
+
+	def LookUpSymbol(self, symbolName):
+		scope = self
+		while(scope is not None):
+			value = scope.LookUpCurrentScope(symbolName)
+			if(value):
+				return value
+			else:
+				scope = scope.parent
+		return False
+
 	def LookUpCurrentScope(self, symbolName):
 		scope = self
 		if symbolName in scope.variables:
 			# print "inupsymbol",scope.variables[symbolName][1]
 			return "variable"
 		elif symbolName in scope.functions:
+			print symbolName, " *******", (scope.functions[symbolName])[0].returnType  
 			return "function"
+		elif symbolName in scope.arrays:
+			return "array"
 		elif symbolName in scope.classes:
 			return "class"
 		elif symbolName in scope.objects:
@@ -58,37 +84,30 @@ class SymbolTable:
 		else:
 			return False
 
-	def LookUpSymbol(self, symbolName):
-		scope = self
-		while(scope):
-			if symbolName in scope.variables:
-				print "inupsymbol",scope.variables[symbolName][1]
-				return scope.variables[symbolName][1]
-			elif symbolName in scope.functions:
-				print symbolName, " *******", (scope.functions[symbolName])[0].returnType  
-				return (scope.functions[symbolName])[0].returnType
-			scope = scope.parent
-		return False
-
 	def LookUpClass(self, symbolName, argList):
 		# print symbolName, " ", argList
 		# print self.name, " ", self.classes
-		if symbolName in self.classes:
-			for class_name in self.classes[symbolName]:
-				# print class_name.argList
-				if argList == class_name.argList:
-					return True
-			return False
-		else:
-			return False
+		scope = self
+		while(scope):
+			if symbolName in scope.classes:
+				for class_name in scope.classes[symbolName]:
+				#	print class_name.argList
+					if argList == class_name.argList:
+						return scope
+			scope = scope.parent
+		return False
+		# if symbolName in self.classes:
+		# 	for class_name in self.classes[symbolName]:
+		# 		# print class_name.argList
+		# 		if argList == class_name.argList:
+		# 			return 
+		# 	return False
+		# else:
+		# 	return False
 
 	def LookUpObject(self, symbolName):
+
 		scope = self
-		if(self.LookUpCurrentScope(symbolName)):
-			if(symbolName in scope.objects):
-				pass
-			else:
-				return False
 		while(scope):
 			if symbolName in scope.objects:
 				return scope.objects[symbolName]
@@ -97,17 +116,13 @@ class SymbolTable:
 		return False
 
 	def GetFuncScope(self, symbolName, argList):
-		scope = self
-		while(scope):
-		#	print "scope.functions " , scope.functions
-			if symbolName in scope.functions:
-				for func in scope.functions[symbolName]:
-				#	print func.argList
-					#print argList, " ", func.argList, "arglists in getfuncscope"
-					if argList == func.argList:
-						return func
-			scope = scope.parent
-		return False
+		if symbolName in self.functions:
+			for func in self.functions[symbolName]:
+				if argList == func.argList:
+					return func
+			return False
+		else:
+			return False
 	
 	def GetClassScope(self, symbolName, argList):
 		if symbolName in self.classes:
@@ -120,13 +135,16 @@ class SymbolTable:
 
 	def InsertVar(self, symbolName, val, type_name):
 		print "testing",type_name
-		if symbolName in self.variables:
+		if self.LookUpCurrentScope(symbolName):
 			return False
 		else:
 			self.variables[symbolName] = [val, type_name]
+			return True
 
 	def InsertFunc(self, symbolName, argList, returnType):
 #		print symbolName, " ", argList, " ", returnType
+		if self.LookUpCurrentScope(symbolName):
+			return False 
 		if symbolName in self.functions:
 			for func in self.functions[symbolName]:
 				if argList == func.argList and self.returnType == returnType:
@@ -137,8 +155,17 @@ class SymbolTable:
 			# print self.functions
 		return self.functions[symbolName][0]
 	
+	def InsertArray(self, symbolName, argList, boundlist):
+		if self.LookUpCurrentScope(symbolName):
+			return False
+		else:
+			self.arrays[symbolName] = [argList, boundlist]
+			return True
+
 	def InsertClass(self, symbolName, argList):
 		# print symbolName, " " , argList
+		if self.LookUpCurrentScope(symbolName):
+			return False
 		if symbolName in self.classes:
 			for class_name in self.classes[symbolName]:
 				if argList == class_name.argList:
@@ -153,18 +180,16 @@ class SymbolTable:
 		# print symbolName, " "
 		if self.LookUpCurrentScope(symbolName):
 			return False
-		scope = self
-		while(scope):
-			if className in scope.classes:
-				class_name = scope.classes[className]
-				self.objects[symbolName] = copy.deepcopy(class_name) #notice that we actually need self here instead of scope
-				self.InvokeConstr(self.objects[symbolName], valList)
-				return True
+		if className in self.classes:
+			class_name = self.classes[className]
+			self.objects[symbolName] = copy.deepcopy(class_name)
+			self.InvokeConstr(self.objects[symbolName], valList)
 		else:
 			print "%s not found" % (className)
-			return False
 
 	def InsertSingletonObject(self, symbolName):
+		if self.LookUpCurrentScope(symbolName):
+			return False
 		self.singletonObject = SymbolTable(self, symbolName)
 		return self.singletonObject
 
@@ -182,6 +207,8 @@ class SymbolTable:
 
 	def InsertFuncDetails(self, symbolName, argList, returnType):
 #print symbolName, " ", argList, " ", returnType
+		if self.LookUpCurrentScope(symbolName):
+			return False
 		self.argList = argList
 		self.name = symbolName
 		self.returnType = returnType

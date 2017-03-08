@@ -905,10 +905,14 @@ def p_ClassInstanceCreationExpression(p):
 	if(p[4] != None):
 		if(currentScope.LookUpClass(p[2], p[4].typelist)):
 			return sys.exit(str(p[2])+"Class Not Found in currentScope")
-		# else:
-		# 	currentScope.InsertObject(p[2], p[4].typelist, []) #valList is to be sent here 
+		else:
+			if(currentScope.InsertObject(p[2], p[4].typelist, [])): #valList is to be sent here 
+				pass
+			else:
+				print("Error: ", p[2], " alreay declared in currentScope" )
+
 	if len(p) ==6:
-		p[0] = Node('ClassInstanceCreationExpression',[p[2], p[4]],[p[1],p[3],p[5]],order='lclcl')
+		p[0] = Node('ClassInstanceCreationExpression',[p[2], p[4]],[p[1],p[3],p[5]],typelist = ['object', p[2]], order='lclcl')
 	# else:
 	# 	p[0] = Node('ClassInstanceCreationExpression',[p[2]],[p[1],p[3],p[4]])
 
@@ -931,7 +935,7 @@ def p_ArrayAccess(p):
 	if len(p) == 5:
 		p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]],typelist =[p[1].typelist[0][5:]] , order="clcl")
 	else:
-		p[0] = Node('ArrayAccess',[p[1],p[3],p[5]],[p[2],p[4],p[6]],typelist=[p[1].typelist[0][5:]], order="clclcl")
+		p[0] = Node('ArrayAccess',[p[1],p[3],p[5]],[p[2],p[4],p[6]],typelist=[p[1].typelist[0][10:]], order="clclcl")
 
 def p_AmbiguousName(p):
 	'''AmbiguousName : ID
@@ -1011,6 +1015,9 @@ def allowed(type1, type2):
 		return True
 	elif(value(type1) and value(type2) and value(type1)>value(type2)):
 		return True
+	else:
+		return False
+
 
 def value(type):
 	if(type == "byte"):
