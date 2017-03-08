@@ -24,7 +24,7 @@ object Good8 {
 			d = sub(i+i+i*i-i%i);
 			var x : Int = 0;
       		// An infinite loop.
-      		while( true )
+      		while( c <= d )
 			{
          		if( x == 2 )
 				 {
@@ -41,6 +41,12 @@ object Good8 {
 				break x;
          		//println( "Value of a: " + a );
       		}
+			x  match 
+			{
+      			case 1 => "one"
+				case 2 => "two"
+				case _ => "three"
+   			}
 	//	    var f = sub(i);
 	//	    var g = sub(i/c);
 		//    d = sub(i%c);
