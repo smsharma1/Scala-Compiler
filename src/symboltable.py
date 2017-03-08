@@ -129,9 +129,9 @@ class SymbolTable:
 		print myobject," myobject ",looklist[0]
 		if myobject :
 			if looklist[1] in myobject.functions:
-				return myobject.functions[looklist[1]][0].returnType
+				return [myobject.functions[looklist[1]][0].returnType]
 			elif looklist[1] in myobject.variables:
-				return myobject.variables[looklist[1]][1]		
+				return [myobject.variables[looklist[1]][1]]		
 		else:
 			for name in looklist[:-1]:
 				print name," inelse ",rootScope.classes
@@ -141,7 +141,7 @@ class SymbolTable:
 					return False
 			if name in rootScope.functions:
 				for func in rootScope.functions[symbolName]:
-					return func.returnType
+					return [func.returnType]
 			else:
 				return False
 		return False
