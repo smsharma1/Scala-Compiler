@@ -501,11 +501,8 @@ def p_VariableDeclarationBody(p):
 			currentScope.SetObjectName("temp", p[1])
 		else:
 			currentScope.InsertVar(p[1],0,p[3].typelist[0])
-<<<<<<< HEAD
-		p[0] = Node(p[2],[p[3]],[p[1]], order="lc")
-=======
 		p[0] = Node(p[2],[p[3]],[p[1]], order="lc",isLeaf=True)
->>>>>>> fe5c211895adc2cc0e60ab487286ae08924b9426
+
 
 def p_Statement(p):
 	'''Statement : StatementWithoutTrailingSubstatement
