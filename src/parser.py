@@ -481,8 +481,10 @@ def p_VariableDeclarationBody(p):
 	global currentScope
 #	print "checking",p[3].typelist
 	if(currentScope.LookUpVar(p[1])):
-			return sys.exit(p[1] + " Variable Already Declared")
+		return sys.exit(p[1] + " Variable Already Declared")
 	if len(p) == 6:
+		if(not allowed(p[3].typelist[0], p[5].typelist[0])):
+			sys.exit("Error: ", p[1]," : ", p[3].typelist[0], " = ", p[5].typelist[0], " type mismatch")
 		currentScope.InsertVar(p[1],0,p[3].typelist)
 		p[0] = Node('VariableDeclarationBody',[p[3],p[5]],[p[1],p[2],p[4]], order="llclc")
 	else:
