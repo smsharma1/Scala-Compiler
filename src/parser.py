@@ -491,7 +491,7 @@ def p_VariableDeclarationBody(p):
 	if(currentScope.LookUpVar(p[1])):
 		return sys.exit(p[1] + " Variable Already Declared")
 	if len(p) == 6:
-		print "checking ",p[3].type," ",p[5].type
+		print "checking ",p[3].typelist," ",p[5].typelist
 		if(not allowed(p[3].typelist[0], p[5].typelist[0])):
 			sys.exit("Error: ", p[1]," : ", p[3].typelist[0], " = ", p[5].typelist[0], " type mismatch")
 		currentScope.InsertVar(p[1],0,p[3].typelist[0])
@@ -501,7 +501,11 @@ def p_VariableDeclarationBody(p):
 			currentScope.SetObjectName("temp", p[1])
 		else:
 			currentScope.InsertVar(p[1],0,p[3].typelist[0])
+<<<<<<< HEAD
 		p[0] = Node(p[2],[p[3]],[p[1]], order="lc")
+=======
+		p[0] = Node(p[2],[p[3]],[p[1]], order="lc",isLeaf=True)
+>>>>>>> fe5c211895adc2cc0e60ab487286ae08924b9426
 
 def p_Statement(p):
 	'''Statement : StatementWithoutTrailingSubstatement
@@ -759,15 +763,15 @@ def p_OrExpression(p):
 	else:
 		if (not (p[1].typelist[0] == 'BOOL' and p[3].typelist[0] ==  'BOOL')):
 			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
-		p[0] = Node("||", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
+		p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 
 def p_AndExpression(p):
 	'''AndExpression : XorExpression
 					| AndExpression AND XorExpression'''
 	if len(p) ==  4:
 		if (not (p[1].typelist[0] == 'BOOL' and p[3].typelist[0] ==  'BOOL')):
-			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
-		p[0] = Node("&&", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
+			sys.exit("Error: " + p[1].typelist[0] + " " + p[3].typelist[0] + " type mismatch")
+		p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 	else:
 		p[0] = p[1]
 
@@ -779,7 +783,7 @@ def p_XorExpression(p):
 	else :
 		if(not (p[1].typelist[0]=='BOOL' and p[3].typelist[0]=='BOOL')):
 			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
-		p[0] = Node("^", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
+		p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 
 
 
@@ -791,9 +795,9 @@ def p_EqualityExpression(p):
 		if(not p[1].typelist[0] == p[3].typelist[0]):
 			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "==":
-			p[0] = Node("==", [p[1], p[3]], [],typelist = ['BOOL'],order='cc',isLeaf=True)
+			p[0] = Node(p[2], [p[1], p[3]], [],typelist = ['BOOL'],order='cc',isLeaf=True)
 		elif p[2] == "!=":
-			p[0] = Node("!=", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)	
+			p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)	
 	else:
 		p[0] = p[1]
 
@@ -806,10 +810,11 @@ def p_RelationalExpression(p):
 						| RelationalExpression R_INSTANCEOF ReferenceType'''
 	if len(p) ==  4:
 		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
+		print p[1].typelist[0],"jjfjfjfj"
 		if(not type_here):
 			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "<":
-			p[0] = Node("<", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
+			p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 		elif p[2] == ">":
 			p[0] = Node(">", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 		elif p[2] == "<=":
@@ -863,6 +868,7 @@ def p_MultiplicativeExpression(p):
 								| MultiplicativeExpression MODULUS UnaryExpression'''
 	if len(p) ==  4:
 		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
+		print p[1].typelist, "multiplicativeerror" , p[3].typelist
 		if(not type_here):
 			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "*":
@@ -1020,6 +1026,7 @@ def p_AmbiguousName(p):
 	
 	if len(p)==2:
 		returnType = currentScope.LookUpSymbolType(p[1])
+		print returnType, "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"
 		# if(t=="variable"):
 		# 	returnType = currentScope.LookUpVar(p[1])[1]
 		# elif(t=="function"):
@@ -1037,6 +1044,7 @@ def p_AmbiguousName(p):
 			sys.exit("No symbol found for "+str(p[1]))
 		# p[0] = Node('AmbiguousName',[],[p[1]],typelist = currentScope.LookUpSymbol(p[1]),order='l')
 	else:
+		print "lkjhgfdfghjkl"
 		thing = currentScope.LookDotThing(rootScope, p[1].type+"."+p[3])
 		print "here **************************",thing
 		if(thing):

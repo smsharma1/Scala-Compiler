@@ -1,24 +1,26 @@
+//import Arrr.ggg
 object Good8 {
-	 /*def add(arr: Array[Int]) : Int = {
-		var c : Int = 0;
-		var i : Int = 0;
+	 def add(arr1: Int) : Int = {
+		var arr = new Array[Int](4);
+		var c: Int = 0;
+		var i: Int = 0;
 		while (i <= 4) {
-               // arr[i] = i+1;
-			//	c = c + a[i];
+              //  arr[i] = i+1;
+				c = c + i;
 				i = i + 1;
     	}
 		return c;
-	 }*/
+	 }
 	 def sub(a : Int) : Int = {
 		return a;
 	 }
 	def main(args: Array[String]) {
         	var a = new Array[Int](4);
-			a[i] = 10;
 			var i : Int = 0;
-		//	i = 10;
+			a[i] = 10;
+			args[i] = "a";
+			i = 10;
 			var c : Int = 0;
-	//		var d =add(a);
 			var d : Int = sub(i);
 			d = sub(i+i+i*i-i%i);
 			var x : Int = 0;
@@ -27,11 +29,12 @@ object Good8 {
 			{
          		if( x == 2 )
 				 {
-            	//	x = x + 1;
+					a[i] = x;
+            		x = x + 1 * 4;
          		}
 				else
 				{
-
+					a[i] = x*10;
 				}
      		 }
 			for ( x <- 1 until 10 )
@@ -46,12 +49,12 @@ object Good8 {
 				case 2 => "two"
 				case _ => "three"
    			}
-	//	    var f = sub(i);
-	//	    var g = sub(i/c);
-		//    d = sub(i%c);
-		//    d = sub(i<<c);
-		//    d = sub(i&&c);
-		  //  d = sub(i||c);
+		    var f : Int  = sub(i);
+		    var g : Int = sub(i/c);
+		    d = sub(i%c);
+		    d = sub(i<<c);
+		   // d = sub(i&&c);
+		   // d = sub(i||c);
 	}
 }
 /*

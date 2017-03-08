@@ -27,6 +27,7 @@ class SymbolTable:
 		scope = self
 		while(scope):
 			if symbolName in scope.variables:
+				print "hola ", scope.variables[symbolName]
 				return scope.variables[symbolName]
 			scope = scope.parent
 #		print symbolName, " Variable not found"
@@ -46,6 +47,7 @@ class SymbolTable:
 	
 	def LookUpCurrentScope(self, symbolName):
 		scope = self
+		print symbolName
 		if symbolName in scope.variables:
 			# print "inupsymbol",scope.variables[symbolName][1]
 			return [self.variables[symbolName][1]]
@@ -146,12 +148,13 @@ class SymbolTable:
 
 	def LookUpSymbolType(self, symbolName):
 		scope = self
-		while(scope is not None):
+		print "ddddddd",symbolName
+		while(scope):
 			value = scope.LookUpCurrentScope(symbolName)
 			if(value):
+				print value
 				return value
-			else:
-				scope = scope.parent
+			scope = scope.parent
 		return False
 
 	def SetObjectName(self, currentName, newName):
@@ -162,7 +165,7 @@ class SymbolTable:
 		print self.objects[newName][0], "last line in set object name"
 
 	def InsertVar(self, symbolName, val, type_name):
-	#	print "testing",type_name
+		print "testing",type_name
 		if symbolName in self.variables:
 			return False
 		else:
@@ -202,8 +205,8 @@ class SymbolTable:
 				print  "className"
 				class_name = scope.classes[className][0]
 				self.objects[symbolName] = copy.deepcopy(class_name) #notice that we actually need self here instead of scope
-				print class_name, " ", self.objects[symbolName],"after deepcopy"
-				self.InvokeConstr(self.objects[symbolName], valList)
+				# print class_name, " ", self.objects[symbolName],"after deepcopy"
+				# self.InvokeConstr(self.objects[symbolName], valList)
 				return True
 			scope = scope.parent
 		print "%s not found" % (className)
