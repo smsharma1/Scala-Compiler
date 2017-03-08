@@ -1,0 +1,24 @@
+add
+var, i, INT, 4
+var, arr, ARRAYINT, 16
+var, c, INT, 4
+var, arr1, INT, 4
+
+sub
+var, a, INT, 4
+
+main
+var, a, ARRAYINT, 16
+var, c, INT, 4
+var, d, INT, 4
+var, g, INT, 4
+var, f, INT, 4
+var, i, INT, 4
+var, args, ARRAYSTRING, 0
+var, x, INT, 4
+
+object
+function, add, ['INT']-->['INT'],   
+function, main, ['ARRAYSTRING']-->[],   
+function, sub, ['INT']-->['INT'],   
+

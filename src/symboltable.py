@@ -27,7 +27,7 @@ class SymbolTable:
 		scope = self
 		while(scope):
 			if symbolName in scope.variables:
-				print "hola ", scope.variables[symbolName]
+				# print "hola ", scope.variables[symbolName]
 				return scope.variables[symbolName]
 			scope = scope.parent
 #		print symbolName, " Variable not found"
@@ -133,7 +133,7 @@ class SymbolTable:
 			if looklist[1] in myobject.functions:
 				return [myobject.functions[looklist[1]][0].returnType]
 			elif looklist[1] in myobject.variables:
-				return [myobject.variables[looklist[1]][1]]
+				return [myobject.variables[looklist[1]][1]]		
 		else:
 			for name in looklist[:-1]:
 				# print name," inelse ",rootScope.classes
@@ -150,11 +150,11 @@ class SymbolTable:
 
 	def LookUpSymbolType(self, symbolName):
 		scope = self
-		print "ddddddd",symbolName
+		# print "ddddddd",symbolName
 		while(scope):
 			value = scope.LookUpCurrentScope(symbolName)
 			if(value):
-				print value
+				# print value
 				return value
 			scope = scope.parent
 		return False
@@ -270,7 +270,7 @@ class SymbolTable:
 			fileh.write(buffer)
 		for key in scope.functions:
 			arglist = str(scope.functions[key][0].argList)
-			buffer = "function, " + str(key) + ", " + arglist+ "-->" + str(scope.functions[key][0].returnType)+", , " + " \n"
+			buffer = "function, " + str(key) + ", " + arglist+ "-->" + str(scope.functions[key][0].returnType)+",  " + " \n"
 			fileh.write(buffer)
 		fileh.write('\n')
 

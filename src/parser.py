@@ -5,6 +5,7 @@ import sys
 from symboltable import *
 # Get the token map from the lexer.  This is required.
 from lexer import tokens
+Error = 0
 graph = pydot.Dot(graph_type='digraph')
 rootScope = SymbolTable(None, "root")
 currentScope = rootScope
@@ -163,14 +164,15 @@ def p_ClassHeader(p):
 	# print currentScope
 	if p[4] != None:
 		if(currentScope.LookUpClass(p[2], p[4].typelist)):
-			return sys.exit("Method declaration error")
-		else:
-			currentScope = currentScope.InsertClass(p[2],p[4].typelist)
+			print "Method Declaration Error at line number: " + str(p.lexer.lineno) 
+			global Error
+			Error = Error + 1 
+		currentScope = currentScope.InsertClass(p[2],p[4].typelist)
 	else:
 		if(currentScope.LookUpClass(p[2],[])):
-			return sys.exit("Method declaration error")
-		else:
-			currentScope = currentScope.InsertClass(p[2],[])
+			print "Method Declaration Error at line number: " + str(p.lexer.lineno)
+			Error = Error + 1 
+		currentScope = currentScope.InsertClass(p[2],[])
 
 	p[0] = Node("ClassHeader", [p[4]],[p[1], p[2],p[3],p[5]], order="lllcl")
 	
@@ -225,14 +227,16 @@ def p_VariableDeclarator1(p):
 	global currentScope
 	global symbol_file
 	if(currentScope.LookUpVar(p[1])):
-			return sys.exit("Variable Already Declared")
+		print "Variable " + p[1] + " already declared error at line number: " + str(p.lexer.lineno)
+		global Error  
+		Error = Error + 1
 	if len(p)==4:
 		if(p[3].typelist[0] == 'object'):
 			currentScope.SetObjectName("temp", p[1])
 			# print self.LookUpObject(p[1]).name, " ", self.LookUpObject(p[1]).variables, "before dumper is called"
 			currentScope.Dumper(currentScope.LookUpObject(p[1]),symbol_file)
 		else:
-			print p[3].typelist, " in variabledeclarator1"
+			# print p[3].typelist, " in variabledeclarator1"
 			currentScope.InsertVar(p[1],0,p[4].typelist[0], length= p[3].typelist[1])
 		p[0] = Node("VariableDeclarator1", [p[3]],[p[1],p[2]], order="llc")
 	elif len(p)==8:
@@ -271,7 +275,9 @@ def p_VariableDeclarator(p):
 	'''VariableDeclarator : ID COLON Type '''
 	global currentScope
 	if(currentScope.LookUpVar(p[1])):
-		return sys.exit("Variable Already Declared")
+		print "Variable " + p[1] + " already declared error at line number: " + str(p.lexer.lineno)
+		global Error 
+		Error = Error + 1
 	else:
 		currentScope.InsertVar(p[1],0,p[3].typelist[0])
 	p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]],typelist = p[3].typelist, order="llc") 
@@ -282,7 +288,7 @@ def p_VariableInitializer(p):
 							| ClassInstanceCreationExpression'''
 
 	p[0] = p[1]
-	print p[1].typelist,"VariableInitializer"
+	# print p[1].typelist,"VariableInitializer",p[1].type
 	# p[0] = Node("VariableInitializer", [p[1]],[],typelist = p[1].typelist, order="c")
 
 def p_ArrayInitializer(p):
@@ -310,14 +316,17 @@ def p_MethodHeader(p):
 	parentScope.functions[p[2].typelist[0]] = currentScope
 	if p[3] != None:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
-			return sys.exit("Method declaration error")
+			print "Method Declaration Error at line number: " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
 		else:
 			currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
 
 		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + p[3].typelist,order="ccc")
 	else:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
-			return sys.exit("Method declaration error")
+			print "Method declaration error at line number: " + str(p.lexer.lineno)
+			Error = Error + 1
 		else:
 			currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:],[])
 		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + [] ,order="ccc")
@@ -501,11 +510,17 @@ def p_VariableDeclarationBody(p):
 	global currentScope
 	global symbol_file
 	if(currentScope.LookUpVar(p[1])):
-		return sys.exit(p[1] + " Variable Already Declared")
+		print "Variable " + p[1] + " already declared error at line number: " + str(p.lexer.lineno)
+		global Error
+		Error = Error + 1
 	if len(p) == 6:
-		print "checking ",p[3].typelist," ",p[5].typelist
+		# print "checking ",p[3].typelist," ",p[5].typelist
 		if(not allowed(p[3].typelist[0], p[5].typelist[0])):
-			sys.exit("Error: ", p[1]," : ", p[3].typelist[0], " = ", p[5].typelist[0], " type mismatch")
+			# print p.lexer.lineno
+			print "Type mismatch in line " + str(p.lexer.lineno)
+			# global Error
+			Error = Error + 1 
+	#		sys.exit("Error: ", p[1]," : ", p[3].typelist[0], " = ", p[5].typelist[0], " type mismatch")
 		currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node(p[4],[p[3],p[5]],[p[1],p[2]], order="llcc",isLeaf=True)
 	else:
@@ -565,14 +580,20 @@ def p_StatementExpression(p):
 def p_IfThenStatement(p):
 	'IfThenStatement : M R_IF LPARAN Expression RPARAN Statement N'
 	if(not (p[4].typelist[0] == 'BOOL')):
-		sys.exit("Error in IfThenStatement")
+		print "Syntax error in expression of if then else statement at line " + str(p.lexer.lineno)
+		global Error
+		Error = Error + 1 
+		#sys.exit("Error in IfThenStatement")
 	p[0] = Node(p[2], [p[4], p[6]],[p[3], p[5]],order='lclc',isLeaf=True)
 
 def p_IfThenElseStatement(p):
 #	'IfThenElseStatement : ifstat elsestat'
 	'IfThenElseStatement : M R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE Statement N'
 	if(not (p[4].typelist[0] == 'BOOL')):
-		sys.exit("Error in IfThenelseStatement")
+		print "Syntax error in expression of if then else statement at line " + str(p.lexer.lineno)
+		global Error
+		Error = Error + 1
+		#sys.exit("Error in IfThenelseStatement")
 	p[0] = Node("IfThenElseStatement", [p[4], p[6], p[8]],[p[2], p[3], p[5], p[7]],order='llclclc')
 
 # def p_ifstat(p):
@@ -585,7 +606,10 @@ def p_IfThenElseStatement(p):
 def p_IfThenElseStatementNoShortIf(p):
 	'IfThenElseStatementNoShortIf : M R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE StatementNoShortIf N'
 	if(not (p[4].typelist[0] == 'BOOL')):
-		sys.exit("Error in IfThenelseStatementnoshortif")
+		print "Syntax error in expression of if then else statement at line " + str(p.lexer.lineno)
+		global Error
+		Error = Error + 1
+		#sys.exit("Error in IfThenelseStatementnoshortif")
 	p[0] = Node("IfThenElseStatementNoShortIf", [p[4], p[6], p[8]],[p[2], p[3], p[5], p[7]],order='llclclc')
 
 def p_SwitchStatement(p):
@@ -629,7 +653,10 @@ def p_SwitchBlockBody(p):
 def p_WhileStatement(p):
 	'WhileStatement : M R_WHILE  LPARAN Expression RPARAN Statement N'
 	if(not (p[4].typelist[0] == 'BOOL')):
-		sys.exit("ERROR: While statement expression is not BOOL it is "+p[4].typelist[0])
+		print "Syntax error in expression of while Statement at line " + str(p.lexer.lineno)
+		global Error
+		Error = Error + 1
+		#sys.exit("ERROR: While statement expression is not BOOL it is "+p[4].typelist[0])
 	p[0] = Node(p[2], [p[4], p[6]],[p[3], p[5]],order='lclc',isLeaf=True)
 
 def p_ForStatement(p):
@@ -660,10 +687,15 @@ def p_ForVariables(p):
 	if(p[1] == None):
 		# print "For variables ",currentScope.LookUpVar(p[2])[1]
 		if(not (currentScope.LookUpVar(p[2])[1] == p[4].typelist[0] and p[4].typelist[0]==p[6].typelist[0]) ):
-			sys.exit("Error: ", p[2], "<-", p[4], " For Until To ", p[6], " type mismatch" )
+			print "Type mismatch in line " + str(p.lexer.lineno)
+			global Error 
+			Error = Error + 1
+			#sys.exit("Error: ", p[2], "<-", p[4], " For Until To ", p[6], " type mismatch" )
 	else:
 		if(not (p[4].typelist[0] == p[6].typelist[0])):
-			sys.exit("Error: ", p[2], "<-", p[4], " For Until To ", p[6], " type mismatch" )
+			print "Type mismatch in line " + str(p.lexer.lineno)
+			# global Error 
+			Error = Error + 1
 		else:
 			currentScope.InsertVar(p[2], p[4].typelist[0])
 	p[0] = Node("ForVariables", [p[1],p[4],p[5],p[6]], [p[2],p[3]],order='cllccc')
@@ -718,7 +750,7 @@ def p_ReturnStatement(p):
 def p_Expression(p):
 	'''Expression : OrExpression'''
 	p[0] = p[1]
-#	print p[1].typelist , "In expression"
+	# print p[1].typelist , "In expression",p[1].type
 	# p[0] = Node("Expression", [p[1]],[],typelist = p[1].typelist,order='c')
 
 
@@ -755,15 +787,20 @@ def p_Assignment(p):
 				#| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
 	#print p[1].typelist,"hello ",p[3].typelist
 	if p[2]=="=":
-		if allowed(p[1].typelist[0], p[3].typelist[0]) :
-			p[0] = Node(p[2], [p[1], p[3]],[], order="cc",isLeaf=True)
-		else:
-			return sys.exit("assignment mismatch error")
+		if not allowed(p[1].typelist[0], p[3].typelist[0]) :
+			print "Assignment mismatch error at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
+		p[0] = Node(p[2], [p[1], p[3]],[], order="cc",isLeaf=True)
+						#return sys.exit("assignment mismatch error")
 	else:
-		if allowed(p[1].typelist[0], p[3].typelist[0]) :
-			p[0] = Node(p[2].type, [p[1], p[3]],[], order="cc",isLeaf=True)
-		else:
-			return sys.exit("assignment mismatch error")
+		if not allowed(p[1].typelist[0], p[3].typelist[0]) :
+			print "Assignment mismatch error at line " + str(p.lexer.lineno)
+			# global Error
+			Error = Error + 1
+		p[0] = Node(p[2].type, [p[1], p[3]],[], order="cc",isLeaf=True)
+
+			
 
 
 def p_OrExpression(p):
@@ -773,7 +810,10 @@ def p_OrExpression(p):
 		p[0] = p[1]
 	else:
 		if (not (p[1].typelist[0] == 'BOOL' and p[3].typelist[0] ==  'BOOL')):
-			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
+			print "Type mismatch error at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
+			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 
 def p_AndExpression(p):
@@ -781,7 +821,10 @@ def p_AndExpression(p):
 					| AndExpression AND XorExpression'''
 	if len(p) ==  4:
 		if (not (p[1].typelist[0] == 'BOOL' and p[3].typelist[0] ==  'BOOL')):
-			sys.exit("Error: " + p[1].typelist[0] + " " + p[3].typelist[0] + " type mismatch")
+			print "Type mismatch error at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
+			#sys.exit("Error: " + p[1].typelist[0] + " " + p[3].typelist[0] + " type mismatch")
 		p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 	else:
 		p[0] = p[1]
@@ -793,7 +836,10 @@ def p_XorExpression(p):
 		p[0] = p[1]
 	else :
 		if(not (p[1].typelist[0]=='BOOL' and p[3].typelist[0]=='BOOL')):
-			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
+			print "Type mismatch error at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
+			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 
 
@@ -804,7 +850,10 @@ def p_EqualityExpression(p):
 						| EqualityExpression NOTEQUAL RelationalExpression'''
 	if len(p) ==  4:
 		if(not p[1].typelist[0] == p[3].typelist[0]):
-			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
+			print "Type mismatch error at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
+			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "==":
 			p[0] = Node(p[2], [p[1], p[3]], [],typelist = ['BOOL'],order='cc',isLeaf=True)
 		elif p[2] == "!=":
@@ -823,7 +872,10 @@ def p_RelationalExpression(p):
 		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
 		# print p[1].typelist[0],"jjfjfjfj"
 		if(not type_here):
-			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
+			print "Type mismatch error at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
+			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "<":
 			p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 		elif p[2] == ">":
@@ -845,7 +897,10 @@ def p_ShiftExpression(p):
 	if len(p) ==  4:
 		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
 		if(not type_here):
-			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
+			print "Type mismatch error at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
+			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "<<":
 			p[0] = Node("<<", [p[1], p[3]], [],typelist=[type_here],order='cc',isLeaf=True)
 		elif p[2] == ">>":
@@ -863,7 +918,10 @@ def p_AdditiveExpression(p):
 	if len(p) ==  4:
 		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
 		if(not type_here):
-			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
+			print "Type mismatch error at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
+			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "+":
 			p[0] = Node("+", [p[1],p[3]], [ ],typelist=[type_here],order='cc',isLeaf=True)
 		else:
@@ -881,7 +939,10 @@ def p_MultiplicativeExpression(p):
 		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
 		# print p[1].typelist, "multiplicativeerror" , p[3].typelist
 		if(not type_here):
-			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
+			print "Type mismatch error at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
+			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "*":
 			p[0] = Node("*", [p[1], p[3]], [], typelist = [type_here], order='cc',isLeaf=True)
 		elif p[2] == "%":
@@ -910,10 +971,11 @@ def p_UnaryExpressionNotPlusMinus(p):
 									#| CastExpression'''
 									#| BITNEG UnaryExpression
 	if len(p) ==  3:
-		if(p[2].typelist == ['BOOL']):
-			type_here = ['BOOL']
-		else:
-			sys.exit("Error: ", p[2].typelist[0], "type mismatch")
+		if(not p[2].typelist == ['BOOL']):
+			print "Type mismatch error at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
+		type_here = ['BOOL']
 		p[0] = Node("!", [p[2]], [],tyelist=type_here,order='c',isLeaf=True)
 	else:
 		p[0] = p[1]
@@ -939,15 +1001,20 @@ def p_MethodInvocation(p):
 #	print p[1].type,"name",currentScope.name
 #	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
 	if (currentScope.LookUpFunc(p[1].type, p[3].typelist[0:])==False):
-		print ""
-		sys.exit("Error: ",p[1].type, p[3].typelist[0:], " Method Invocation error")
+		print "Method invocation error at line " + str(p.lexer.lineno)
+		global Error
+		Error = Error + 1
+		#sys.exit("Error: ",p[1].type, p[3].typelist[0:], " Method Invocation error")
 	# else:
 	# 	currentScope = currentScope.GetScope(p[1].name, p[3].typelist[0:])
 	if len(p) ==  5:
 		
 		value = currentScope.GetFuncScope(p[1].type,p[3].typelist)
 		if(value == False):
-			sys.exit("Method" + p[1].type + " does not found")
+			print "Method " + p[1].type+ " at line " + str(p.lexer.lineno)
+			# global Error
+			Error = Error + 1
+			#sys.exit("Method" + p[1].type + " does not found")
 		else:
 			p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]],typelist = value.returnType , order='clcl')
 	# elif len(p) ==  4:
@@ -991,18 +1058,21 @@ def p_ClassInstanceCreationExpression(p):
 								#		| R_NEW ClassType LPARAN RPARAN'''
 	global currentScope
 	if(p[4] != None):
-		print p[2].type,"inclassinstance",p[4].typelist
+		# print p[2].type,"inclassinstance",p[4].typelist
 		if(currentScope.LookUpClass(p[2].type, p[4].typelist)):
-			return sys.exit(str(p[2])+"Class Not Found in currentScope")
+			print "Class " + str(p[2])+" Not Found in currentScope error at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
+			#return sys.exit(str(p[2])+"Class Not Found in currentScope")
 		else:
-			print p[2].type, " " , p[4].typelist, " creating object"
+			# print p[2].type, " " , p[4].typelist, " creating object"
 			if(currentScope.InsertObject("temp", p[2].type, [])): #valList is to be sent here 
 				pass
 			else:
 				print("Error: ", p[2].type, " alreay declared in currentScope" )
 
 	if len(p) ==6:
-		print p[2].type,"inclassinstanceasdasdadsasda",p[4].typelist
+		# print p[2].type,"inclassinstanceasdasdadsasda",p[4].typelist
 		p[0] = Node('ClassInstanceCreationExpression',[p[2], p[4]],[p[1],p[3],p[5]],typelist = ['object', p[2].type], order='lclcl')
 	# else:
 	# 	p[0] = Node('ClassInstanceCreationExpression',[p[2]],[p[1],p[3],p[4]])
@@ -1037,7 +1107,7 @@ def p_AmbiguousName(p):
 	
 	if len(p)==2:
 		returnType = currentScope.LookUpSymbolType(p[1])
-		print returnType, "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"
+		# print returnType, "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"
 		# if(t=="variable"):
 		# 	returnType = currentScope.LookUpVar(p[1])[1]
 		# elif(t=="function"):
@@ -1052,12 +1122,15 @@ def p_AmbiguousName(p):
 		if(returnType):
 			p[0] = Node(p[1], [], [], typelist = returnType, isLeaf=True)
 		else:
-			sys.exit("No symbol found for "+str(p[1]))
+			print "No Symbol found for " + str(p[1]) + " error at line " + str(p.lexer.lineno)
+			global Error 
+			Error = Error + 1
+			#sys.exit("No symbol found for "+str(p[1]))
 		# p[0] = Node('AmbiguousName',[],[p[1]],typelist = currentScope.LookUpSymbol(p[1]),order='l')
 	else:
-		print "lkjhgfdfghjkl"
+		# print "lkjhgfdfghjkl"
 		thing = currentScope.LookDotThing(rootScope, p[1].type+"."+p[3])
-		print "here **************************",thing
+		# print "here **************************",thing
 		if(thing):
 			p[0] = Node(p[1].type+"."+p[3],[p[1]],[p[2],p[3]],typelist = thing, order='cll')
 
@@ -1119,7 +1192,8 @@ def p_empty(p):
 	pass
 
 def p_error(p):
-	sys.exit("Syntax Error")
+	print "Syntax Error at line " + str(p.lexer.lineno)
+	#sys.exit("Syntax Error")
 parser = yacc.yacc()
 
 def allowed(type1, type2):
@@ -1161,6 +1235,9 @@ if __name__ == "__main__" :
 	programfile = open(filename)
 	data = programfile.read()
 	parser.parse(data)
+	# global Error
+	if(Error):
+		print sys.exit("Your Program contain total " + str(Error) + " Errors"  )
 	graph.write_png('parsetree.png')
 	filedot = open(filename + "dot",'w')
 	filedot.write(graph.to_string())

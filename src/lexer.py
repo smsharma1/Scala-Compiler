@@ -157,6 +157,11 @@ tokens =list(reserved.values()) +  [
 # <hex digit> :: = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | a | b | c | d | e | f | A | B | C | D | E | F
 # <integer type suffix> ::= l | L
 
+def t_LINEFEED(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+    t.value = '\n'
+
 def t_COMMENT(t):
 	r'(/\*(.|\n)*?\*/)|(//.*)'
 	pass
@@ -232,10 +237,6 @@ t_NOT = r'!'
 t_ignore  = ' \t'
 # t_BACKSPACE = r'\\b'
 # t_HORITAB = r'\t'
-def t_LINEFEED(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
-    t.value = '\n'
 # t_FORMFEED = r'\f'
 # t_CARRIAGERETN = r'\r'
 # t_DOUBLEQUOTE = r'\"'
@@ -254,7 +255,6 @@ t_COMMA = r'\,'
 def t_error(t):
 	print("Illegal character '%s'" % t.value[0])
 	t.lexer.skip(1)
-
 
 lexer = lex.lex()
 
