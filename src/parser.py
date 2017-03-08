@@ -10,12 +10,14 @@ currentScope = SymbolTable(None, "root")
 
 class Node:
 	uid=0
-	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False):
+	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False):
 		self.type = type
 		self.typelist = typelist
 		Node.uid = Node.uid + 1
 		self.uid = Node.uid
 		self.name = type+"##"+str(self.uid)
+		if(notreenode):
+			return
 		# print self.name, " ", typelist
 		if isLeaf:
 			self.node = pydot.Node(self.name, style="filled", fillcolor="green", myNo = seqNo)
@@ -486,10 +488,10 @@ def p_VariableDeclarationBody(p):
 		if(not allowed(p[3].typelist[0], p[5].typelist[0])):
 			sys.exit("Error: ", p[1]," : ", p[3].typelist[0], " = ", p[5].typelist[0], " type mismatch")
 		currentScope.InsertVar(p[1],0,p[3].typelist)
-		p[0] = Node('VariableDeclarationBody',[p[3],p[5]],[p[1],p[2],p[4]], order="llclc")
+		p[0] = Node(p[4],[p[3],p[5]],[p[1],p[2]], order="llcc",isLeaf=True)
 	else:
 		currentScope.InsertVar(p[1],0,p[3].typelist)
-		p[0] = Node('VariableDeclarationBody',[p[3]],[p[1],p[2]], order="llc")
+		p[0] = Node(p[2],[p[3]],[p[1]], order="lc")
 
 def p_Statement(p):
 	'''Statement : StatementWithoutTrailingSubstatement
@@ -719,7 +721,7 @@ def p_AssignmentOperator(p):
 						| BITANDASS
 						| BITXORASS
 						| BITORASS'''
-	p[0] = Node("AssignmentOperator", [],[p[1]],order='l')
+	p[0] = Node(p[1], [],[],isLeaf=True,notreenode=True)
 
 ##check it very important issue
 def p_Assignment(p):
@@ -729,12 +731,12 @@ def p_Assignment(p):
 	#print p[1].typelist,"hello ",p[3].typelist
 	if p[2]=="=":
 		if allowed(p[1].typelist[0], p[3].typelist[0]) :
-			p[0] = Node("Assignment", [p[1], p[3]],[p[2]], order="clc")
+			p[0] = Node(p[2], [p[1], p[3]],[], order="cc",isLeaf=True)
 		else:
 			return sys.exit("assignment mismatch error")
 	else:
 		if allowed(p[1].typelist[0], p[3].typelist[0]) :
-			p[0] = Node("Assignment", [p[1], p[2], p[3]],[], order="ccc")
+			p[0] = Node(p[2].type, [p[1], p[3]],[], order="cc",isLeaf=True)
 		else:
 			return sys.exit("assignment mismatch error")
 
