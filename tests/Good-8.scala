@@ -20,10 +20,10 @@ object Good8 {
 		//	i = 10;
 			var c : Int = 0;
 	//		var d =add(a);
-			var d : Int = sub(i+c);
-			 d = sub(i-c);
-		    var f = sub(i*c);
-		    var g = sub(i/c);
+			var d : Int = sub(i);
+			 d = sub(i);
+	//	    var f = sub(i);
+	//	    var g = sub(i/c);
 		//    d = sub(i%c);
 		//    d = sub(i<<c);
 		//    d = sub(i&&c);

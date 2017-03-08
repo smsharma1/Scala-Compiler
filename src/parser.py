@@ -698,7 +698,8 @@ def p_Assignment(p):
 	else:
 		if allowed(p[1].typelist[0], p[3].typelist[0]) :
 			p[0] = Node("Assignment", [p[1], p[2], p[3]],[], order="ccc")
-		return sys.exit("assignment mismatch error")
+		else:
+			return sys.exit("assignment mismatch error")
 
 
 def p_OrExpression(p):
@@ -848,14 +849,19 @@ def p_MethodInvocation(p):
 #	print p[3].typelist
 	global currentScope
 	print p[1].type,"name",currentScope.name
-	print p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist[0:])
+	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
 	if (currentScope.LookUpFunc(p[1].type, p[3].typelist[0:])==False):
-		print "a"
+		print ""
 #		return sys.exit("Method Invocation error")
 	# else:
 	# 	currentScope = currentScope.GetScope(p[1].name, p[3].typelist[0:])
 	if len(p) ==  5:
-		p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]],typelist = currentScope.returnType , order='clcl')
+		
+		value = currentScope.GetFuncScope(p[1].type,p[3].typelist)
+		if(value == False):
+			sys.exit("Method" + p[1].type + " does not found")
+		else:
+			p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]],typelist = value.returnType , order='clcl')
 	# elif len(p) ==  4:
 	# 	p[0] = Node("MethodInvocation", [p[1]], [p[2], p[3]])
 
@@ -888,6 +894,7 @@ def p_PrimaryNoNewArray(p):
 	if len(p) == 3:
 		p[0] = Node('PrimaryNoNewArray',[p[2]],[p[1],p[3]],typelist = p[2].typelist,order='lcl')
 	else:
+		print p[1].type,"we are in p_PrimaryNoNewArray", p[1].typelist
 		p[0] = p[1]
 # <class instance creation expression> ::= new <class type> ( <argument list>? )
 
