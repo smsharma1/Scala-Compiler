@@ -62,10 +62,10 @@ class SymbolTable:
 		scope = self
 		while(scope):
 			if symbolName in scope.variables:
-				print "inupsymbol",scope.variables[symbolName][1]
+			#	print "inupsymbol",scope.variables[symbolName][1]
 				return scope.variables[symbolName][1]
 			elif symbolName in scope.functions:
-				print symbolName, " *******", (scope.functions[symbolName])[0].returnType  
+			#	print symbolName, " *******", (scope.functions[symbolName])[0].returnType  
 				return (scope.functions[symbolName])[0].returnType
 			scope = scope.parent
 		return False
@@ -112,7 +112,7 @@ class SymbolTable:
 			return False
 
 	def InsertVar(self, symbolName, val, type_name):
-		print "testing",type_name
+	#	print "testing",type_name
 		if symbolName in self.variables:
 			return False
 		else:
