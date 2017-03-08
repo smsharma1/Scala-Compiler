@@ -1,8 +1,7 @@
-import Arrr.ggg
 object Good8 {
 	 /*def add(arr: Array[Int]) : Int = {
-		var c = 0;
-		var i = 0;
+		var c : Int = 0;
+		var i : Int = 0;
 		while (i <= 4) {
                // arr[i] = i+1;
 			//	c = c + a[i];

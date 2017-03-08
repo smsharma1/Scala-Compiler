@@ -225,19 +225,19 @@ def p_VariableDeclarator1(p):
 		if(p[3].typelist[0] == 'object'):
 			currentScope.SetObjectName("temp", p[1])
 		else:
-			currentScope.InsertVar(p[1],0,p[4].typelist)
+			currentScope.InsertVar(p[1],0,p[4].typelist[0])
 		p[0] = Node("VariableDeclarator1", [p[3]],[p[1],p[2]], order="llc")
 	elif len(p)==8:
-		currentScope.InsertVar(p[1],0,p[3].typelist)
+		currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node("VariableDeclarator1", [p[3], p[5], p[7]],[p[1],p[2], p[4], p[6]], order="llclclc")
 	elif p[2] == ':':
-		currentScope.InsertVar(p[1],0,p[3].typelist)
+		currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node("VariableDeclarator1", [p[3], p[5]],[p[1],p[2], p[4]], order="llclc")
 	else:
 		if(p[3].typelist[0] == 'object'):
 			currentScope.SetObjectName("temp", p[1])
 		else:
-			currentScope.InsertVar(p[1],0,p[3].typelist)
+			currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node("VariableDeclarator1", [p[3], p[5]],[p[1],p[2], p[4]], order="llclc")
 
 def p_FuncArgumentListExtras(p):
@@ -264,7 +264,7 @@ def p_VariableDeclarator(p):
 	if(currentScope.LookUpVar(p[1])):
 		return sys.exit("Variable Already Declared")
 	else:
-		currentScope.InsertVar(p[1],0,p[3].typelist)
+		currentScope.InsertVar(p[1],0,p[3].typelist[0])
 	p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]],typelist = p[3].typelist, order="llc") 
 
 def p_VariableInitializer(p):
@@ -273,7 +273,7 @@ def p_VariableInitializer(p):
 							| ClassInstanceCreationExpression'''
 
 	p[0] = p[1]
-	print p[1].type,"VariableInitializer"
+	print p[1].typelist,"VariableInitializer"
 	# p[0] = Node("VariableInitializer", [p[1]],[],typelist = p[1].typelist, order="c")
 
 def p_ArrayInitializer(p):
@@ -494,10 +494,13 @@ def p_VariableDeclarationBody(p):
 		print "checking ",p[3].type," ",p[5].type
 		if(not allowed(p[3].typelist[0], p[5].typelist[0])):
 			sys.exit("Error: ", p[1]," : ", p[3].typelist[0], " = ", p[5].typelist[0], " type mismatch")
-		currentScope.InsertVar(p[1],0,p[3].typelist)
+		currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node(p[4],[p[3],p[5]],[p[1],p[2]], order="llcc",isLeaf=True)
 	else:
-		currentScope.InsertVar(p[1],0,p[3].typelist)
+		if(p[3].typelist[0] == 'object'):
+			currentScope.SetObjectName("temp", p[1])
+		else:
+			currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node(p[2],[p[3]],[p[1]], order="lc")
 
 def p_Statement(p):
@@ -647,7 +650,7 @@ def p_ForVariables(p):
 		if(not (p[4].typelist == p[6].typelist)):
 			sys.exit("Error: ", p[2], "<-", p[4], " For Until To ", p[6], " type mismatch" )
 		else:
-			currentScope.InsertVar(p[2], p[4].typelist)
+			currentScope.InsertVar(p[2], p[4].typelist[0])
 	p[0] = Node("ForVariables", [p[1],p[4],p[5],p[6]], [p[2],p[3]],order='cllccc')
  #'''declaration_keyword_extras : variable_header | empty'''
 #'''variable_header : K_VAL | K_VAR '''
@@ -1012,6 +1015,7 @@ def p_AmbiguousName(p):
 	'''AmbiguousName : ID
 					| AmbiguousName DOT ID'''
 	global currentScope
+	global rootScope
 	#print p[1],"hello i am here",currentScope.LookUpSymbol(p[1])
 	
 	if len(p)==2:
@@ -1036,7 +1040,7 @@ def p_AmbiguousName(p):
 		thing = currentScope.LookDotThing(rootScope, p[1].type+"."+p[3])
 		print "here **************************",thing
 		if(thing):
-			p[0] = Node(p[1].type+"."+p[3],[p[1]],[p[2],p[3]],typelist = [thing], order='cll')
+			p[0] = Node(p[1].type+"."+p[3],[p[1]],[p[2],p[3]],typelist = thing, order='cll')
 
 # <literal> ::= <integer literal> | <floating-point literal> | <boolean literal> | <character literal> | <string literal> | <null literal>
 def p_Literal(p):

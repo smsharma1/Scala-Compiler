@@ -50,10 +50,12 @@ class SymbolTable:
 			# print "inupsymbol",scope.variables[symbolName][1]
 			return [self.variables[symbolName][1]]
 		elif symbolName in scope.functions:
+			print self.functions[symbolName][0].returnType, " return type look up current scope"
 			return [self.functions[symbolName][0].returnType]
 		elif symbolName in scope.classes:
 			return ['class', self.classes[symbolName][0].name]
 		elif symbolName in scope.objects:
+			print self.objects[symbolName]
 			return ['object', self.objects[symbolName][0].name]
 		else:
 			return False
@@ -91,7 +93,7 @@ class SymbolTable:
 				return False
 		while(scope):
 			if symbolName in scope.objects:
-				return scope.objects[symbolName]
+				return scope.objects[symbolName][0]
 			scope = scope.parent
 #		print symbolName, " Variable not found"
 		return False
@@ -130,7 +132,7 @@ class SymbolTable:
 				return myobject.variables[looklist[1]][1]		
 		else:
 			for name in looklist[:-1]:
-				print name," inelse ",rootscope.classes
+				print name," inelse ",rootScope.classes
 				if name in rootScope.classes:
 					rootScope = rootScope.classes[name]
 				else:
@@ -153,10 +155,11 @@ class SymbolTable:
 		return False
 
 	def SetObjectName(self, currentName, newName):
-		print "Inselfobjectname", currentName," ",newName
+		print "Insetobjectname", currentName," ",newName
 		myobject = self.LookUpObject(currentName)
 		self.objects[newName] = copy.deepcopy(myobject)
 		self.objects.pop(currentName, None)
+		print self.objects[newName][0], "last line in set object name"
 
 	def InsertVar(self, symbolName, val, type_name):
 	#	print "testing",type_name
@@ -197,8 +200,9 @@ class SymbolTable:
 		while(scope):
 			if className in scope.classes:
 				print  "className"
-				class_name = scope.classes[className]
+				class_name = scope.classes[className][0]
 				self.objects[symbolName] = copy.deepcopy(class_name) #notice that we actually need self here instead of scope
+				print class_name, " ", self.objects[symbolName],"after deepcopy"
 				self.InvokeConstr(self.objects[symbolName], valList)
 				return True
 			scope = scope.parent
