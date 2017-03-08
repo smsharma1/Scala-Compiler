@@ -710,13 +710,17 @@ def p_OrExpression(p):
 	if(len(p)==2):
 		p[0] = p[1]
 	else:
-		p[0] = Node("||", [p[1], p[3]], [],order='cc',isLeaf=True)
+		if (not (p[1].typelist[0] == 'BOOL' and p[3].typelist[0] ==  'BOOL')):
+			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
+		p[0] = Node("||", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 
 def p_AndExpression(p):
 	'''AndExpression : XorExpression
 					| AndExpression AND XorExpression'''
 	if len(p) ==  4:
-		p[0] = Node("&&", [p[1], p[3]], [],order='cc',isLeaf=True)
+		if (not (p[1].typelist[0] == 'BOOL' and p[3].typelist[0] ==  'BOOL')):
+			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
+		p[0] = Node("&&", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 	else:
 		p[0] = p[1]
 
@@ -726,7 +730,9 @@ def p_XorExpression(p):
 	if len(p) == 2:
 		p[0] = p[1]
 	else :
-		p[0] = Node("^", [p[1], p[3]], [],order='cc',isLeaf=True)
+		if(not (p[1].typelist[0]=='BOOL' and p[3].typelist[0]=='BOOL')):
+			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
+		p[0] = Node("^", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 
 
 
@@ -735,10 +741,12 @@ def p_EqualityExpression(p):
 						 | EqualityExpression EQUAL RelationalExpression
 						| EqualityExpression NOTEQUAL RelationalExpression'''
 	if len(p) ==  4:
+		if(not p[1].typelist[0] == p[3].typelist[0]):
+			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "==":
-			p[0] = Node("==", [p[1], p[3]], [],order='cc',isLeaf=True)
+			p[0] = Node("==", [p[1], p[3]], [],typelist = ['BOOL'],order='cc',isLeaf=True)
 		elif p[2] == "!=":
-			p[0] = Node("!=", [p[1], p[3]], [],order='cc',isLeaf=True)	
+			p[0] = Node("!=", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)	
 	else:
 		p[0] = p[1]
 
@@ -750,16 +758,19 @@ def p_RelationalExpression(p):
 						| RelationalExpression GE ShiftExpression
 						| RelationalExpression R_INSTANCEOF ReferenceType'''
 	if len(p) ==  4:
+		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
+		if(not type_here):
+			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "<":
-			p[0] = Node("<", [p[1], p[3]], [],order='cc',isLeaf=True)
+			p[0] = Node("<", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 		elif p[2] == ">":
-			p[0] = Node(">", [p[1], p[3]], [],order='cc',isLeaf=True)
+			p[0] = Node(">", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 		elif p[2] == "<=":
-			p[0] = Node("<=", [p[1], p[3]], [],order='cc',isLeaf=True)
+			p[0] = Node("<=", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 		elif p[2] == ">=":
-			p[0] = Node(">=", [p[1], p[3]], [],order='cc',isLeaf=True)
+			p[0] = Node(">=", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 		elif p[2] == "instanceof":
-			p[0] = Node("instanceof", [p[1], p[3]], [],order='cc',isLeaf=True)
+			p[0] = Node("instanceof", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 	else:
 		p[0] = p[1]
 
@@ -769,12 +780,15 @@ def p_ShiftExpression(p):
 					| ShiftExpression BITRSHIFT AdditiveExpression
 					| ShiftExpression BITRSFILL AdditiveExpression'''
 	if len(p) ==  4:
+		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
+		if(not type_here):
+			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "<<":
-			p[0] = Node("<<", [p[1], p[3]], [],order='cc',isLeaf=True)
+			p[0] = Node("<<", [p[1], p[3]], [],typelist=[type_here],order='cc',isLeaf=True)
 		elif p[2] == ">>":
-			p[0] = Node("<<", [p[1], p[3]], [],order='cc',isLeaf=True)
+			p[0] = Node("<<", [p[1], p[3]], [],typelist=[type_here],order='cc',isLeaf=True)
 		elif p[2] == ">>>":
-			p[0] = Node(">>>", [p[1], p[3]], [],order='cc',isLeaf=True)
+			p[0] = Node(">>>", [p[1], p[3]], [],typelist=[type_here],order='cc',isLeaf=True)
 	else:
 		p[0] = p[1]
 
@@ -784,10 +798,13 @@ def p_AdditiveExpression(p):
 							| AdditiveExpression PLUS MultiplicativeExpression
 							| AdditiveExpression MINUS MultiplicativeExpression'''
 	if len(p) ==  4:
+		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
+		if(not type_here):
+			sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "+":
-			p[0] = Node("+", [p[1],p[3]], [ ],order='cc',isLeaf=True)
+			p[0] = Node("+", [p[1],p[3]], [ ],typelist=[type_here],order='cc',isLeaf=True)
 		else:
-			p[0] = Node("-", [p[1],p[3]], [ ],order='cc',isLeaf=True)
+			p[0] = Node("-", [p[1],p[3]], [ ],typelist=[type_here],order='cc',isLeaf=True)
 	else:
 		p[0] = p[1]
 
@@ -811,18 +828,10 @@ def p_MultiplicativeExpression(p):
 		p[0] = p[1]
 
 def p_UnaryExpression(p):
-	'''UnaryExpression :  PLUS UnaryExpression
-						| MINUS UnaryExpression
-						| UnaryExpressionNotPlusMinus'''
+	'''UnaryExpression :  UnaryExpressionNotPlusMinus'''
 						# | PreincrementExpression
 						# | PredecrementExpression'''
-	if len(p) ==  3:
-		if p[1] == "+":
-			p[0] = Node("+", [p[2]], [],order='c',isLeaf=True)
-		elif p[1] == "-":
-			p[0] = Node("-", [p[2]], [],order='c',isLeaf=True)
-	else:
-		p[0] = p[1]
+	p[0] = p[1]
 		#print p[1].typelist,"Unaryexpression"
 
 def p_UnaryExpressionNotPlusMinus(p):
@@ -831,7 +840,11 @@ def p_UnaryExpressionNotPlusMinus(p):
 									#| CastExpression'''
 									#| BITNEG UnaryExpression
 	if len(p) ==  3:
-		p[0] = Node("!", [p[2]], [],order='c',isLeaf=True)
+		if(p[2].typelist == ['BOOL']):
+			type_here = ['BOOL']
+		else:
+			sys.exit("Error: ", p[2].typelist[0], "type mismatch")
+		p[0] = Node("!", [p[2]], [],tyelist=type_here,order='c',isLeaf=True)
 	else:
 		p[0] = p[1]
 def p_PostfixExpression(p):

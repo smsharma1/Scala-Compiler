@@ -21,7 +21,7 @@ object Good8 {
 			var c : Int = 0;
 	//		var d =add(a);
 			var d : Int = sub(i);
-			d = sub(i);
+			d = sub(i+i+i*i-i%i);
 			var x : Int = 0;
       		// An infinite loop.
       		while( true )
