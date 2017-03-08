@@ -10,12 +10,14 @@ rootScope = SymbolTable(None, "root")
 currentScope = rootScope
 class Node:
 	uid=0
-	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False):
+	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False):
 		self.type = type
 		self.typelist = typelist
 		Node.uid = Node.uid + 1
 		self.uid = Node.uid
 		self.name = type+"##"+str(self.uid)
+		if(notreenode):
+			return
 		# print self.name, " ", typelist
 		if isLeaf:
 			self.node = pydot.Node(self.name, style="filled", fillcolor="green", myNo = seqNo)
@@ -493,10 +495,10 @@ def p_VariableDeclarationBody(p):
 		if(not allowed(p[3].typelist[0], p[5].typelist[0])):
 			sys.exit("Error: ", p[1]," : ", p[3].typelist[0], " = ", p[5].typelist[0], " type mismatch")
 		currentScope.InsertVar(p[1],0,p[3].typelist)
-		p[0] = Node('VariableDeclarationBody',[p[3],p[5]],[p[1],p[2],p[4]], order="llclc")
+		p[0] = Node(p[4],[p[3],p[5]],[p[1],p[2]], order="llcc",isLeaf=True)
 	else:
 		currentScope.InsertVar(p[1],0,p[3].typelist)
-		p[0] = Node('VariableDeclarationBody',[p[3]],[p[1],p[2]], order="llc")
+		p[0] = Node(p[2],[p[3]],[p[1]], order="lc")
 
 def p_Statement(p):
 	'''Statement : StatementWithoutTrailingSubstatement
@@ -522,7 +524,8 @@ def p_StatementWithoutTrailingSubstatement(p):
 def p_StatementNoShortIf(p):
 	'''StatementNoShortIf : StatementWithoutTrailingSubstatement
 						| IfThenElseStatementNoShortIf'''
-	p[0] = Node("StatementNoShortIf", [p[1]],[],order='c')
+	p[0] = p[1]
+	# p[0] = Node("StatementNoShortIf", [p[1]],[],order='c')
 
 #<expression statement> ::= <statement expression> ;
 def p_ExpressionStatement(p):
@@ -540,30 +543,45 @@ def p_StatementExpression(p):
 						# | PostincrementExpression
 						# | PredecrementExpression
 						# | PostdecrementExpression
-	p[0] = Node("StatementExpression", [p[1]],[],order='c')
+	p[0] =p[1] #Node("StatementExpression", [p[1]],[],order='c')
 
 def p_IfThenStatement(p):
-	'IfThenStatement : R_IF LPARAN Expression RPARAN Statement'
-	p[0] = Node("IfThenStatement", [p[3], p[5]],[p[1], p[2], p[4]],order='llclc')
+	'IfThenStatement : M R_IF LPARAN Expression RPARAN Statement N'
+	if(not (p[4].typelist[0] == 'BOOL')):
+		sys.exit("Error in IfThenStatement")
+	p[0] = Node(p[2], [p[4], p[6]],[p[3], p[5]],order='lclc',isLeaf=True)
 
 def p_IfThenElseStatement(p):
-	'IfThenElseStatement : R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE Statement'
-	p[0] = Node("IfThenElseStatement", [p[3], p[5], p[7]],[p[1], p[2], p[4], p[6]],order='llclclc')
+#	'IfThenElseStatement : ifstat elsestat'
+	'IfThenElseStatement : M R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE Statement N'
+	if(not (p[4].typelist[0] == 'BOOL')):
+		sys.exit("Error in IfThenelseStatement")
+	p[0] = Node("IfThenElseStatement", [p[4], p[6], p[8]],[p[2], p[3], p[5], p[7]],order='llclclc')
 
+# def p_ifstat(p):
+# 	'ifstat : R_IF LPARAN Expression RPARAN StatementNoShortIf'
+# 	p[0] = Node(p[1],[p[3],p[5]],[p[2],p[4]],order='lclc',isLeaf=True)
+
+# def p_elsestat(p):
+# 	'elsestat : R_ELSE Statement'
+# 	p[0] = Node(p[1],[p[2]],[],order='c',isLeaf=True)
 def p_IfThenElseStatementNoShortIf(p):
-	'IfThenElseStatementNoShortIf : R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE StatementNoShortIf'
-	p[0] = Node("IfThenElseStatementNoShortIf", [p[3], p[5], p[7]],[p[1], p[2], p[4], p[6]],order='llclclc')
+	'IfThenElseStatementNoShortIf : M R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE StatementNoShortIf N'
+	if(not (p[4].typelist[0] == 'BOOL')):
+		sys.exit("Error in IfThenelseStatementnoshortif")
+	p[0] = Node("IfThenElseStatementNoShortIf", [p[4], p[6], p[8]],[p[2], p[3], p[5], p[7]],order='llclclc')
 
 def p_SwitchStatement(p):
 	'''SwitchStatement : Expression R_MATCH BLOCKOPEN SwitchBlockStatementGroups BLOCKCLOSE'''
-	p[0] = Node("SwitchStatement", [p[1],p[4]],[p[2],p[3],p[5]],order='cllcl')
+	p[0] = Node(p[2], [p[1],p[4]],[p[3],p[5]],order='clcl',isLeaf=True)
 
 def p_SwitchBlockStatementGroups(p):
 	'''SwitchBlockStatementGroups : SwitchBlock
 					| SwitchBlockStatementGroups  SwitchBlock  '''
 				#	| SwitchBlockStatementGroups LINEFEED SwitchBlock
 	if len(p) ==  2:
-		p[0] = Node("SwitchBlockStatementGroups", [p[1]],[],order='c')
+		p[0] = p[1]
+		# p[0] = Node("SwitchBlockStatementGroups", [p[1]],[],order='c')
 	elif len(p) == 3:
 		p[0] = Node("SwitchBlockStatementGroups", [p[1],p[2]],[],order='cc')
 	# else :
@@ -583,7 +601,7 @@ def p_SwitchBlock(p):
 
 def p_SwitchBlockHeader(p):
 	'SwitchBlockHeader : R_CASE Expression IMPLIES1'
-	p[0] = Node("SwitchBlockHeader", [p[2]],[p[1],p[3]],order='lcl')
+	p[0] = Node(p[1], [p[2]],[p[3]],order='cl',isLeaf=True)
 
 def p_SwitchBlockBody(p):
 	'''SwitchBlockBody : Expression
@@ -592,12 +610,13 @@ def p_SwitchBlockBody(p):
 
 
 def p_WhileStatement(p):
-	'WhileStatement :  R_WHILE  LPARAN Expression RPARAN Statement'
-	p[0] = Node(p[1], [p[3], p[5]],[p[2], p[4]],order='lclc',isLeaf=True)
+	'WhileStatement : M R_WHILE  LPARAN Expression RPARAN Statement N'
+	if(not (p[4].typelist[0] == 'BOOL')):
+		sys.exit("ERROR: While statement expression is not BOOL it is "+p[4].typelist[0])
+	p[0] = Node(p[2], [p[4], p[6]],[p[3], p[5]],order='lclc',isLeaf=True)
 
 def p_ForStatement(p):
 	'ForStatement : M R_FOR LPARAN ForVariables RPARAN Statement N'
-
 	p[0] = Node(p[2], [p[4], p[6]],[p[3], p[5]],order='lclc',isLeaf=True)
 
 def p_M(p):
@@ -709,7 +728,7 @@ def p_AssignmentOperator(p):
 						| BITANDASS
 						| BITXORASS
 						| BITORASS'''
-	p[0] = Node("AssignmentOperator", [],[p[1]],order='l')
+	p[0] = Node(p[1], [],[],isLeaf=True,notreenode=True)
 
 ##check it very important issue
 def p_Assignment(p):
@@ -719,12 +738,12 @@ def p_Assignment(p):
 	#print p[1].typelist,"hello ",p[3].typelist
 	if p[2]=="=":
 		if allowed(p[1].typelist[0], p[3].typelist[0]) :
-			p[0] = Node("Assignment", [p[1], p[3]],[p[2]], order="clc")
+			p[0] = Node(p[2], [p[1], p[3]],[], order="cc",isLeaf=True)
 		else:
 			return sys.exit("assignment mismatch error")
 	else:
 		if allowed(p[1].typelist[0], p[3].typelist[0]) :
-			p[0] = Node("Assignment", [p[1], p[2], p[3]],[], order="ccc")
+			p[0] = Node(p[2].type, [p[1], p[3]],[], order="cc",isLeaf=True)
 		else:
 			return sys.exit("assignment mismatch error")
 
