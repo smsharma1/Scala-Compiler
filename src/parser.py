@@ -21,10 +21,27 @@ class Node:
 		if(notreenode):
 			return
 		# print self.name, " ", typelist
+		self.childOrder = ""
+		count = 1
+		leafno = 0
+		childno = 0
+		for letter in order:
+			if letter == 'l':
+				if leaf[leafno] != None:
+					self.childOrder = self.childOrder + leaf[leafno] + " "
+					count = count + 1
+				leafno = leafno + 1
+			elif letter == 'c':
+				if children[childno] != None:
+					self.childOrder = self.childOrder + children[childno].name + " "
+					count = count + 1
+				childno = childno + 1
+
+
 		if isLeaf:
-			self.node = pydot.Node(self.name, style="filled", fillcolor="green", myNo = seqNo)
+			self.node = pydot.Node(self.name, style="filled", fillcolor="green", myNo=seqNo, myOrder=self.childOrder)
 		else:
-			self.node = pydot.Node(self.name, style="filled", fillcolor="red", myNo = seqNo)
+			self.node = pydot.Node(self.name, style="filled", fillcolor="red", myNo=seqNo, myOrder=self.childOrder)
 		graph.add_node(self.node)
 		self.children = children
 		self.leaf = leaf
@@ -578,23 +595,33 @@ def p_StatementExpression(p):
 	p[0] =p[1] #Node("StatementExpression", [p[1]],[],order='c')
 
 def p_IfThenStatement(p):
-	'IfThenStatement : M R_IF LPARAN Expression RPARAN Statement N'
-	if(not (p[4].typelist[0] == 'BOOL')):
-		print "Syntax error in expression of if then else statement at line " + str(p.lexer.lineno)
-		global Error
-		Error = Error + 1 
-		#sys.exit("Error in IfThenStatement")
-	p[0] = Node(p[2], [p[4], p[6]],[p[3], p[5]],order='lclc',isLeaf=True)
+	'''IfThenStatement : M R_IF LPARAN Expression RPARAN Statement N
+					|	M R_IF LPARAN R_TRUE RPARAN Statement N
+					| 	M R_IF LPARAN R_FALSE RPARAN Statement N'''
+	if(p[4] == 'true' or p[4] == 'false'):
+		p[0] = Node(p[2], [p[6]],[p[3], p[4], p[5]],order='lllc',isLeaf=True)
+	else:
+		if(not (p[4].typelist[0] == 'BOOL')):
+			print "Syntax error in expression of while Statement at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
+			#sys.exit("ERROR: While statement expression is not BOOL it is "+p[4].typelist[0])
+		p[0] = Node(p[2], [p[4], p[6]],[p[3], p[5]],order='lclc',isLeaf=True)
 
 def p_IfThenElseStatement(p):
 #	'IfThenElseStatement : ifstat elsestat'
-	'IfThenElseStatement : M R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE Statement N'
-	if(not (p[4].typelist[0] == 'BOOL')):
-		print "Syntax error in expression of if then else statement at line " + str(p.lexer.lineno)
-		global Error
-		Error = Error + 1
-		#sys.exit("Error in IfThenelseStatement")
-	p[0] = Node("IfThenElseStatement", [p[4], p[6], p[8]],[p[2], p[3], p[5], p[7]],order='llclclc')
+	'''IfThenElseStatement : M R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE Statement N
+						| M R_IF LPARAN R_TRUE RPARAN StatementNoShortIf R_ELSE Statement N
+						| M R_IF LPARAN R_FALSE RPARAN StatementNoShortIf R_ELSE Statement N'''
+	if p[4] == "true" or p[4] == "false":
+		p[0] = Node("IfThenElseStatement", [p[6], p[8]],[p[2], p[3], p[4], p[5], p[7]],order='llllclc')
+	else:
+		if(not (p[4].typelist[0] == 'BOOL')):
+			print "Syntax error in expression of if then else statement at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
+			#sys.exit("Error in IfThenelseStatement")
+		p[0] = Node("IfThenElseStatement", [p[4], p[6], p[8]],[p[2], p[3], p[5], p[7]],order='llclclc')
 
 # def p_ifstat(p):
 # 	'ifstat : R_IF LPARAN Expression RPARAN StatementNoShortIf'
@@ -604,13 +631,18 @@ def p_IfThenElseStatement(p):
 # 	'elsestat : R_ELSE Statement'
 # 	p[0] = Node(p[1],[p[2]],[],order='c',isLeaf=True)
 def p_IfThenElseStatementNoShortIf(p):
-	'IfThenElseStatementNoShortIf : M R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE StatementNoShortIf N'
-	if(not (p[4].typelist[0] == 'BOOL')):
-		print "Syntax error in expression of if then else statement at line " + str(p.lexer.lineno)
-		global Error
-		Error = Error + 1
-		#sys.exit("Error in IfThenelseStatementnoshortif")
-	p[0] = Node("IfThenElseStatementNoShortIf", [p[4], p[6], p[8]],[p[2], p[3], p[5], p[7]],order='llclclc')
+	'''IfThenElseStatementNoShortIf : M R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE StatementNoShortIf N
+									|  M R_IF LPARAN R_TRUE RPARAN StatementNoShortIf R_ELSE StatementNoShortIf N
+									|  M R_IF LPARAN R_FALSE RPARAN StatementNoShortIf R_ELSE StatementNoShortIf N'''
+	if p[4] == "true" or p[4] == "false":
+		p[0] = Node("IfThenElseStatementNoShortIf", [p[6], p[8]],[p[2], p[3], p[4], p[5], p[7]],order='llllclc')
+	else:
+		if(not (p[4].typelist[0] == 'BOOL')):
+			print "Syntax error in expression of if then else statement at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
+			#sys.exit("Error in IfThenelseStatementnoshortif")
+		p[0] = Node("IfThenElseStatementNoShortIf", [p[4], p[6], p[8]],[p[2], p[3], p[5], p[7]],order='llclclc')
 
 def p_SwitchStatement(p):
 	'''SwitchStatement : Expression R_MATCH BLOCKOPEN SwitchBlockStatementGroups BLOCKCLOSE'''
@@ -651,13 +683,18 @@ def p_SwitchBlockBody(p):
 
 
 def p_WhileStatement(p):
-	'WhileStatement : M R_WHILE  LPARAN Expression RPARAN Statement N'
-	if(not (p[4].typelist[0] == 'BOOL')):
-		print "Syntax error in expression of while Statement at line " + str(p.lexer.lineno)
-		global Error
-		Error = Error + 1
-		#sys.exit("ERROR: While statement expression is not BOOL it is "+p[4].typelist[0])
-	p[0] = Node(p[2], [p[4], p[6]],[p[3], p[5]],order='lclc',isLeaf=True)
+	'''WhileStatement : M R_WHILE  LPARAN Expression RPARAN Statement N
+					|  M R_WHILE  LPARAN R_TRUE RPARAN Statement N
+					|  M R_WHILE  LPARAN R_FALSE RPARAN Statement N'''
+	if(p[4] == 'true' or p[4] == 'false'):
+		p[0] = Node(p[2], [p[6]],[p[3], p[4], p[5]],order='lllc',isLeaf=True)
+	else:
+		if(not (p[4].typelist[0] == 'BOOL')):
+			print "Syntax error in expression of while Statement at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
+			#sys.exit("ERROR: While statement expression is not BOOL it is "+p[4].typelist[0])
+		p[0] = Node(p[2], [p[4], p[6]],[p[3], p[5]],order='lclc',isLeaf=True)
 
 def p_ForStatement(p):
 	'ForStatement : M R_FOR LPARAN ForVariables RPARAN Statement N'
@@ -1202,7 +1239,10 @@ def p_empty(p):
 	pass
 
 def p_error(p):
-	print "Syntax Error at line " + str(p.lexer.lineno)
+	if (p == None):
+		print "Object Declaration Error"
+	else:
+		print "Syntax Error at line " + str(p.lexer.lineno)
 	#sys.exit("Syntax Error")
 parser = yacc.yacc()
 
