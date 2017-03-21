@@ -21,6 +21,23 @@ class Node:
 		if(notreenode):
 			return
 		# print self.name, " ", typelist
+		self.name = self.name + '\n'
+		count = 1
+		leafno = 0
+		childno = 0
+		# for letter in order:
+		# 	if letter == 'l':
+		# 		if leaf[leafno] != None:
+		# 			self.name = self.name + leaf[leafno] + " "
+		# 			count = count + 1
+		# 		leafno = leafno + 1
+		# 	elif letter == 'c':
+		# 		if children[childno] != None:
+		# 			self.name = self.name + children[childno].name + " "
+		# 			count = count + 1
+		# 		childno = childno + 1
+
+
 		if isLeaf:
 			self.node = pydot.Node(self.name, style="filled", fillcolor="green", myNo = seqNo)
 		else:
