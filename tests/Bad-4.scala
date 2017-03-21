@@ -1,3 +1,10 @@
+
+object Demo {
+   def main(args: Array[String]) {
+      var @a : Int = 	55	;
+      println(@a);
+   }
+}
 /*
 //Bad test case - invalid identifier
 #include<stdio.h>
@@ -6,9 +13,3 @@ void main(){
         printf("%d", a);
 }
 */
-object Demo {
-   def main(args: Array[String]) {
-      var @a : Int = 	55	;
-      println(@a);
-   }
-}
