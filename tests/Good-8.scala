@@ -1,4 +1,3 @@
-//import Arrr.ggg
 object Good8 {
 	 def add(arr1: Int) : Int = {
 		var arr = new Array[Int](4);

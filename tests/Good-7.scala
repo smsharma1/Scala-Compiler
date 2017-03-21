@@ -1,7 +1,7 @@
 object Good7 {
 	def main(args: Array[String]) {
-        var a=scala.io.StdIn.readInt();
-        var b=scala.io.Stdin.readInt();
-        println(a+b);
+//        var a: Int = read();
+//        var b: Int = read();
+        println("a");
     }
 }

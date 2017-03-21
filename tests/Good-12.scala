@@ -1,8 +1,7 @@
-// This test case is to test nested commenting // By- Nishit
 object Good12 {
-def main(args: Array[String]) {
-//*/
-printf("Actually I am in Nested Comment!!");
+  def main(args: Array[String]) {
+    //*/
+println("Actually I am in Nested Comment!!");
 //*
 return 0;}
 }

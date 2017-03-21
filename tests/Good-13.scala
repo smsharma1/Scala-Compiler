@@ -4,8 +4,8 @@
 object Good12 {
 def main(args: Array[String]) {
 
-   var long_variable:Long = 1234567;
-   printf("Size for long long int data type " + SizeEstimator.estimate(long_variable));
+   var long_variable:Int = 1234567;
+   println("Size for long long int data type ");
    return 0;
 }
 }

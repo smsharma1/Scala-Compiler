@@ -996,10 +996,15 @@ def p_MethodInvocation(p):
 						# # | Super DOT Identifier LPARAN RPARAN
 						# | AmbiguousName LPARAN RPARAN
 						# | Primary DOT Identifier LPARAN RPARAN
-#	print p[3].typelist
 	global currentScope
-#	print p[1].type,"name",currentScope.name
+#	print p[1].name,"name",currentScope.name
 #	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
+	if(p[1].type == "println"):
+		p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]] , order='clcl')
+		return
+	if(p[1].type == "read"):
+		p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]] , order='clcl')
+		return
 	if (currentScope.LookUpFunc(p[1].type, p[3].typelist[0:])==False):
 		print "Method invocation error at line " + str(p.lexer.lineno)
 		global Error
@@ -1106,7 +1111,12 @@ def p_AmbiguousName(p):
 	#print p[1],"hello i am here",currentScope.LookUpSymbol(p[1])
 	
 	if len(p)==2:
-		returnType = currentScope.LookUpSymbolType(p[1])
+		if p[1] == 'println':
+			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
+		elif p[1] == 'read':
+			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
+		else:
+			returnType = currentScope.LookUpSymbolType(p[1])
 		# print returnType, "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"
 		# if(t=="variable"):
 		# 	returnType = currentScope.LookUpVar(p[1])[1]
@@ -1119,12 +1129,12 @@ def p_AmbiguousName(p):
 		# else:
 		# 	returnType = False
 
-		if(returnType):
-			p[0] = Node(p[1], [], [], typelist = returnType, isLeaf=True)
-		else:
-			print "No Symbol found for " + str(p[1]) + " error at line " + str(p.lexer.lineno)
-			global Error 
-			Error = Error + 1
+			if(returnType):
+				p[0] = Node(p[1], [], [], typelist = returnType, isLeaf=True)
+			else:
+				print "No Symbol found for " + str(p[1]) + " error at line " + str(p.lexer.lineno)
+				global Error 
+				Error = Error + 1
 			#sys.exit("No symbol found for "+str(p[1]))
 		# p[0] = Node('AmbiguousName',[],[p[1]],typelist = currentScope.LookUpSymbol(p[1]),order='l')
 	else:
