@@ -1,17 +1,6 @@
-node
-var, y, INT, 4
-var, x, INT, 4
-
 main
-<<<<<<< HEAD
-var, a, INT, 4
+var, x, INT, 4
 var, args, ARRAYSTRING, 0
-var, name, STRING, 0
-=======
-var, y, INT, 4
-var, args, ARRAYSTRING, 0
-object, n, node, 
->>>>>>> ad12201e15275cf886a838f455d2df6df9d3baf8
 
 object
 function, main, ['ARRAYSTRING']-->[],   

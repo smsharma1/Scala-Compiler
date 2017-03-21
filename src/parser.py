@@ -352,7 +352,7 @@ def p_MethodDefine(p):
 	'''MethodDefine : R_DEF'''
 	global currentScope
 	currentScope = currentScope.NewFuncScope()		
-	p[0] = Node("MethodDefine", [],[p[1]], order="l")
+	p[0] = Node(p[1], [],[], isLeaf=True)
 	
 
 #<method declarator> ::= <identifier> ( <formal parameter list>? )
@@ -515,7 +515,7 @@ def p_BlockStatement(p):
 
 def p_LocalVariableDeclarationStatement(p):
 	'LocalVariableDeclarationStatement : LocalVariableDeclaration EndStatement'
-	p[0] = Node("LocalVariableDeclarationStatement", [p[1]],[], order="c")
+	p[0] = p[1]
 
 def p_LocalVariableDeclaration(p):
 	'''LocalVariableDeclaration : VariableHeader VariableDeclarationBody'''
@@ -579,7 +579,7 @@ def p_StatementNoShortIf(p):
 #<expression statement> ::= <statement expression> ;
 def p_ExpressionStatement(p):
 	'ExpressionStatement : StatementExpression EndStatement'
-	p[0] = Node("ExpressionStatement", [p[1]],[],order='c')
+	p[0] = p[1]
 
 #<statement expression> ::= <assignment> | <preincrement expression>
 # | <postincrement expression> | <predecrement expression> | <postdecrement expression>
@@ -599,14 +599,14 @@ def p_IfThenStatement(p):
 					|	M R_IF LPARAN R_TRUE RPARAN Statement N
 					| 	M R_IF LPARAN R_FALSE RPARAN Statement N'''
 	if(p[4] == 'true' or p[4] == 'false'):
-		p[0] = Node(p[2], [p[6]],[p[3], p[4], p[5]],order='lllc',isLeaf=True)
+		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True)
 	else:
 		if(not (p[4].typelist[0] == 'BOOL')):
 			print "Syntax error in expression of while Statement at line " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
 			#sys.exit("ERROR: While statement expression is not BOOL it is "+p[4].typelist[0])
-		p[0] = Node(p[2], [p[4], p[6]],[p[3], p[5]],order='lclc',isLeaf=True)
+		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True)
 
 def p_IfThenElseStatement(p):
 #	'IfThenElseStatement : ifstat elsestat'
@@ -614,14 +614,14 @@ def p_IfThenElseStatement(p):
 						| M R_IF LPARAN R_TRUE RPARAN StatementNoShortIf R_ELSE Statement N
 						| M R_IF LPARAN R_FALSE RPARAN StatementNoShortIf R_ELSE Statement N'''
 	if p[4] == "true" or p[4] == "false":
-		p[0] = Node("IfThenElseStatement", [p[6], p[8]],[p[2], p[3], p[4], p[5], p[7]],order='llllclc')
+		p[0] = Node("IfThenElseStatement", [p[6], p[8]],[p[2], p[4], p[7]],order='llclc')
 	else:
 		if(not (p[4].typelist[0] == 'BOOL')):
 			print "Syntax error in expression of if then else statement at line " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
 			#sys.exit("Error in IfThenelseStatement")
-		p[0] = Node("IfThenElseStatement", [p[4], p[6], p[8]],[p[2], p[3], p[5], p[7]],order='llclclc')
+		p[0] = Node("IfThenElseStatement", [p[4], p[6], p[8]],[p[2], p[7]],order='lcclc')
 
 # def p_ifstat(p):
 # 	'ifstat : R_IF LPARAN Expression RPARAN StatementNoShortIf'
@@ -635,18 +635,18 @@ def p_IfThenElseStatementNoShortIf(p):
 									|  M R_IF LPARAN R_TRUE RPARAN StatementNoShortIf R_ELSE StatementNoShortIf N
 									|  M R_IF LPARAN R_FALSE RPARAN StatementNoShortIf R_ELSE StatementNoShortIf N'''
 	if p[4] == "true" or p[4] == "false":
-		p[0] = Node("IfThenElseStatementNoShortIf", [p[6], p[8]],[p[2], p[3], p[4], p[5], p[7]],order='llllclc')
+		p[0] = Node("IfThenElseStatementNoShortIf", [p[6], p[8]],[p[2] ,p[4] ,p[7]],order='llclc')
 	else:
 		if(not (p[4].typelist[0] == 'BOOL')):
 			print "Syntax error in expression of if then else statement at line " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
 			#sys.exit("Error in IfThenelseStatementnoshortif")
-		p[0] = Node("IfThenElseStatementNoShortIf", [p[4], p[6], p[8]],[p[2], p[3], p[5], p[7]],order='llclclc')
+		p[0] = Node("IfThenElseStatementNoShortIf", [p[4], p[6], p[8]],[p[2], p[7]],order='lcclc')
 
 def p_SwitchStatement(p):
 	'''SwitchStatement : Expression R_MATCH BLOCKOPEN SwitchBlockStatementGroups BLOCKCLOSE'''
-	p[0] = Node(p[2], [p[1],p[4]],[p[3],p[5]],order='clcl',isLeaf=True)
+	p[0] = Node(p[2], [p[1],p[4]],[],order='cc',isLeaf=True)
 
 def p_SwitchBlockStatementGroups(p):
 	'''SwitchBlockStatementGroups : SwitchBlock
@@ -687,18 +687,18 @@ def p_WhileStatement(p):
 					|  M R_WHILE  LPARAN R_TRUE RPARAN Statement N
 					|  M R_WHILE  LPARAN R_FALSE RPARAN Statement N'''
 	if(p[4] == 'true' or p[4] == 'false'):
-		p[0] = Node(p[2], [p[6]],[p[3], p[4], p[5]],order='lllc',isLeaf=True)
+		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True)
 	else:
 		if(not (p[4].typelist[0] == 'BOOL')):
 			print "Syntax error in expression of while Statement at line " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
 			#sys.exit("ERROR: While statement expression is not BOOL it is "+p[4].typelist[0])
-		p[0] = Node(p[2], [p[4], p[6]],[p[3], p[5]],order='lclc',isLeaf=True)
+		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True)
 
 def p_ForStatement(p):
 	'ForStatement : M R_FOR LPARAN ForVariables RPARAN Statement N'
-	p[0] = Node(p[2], [p[4], p[6]],[p[3], p[5]],order='lclc',isLeaf=True)
+	p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True)
 
 def p_M(p):
 	'M : empty'
@@ -751,37 +751,37 @@ def p_DeclarationKeywordExtras(p):
 def p_VariableHeader(p):
 	'''VariableHeader : R_VAL
 					| R_VAR'''
-	p[0] = Node('VariableHeader',[],[p[1]],order='l')
+	p[0] = Node(p[1],[],[],isLeaf=True)
 
 def p_ForUntilTo(p):
 	'''ForUntilTo : R_UNTIL
 				| R_TO'''
-	p[0] = Node("ForUntilTo", [],[p[1]],order='l')
+	p[0] = Node(p[1], [],[],isLeaf=True)
 
 
 def p_BreakStatement(p) :
 	'''BreakStatement : R_BREAK ID EndStatement
 					| R_BREAK EndStatement'''
 	if len(p) ==  4:
-		p[0] = Node(p[1], [p[3]], [p[2]],order='lc',isLeaf=True)
+		p[0] = Node(p[1], [], [p[2]],order='l',isLeaf=True)
 	else:
-		p[0] = Node(p[1], [p[2]],[],order='c',isLeaf = True)
+		p[0] = Node(p[1], [],[],isLeaf = True)
 
 def p_ContinueStatement(p):
 	'''ContinueStatement : R_CONTINUE ID EndStatement
 						| R_CONTINUE  EndStatement'''
 	if len(p) ==  4:
-		p[0] = Node(p[1], [p[3]],[p[2]],order='lc',isLeaf=True)
+		p[0] = Node(p[1], [],[p[2]],order='l',isLeaf=True)
 	else:
-		p[0] = Node(p[1], [p[2]],[],order='c',isLeaf=True)
+		p[0] = Node(p[1], [],[],isLeaf=True)
 
 def p_ReturnStatement(p):
 	'''ReturnStatement : R_RETURN Expression EndStatement
 					| R_RETURN EndStatement'''
 	if len(p) ==  4:
-		p[0] = Node("ReturnStatement", [p[2],p[3]], [p[1]],order='lcc')
+		p[0] = Node(p[1], [p[2]], [],order='c',isLeaf=True)
 	else:
-		p[0] = Node("ReturnStatement", [p[2]],[p[1]],order='lc')
+		p[0] = Node(p[1], [],[],isLeaf=True)
 
 
 def p_Expression(p):
@@ -1037,10 +1037,10 @@ def p_MethodInvocation(p):
 #	print p[1].name,"name",currentScope.name
 #	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
 	if(p[1].type == "println"):
-		p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]] , order='clcl')
+		p[0] = Node("MethodInvocation", [p[1], p[3]], [] , order='cc')
 		return
 	if(p[1].type == "read"):
-		p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]] , order='clcl')
+		p[0] = Node("MethodInvocation", [p[1], p[3]], [] , order='cc')
 		return
 	if (currentScope.LookUpFunc(p[1].type, p[3].typelist[0:])==False):
 		print "Method invocation error at line " + str(p.lexer.lineno)
@@ -1058,7 +1058,7 @@ def p_MethodInvocation(p):
 			Error = Error + 1
 			#sys.exit("Method" + p[1].type + " does not found")
 		else:
-			p[0] = Node("MethodInvocation", [p[1], p[3]], [p[2], p[4]],typelist = value.returnType , order='clcl')
+			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = value.returnType , order='cc')
 	# elif len(p) ==  4:
 	# 	p[0] = Node("MethodInvocation", [p[1]], [p[2], p[3]])
 
@@ -1089,7 +1089,7 @@ def p_PrimaryNoNewArray(p):
 						# | ClassInstanceCreationExpression
 						# | FieldAccess
 	if len(p) == 3:
-		p[0] = Node('PrimaryNoNewArray',[p[2]],[p[1],p[3]],typelist = p[2].typelist,order='lcl')
+		p[0] = p[2]
 	else:
 	#	print p[1].type,"we are in p_PrimaryNoNewArray", p[1].typelist
 		p[0] = p[1]
@@ -1115,7 +1115,7 @@ def p_ClassInstanceCreationExpression(p):
 
 	if len(p) ==6:
 		# print p[2].type,"inclassinstanceasdasdadsasda",p[4].typelist
-		p[0] = Node('ClassInstanceCreationExpression',[p[2], p[4]],[p[1],p[3],p[5]],typelist = ['object', p[2].type], order='lclcl')
+		p[0] = Node('ClassInstanceCreationExpression',[p[2], p[4]],[p[1]],typelist = ['object', p[2].type], order='lcc')
 	# else:
 	# 	p[0] = Node('ClassInstanceCreationExpression',[p[2]],[p[1],p[3],p[4]])
 
