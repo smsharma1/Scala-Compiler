@@ -249,21 +249,30 @@ class SymbolTable:
 		# print scope.variables, "i am symbol table"
 		# print scope.objects, "i am symbol table"
 		# print scope.name, " in dumper"
+		offset = 0
 		fileh.write(scope.name+"\n")
 		for key in scope.variables:
 			if(scope.variables[key][1]=="STRING"):
 				size = scope.variables[key][2]*2
+				prevoffset = offset
+				offset = offset + size
 			elif(scope.variables[key][1][5:10]=="ARRAY"):
 				typename = self.Size(scope.variables[key][1][10:])
 				# print typename, scope.variables[key][2]
 				size = int(scope.variables[key][2])*typename
+				prevoffset = offset
+				offset = offset + size
 			elif(scope.variables[key][1][0:5]=="ARRAY"):
 				typename = self.Size(scope.variables[key][1][5:])
 				# print typename, scope.variables[key][2]
 				size = int(scope.variables[key][2])*typename
+				prevoffset = offset
+				offset = offset + size
 			else:
 				size = self.Size(scope.variables[key][1])
-			buffer = "var, " + str(key) +", "+ str(scope.variables[key][1])+ ", " + str(size) + "\n"
+				prevoffset = offset
+				offset = offset + size
+			buffer = "var, " + str(key) +", "+ str(scope.variables[key][1])+ ", " + str(size) + ", " + str(prevoffset)+ "\n"
 			fileh.write(buffer)
 		for key in scope.objects:
 			buffer = "object, " + str(key) + ", "+ str(scope.objects[key][0].name) +", \n"

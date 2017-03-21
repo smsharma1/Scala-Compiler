@@ -25,6 +25,8 @@ binsymboltable:
 
 clean:
 	rm -r bin
+	rm *png
+	rm *csv
 
 clean-src:
 	rm src/parser.out src/parse3.py src/*.png src/parsetab.py src/*.pyc src/*dot
