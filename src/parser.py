@@ -609,40 +609,60 @@ def p_IfThenStatement(p):
 		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True)
 
 def p_IfThenElseStatement(p):
-#	'IfThenElseStatement : ifstat elsestat'
-	'''IfThenElseStatement : M R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE Statement N
-						| M R_IF LPARAN R_TRUE RPARAN StatementNoShortIf R_ELSE Statement N
-						| M R_IF LPARAN R_FALSE RPARAN StatementNoShortIf R_ELSE Statement N'''
+	'IfThenElseStatement : ifstat elsestat'
+	# '''IfThenElseStatement : M R_IF LPARAN Expression RPARAN StatementNoShortIf elsestat
+	# 					| M R_IF LPARAN R_TRUE RPARAN StatementNoShortIf elsestat
+	# 					| M R_IF LPARAN R_FALSE RPARAN StatementNoShortIf elsestat'''
+
+	# '''IfThenElseStatement : M R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE Statement N
+	# 					| M R_IF LPARAN R_TRUE RPARAN StatementNoShortIf R_ELSE Statement N
+	# 					| M R_IF LPARAN R_FALSE RPARAN StatementNoShortIf R_ELSE Statement N'''
+	p[0] = Node("IfThenElseStatement", [p[1],p[2]],[],order='cc')
+	# if p[4] == "true" or p[4] == "false":
+	# 	p[0] = Node("IfThenElseStatement", [p[6], p[7]],[p[2], p[4]],order='llcc')
+	# else:
+	# 	if(not (p[4].typelist[0] == 'BOOL')):
+	# 		print "Syntax error in expression of if then else statement at line " + str(p.lexer.lineno)
+	# 		global Error
+	# 		Error = Error + 1
+	# 		#sys.exit("Error in IfThenelseStatement")
+	# 	p[0] = Node("IfThenElseStatement", [p[4], p[6], p[7]],[p[2]],order='lccc')
+
+def p_ifstat(p):
+	'''ifstat : M R_IF LPARAN Expression RPARAN StatementNoShortIf
+			| M R_IF LPARAN R_TRUE RPARAN StatementNoShortIf
+			| M R_IF LPARAN R_FALSE RPARAN StatementNoShortIf'''
 	if p[4] == "true" or p[4] == "false":
-		p[0] = Node("IfThenElseStatement", [p[6], p[8]],[p[2], p[4], p[7]],order='llclc')
+		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True)
 	else:
 		if(not (p[4].typelist[0] == 'BOOL')):
 			print "Syntax error in expression of if then else statement at line " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
 			#sys.exit("Error in IfThenelseStatement")
-		p[0] = Node("IfThenElseStatement", [p[4], p[6], p[8]],[p[2], p[7]],order='lcclc')
+		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True)
 
-# def p_ifstat(p):
-# 	'ifstat : R_IF LPARAN Expression RPARAN StatementNoShortIf'
-# 	p[0] = Node(p[1],[p[3],p[5]],[p[2],p[4]],order='lclc',isLeaf=True)
-
-# def p_elsestat(p):
-# 	'elsestat : R_ELSE Statement'
-# 	p[0] = Node(p[1],[p[2]],[],order='c',isLeaf=True)
+def p_elsestat(p):
+	'elsestat : R_ELSE Statement N'
+	p[0] = Node(p[1],[p[2]],[],order='c',isLeaf=True)
+	
 def p_IfThenElseStatementNoShortIf(p):
-	'''IfThenElseStatementNoShortIf : M R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE StatementNoShortIf N
-									|  M R_IF LPARAN R_TRUE RPARAN StatementNoShortIf R_ELSE StatementNoShortIf N
-									|  M R_IF LPARAN R_FALSE RPARAN StatementNoShortIf R_ELSE StatementNoShortIf N'''
-	if p[4] == "true" or p[4] == "false":
-		p[0] = Node("IfThenElseStatementNoShortIf", [p[6], p[8]],[p[2] ,p[4] ,p[7]],order='llclc')
-	else:
-		if(not (p[4].typelist[0] == 'BOOL')):
-			print "Syntax error in expression of if then else statement at line " + str(p.lexer.lineno)
-			global Error
-			Error = Error + 1
-			#sys.exit("Error in IfThenelseStatementnoshortif")
-		p[0] = Node("IfThenElseStatementNoShortIf", [p[4], p[6], p[8]],[p[2], p[7]],order='lcclc')
+	'''IfThenElseStatementNoShortIf : ifstat elsenoshortif'''
+	# '''IfThenElseStatementNoShortIf : ifstat R_ELSE StatementNoShortIf N'''
+
+	p[0] = Node("IfThenElseStatementNoShortIf",[p[1],p[2]],[],order='cc')
+	# if p[4] == "true" or p[4] == "false":
+	# 	p[0] = Node("IfThenElseStatementNoShortIf", [p[6], p[8]],[p[2] ,p[4] ,p[7]],order='llclc')
+	# else:
+	# 	if(not (p[4].typelist[0] == 'BOOL')):
+	# 		print "Syntax error in expression of if then else statement at line " + str(p.lexer.lineno)
+	# 		global Error
+	# 		Error = Error + 1
+	# 		#sys.exit("Error in IfThenelseStatementnoshortif")
+	# 	p[0] = Node("IfThenElseStatementNoShortIf", [p[4], p[6], p[8]],[p[2], p[7]],order='lcclc')
+def p_elsenoshortif(p):
+	'''elsenoshortif : R_ELSE StatementNoShortIf N '''
+	p[0] = Node(p[1],[p[2]],[],order='c')
 
 def p_SwitchStatement(p):
 	'''SwitchStatement : Expression R_MATCH BLOCKOPEN SwitchBlockStatementGroups BLOCKCLOSE'''
