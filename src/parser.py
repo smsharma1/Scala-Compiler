@@ -136,9 +136,9 @@ def p_ClassBody(p):
 	currentScope = currentScope.parent
 #	print currentScope.classes
 	if len(p) == 5:
-		p[0] = Node("ClassBody",[p[1],p[3]],[p[2],p[4]],order="clcl")
+		p[0] = Node("ClassBody",[p[1],p[3]],[],order="cc")
 	else:
-		p[0] = Node("ClassBody",[p[1]],[p[2],p[3]],order="cll")
+		p[0] = Node("ClassBody",[p[1]],[ ],order="c")
 # 	if len(p)==8:
 # 		
 # 	# elif "Super" in p[4].name:
@@ -174,7 +174,7 @@ def p_ClassHeader(p):
 			Error = Error + 1 
 		currentScope = currentScope.InsertClass(p[2],[])
 
-	p[0] = Node("ClassHeader", [p[4]],[p[1], p[2],p[3],p[5]], order="lllcl")
+	p[0] = Node("ClassHeader", [p[4]],[p[1], p[2]], order="llc")
 	
 def p_FormalParameterLists(p):
 	'''FormalParameterLists : FormalParameterList
@@ -216,7 +216,7 @@ def p_FormalParameterList(p):
 #<field declaration> ::=  val <variable declarator> ;
 def p_FieldDeclaration(p):
 	'''FieldDeclaration : VariableHeader VariableDeclarator1 EndStatement'''
-	p[0] = Node("FieldDeclaration", [p[1],p[2], p[3]],[], order="ccc")
+	p[0] = Node("FieldDeclaration", [p[1],p[2]],[], order="cc")
 #<variable declarator> ::= <identifier> | <identifier>: <type>   | <identifier> <variable_declarator_extra>
 
 def p_VariableDeclarator1(p):
@@ -302,7 +302,7 @@ def p_ArrayInitializer(p):
 def p_EndStatement(p):
 	'''EndStatement : SEMICOLON
 					| LINEFEED'''
-	p[0] = Node(p[1], [], [], isLeaf=True)
+	p[0] = Node(p[1], [], [], isLeaf=True,notreenode=True)
 	# p[0] = Node("EndStatement", [],[p[1]], order="l")
 #<method declaration> ::= <method header> <method body>
 def p_MethodDeclaration(p):
@@ -345,9 +345,9 @@ def p_MethodDeclarator(p):
 	# 	p[0] = Node("MethodDeclarator", [p[1]],[p[2], p[3]])
 	# else:
 	if p[3] == None:
-		p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]],typelist=[p[1]], order="llcl")
+		p[0] = Node("MethodDeclarator", [p[3]],[p[1]],typelist=[p[1]], order="lc")
 	else:
-		p[0] = Node("MethodDeclarator", [p[3]],[p[1],p[2], p[4]],typelist=[p[1]] + p[3].typelist, order="llcl")
+		p[0] = Node("MethodDeclarator", [p[3]],[p[1]],typelist=[p[1]] + p[3].typelist, order="lc")
 
 
 def p_MethodReturnTypeExtras(p):
@@ -478,9 +478,9 @@ def p_Block(p):
 	'''Block : BLOCKOPEN BLOCKCLOSE
 			| BLOCKOPEN BlockStatements BLOCKCLOSE'''
 	if len(p)==3:
-		p[0] = Node("Block", [],[p[1], p[2]], order="ll")
+		p[0] = Node("Block", [],[],notreenode=True)
 	else:
-		p[0] = Node("Block", [p[2]],[p[1], p[3]], order="lcl")
+		p[0] = p[2]
 #<block statements> ::= <block statement> | <block statements> <block statement>
 def p_BlockStatements(p):
 	'''BlockStatements : BlockStatement
@@ -498,7 +498,7 @@ def p_BlockStatement(p):
 
 def p_LocalVariableDeclarationStatement(p):
 	'LocalVariableDeclarationStatement : LocalVariableDeclaration EndStatement'
-	p[0] = Node("LocalVariableDeclarationStatement", [p[1],p[2]],[], order="cc")
+	p[0] = Node("LocalVariableDeclarationStatement", [p[1]],[], order="c")
 
 def p_LocalVariableDeclaration(p):
 	'''LocalVariableDeclaration : VariableHeader VariableDeclarationBody'''
@@ -562,7 +562,7 @@ def p_StatementNoShortIf(p):
 #<expression statement> ::= <statement expression> ;
 def p_ExpressionStatement(p):
 	'ExpressionStatement : StatementExpression EndStatement'
-	p[0] = Node("ExpressionStatement", [p[1],p[2]],[],order='cc')
+	p[0] = Node("ExpressionStatement", [p[1]],[],order='c')
 
 #<statement expression> ::= <assignment> | <preincrement expression>
 # | <postincrement expression> | <predecrement expression> | <postdecrement expression>
