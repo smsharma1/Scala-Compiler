@@ -1,6 +1,7 @@
 main
-var, long_variable, INT, 4
+var, a, INT, 4
 var, args, ARRAYSTRING, 0
+var, name, STRING, 0
 
 object
 function, main, ['ARRAYSTRING']-->[],   
