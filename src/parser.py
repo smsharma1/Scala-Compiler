@@ -19,18 +19,18 @@ def newtemp():
 
 class Node:
 	uid=0
-	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False):
+	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False,code=[],place=""):
 		self.type = type
 		self.typelist = typelist
-		Node.uid = Node.uid + 1
+		Node.uid = Node.uid + 1,
 		self.uid = Node.uid
 		self.name = type+"##"+str(self.uid)
 		if(notreenode):
 			return
 		# print self.name, " ", typelist
 		self.childOrder = ""
-		self.code = []
-		self.place = ""
+		self.code = code
+		self.place = place
 		count = 1
 		leafno = 0
 		childno = 0
@@ -906,7 +906,9 @@ def p_XorExpression(p):
 			global Error
 			Error = Error + 1
 			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
-		p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
+		nodename = newtemp()
+		code = [nodename  + "=" + p[1].place + " " + p[2] + " " + p[3].place]
+		p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 
 
 
@@ -921,9 +923,15 @@ def p_EqualityExpression(p):
 			Error = Error + 1
 			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "==":
-			p[0] = Node(p[2], [p[1], p[3]], [],typelist = ['BOOL'],order='cc',isLeaf=True)
+			nodename = newtemp()
+			code = ["if " + p[1].place + " " + p[2] + " " + p[3].place + "goto nextstat + 3", nodename + " = 0",
+				"goto nextstat + 2", nodename + " = 1"]
+			p[0] = Node(p[2], [p[1], p[3]], [],typelist = ['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == "!=":
-			p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)	
+			nodename = newtemp()
+			code = ["if " + p[1].place + " " + p[2] + " " + p[3].place + "goto nextstat + 3", nodename + " = 0",
+				"goto nextstat + 2", nodename + " = 1"]
+			p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)	
 	else:
 		p[0] = p[1]
 
@@ -943,13 +951,23 @@ def p_RelationalExpression(p):
 			Error = Error + 1
 			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "<":
-			p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
+			nodename = newtemp()
+			code = ["if " + p[1].place + " " + p[2] + " " + p[3].place + "goto nextstat + 3", nodename + " = 0",
+				"goto nextstat + 2", nodename + " = 1"]
+			p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename )
 		elif p[2] == ">":
-			p[0] = Node(">", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
+			nodename = newtemp()
+			code = ["if " + p[1].place + " " + p[2] + " " + p[3].place + "goto nextstat + 3", nodename + " = 0",
+				"goto nextstat + 2", nodename + " = 1"]
+			p[0] = Node(">", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == "<=":
-			p[0] = Node("<=", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
+			code = ["if " + p[1].place + " " + p[2] + " " + p[3].place + "goto nextstat + 3", nodename + " = 0",
+				"goto nextstat + 2", nodename + " = 1"]
+			p[0] = Node("<=", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == ">=":
-			p[0] = Node(">=", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
+			code = ["if " + p[1].place + " " + p[2] + " " + p[3].place + "goto nextstat + 3", nodename + " = 0",
+				"goto nextstat + 2", nodename + " = 1"]
+			p[0] = Node(">=", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == "instanceof":
 			p[0] = Node("instanceof", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
 	else:
@@ -968,11 +986,17 @@ def p_ShiftExpression(p):
 			Error = Error + 1
 			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "<<":
-			p[0] = Node("<<", [p[1], p[3]], [],typelist=[type_here],order='cc',isLeaf=True)
+			nodename = newtemp()
+			code = [nodename  + "=" + p[1].place + " " + p[2] + " " + p[3].place]
+			p[0] = Node("<<", [p[1], p[3]], [],typelist=[type_here],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == ">>":
+			nodename = newtemp()
+			code = [nodename  + "=" + p[1].place + " " + p[2] + " " + p[3].place]
 			p[0] = Node("<<", [p[1], p[3]], [],typelist=[type_here],order='cc',isLeaf=True)
 		elif p[2] == ">>>":
-			p[0] = Node(">>>", [p[1], p[3]], [],typelist=[type_here],order='cc',isLeaf=True)
+			nodename = newtemp()
+			code = [nodename  + "=" + p[1].place + " " + p[2] + " " + p[3].place]
+			p[0] = Node(">>>", [p[1], p[3]], [],typelist=[type_here],order='cc',isLeaf=True, code=p[1].code + p[3].code + code, place=nodename)
 	else:
 		p[0] = p[1]
 
