@@ -19,7 +19,7 @@ def newtemp():
 
 class Node:
 	uid=0
-	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False,code=None,place=None):
+	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False,code=[],place="A"):
 		self.code = code 
 		self.place = place
 		self.type = type
@@ -998,6 +998,8 @@ def p_AdditiveExpression(p):
 			nodename = newtemp()
 			code = [nodename  + "=" + p[1].place + " " + p[2] + " " + p[3].place]
 			p[0] = Node("-", [p[1],p[3]], [ ],typelist=[type_here],order='cc',isLeaf=True,code= p[1].code + p[3].code + code,place=nodename)
+		print p[0].code
+		print p[0].place
 	else:
 		p[0] = p[1]
 
@@ -1206,7 +1208,7 @@ def p_AmbiguousName(p):
 		# 	returnType = False
 
 			if(returnType):
-				p[0] = Node(p[1], [], [], typelist = returnType, isLeaf=True)
+				p[0] = Node(p[1], [], [], typelist = returnType, isLeaf=True,place=p[1])
 			else:
 				print "No Symbol found for " + str(p[1]) + " error at line " + str(p.lexer.lineno)
 				global Error 
@@ -1235,35 +1237,35 @@ def p_Literal(p):
 
 def p_BooleanLiteral(p):
 	'BooleanLiteral : BOOL'
-	p[0] = Node(p[1], [], [], typelist = ['BOOL'], isLeaf=True)
+	p[0] = Node(p[1], [], [], typelist = ['BOOL'], isLeaf=True,place=p[1])
 	# p[0] = Node('BooleanLiteral',[],[p[1]],typelist = ['BOOL'],order='l')
 
 def p_IntegerLiteral(p):
 	 'IntegerLiteral : INT'
-	 p[0] = Node(p[1], [], [], typelist = ['INT'], isLeaf=True)
+	 p[0] = Node(p[1], [], [], typelist = ['INT'], isLeaf=True,place=p[1])
 	#  p[0] = Node('IntegerLiteral',[],[p[1]],typelist = ['INT'],order='l')
 
 def p_FloatingPointLiteral(p):
 	'FloatingPointLiteral : FLOAT'
-	p[0] = Node(p[1], [], [], typelist = ['FLOAT'], isLeaf=True)
+	p[0] = Node(p[1], [], [], typelist = ['FLOAT'], isLeaf=True,place=p[1])
 	# p[0] = Node('FloatingPointLiteral',[],[p[1]],typelist =['FLOAT'],order='l')
 
 def p_CharacterLiteral(p):
 	'CharacterLiteral : CHAR'
-	p[0] = Node(p[1], [], [], typelist = ['CHAR'], isLeaf=True)
+	p[0] = Node(p[1], [], [], typelist = ['CHAR'], isLeaf=True,place=p[1])
 	# p[0] = Node('CharacterLiteral',[],[p[1]],typelist =['CHAR'],order='l')
 
 def p_StringLiteral(p):
 	'StringLiteral : STRING'
 	length = len(p[1])
-	p[0] = Node(p[1], [], [], typelist = ['STRING', length], isLeaf=True)
+	p[0] = Node(p[1], [], [], typelist = ['STRING', length], isLeaf=True,place=p[1])
 	# p[0] = Node('StringLiteral',[],[p[1]],typelist = ['STRING'],order='l')
 
 
 # # # <null literal> ::= null
 def p_NullLiteral(p):
 	'NullLiteral : R_NULL'
-	p[0] = Node(p[1], [], [], typelist = ['NULL'], isLeaf=True)
+	p[0] = Node(p[1], [], [], typelist = ['NULL'], isLeaf=True,place=p[1])
 	# p[0] = Node("NullLiteral", [],[p[1]],typelist = ['NULL'],order='l')
 
 #<empty statement> ::= ;
