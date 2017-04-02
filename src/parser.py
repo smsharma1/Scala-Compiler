@@ -11,6 +11,7 @@ graph = pydot.Dot(graph_type='digraph')
 rootScope = SymbolTable(None, "root")
 currentScope = rootScope
 symbol_file = open("Symbols.csv", "w+")
+
 def newtemp():
 	global tempcount
 	tempcount = tempcount + 1
@@ -28,6 +29,8 @@ class Node:
 			return
 		# print self.name, " ", typelist
 		self.childOrder = ""
+		self.code = []
+		self.place = ""
 		count = 1
 		leafno = 0
 		childno = 0
@@ -986,9 +989,7 @@ def p_AdditiveExpression(p):
 			Error = Error + 1
 			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "+":
-			nodename = newtemp()
-			code = [nodename  + "=" + p[1].place + " " + p[2] + " " + p[3].place]
-			p[0] = Node("+", [p[1],p[3]], [ ],typelist=[type_here],order='cc',isLeaf=True,code= p[1].code + p[3].code + code,place=nodename)
+			p[0] = Node("+", [p[1],p[3]], [ ],typelist=[type_here],order='cc',isLeaf=True)
 		else:
 			nodename = newtemp()
 			code = [nodename  + "=" + p[1].place + " " + p[2] + " " + p[3].place]

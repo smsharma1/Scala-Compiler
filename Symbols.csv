@@ -1,7 +1,0 @@
-main
-var, x, INT, 4
-var, args, ARRAYSTRING, 0
-
-object
-function, main, ['ARRAYSTRING']-->[],   
-
