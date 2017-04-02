@@ -5,3 +5,4 @@ parsetab.py
 *.vscode/
 *.scaladot
 Test.tar.gz
+Symbols.csv
