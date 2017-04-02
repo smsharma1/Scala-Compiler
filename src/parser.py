@@ -7,6 +7,7 @@ from symboltable import *
 from lexer import tokens
 Error = 0
 tempcount = 0
+a3AC=[]
 graph = pydot.Dot(graph_type='digraph')
 rootScope = SymbolTable(None, "root")
 currentScope = rootScope
@@ -18,7 +19,9 @@ def newtemp():
 
 class Node:
 	uid=0
-	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False):
+	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False,code=None,place=None):
+		self.code = code 
+		self.place = place
 		self.type = type
 		self.typelist = typelist
 		Node.uid = Node.uid + 1
@@ -79,6 +82,8 @@ def p_CompilationUnit(p):
 						# | ClassesObjects'''
 	if len(p)==3:
 		p[0] = Node("CompilationUnit", [p[1], p[2]],[], order="cc")
+	global a3AC
+	a3AC = p[0].code 
 	# else:
 	# 	p[0] = Node("CompilationUnit", [p[1]],[])
 def p_ImportDeclarationss(p):
@@ -986,18 +991,13 @@ def p_AdditiveExpression(p):
 			Error = Error + 1
 			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "+":
-<<<<<<< HEAD
-=======
 			nodename = newtemp()
 			code = [nodename  + "=" + p[1].place + " " + p[2] + " " + p[3].place]
 			p[0] = Node("+", [p[1],p[3]], [ ],typelist=[type_here],order='cc',isLeaf=True,code= p[1].code + p[3].code + code,place=nodename)
 		else:
->>>>>>> 17cdc925e95248ec3fc438ee2157d5f1599892d3
 			nodename = newtemp()
 			code = [nodename  + "=" + p[1].place + " " + p[2] + " " + p[3].place]
-			p[0] = Node("+", [p[1],p[3]], [ ],typelist=[type_here],order='cc',isLeaf=True,code= p[1].code + p[3].code + code,place=nodename)
-		else:
-			p[0] = Node("-", [p[1],p[3]], [ ],typelist=[type_here],order='cc',isLeaf=True)
+			p[0] = Node("-", [p[1],p[3]], [ ],typelist=[type_here],order='cc',isLeaf=True,code= p[1].code + p[3].code + code,place=nodename)
 	else:
 		p[0] = p[1]
 
@@ -1008,6 +1008,8 @@ def p_MultiplicativeExpression(p):
 								| MultiplicativeExpression DIVISION UnaryExpression
 								| MultiplicativeExpression MODULUS UnaryExpression'''
 	if len(p) ==  4:
+		nodename = newtemp()
+		code = [nodename  + "=" + p[1].place + " " + p[2] + " " + p[3].place]
 		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
 		# print p[1].typelist, "multiplicativeerror" , p[3].typelist
 		if(not type_here):
@@ -1016,11 +1018,11 @@ def p_MultiplicativeExpression(p):
 			Error = Error + 1
 			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "*":
-			p[0] = Node("*", [p[1], p[3]], [], typelist = [type_here], order='cc',isLeaf=True)
+			p[0] = Node("*", [p[1], p[3]], [], typelist = [type_here], order='cc',isLeaf=True,code=p[1].code + p[3].code + code,place=nodename)
 		elif p[2] == "%":
-			p[0] = Node("%", [p[1], p[3]], [],order='cc',typelist = [type_here], isLeaf=True)
+			p[0] = Node("%", [p[1], p[3]], [],order='cc',typelist = [type_here], isLeaf=True,code=p[1].code + p[3].code + code,place=nodename)
 		elif p[2] == "/":
-			p[0] = Node("/", [p[1], p[3]], [],order='cc', typelist = [type_here],isLeaf=True)
+			p[0] = Node("/", [p[1], p[3]], [],order='cc', typelist = [type_here],isLeaf=True,code=p[1].code + p[3].code + code,place=nodename)
 	else:
 		p[0] = p[1]
 
@@ -1043,12 +1045,14 @@ def p_UnaryExpressionNotPlusMinus(p):
 									#| CastExpression'''
 									#| BITNEG UnaryExpression
 	if len(p) ==  3:
+		nodename = newtemp()
+		code = [nodename  + "="  + p[1] + " " + p[2].place]
 		if(not p[2].typelist == ['BOOL']):
 			print "Type mismatch error at line " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
 		type_here = ['BOOL']
-		p[0] = Node("!", [p[2]], [],tyelist=type_here,order='c',isLeaf=True)
+		p[0] = Node("!", [p[2]], [],tyelist=type_here,order='c',isLeaf=True,code=p[2].code + code ,place= node)
 	else:
 		p[0] = p[1]
 def p_PostfixExpression(p):
@@ -1321,6 +1325,7 @@ if __name__ == "__main__" :
 	data = programfile.read()
 	parser.parse(data)
 	# global Error
+	print a3AC
 	if(Error):
 		print sys.exit("Your Program contain total " + str(Error) + " Errors"  )
 	graph.write_png('parsetree.png')
