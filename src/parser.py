@@ -19,16 +19,12 @@ def newtemp():
 
 class Node:
 	uid=0
-<<<<<<< HEAD
 	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False,code=[],place="A"):
 		self.code = code 
 		self.place = place
-=======
-	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False,code=[],place=""):
->>>>>>> 90a1f20950fa99d5c70e2d24fc4f139afc551f34
 		self.type = type
 		self.typelist = typelist
-		Node.uid = Node.uid + 1,
+		Node.uid = Node.uid + 1
 		self.uid = Node.uid
 		self.name = type+"##"+str(self.uid)
 		if(notreenode):
@@ -866,7 +862,7 @@ def p_Assignment(p):
 			global Error
 			Error = Error + 1
 		nodename = newtemp()
-		code = [p[1].place + " " + p[2].type + " " + p[3].place]
+		code = [p[1].place + " " + p[2] + " " + p[3].place]
 		p[0] = Node(p[2], [p[1], p[3]],[], order="cc",isLeaf=True,code=p[1].code + p[3].code + code)
 						#return sys.exit("assignment mismatch error")
 	else:
@@ -875,8 +871,9 @@ def p_Assignment(p):
 			# global Error
 			Error = Error + 1
 		nodename = newtemp()
-		code = [p[1].place + " " + p[2] + " " + p[3].place]
+		code = [p[1].place + " " + p[2].type + " " + p[3].place]
 		p[0] = Node(p[2].type, [p[1], p[3]],[], order="cc",isLeaf=True,code=p[1].code + p[3].code + code)
+	print p[0].code
 
 			
 
@@ -977,10 +974,12 @@ def p_RelationalExpression(p):
 				"goto nextstat + 2", nodename + " = 1"]
 			p[0] = Node(">", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == "<=":
+			nodename = newtemp()
 			code = ["if " + p[1].place + " " + p[2] + " " + p[3].place + "goto nextstat + 3", nodename + " = 0",
 				"goto nextstat + 2", nodename + " = 1"]
 			p[0] = Node("<=", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == ">=":
+			nodename = newtemp()
 			code = ["if " + p[1].place + " " + p[2] + " " + p[3].place + "goto nextstat + 3", nodename + " = 0",
 				"goto nextstat + 2", nodename + " = 1"]
 			p[0] = Node(">=", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
