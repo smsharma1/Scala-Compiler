@@ -6,10 +6,16 @@ from symboltable import *
 # Get the token map from the lexer.  This is required.
 from lexer import tokens
 Error = 0
+tempcount = 0
 graph = pydot.Dot(graph_type='digraph')
 rootScope = SymbolTable(None, "root")
 currentScope = rootScope
 symbol_file = open("Symbols.csv", "w+")
+def newtemp():
+	global tempcount
+	tempcount = tempcount + 1
+	return "t" + str(tempcount)
+
 class Node:
 	uid=0
 	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False):
@@ -980,7 +986,9 @@ def p_AdditiveExpression(p):
 			Error = Error + 1
 			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "+":
-			p[0] = Node("+", [p[1],p[3]], [ ],typelist=[type_here],order='cc',isLeaf=True)
+			nodename = newtemp()
+			code = [nodename  + "=" + p[1].place + " " + p[2] + " " + p[3].place]
+			p[0] = Node("+", [p[1],p[3]], [ ],typelist=[type_here],order='cc',isLeaf=True,code= p[1].code + p[3].code + code,place=nodename)
 		else:
 			p[0] = Node("-", [p[1],p[3]], [ ],typelist=[type_here],order='cc',isLeaf=True)
 	else:
