@@ -986,6 +986,13 @@ def p_AdditiveExpression(p):
 			Error = Error + 1
 			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		if p[2] == "+":
+<<<<<<< HEAD
+=======
+			nodename = newtemp()
+			code = [nodename  + "=" + p[1].place + " " + p[2] + " " + p[3].place]
+			p[0] = Node("+", [p[1],p[3]], [ ],typelist=[type_here],order='cc',isLeaf=True,code= p[1].code + p[3].code + code,place=nodename)
+		else:
+>>>>>>> 17cdc925e95248ec3fc438ee2157d5f1599892d3
 			nodename = newtemp()
 			code = [nodename  + "=" + p[1].place + " " + p[2] + " " + p[3].place]
 			p[0] = Node("+", [p[1],p[3]], [ ],typelist=[type_here],order='cc',isLeaf=True,code= p[1].code + p[3].code + code,place=nodename)
