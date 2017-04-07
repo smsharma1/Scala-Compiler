@@ -1,7 +1,7 @@
 object Good8 {
 	 def add(arr1: Int) : Int = {
 		var arr = new Array[Int](4);
-		var c: Int = 0;
+		var c: Int = 10 + 12;
 		var i: Int = 0;
 		while (i <= 4) {
               //  arr[i] = i+1;
@@ -16,6 +16,10 @@ object Good8 {
 	def main(args: Array[String]) {
         	var a = new Array[Int](4);
 			var i : Int = 0;
+			if( i == 2 )
+			{
+					i = i + 1;
+         	}
 			a[i] = 10;
 			args[i] = "a";
 			i = 10;
