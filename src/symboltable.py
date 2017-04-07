@@ -20,6 +20,8 @@ class SymbolTable:
 		self.uid = SymbolTable.uid
 		self.argList = argList
 		self.returnType = returnType
+		self.offset=0
+		self.size=0 #relevant for classes and objects
 		SymbolTable.uid = SymbolTable.uid+1
 		# print self.argList
 
@@ -67,10 +69,10 @@ class SymbolTable:
 		while(scope):
 			if symbolName in scope.variables:
 			#	print "inupsymbol",scope.variables[symbolName][1]
-				return scope.variables[symbolName][1]
+				return copy.deepcopy(scope.variables[symbolName])
 			elif symbolName in scope.functions:
 			#	print symbolName, " *******", (scope.functions[symbolName])[0].returnType  
-				return (scope.functions[symbolName])[0].returnType
+				return (scope.functions[symbolName])[0]
 			scope = scope.parent
 		return False
 
@@ -159,11 +161,27 @@ class SymbolTable:
 			scope = scope.parent
 		return False
 
+	def GetOffset(self, symbolName):
+		scope = self
+		while(scope):
+			value = scope.LookUpCurrentScope(symbolName)
+			if(value):
+				# print value
+				if symbolName in scope.variables:
+			# print "inupsymbol",scope.variables[symbolName][1]
+					return [self.variables[symbolName][3]]
+				else:
+					return False
+			scope = scope.parent
+		return False
+
 	def SetObjectName(self, currentName, newName):
 		# print "Insetobjectname", currentName," ",newName
 		myobject = self.LookUpObject(currentName)
 		self.objects[newName] = copy.deepcopy(myobject)
 		self.objects.pop(currentName, None)
+		self.offset = self.offset + self.objects[newName].getSymbolTableSize()
+		
 		# print self.objects[newName][0], "last line in set object name"
 
 	def InsertVar(self, symbolName, val, type_name, length=0):
@@ -171,7 +189,11 @@ class SymbolTable:
 		if symbolName in self.variables:
 			return False
 		else:
-			self.variables[symbolName] = [val, type_name, length]
+			self.variables[symbolName] = [val, type_name, length, self.offset]
+			if length:
+				self.offset = self.offset + self.Size(type_name.upper())*length
+			else:
+				self.offset = self.offset + self.Size(type_name.upper())
 
 	def InsertFunc(self, symbolName, argList, returnType):
 #		print symbolName, " ", argList, " ", returnType
@@ -239,6 +261,37 @@ class SymbolTable:
 	def InvokeConstr(self, classScope, valList):
 		# you can get arglist from scope.arglist to parse valList
 		pass
+
+
+	def getSymbolTableSize(self):
+		offset=0
+		if self.Size != 0:
+			return self.Size
+		for key in scope.variables:
+			if(scope.variables[key][1]=="STRING"):
+				size = scope.variables[key][2]*2
+				prevoffset = offset
+				offset = offset + size
+			elif(scope.variables[key][1][5:10]=="ARRAY"):
+				typename = self.Size(scope.variables[key][1][10:])
+				# print typename, scope.variables[key][2]
+				size = int(scope.variables[key][2])*typename
+				prevoffset = offset
+				offset = offset + size
+			elif(scope.variables[key][1][0:5]=="ARRAY"):
+				typename = self.Size(scope.variables[key][1][5:])
+				# print typename, scope.variables[key][2]
+				size = int(scope.variables[key][2])*typename
+				prevoffset = offset
+				offset = offset + size
+			else:
+				size = self.Size(scope.variables[key][1])
+				prevoffset = offset
+				offset = offset + size
+		for key in scope.objects:
+			offset = offset + scope.objects[key].getSymbolTableSize()
+		self.Size = offset
+		return self.Size
 
 	def Dumper(self, scope, fileh):
 		# column description
