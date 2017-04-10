@@ -542,7 +542,7 @@ def p_VariableDeclarationBody(p):
 		p[0] = Node(p[4],[p[3],p[5]],[p[1],p[2]], order="llcc",isLeaf=True)
 	else:
 		if(p[3].typelist[0] == 'object'):
-			print p[1]
+			# print p[1]
 			currentScope.SetObjectName("temp", p[1])
 			currentScope.Dumper(currentScope.LookUpObject(p[1]),symbol_file)
 		else:
@@ -1109,7 +1109,11 @@ def p_PrimaryNoNewArray(p):
 						| ArrayAccess'''
 						# | ClassInstanceCreationExpression
 						# | FieldAccess
+<<<<<<< HEAD:src/grahulparser.py
 	if len(p) == 3:
+=======
+	if len(p) == 4:
+>>>>>>> 85f59ecce149fde81cb85f1c8f786ae9d0056178:milestone2/parser.py
 		p[0] = p[2]
 	else:
 	#	print p[1].type,"we are in p_PrimaryNoNewArray", p[1].typelist
@@ -1125,13 +1129,12 @@ def p_ClassInstanceCreationExpression(p):
 	if(p[4] != None):
 		# print p[2].type,"inclassinstance",p[4].typelist
 		if(currentScope.LookUpClass(p[2].type, p[4].typelist)):
-			print "Class " + str(p[2])+" Not Found in currentScope error at line " + str(p.lexer.lineno)
+		#	print "Class " + str(p[2])+" Not Found in currentScope error at line " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
 			#return sys.exit(str(p[2])+"Class Not Found in currentScope")
 		else:
 			# print p[2].type, " " , p[4].typelist, " creating object"
-			print "here please"
 			if(currentScope.InsertObject("temp", p[2].type, [])): #valList is to be sent here 
 				pass
 			else:
@@ -1150,9 +1153,9 @@ def p_ClassInstanceCreationExpression(p):
 			else:
 				print("Error: ", p[2].type, " alreay declared in currentScope" )
 
-	if len(p) ==6:
+
 		# print p[2].type,"inclassinstanceasdasdadsasda",p[4].typelist
-		p[0] = Node('ClassInstanceCreationExpression',[p[2], p[4]],[p[1]],typelist = ['object', p[2].type], order='lcc')
+	p[0] = Node('ClassInstanceCreationExpression',[p[2], p[4]],[p[1]],typelist = ['object', p[2].type], order='lcc')
 	# else:
 	# 	p[0] = Node('ClassInstanceCreationExpression',[p[2]],[p[1],p[3],p[4]])
 
@@ -1212,7 +1215,6 @@ def p_AmbiguousName(p):
 			#sys.exit("No symbol found for "+str(p[1]))
 		# p[0] = Node('AmbiguousName',[],[p[1]],typelist = currentScope.LookUpSymbol(p[1]),order='l')
 	else:
-		# print "lkjhgfdfghjkl"
 		thing = currentScope.LookDotThing(rootScope, p[1].type+"."+p[3])
 		# print "here **************************",thing
 		if(thing):
@@ -1294,7 +1296,9 @@ def allowed(type1, type2):
 		return False
 
 def higher(type1, type2):
-	if((type1=="DOUBLE" and (type2=="FLOAT" or type2 == "INT")) or (type2=="DOUBLE" and (type1=="FLOAT" or type1 == "INT"))):
+	if (type1 == "DOUBLE" and type2 == "DOUBLE"):
+		return "DOUBLE"
+	elif((type1=="DOUBLE" and (type2=="FLOAT" or type2 == "INT")) or (type2=="DOUBLE" and (type1=="FLOAT" or type1 == "INT"))):
 		return "DOUBLE"
 	elif(value(type1) and value(type2) and value(type1)>=value(type2)):
 		return type1

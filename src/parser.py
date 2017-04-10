@@ -1172,7 +1172,7 @@ def p_PostfixExpression(p):
 #'''method_invocation : ambiguous_name LPAREN argument_list_extras RPAREN '''
 def p_MethodInvocation(p):
 	'''MethodInvocation : AmbiguousName LPARAN ArgumentLists RPARAN'''
-					#		| AmbiguousName LPARAN RPARAN'''
+						#	| AmbiguousName LPARAN RPARAN'''
 						# | Primary DOT Identifier LPARAN ArgumentList RPARAN
 						# | Super DOT Identifier LPARAN ArgumentList RPARAN'''
 						# # | Super DOT Identifier LPARAN RPARAN
@@ -1203,7 +1203,6 @@ def p_MethodInvocation(p):
 			Error = Error + 1
 			#sys.exit("Method" + p[1].type + " does not found")
 		else:
-<<<<<<< HEAD
 			# get the types of each argument and insert it with certain name in currentscope
 			for idname in p[3]:
 				i=0
