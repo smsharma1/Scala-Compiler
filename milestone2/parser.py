@@ -2,7 +2,7 @@
 import ply.yacc as yacc
 import pydot
 import sys
-from symboltableold import *
+from symboltable import *
 # Get the token map from the lexer.  This is required.
 from lexer import tokens
 Error = 0
@@ -330,13 +330,15 @@ def p_MethodHeader(p):
 	'''MethodHeader : MethodDefine MethodDeclarator MethodReturnTypeExtras'''
 	global currentScope
 	parentScope = currentScope.parent
-	parentScope.functions[p[2].typelist[0]] = currentScope
 	if p[3] != None:
+		print p[2].typelist[0], " " , p[2].typelist[1:], "args to lookupfunc"
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
+			print "in if part"
 			print "Method Declaration Error at line number: " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
 		else:
+			parentScope.functions[p[2].typelist[0]] = currentScope
 			currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
 
 		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + p[3].typelist,order="ccc")
@@ -345,6 +347,7 @@ def p_MethodHeader(p):
 			print "Method declaration error at line number: " + str(p.lexer.lineno)
 			Error = Error + 1
 		else:
+			parentScope.functions[p[2].typelist[0]] = currentScope
 			currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:],[])
 		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + [] ,order="ccc")
 
@@ -374,7 +377,7 @@ def p_MethodReturnTypeExtras(p):
 	if(p[1] == None):
 		pass
 	elif len(p)==4:
-		p[0] = Node("MethodReturnTypeExtras", [p[2]],[p[1], p[3]],typelist = p[2].typelist, order="lcl")
+		p[0] = Node("MethodReturnTypeExtras", [p[2]],[],typelist = p[2].typelist, order="c")
 	elif "=" in p[1]:
 		p[0] = Node("MethodReturnTypeExtras", [],[p[1]], order="l")
 
@@ -1063,15 +1066,29 @@ def p_MethodInvocation(p):
 	if(p[1].type == "read"):
 		p[0] = Node("MethodInvocation", [p[1], p[3]], [] , order='cc')
 		return
-	if (currentScope.LookUpFunc(p[1].type, p[3].typelist[0:])==False):
-		print "Method invocation error at line " + str(p.lexer.lineno)
-		global Error
-		Error = Error + 1
+	if p[3] == None :
+		if (currentScope.LookUpFunc(p[1].type,[])==False):
+			print "Method invocation error at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
+	else:
+		if (currentScope.LookUpFunc(p[1].type, p[3].typelist[0:])==False):
+			print "Method invocation error at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
 		#sys.exit("Error: ",p[1].type, p[3].typelist[0:], " Method Invocation error")
 	# else:
 	# 	currentScope = currentScope.GetScope(p[1].name, p[3].typelist[0:])
-	if len(p) ==  5:
-		
+	if p[3] == None:
+		value = currentScope.GetFuncScope(p[1].type,[])
+		if(value == False):
+			print "Method " + p[1].type+ " at line " + str(p.lexer.lineno)
+			# global Error
+			Error = Error + 1
+			#sys.exit("Method" + p[1].type + " does not found")
+		else:
+			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = value.returnType , order='cc')
+	else:
 		value = currentScope.GetFuncScope(p[1].type,p[3].typelist)
 		if(value == False):
 			print "Method " + p[1].type+ " at line " + str(p.lexer.lineno)
@@ -1080,6 +1097,7 @@ def p_MethodInvocation(p):
 			#sys.exit("Method" + p[1].type + " does not found")
 		else:
 			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = value.returnType , order='cc')
+		
 	# elif len(p) ==  4:
 	# 	p[0] = Node("MethodInvocation", [p[1]], [p[2], p[3]])
 
@@ -1109,11 +1127,7 @@ def p_PrimaryNoNewArray(p):
 						| ArrayAccess'''
 						# | ClassInstanceCreationExpression
 						# | FieldAccess
-<<<<<<< HEAD:src/grahulparser.py
-	if len(p) == 3:
-=======
 	if len(p) == 4:
->>>>>>> 85f59ecce149fde81cb85f1c8f786ae9d0056178:milestone2/parser.py
 		p[0] = p[2]
 	else:
 	#	print p[1].type,"we are in p_PrimaryNoNewArray", p[1].typelist
@@ -1123,6 +1137,7 @@ def p_PrimaryNoNewArray(p):
 def p_ClassInstanceCreationExpression(p):
 	'''ClassInstanceCreationExpression : R_NEW AmbiguousName LPARAN ArgumentLists RPARAN'''
 								#		| R_NEW ClassType LPARAN RPARAN'''
+	global Error
 	print "here ??"
 	global currentScope
 	print p[4] , "is it none"
@@ -1130,7 +1145,6 @@ def p_ClassInstanceCreationExpression(p):
 		# print p[2].type,"inclassinstance",p[4].typelist
 		if(currentScope.LookUpClass(p[2].type, p[4].typelist)):
 		#	print "Class " + str(p[2])+" Not Found in currentScope error at line " + str(p.lexer.lineno)
-			global Error
 			Error = Error + 1
 			#return sys.exit(str(p[2])+"Class Not Found in currentScope")
 		else:
@@ -1142,7 +1156,6 @@ def p_ClassInstanceCreationExpression(p):
 	else:
 		if(currentScope.LookUpClass(p[2].type, [])):
 			print "Class " + str(p[2])+" Not Found in currentScope error at line " + str(p.lexer.lineno)
-			global Error
 			Error = Error + 1
 			#return sys.exit(str(p[2])+"Class Not Found in currentScope")
 		else:
