@@ -699,18 +699,22 @@ def p_elsenoshortif(p):
 
 def p_SwitchStatement(p):
 	'''SwitchStatement : Expression R_MATCH BLOCKOPEN SwitchBlockStatementGroups BLOCKCLOSE'''
-	code = p[1].code + p[4].code
-	p[0] = Node(p[2], [p[1],p[4]],[],order='cc',isLeaf=True)
+	code = ['If']
+	p[0] = Node(p[2], [p[1],p[4]],[],order='cc',isLeaf=True,code=p[1].code + p[4].code + code)
 
 def p_SwitchBlockStatementGroups(p):
 	'''SwitchBlockStatementGroups : SwitchBlock
 					| SwitchBlockStatementGroups  SwitchBlock  '''
 				#	| SwitchBlockStatementGroups LINEFEED SwitchBlock
+	label = newtemp()
+	print label, 'I am in SwitchBlockStatementGroups'
 	if len(p) ==  2:
 		p[0] = p[1]
+		p[0].code = [' If ' + p[1].meta[0] + ' <> ' + p[1].place + ' goto ' + label ] + p[0].code + ['Label ' + label]  
 		# p[0] = Node("SwitchBlockStatementGroups", [p[1]],[],order='c')
 	elif len(p) == 3:
-		p[0] = Node("SwitchBlockStatementGroups", [p[1],p[2]],[],order='cc')
+		code = p[1].code + [' If ' + p[2].meta[0] + ' <> ' + p[2].place + ' goto ' + label ] + p[2].code + ['Label ' + label]
+		p[0] = Node("SwitchBlockStatementGroups", [p[1],p[2]],[],order='cc',code=code)
 	# else :
 	# 	p[0] = Node("SwitchBlockStatementGroups", [p[1],p[3]],[p[2]],order='clc')
 
@@ -724,7 +728,7 @@ def p_SwitchBlockStatementGroups(p):
 def p_SwitchBlock(p):
 	'''SwitchBlock : SwitchBlockHeader SwitchBlockBody'''
 	if len(p) ==  3:
-		p[0] = Node("SwitchBlock", [p[1], p[2]],[],order='cc')
+		p[0] = Node("SwitchBlock", [p[1], p[2]],[],order='cc',code=p[2].code,meta=p[1].type,place=p[2].place)
 
 def p_SwitchBlockHeader(p):
 	'SwitchBlockHeader : R_CASE ID IMPLIES1'
@@ -733,7 +737,7 @@ def p_SwitchBlockHeader(p):
 def p_SwitchBlockBody(p):
 	'''SwitchBlockBody : Expression
 					| BlockStatements'''
-	p[0] = Node("SwitchBlockBody", [p[1]],[],order='c')
+	p[0] = Node("SwitchBlockBody", [p[1]],[],order='c',code=p[1].code,place=p[1].place)
 
 
 def p_WhileStatement(p):

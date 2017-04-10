@@ -63,22 +63,29 @@ jg t25
 x = x + 1
 goto t24
 label t25
+ If c <> one goto t26
+Label t26
+ If c <> two goto t27
+Label t27
+ If c <> three goto t28
+Label t28
+If
 pusharg,i
 call,sub
-t26=i / c
+t29=i / c
 pusharg,t
 pusharg,2
-pusharg,6
+pusharg,9
 call,sub
-t27=i % c
+t30=i % c
 pusharg,t
-pusharg,2
-pusharg,7
+pusharg,3
+pusharg,0
 call,sub
 d = A
-t28=i << c
+t31=i << c
 pusharg,t
-pusharg,2
-pusharg,8
+pusharg,3
+pusharg,1
 call,sub
 d = A
