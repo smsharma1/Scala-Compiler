@@ -3,7 +3,7 @@ object Good9 {
 		return 1;
 	 }
    def main(args: Array[String]) {
-        var a:Int =1;
+        var a =1;
         var b:Int =1;
         var c = new Array[Int](3);
         a = 2;

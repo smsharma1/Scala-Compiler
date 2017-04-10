@@ -332,7 +332,7 @@ def p_MethodHeader(p):
 	parentScope = currentScope.parent
 	if p[3] != None:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
-			print "in if part"
+		#	print "in if part"
 			print "Method Declaration Error at line number: " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
@@ -548,7 +548,11 @@ def p_VariableDeclarationBody(p):
 			currentScope.SetObjectName("temp", p[1])
 			currentScope.Dumper(currentScope.LookUpObject(p[1]),symbol_file)
 		else:
-			currentScope.InsertVar(p[1],0,p[3].typelist[0], length= p[3].typelist[1])
+		#	print p[3].typelist, "I am in typelist"
+			if(p[3].typelist[0][0:5] == 'ARRAY'):
+				currentScope.InsertVar(p[1],0,p[3].typelist[0], length= p[3].typelist[1])
+			else:
+				currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node(p[2],[p[3]],[p[1]], order="lc",isLeaf=True)
 
 
@@ -1136,10 +1140,10 @@ def p_ClassInstanceCreationExpression(p):
 	'''ClassInstanceCreationExpression : R_NEW AmbiguousName LPARAN ArgumentLists RPARAN'''
 								#		| R_NEW ClassType LPARAN RPARAN'''
 	global Error
-	print "here ??"
+#	print "here ??"
 	global currentScope
 	global Error
-	print p[4] , "is it none"
+#	print p[4] , "is it none"
 	if(p[4] != None):
 		# print p[2].type,"inclassinstance",p[4].typelist
 		if(currentScope.LookUpClass(p[2].type, p[4].typelist)):
@@ -1159,7 +1163,7 @@ def p_ClassInstanceCreationExpression(p):
 			#return sys.exit(str(p[2])+"Class Not Found in currentScope")
 		else:
 			# print p[2].type, " " , p[4].typelist, " creating object"
-			print "here please"
+		#	print "here please"
 			if(currentScope.InsertObject("temp", p[2].type, [])): #valList is to be sent here 
 				pass
 			else:
