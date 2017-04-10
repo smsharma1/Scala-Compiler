@@ -93,7 +93,7 @@ class SymbolTable:
 				pass
 			else:
 				return False
-		scope = currentScope
+		scope = self
 		while(scope):
 			if symbolName in scope.classes:
 				for class_name in scope.classes[symbolName]:
