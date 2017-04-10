@@ -269,9 +269,11 @@ def p_VariableDeclarator1(p):
 			currentScope.SetObjectName("temp", p[1])
 			# print self.LookUpObject(p[1]).name, " ", self.LookUpObject(p[1]).variables, "before dumper is called"
 			currentScope.Dumper(currentScope.LookUpObject(p[1]),symbol_file)
+		elif "ARRAY" in p[3].typelist[0]:
+			currentScope.InsertVar(p[1],0,p[3].typelist[0], length= p[3].typelist[1])
 		else:
 			# print p[3].typelist, " in variabledeclarator1"
-			currentScope.InsertVar(p[1],0,p[4].typelist[0], length= p[3].typelist[1])
+			currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node("VariableDeclarator1", [p[3]],[p[1],p[2]], order="llc",code=p[3].code)
 	elif len(p)==8:
 		currentScope.InsertVar(p[1],0,p[3].typelist[0])
@@ -1201,6 +1203,21 @@ def p_MethodInvocation(p):
 			Error = Error + 1
 			#sys.exit("Method" + p[1].type + " does not found")
 		else:
+<<<<<<< HEAD
+			# get the types of each argument and insert it with certain name in currentscope
+			for idname in p[3]:
+				i=0
+				if idname in value.variables:
+					if ("ARRAY" in value.variables[idname][1].upper()) or ("STRING" in value.variables[idname][1].upper()):
+						offset = currentScope.GetOffset(idname)
+						currentScope.InsertVar("arg"+str(i),offset,"pointer")
+					elif "OBJECT" in value.variables[idname][1].upper() :
+						offset = currentScope.GetOffset(idname)
+						currentScope.InsertVar("arg"+str(i),offset,"pointer")
+					else :
+						# we may need to pass value instead of 0
+						varinfo = self.LookUpSymbol(idname)
+						curentScope.InsertVar("arg"+str(i), varinfo[0] ,"value")
 			code = []
 			for k in p[3].place:
 				code.append("pusharg," + k)
