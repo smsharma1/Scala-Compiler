@@ -4,12 +4,12 @@ class s () {
     }
 
 class t () {
-    var x = new Array[Int](5,5);
+    var x = new Array[Float](5,5);
 }
 
 object good4 {
-    def f(a: Array[Int], b:Array[String]){
-		// b[1][2] = 10.4
+    def f(a: Array[Int], b:Array[Float]){
+		a[1] = 10;
 	 }
    def main(args: Array[String]){
       var a = new Array[Float](10,10);
@@ -17,7 +17,7 @@ object good4 {
       var c = new Array[Int](5);
       var y = new t();
       var i : Int = 1;
-      y.x[3].b[1][2] = 4.8;
+      y.x[3,3] = 4.8;
     //   f(c, y.x[3].b);
     //   println(y.x[3].b[1][2]);
    }

@@ -548,6 +548,7 @@ def p_VariableDeclarationBody(p):
 		if(p[3].typelist[0] == 'object'):
 			# print p[1]
 			currentScope.SetObjectName("temp", p[1])
+		#	print p[1] ,"jajajajj"
 			currentScope.Dumper(currentScope.LookUpObject(p[1]),symbol_file)
 		else:
 		#	print p[3].typelist, "I am in typelist"
@@ -1148,27 +1149,28 @@ def p_ClassInstanceCreationExpression(p):
 #	print "here ??"
 	global currentScope
 	global Error
-#	print p[4] , "is it none"
+	print p[4] , "is it none"
 	if(p[4] != None):
-		# print p[2].type,"inclassinstance",p[4].typelist
-		if(currentScope.LookUpClass(p[2].type, p[4].typelist)):
-		#	print "Class " + str(p[2])+" Not Found in currentScope error at line " + str(p.lexer.lineno)
+		print p[2].type,"inclassinstance",p[4].typelist
+		if(not currentScope.LookUpClass(p[2].type, p[4].typelist)):
+			print "Class " + str(p[2])+" Not Found in currentScope error at line " + str(p.lexer.lineno)
 			Error = Error + 1
 			#return sys.exit(str(p[2])+"Class Not Found in currentScope")
 		else:
-			# print p[2].type, " " , p[4].typelist, " creating object"
+			print p[2].type, " " , p[4].typelist, " creating object"
 			if(currentScope.InsertObject("temp", p[2].type, [])): #valList is to be sent here 
 				pass
 			else:
 				print("Error: ", p[2].type, " alreay declared in currentScope" )
 	else:
-		if(currentScope.LookUpClass(p[2].type, [])):
+		print p[2].type, "class name"
+		if(not currentScope.LookUpClass(p[2].type, [])):
 			print "Class " + str(p[2])+" Not Found in currentScope error at line " + str(p.lexer.lineno)
 			Error = Error + 1
 			#return sys.exit(str(p[2])+"Class Not Found in currentScope")
 		else:
-			# print p[2].type, " " , p[4].typelist, " creating object"
-		#	print "here please"
+			print p[2].type, " creating object"
+			print "here please"
 			if(currentScope.InsertObject("temp", p[2].type, [])): #valList is to be sent here 
 				pass
 			else:
