@@ -95,27 +95,27 @@ class SymbolTable:
 				return False
 		scope = self
 		while(scope):
-			print scope.classes
+			# print scope.classes
 			if symbolName in scope.classes:
 				for class_name in scope.classes[symbolName]:
 					# print class_name.argList
 					if argList == class_name.argList:
-						print "i am i class"
+						# print "i am i class"
 						return True
 			scope = scope.parent
 		return False
 
 	def LookUpObject(self, symbolName):
 		scope = self
-		print symbolName, "symbolname in LookupObject"
+		# print symbolName, "symbolname in LookupObject"
 		if(self.LookUpCurrentScope(symbolName)):
 			if(symbolName in scope.objects):
 				pass
 			else:
 				return False
-		print "am i here"
+		# print "am i here"
 		while(scope):
-			print scope.objects
+			# print scope.objects
 			if symbolName in scope.objects:
 				# print  scope.objects[symbolName][0], " In Look up object"
 				# print scope.objects[symbolName][0].name, " ", scope.objects[symbolName][0].variables, " "
@@ -150,7 +150,7 @@ class SymbolTable:
 		looklist = symbolName.split('.')
 		name = ""
 		myobject = self.LookUpObject(looklist[0])
-		print myobject," myobject ",looklist[0]
+		# print myobject," myobject ",looklist[0]
 		if myobject :
 			if looklist[1] in myobject.functions:
 				return [myobject.functions[looklist[1]][0].returnType]
@@ -184,7 +184,7 @@ class SymbolTable:
 	def SetObjectName(self, currentName, newName):
 		# print "Insetobjectname", currentName," ",newName
 		myobject = self.LookUpObject(currentName)
-		print myobject, "myobject"
+		# print myobject, "myobject"
 		self.objects[newName] = copy.deepcopy(myobject)
 		self.objects.pop(currentName, None)
 		# print self.objects[newName][0], "last line in set object name"

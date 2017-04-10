@@ -16,7 +16,6 @@ object Good1 {
       var b : Int = 1;
       var a : Int = 1;
       var k = new node();
-
       a = get_a(k);
    }
 }

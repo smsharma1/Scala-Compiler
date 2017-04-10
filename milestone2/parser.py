@@ -854,7 +854,7 @@ def p_Assignment(p):
 				#| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
 	#print p[1].typelist,"hello ",p[3].typelist
 	if p[2]=="=":
-		print p[1].typelist[0], " " ,  p[3].typelist[0], "assignment"
+		# print p[1].typelist[0], " " ,  p[3].typelist[0], "assignment"
 		if not allowed(p[1].typelist[0], p[3].typelist[0]) :
 			print "Assignment mismatch error at line " + str(p.lexer.lineno)
 			global Error
@@ -862,7 +862,7 @@ def p_Assignment(p):
 		p[0] = Node(p[2], [p[1], p[3]],[], order="cc",isLeaf=True)
 						#return sys.exit("assignment mismatch error")
 	else:
-		print p[1].typelist[0], " " ,p[2].type, " " , p[3].typelist[0], "assignment"
+		# print p[1].typelist[0], " " ,p[2].type, " " , p[3].typelist[0], "assignment"
 		if not allowed(p[1].typelist[0], p[3].typelist[0]) :
 			print "Assignment mismatch error at line " + str(p.lexer.lineno)
 			# global Error
@@ -1080,7 +1080,7 @@ def p_MethodInvocation(p):
 			print "Method invocation error at line " + str(p.lexer.lineno)
 			Error = Error + 1
 	else:
-		print p[1].type, " " , p[3].typelist[0:], "in method invocation with typelist"
+		# print p[1].type, " " , p[3].typelist[0:], "in method invocation with typelist"
 		if (currentScope.LookUpFunc(p[1].type, p[3].typelist[0:])==False):
 			print "Method invocation error at line " + str(p.lexer.lineno)
 			Error = Error + 1
@@ -1155,20 +1155,20 @@ def p_ClassInstanceCreationExpression(p):
 			Error = Error + 1
 			#return sys.exit(str(p[2])+"Class Not Found in currentScope")
 		else:
-			print p[2].type, " " , p[4].typelist, " creating object"
+			# print p[2].type, " " , p[4].typelist, " creating object"
 			if(currentScope.InsertObject("temp", p[2].type, [])): #valList is to be sent here 
 				pass
 			else:
 				print("Error: ", p[2].type, " alreay declared in currentScope" )
 	else:
-		print p[2].type, "class name"
+		#print p[2].type, "class name"
 		if(not currentScope.LookUpClass(p[2].type, [])):
 			print "Class " + str(p[2])+" Not Found in currentScope error at line " + str(p.lexer.lineno)
 			Error = Error + 1
 			#return sys.exit(str(p[2])+"Class Not Found in currentScope")
 		else:
-			print p[2].type, " creating object"
-			print "here please"
+			# print p[2].type, " creating object"
+			# print "here please"
 			if(currentScope.InsertObject("temp", p[2].type, [])): #valList is to be sent here 
 				pass
 			else:
