@@ -1,7 +1,7 @@
 class S()
 {
    var a: Int = 0;
-   var b: Float = 0;
+   var b: Double = 0;
 }
 object Good10 {
    def main(args: Array[String]) {
@@ -15,15 +15,15 @@ object Good10 {
     var x = new S();
     f1 = 3.0;
     f2 = 3.0;
- //   x.a = 5;
-//    x.b = 7;
+    x.a = 5;
+    x.b = 7;
     fa[0] = 2;
     ia[5] = 9;
     i2 = 1;
-//    i1 = f1 + f2;       // i1 = (int) f1 +FLOAT f2
+    f3 = f1 + f2;       // i1 = (int) f1 +FLOAT f2
     f3 = f1 / i2;       // f3 =  f1 /FLOAT((float) i2)
-//    f1 = i1 * x.a;      // f1 = (float) i1+INT x.a
-//    i1 = fa[0] + ia[5]; // i1 = (int)fa[0] +FLOAT ((float) ia[0])
+    f1 = i1 * x.a;      // f1 = (float) i1+INT x.a
+    f2 = fa[0] + ia[5]; 
     println(i1);
     println(f3);
     println(f1);
