@@ -1203,7 +1203,6 @@ def p_MethodInvocation(p):
 			Error = Error + 1
 			#sys.exit("Method" + p[1].type + " does not found")
 		else:
-<<<<<<< HEAD
 			# get the types of each argument and insert it with certain name in currentscope
 			for idname in p[3]:
 				i=0
