@@ -252,9 +252,11 @@ def p_VariableDeclarator1(p):
 			currentScope.SetObjectName("temp", p[1])
 			# print self.LookUpObject(p[1]).name, " ", self.LookUpObject(p[1]).variables, "before dumper is called"
 			currentScope.Dumper(currentScope.LookUpObject(p[1]),symbol_file)
+		elif "ARRAY" in p[3].typelist[0]:
+			currentScope.InsertVar(p[1],0,p[3].typelist[0], length= p[3].typelist[1])
 		else:
 			# print p[3].typelist, " in variabledeclarator1"
-			currentScope.InsertVar(p[1],0,p[4].typelist[0], length= p[3].typelist[1])
+			currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node("VariableDeclarator1", [p[3]],[p[1],p[2]], order="llc")
 	elif len(p)==8:
 		currentScope.InsertVar(p[1],0,p[3].typelist[0])
@@ -848,6 +850,7 @@ def p_Assignment(p):
 				#| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
 	#print p[1].typelist,"hello ",p[3].typelist
 	if p[2]=="=":
+		print p[1].typelist[0], " " ,  p[3].typelist[0], "assignment"
 		if not allowed(p[1].typelist[0], p[3].typelist[0]) :
 			print "Assignment mismatch error at line " + str(p.lexer.lineno)
 			global Error
@@ -855,6 +858,7 @@ def p_Assignment(p):
 		p[0] = Node(p[2], [p[1], p[3]],[], order="cc",isLeaf=True)
 						#return sys.exit("assignment mismatch error")
 	else:
+		print p[1].typelist[0], " " ,p[2].type, " " , p[3].typelist[0], "assignment"
 		if not allowed(p[1].typelist[0], p[3].typelist[0]) :
 			print "Assignment mismatch error at line " + str(p.lexer.lineno)
 			# global Error
@@ -1058,6 +1062,7 @@ def p_MethodInvocation(p):
 						# | AmbiguousName LPARAN RPARAN
 						# | Primary DOT Identifier LPARAN RPARAN
 	global currentScope
+	global Error
 #	print p[1].name,"name",currentScope.name
 #	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
 	if(p[1].type == "println"):
@@ -1069,12 +1074,11 @@ def p_MethodInvocation(p):
 	if p[3] == None :
 		if (currentScope.LookUpFunc(p[1].type,[])==False):
 			print "Method invocation error at line " + str(p.lexer.lineno)
-			global Error
 			Error = Error + 1
 	else:
+		print p[1].type, " " , p[3].typelist[0:], "in method invocation with typelist"
 		if (currentScope.LookUpFunc(p[1].type, p[3].typelist[0:])==False):
 			print "Method invocation error at line " + str(p.lexer.lineno)
-			global Error
 			Error = Error + 1
 		#sys.exit("Error: ",p[1].type, p[3].typelist[0:], " Method Invocation error")
 	# else:
@@ -1083,7 +1087,7 @@ def p_MethodInvocation(p):
 		value = currentScope.GetFuncScope(p[1].type,[])
 		if(value == False):
 			print "Method " + p[1].type+ " at line " + str(p.lexer.lineno)
-			# global Error
+	
 			Error = Error + 1
 			#sys.exit("Method" + p[1].type + " does not found")
 		else:
@@ -1092,7 +1096,7 @@ def p_MethodInvocation(p):
 		value = currentScope.GetFuncScope(p[1].type,p[3].typelist)
 		if(value == False):
 			print "Method " + p[1].type+ " at line " + str(p.lexer.lineno)
-			# global Error
+	
 			Error = Error + 1
 			#sys.exit("Method" + p[1].type + " does not found")
 		else:
@@ -1301,6 +1305,8 @@ parser = yacc.yacc()
 def allowed(type1, type2):
 	if(type1=="DOUBLE" and (type2=="FLOAT" or type2 == "INT")):
 		return True
+	elif (type1=="FLOAT" and type2=="INT"):
+		return True
 	elif(type1==type2):
 		return True
 	elif(value(type1) and value(type2) and value(type1)>value(type2)):
@@ -1313,6 +1319,8 @@ def higher(type1, type2):
 		return "DOUBLE"
 	elif((type1=="DOUBLE" and (type2=="FLOAT" or type2 == "INT")) or (type2=="DOUBLE" and (type1=="FLOAT" or type1 == "INT"))):
 		return "DOUBLE"
+	elif((type1=="FLOAT" and type2=="INT") or (type2=="FLOAT" and type1=="INT")):
+		return "FLOAT"
 	elif(value(type1) and value(type2) and value(type1)>=value(type2)):
 		return type1
 	elif(value(type1) and value(type2) and value(type2)>=value(type1)):

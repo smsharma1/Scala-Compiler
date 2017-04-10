@@ -25,6 +25,11 @@ class SymbolTable:
 
 	def LookUpVar(self, symbolName):
 		scope = self
+		if(self.LookUpCurrentScope(symbolName)):
+			if(symbolName in scope.variables):
+				pass
+			else:
+				return False
 		while(scope):
 			if symbolName in scope.variables:
 				# print "hola ", scope.variables[symbolName]
@@ -35,6 +40,11 @@ class SymbolTable:
 
 	def LookUpFunc(self, symbolName, argList):
 		scope = self
+		if(self.LookUpCurrentScope(symbolName)):
+			if(symbolName in scope.functions):
+				pass
+			else:
+				return False
 		while(scope):
 		#	print "scope.functions " , scope.functions
 			if symbolName in scope.functions:
@@ -78,14 +88,19 @@ class SymbolTable:
 	def LookUpClass(self, symbolName, argList):
 		# print symbolName, " ", argList
 		# print self.name, " ", self.classes
-		if symbolName in self.classes:
-			for class_name in self.classes[symbolName]:
-				# print class_name.argList
-				if argList == class_name.argList:
-					return True
-			return False
-		else:
-			return False
+		if(self.LookUpCurrentScope(symbolName)):
+			if(symbolName in scope.objects):
+				pass
+			else:
+				return False
+		scope = currentScope
+		while(scope):
+			if symbolName in scope.classes:
+				for class_name in scope.classes[symbolName]:
+					# print class_name.argList
+					if argList == class_name.argList:
+						return True
+		return False
 
 	def LookUpObject(self, symbolName):
 		scope = self
@@ -129,7 +144,7 @@ class SymbolTable:
 		looklist = symbolName.split('.')
 		name = ""
 		myobject = self.LookUpObject(looklist[0])
-		# print myobject," myobject ",looklist[0]
+		print myobject," myobject ",looklist[0]
 		if myobject :
 			if looklist[1] in myobject.functions:
 				return [myobject.functions[looklist[1]][0].returnType]
