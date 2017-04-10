@@ -9,7 +9,7 @@ class hello_world () {
 }
 
 object Good1 {
-    def get_a(k:Int) : Int = { //don't even know how to write code
+    def get_a(k: new node()) : Int = { //don't even know how to write code
 		return k;
 	 }
    def main(args: Array[String]) {
