@@ -2,7 +2,7 @@
 import ply.yacc as yacc
 import pydot
 import sys
-from symboltableold import *
+from symboltable import *
 # Get the token map from the lexer.  This is required.
 from lexer import tokens
 Error = 0
@@ -330,13 +330,14 @@ def p_MethodHeader(p):
 	'''MethodHeader : MethodDefine MethodDeclarator MethodReturnTypeExtras'''
 	global currentScope
 	parentScope = currentScope.parent
-	parentScope.functions[p[2].typelist[0]] = currentScope
 	if p[3] != None:
+		#print p[2].typelist, "hahaah" 
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
 			print "Method Declaration Error at line number: " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
 		else:
+			parentScope.functions[p[2].typelist[0]] = currentScope
 			currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
 
 		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + p[3].typelist,order="ccc")
@@ -345,6 +346,7 @@ def p_MethodHeader(p):
 			print "Method declaration error at line number: " + str(p.lexer.lineno)
 			Error = Error + 1
 		else:
+			parentScope.functions[p[2].typelist[0]] = currentScope
 			currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:],[])
 		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + [] ,order="ccc")
 
@@ -1109,11 +1111,7 @@ def p_PrimaryNoNewArray(p):
 						| ArrayAccess'''
 						# | ClassInstanceCreationExpression
 						# | FieldAccess
-<<<<<<< HEAD:src/grahulparser.py
-	if len(p) == 3:
-=======
 	if len(p) == 4:
->>>>>>> 85f59ecce149fde81cb85f1c8f786ae9d0056178:milestone2/parser.py
 		p[0] = p[2]
 	else:
 	#	print p[1].type,"we are in p_PrimaryNoNewArray", p[1].typelist
@@ -1125,12 +1123,12 @@ def p_ClassInstanceCreationExpression(p):
 								#		| R_NEW ClassType LPARAN RPARAN'''
 	print "here ??"
 	global currentScope
+	global Error
 	print p[4] , "is it none"
 	if(p[4] != None):
 		# print p[2].type,"inclassinstance",p[4].typelist
 		if(currentScope.LookUpClass(p[2].type, p[4].typelist)):
 		#	print "Class " + str(p[2])+" Not Found in currentScope error at line " + str(p.lexer.lineno)
-			global Error
 			Error = Error + 1
 			#return sys.exit(str(p[2])+"Class Not Found in currentScope")
 		else:
@@ -1142,7 +1140,6 @@ def p_ClassInstanceCreationExpression(p):
 	else:
 		if(currentScope.LookUpClass(p[2].type, [])):
 			print "Class " + str(p[2])+" Not Found in currentScope error at line " + str(p.lexer.lineno)
-			global Error
 			Error = Error + 1
 			#return sys.exit(str(p[2])+"Class Not Found in currentScope")
 		else:
