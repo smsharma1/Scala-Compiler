@@ -38,7 +38,7 @@ class SymbolTable:
 		while(scope):
 		#	print "scope.functions " , scope.functions
 			if symbolName in scope.functions:
-				print scope.functions
+			#	print scope.functions
 				for func in scope.functions[symbolName]:
 				#	print func.argList
 					if argList == func.argList:
@@ -232,8 +232,8 @@ class SymbolTable:
 		return SymbolTable(self, "temp")
 
 	def InsertFuncDetails(self, symbolName, argList, returnType):
-		print symbolName, " ", argList, " ", returnType
-		print "hello in insertfuncdetails"
+	#	print symbolName, " ", argList, " ", returnType
+	#	print "hello in insertfuncdetails"
 		self.argList = argList
 		self.name = symbolName
 		self.returnType = returnType

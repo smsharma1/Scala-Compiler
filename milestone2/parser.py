@@ -1057,6 +1057,7 @@ def p_MethodInvocation(p):
 						# | AmbiguousName LPARAN RPARAN
 						# | Primary DOT Identifier LPARAN RPARAN
 	global currentScope
+	global Error
 #	print p[1].name,"name",currentScope.name
 #	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
 	if(p[1].type == "println"):
@@ -1068,12 +1069,10 @@ def p_MethodInvocation(p):
 	if p[3] == None :
 		if (currentScope.LookUpFunc(p[1].type,[])==False):
 			print "Method invocation error at line " + str(p.lexer.lineno)
-			global Error
 			Error = Error + 1
 	else:
 		if (currentScope.LookUpFunc(p[1].type, p[3].typelist[0:])==False):
 			print "Method invocation error at line " + str(p.lexer.lineno)
-			global Error
 			Error = Error + 1
 		#sys.exit("Error: ",p[1].type, p[3].typelist[0:], " Method Invocation error")
 	# else:
