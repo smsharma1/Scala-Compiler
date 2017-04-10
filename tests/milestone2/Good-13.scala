@@ -4,10 +4,6 @@ object Good8 {
 	println(a);
    }
 }
-
-
-
-
 /*
 #include<stdio.h>
 

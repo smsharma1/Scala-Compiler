@@ -12,7 +12,7 @@ object Good11 {
 	{
 		y = -1 * y;
         x = x + i * y;
-    //    i = -(-i);
+        i = -1 * -1*i;
     }
     a = 10.0;
     b = -0.1;
@@ -20,9 +20,8 @@ object Good11 {
 	{
           b = -1 * b;
           a  = a + i*b;
-      //  i= - (-i);
+          i= -1 * -1 * i;
     }
-    println("Expected output:5 9.500000\n");
     println(x);
     println(a);
    }
