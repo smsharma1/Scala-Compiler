@@ -11,6 +11,7 @@ object Good9 {
         c[returnInt()] = 4;
         println(c[1]);
    }
+}
 /*
 #include<stdio.h>
 int returnInt () {

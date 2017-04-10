@@ -331,8 +331,8 @@ def p_MethodHeader(p):
 	global currentScope
 	parentScope = currentScope.parent
 	if p[3] != None:
-		#print p[2].typelist, "hahaah" 
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
+			print "in if part"
 			print "Method Declaration Error at line number: " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
@@ -376,7 +376,7 @@ def p_MethodReturnTypeExtras(p):
 	if(p[1] == None):
 		pass
 	elif len(p)==4:
-		p[0] = Node("MethodReturnTypeExtras", [p[2]],[p[1], p[3]],typelist = p[2].typelist, order="lcl")
+		p[0] = Node("MethodReturnTypeExtras", [p[2]],[],typelist = p[2].typelist, order="c")
 	elif "=" in p[1]:
 		p[0] = Node("MethodReturnTypeExtras", [],[p[1]], order="l")
 
@@ -1065,15 +1065,29 @@ def p_MethodInvocation(p):
 	if(p[1].type == "read"):
 		p[0] = Node("MethodInvocation", [p[1], p[3]], [] , order='cc')
 		return
-	if (currentScope.LookUpFunc(p[1].type, p[3].typelist[0:])==False):
-		print "Method invocation error at line " + str(p.lexer.lineno)
-		global Error
-		Error = Error + 1
+	if p[3] == None :
+		if (currentScope.LookUpFunc(p[1].type,[])==False):
+			print "Method invocation error at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
+	else:
+		if (currentScope.LookUpFunc(p[1].type, p[3].typelist[0:])==False):
+			print "Method invocation error at line " + str(p.lexer.lineno)
+			global Error
+			Error = Error + 1
 		#sys.exit("Error: ",p[1].type, p[3].typelist[0:], " Method Invocation error")
 	# else:
 	# 	currentScope = currentScope.GetScope(p[1].name, p[3].typelist[0:])
-	if len(p) ==  5:
-		
+	if p[3] == None:
+		value = currentScope.GetFuncScope(p[1].type,[])
+		if(value == False):
+			print "Method " + p[1].type+ " at line " + str(p.lexer.lineno)
+			# global Error
+			Error = Error + 1
+			#sys.exit("Method" + p[1].type + " does not found")
+		else:
+			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = value.returnType , order='cc')
+	else:
 		value = currentScope.GetFuncScope(p[1].type,p[3].typelist)
 		if(value == False):
 			print "Method " + p[1].type+ " at line " + str(p.lexer.lineno)
@@ -1082,6 +1096,7 @@ def p_MethodInvocation(p):
 			#sys.exit("Method" + p[1].type + " does not found")
 		else:
 			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = value.returnType , order='cc')
+		
 	# elif len(p) ==  4:
 	# 	p[0] = Node("MethodInvocation", [p[1]], [p[2], p[3]])
 
@@ -1121,6 +1136,7 @@ def p_PrimaryNoNewArray(p):
 def p_ClassInstanceCreationExpression(p):
 	'''ClassInstanceCreationExpression : R_NEW AmbiguousName LPARAN ArgumentLists RPARAN'''
 								#		| R_NEW ClassType LPARAN RPARAN'''
+	global Error
 	print "here ??"
 	global currentScope
 	global Error
