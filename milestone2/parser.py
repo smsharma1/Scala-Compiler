@@ -1142,7 +1142,6 @@ def p_ClassInstanceCreationExpression(p):
 	global Error
 #	print "here ??"
 	global currentScope
-	global Error
 #	print p[4] , "is it none"
 	if(p[4] != None):
 		# print p[2].type,"inclassinstance",p[4].typelist
