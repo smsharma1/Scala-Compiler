@@ -9,10 +9,21 @@ Error = 0
 graph = pydot.Dot(graph_type='digraph')
 rootScope = SymbolTable(None, "root")
 currentScope = rootScope
+a3AC=[]
 symbol_file = open("Symbols.csv", "w+")
+def newtemp():
+	global tempcount
+	tempcount = tempcount + 1
+	#print "t" + str(tempcount)
+	return "t" + str(tempcount)
+
 class Node:
 	uid=0
-	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False):
+	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False,code=[],place="A",next=None,meta=None):
+		self.meta = meta
+		self.next = next
+		self.code = code 
+		self.place = place
 		self.type = type
 		self.typelist = typelist
 		Node.uid = Node.uid + 1
@@ -72,8 +83,9 @@ def p_CompilationUnit(p):
 	'''CompilationUnit : ImportDeclarationss ClassObjectsList'''
 						# | ClassesObjects'''
 	if len(p)==3:
-		p[0] = Node("CompilationUnit", [p[1], p[2]],[], order="cc")
-	# else:
+		p[0] = Node("CompilationUnit", [p[1], p[2]],[], order="cc",code=p[2].code)
+	global a3AC
+	a3AC = p[0].code 
 	# 	p[0] = Node("CompilationUnit", [p[1]],[])
 def p_ImportDeclarationss(p):
 	'''ImportDeclarationss : ImportDeclarations
@@ -107,7 +119,7 @@ def p_ClassObjectsList(p):
 	if len(p) ==2:
 		p[0] = p[1] #Node('ClassObjectsList',[p[1]],[], order="c")
 	else:
-		p[0] = Node('ClassObjectsList',[p[1],p[2]],[], order = "cc")
+		p[0] = Node('ClassObjectsList',[p[1],p[2]],[], order = "cc",code=p[1].code+p[2].code)
 #<classes_objects> ::= <class_object> | <class_object> <classes_objects>
 def p_ClassAndObjectDeclaration(p):
 	'''ClassAndObjectDeclaration : ObjectDeclaration
@@ -118,7 +130,7 @@ def p_ClassAndObjectDeclaration(p):
 #<object_declaration> ::= object <identifier> <super>? { method_body }
 def p_ObjectDeclaration(p):
 	'''ObjectDeclaration : ObjectHeader ObjectBody'''
-	p[0] = Node("ObjectDeclaration", [p[1], p[2]],[ ], order="cc")
+	p[0] = Node("ObjectDeclaration", [p[1], p[2]],[ ], order="cc",code=p[2].code)
 
 def p_ObjectHeader(p):
 	'''ObjectHeader : R_OBJECT ID Super'''
