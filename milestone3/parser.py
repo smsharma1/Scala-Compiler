@@ -8,6 +8,7 @@ from symboltable import *
 from lexer import tokens
 Error = 0
 tempcount = 0
+esp = 0
 graph = pydot.Dot(graph_type='digraph')
 activr = Stack()
 rootScope = SymbolTable(None, "root")
@@ -1205,6 +1206,8 @@ def p_MethodInvocation(p):
 						# | Primary DOT Identifier LPARAN RPARAN
 	global currentScope
 	global Error
+	global esp
+	global ebp
 #	print p[1].name,"name",currentScope.name
 #	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
 	if(p[1].type == "println"):
@@ -1238,11 +1241,32 @@ def p_MethodInvocation(p):
 		value = currentScope.GetFuncScope(p[1].type,p[3].typelist)
 		if(value == False):
 			print "Method " + p[1].type+ " at line " + str(p.lexer.lineno)
-	
 			Error = Error + 1
 			#sys.exit("Method" + p[1].type + " does not found")
 		else:
+			for idname in p[3].typelist:
+				if "ARRAY" in idname:
+					activr.push("newptr")
+					esp = esp + self.Size("POINTER")
+				else:
+					activr.push("value")
+					print idname, " ", "supposed to be argument type"
+					esp = esp + self.Size(idname)
+				itemcount = itemcount + 1
+			activr.push(ebp)
+			ebp = esp
+			activr.printstack()
+				# you need to push var equal to size
 			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = value.returnType , order='cc')
+			for idname in p[3].typelist:
+				if "ARRAY" in idname:
+					activr.pop()
+					esp = esp - self.Size("POINTER")
+				else:
+					activr.pop()
+					print idname, " ", "supposed to be argument type"
+					esp = esp - self.Size(idname)
+				itemcount = itemcount - 1
 		
 	# elif len(p) ==  4:
 	# 	p[0] = Node("MethodInvocation", [p[1]], [p[2], p[3]])

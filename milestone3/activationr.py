@@ -25,3 +25,6 @@ class Stack:
 	
 	def relModify(self, num, ebp):
 		return self.items[num+ebp]
+	
+	def printstack(self):
+		print self.items
