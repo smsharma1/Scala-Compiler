@@ -729,7 +729,16 @@ def p_elsenoshortif(p):
 
 def p_SwitchStatement(p):
 	'''SwitchStatement : Expression R_MATCH BLOCKOPEN SwitchBlockStatementGroups BLOCKCLOSE'''
-	p[0] = Node(p[2], [p[1],p[4]],[],order='cc',isLeaf=True)
+	exp = p[1].place
+	code = []
+	ml = p[4].place.split(',,,')
+	l = len(p[4].meta)-2
+	code += ["label " + p[4].meta[0]]
+	for i in range(0, l):
+		code += ["cmp " + ml[i] + " "  + exp]
+		code += ["je " + p[4].meta[-i-2]]
+	code += ["label "  + p[4].meta[-1]]
+	p[0] = Node(p[2], [p[1],p[4]],[],order='cc',isLeaf=True,code= p[4].code + code)
 
 def p_SwitchBlockStatementGroups(p):
 	'''SwitchBlockStatementGroups : SwitchBlock
@@ -737,32 +746,47 @@ def p_SwitchBlockStatementGroups(p):
 				#	| SwitchBlockStatementGroups LINEFEED SwitchBlock
 	if len(p) ==  2:
 		p[0] = p[1]
+		vl = []
+		test = newtemp()
+		lab = newtemp()
+		next = newtemp()
+		print test,lab,next, "I am in switch statement"
+		vl.append(test)
+		vl.append(lab)
+		vl.append(next)
+		l1 = ["label " + lab]
+		l2 = ["goto " + next]
+		l3 = ["goto " + test]
+		p[0].code =  l3 + l1 + p[1].code + l2
+		p[0].place = p[1].place
+		p[0].meta = vl
 		# p[0] = Node("SwitchBlockStatementGroups", [p[1]],[],order='c')
 	elif len(p) == 3:
-		p[0] = Node("SwitchBlockStatementGroups", [p[1],p[2]],[],order='cc')
-	# else :
-	# 	p[0] = Node("SwitchBlockStatementGroups", [p[1],p[3]],[p[2]],order='clc')
+		vl = []
+		lab = newtemp()
+		print lab, "I am in switch statement"
+		vl.append(p[1].meta[0])
+		vl.append(lab)
+		for k in p[1].meta[1:]:
+			vl.append(k) 
+		l1 = ["label " + lab]
+		l2 = ["goto " + p[1].meta[-1]]
 
-# def p_SwitchBlockStatementGroupss(p):
-# 	'''SwitchBlockStatementGroupss : SwitchBlockStatementGroups
-# 									| empty'''
-# 	if p[1] is None:
-# 		pass
-# 	else :
-# 		p[0] = Node('SwitchBlockStatementGroupss',[p[1]],[],order='c')
+		p[0] = Node("SwitchBlockStatementGroups", [p[1],p[2]],[],order='cc',meta = vl,code= p[1].code + l1 + p[2].code + l2,place=p[1].place + ",,,"+p[2].place )
+	
 def p_SwitchBlock(p):
 	'''SwitchBlock : SwitchBlockHeader SwitchBlockBody'''
 	if len(p) ==  3:
-		p[0] = Node("SwitchBlock", [p[1], p[2]],[],order='cc')
+		p[0] = Node("SwitchBlock", [p[1], p[2]],[],order='cc',code=  p[2].code ,place= p[1].place)
 
 def p_SwitchBlockHeader(p):
 	'SwitchBlockHeader : R_CASE ID IMPLIES1'
-	p[0] = Node(p[1],[ ],[p[2],p[3]],order='ll',isLeaf=True)
+	p[0] = Node(p[1],[ ],[p[2],p[3]],order='ll',isLeaf=True,place = p[2])
 
 def p_SwitchBlockBody(p):
 	'''SwitchBlockBody : Expression
 					| BlockStatements'''
-	p[0] = Node("SwitchBlockBody", [p[1]],[],order='c')
+	p[0] = Node("SwitchBlockBody", [p[1]],[],order='c',code= p[1].code,place= p[1].place)
 
 
 def p_WhileStatement(p):
@@ -940,13 +964,13 @@ def p_Assignment(p):
 		p[0] = Node(p[2], [p[1], p[3]],[], order="cc",isLeaf=True,code = p[1].code + p[3].code + code)
 						#return sys.exit("assignment mismatch error")
 	else:
-		code = []
+		code = [p[1].place + " " + p[2].type  + " " +  p[3].place ]
 		# print p[1].typelist[0], " " ,p[2].type, " " , p[3].typelist[0], "assignment"
 		if not allowed(p[1].typelist[0], p[3].typelist[0]) :
 			print "Assignment mismatch error at line " + str(p.lexer.lineno)
 			# global Error
 			Error = Error + 1
-		p[0] = Node(p[2].type, [p[1], p[3]],[], order="cc",isLeaf=True)
+		p[0] = Node(p[2].type, [p[1], p[3]],[], order="cc",isLeaf=True,code= p[1].code + p[3].code + code)
 
 			
 
@@ -1203,6 +1227,9 @@ def p_MethodInvocation(p):
 						# | Primary DOT Identifier LPARAN RPARAN
 	global currentScope
 	global Error
+	code =[]
+	func_name = p[1].type
+	temp = None
 #	print p[1].name,"name",currentScope.name
 #	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
 	if(p[1].type == "println"):
@@ -1225,22 +1252,36 @@ def p_MethodInvocation(p):
 	# 	currentScope = currentScope.GetScope(p[1].name, p[3].typelist[0:])
 	if p[3] == None:
 		value = currentScope.GetFuncScope(p[1].type,[])
+		code.append("call " + func_name)
 		if(value == False):
 			print "Method " + p[1].type+ " at line " + str(p.lexer.lineno)
 	
 			Error = Error + 1
 			#sys.exit("Method" + p[1].type + " does not found")
 		else:
-			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = value.returnType , order='cc')
+			if(len(value.returnType) > 0):
+				temp = newtemp()
+				print temp, "I am in method invocation"
+				code.append('Get ' + temp)
+			#print value.returnType,"checking"
+			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = value.returnType , order='cc',code = code, place= temp)
 	else:
+		for k in p[3].meta:
+			code.append("pusharg " + k)
+		code.append("call " + func_name)
 		value = currentScope.GetFuncScope(p[1].type,p[3].typelist)
+		#print value.returnType,"checking"
 		if(value == False):
 			print "Method " + p[1].type+ " at line " + str(p.lexer.lineno)
 	
 			Error = Error + 1
 			#sys.exit("Method" + p[1].type + " does not found")
 		else:
-			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = value.returnType , order='cc')
+			if(len(value.returnType) > 0):
+				temp = newtemp()
+				print temp, "I am in method invocation"
+				code.append('Get ' + temp)
+			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = value.returnType , order='cc',code= code,place=temp)
 		
 	# elif len(p) ==  4:
 	# 	p[0] = Node("MethodInvocation", [p[1]], [p[2], p[3]])
@@ -1254,6 +1295,11 @@ def p_ArgumentLists(p):
 		pass
 	else:
 		p[0] = p[1]
+		t = p[1].place.split(',,,')
+		l = []
+		for t1 in t:
+			l.append(t1)
+		p[0].meta = l
 	#	print p[1].typelist, " argumentlists"
 
 def p_Primary(p):
@@ -1325,7 +1371,7 @@ def p_ArgumentList(p):
 		p[0] = p[1]
 		# p[0] = Node('ArgumentList',[p[1]],[],typelist = p[1].typelist,order='c')
 	else :
-		p[0] = Node('ArgumentList',[p[1],p[3]],[p[2]],typelist = p[1].typelist + p[3].typelist,order='clc')
+		p[0] = Node('ArgumentList',[p[1],p[3]],[p[2]],typelist = p[1].typelist + p[3].typelist,order='clc',code = p[1].code + p[3].code,place=p[1].place + ",,," + p[3].place)
 
 # <array access> ::= <expression name> [ <expression> ] | <primary no new array> [ <expression>]
 def p_ArrayAccess(p):
