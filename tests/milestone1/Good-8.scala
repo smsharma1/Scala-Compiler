@@ -10,6 +10,9 @@ object Good8 {
     	}
 		return c;
 	 }
+	 def sub1(a : Int,b:Int) : Int = {
+		return a;
+	 }
 	 def sub(a : Int) : Int = {
 		return a;
 	 }
