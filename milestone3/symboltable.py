@@ -14,12 +14,16 @@ class SymbolTable:
 		self.functions = Dictlist()
 		self.variables = {}
 		self.classes = Dictlist()
-		self.objects = Dictlist()
+		self.objects = {}
 		self.name = name
 		self.parent = parent
 		self.uid = SymbolTable.uid
 		self.argList = argList
 		self.returnType = returnType
+		self.offset=0
+		self.offsetmap={}
+		self.itemcount=0
+		self.size=0 #relevant for classes and objects
 		SymbolTable.uid = SymbolTable.uid+1
 		# print self.argList
 
@@ -73,6 +77,18 @@ class SymbolTable:
 		else:
 			return False
 
+# supposed to look for existential symbols
+	def LookUpSymbolAcrossScope(self, symbolName):
+		scope = self
+		while(scope):
+			if symbolName in scope.variables:
+				# print "inupsymbol",scope.variables[symbolName][1]
+				return [self.variables[symbolName][1]]
+			elif symbolName in scope.objects:
+				# print self.objects[symbolName]
+				return ['object', self.objects[symbolName][0].name]
+			scope = scope.parent
+
 	def LookUpSymbol(self, symbolName):
 		scope = self
 		while(scope):
@@ -119,7 +135,7 @@ class SymbolTable:
 			if symbolName in scope.objects:
 				# print  scope.objects[symbolName][0], " In Look up object"
 				# print scope.objects[symbolName][0].name, " ", scope.objects[symbolName][0].variables, " "
-				return scope.objects[symbolName][0]
+				return scope.objects[symbolName]
 			scope = scope.parent
 #		print symbolName, " Variable not found"
 		return False
@@ -149,7 +165,7 @@ class SymbolTable:
 	def LookDotThing(self,rootScope,symbolName):
 		looklist = symbolName.split('.')
 		name = ""
-		myobject = self.LookUpObject(looklist[0])
+		myobject = self.LookUpObject(looklist[0])[0]
 		# print myobject," myobject ",looklist[0]
 		if myobject :
 			if looklist[1] in myobject.functions:
@@ -169,6 +185,34 @@ class SymbolTable:
 			else:
 				return False
 		return False
+	
+	def GetOffset(self, symbolName):
+		scope = self
+		value = scope.LookUpSymbolAcrossScope(symbolName)
+		if value == None:
+			raise ValueError('An undeclared object: '+str(symbolName)+' is called for GetOffset')
+		if value[0] == 'object':
+			while(scope):
+				if symbolName in scope.objects:
+					raise ValueError("yet to fill code for finding offset of object")
+			raise ValueError("unexpected behavior in GetOffset in object")
+		while(scope):
+			while(scope):
+				if symbolName in scope.variables:
+					return [self.variables[symbolName][3]]
+			raise ValueError("unexpected behavior in GetOffset in variables")
+
+	def LookUpArray(self, symbolName):
+		scope=self
+		if self.LookUpVar(symbolName):
+			while(scope):
+				if symbolName in self.variables:
+					if self.variables[symbolName][2] > 0:
+						return self.variables[symbolName]
+					else:
+						raise ValueError(symbolName+" is a variable and not an array")
+		else:
+			raise ValueError("No variable or array of this name found : "+symbolName)
 
 	def LookUpSymbolType(self, symbolName):
 		scope = self
@@ -187,14 +231,27 @@ class SymbolTable:
 		# print myobject, "myobject"
 		self.objects[newName] = copy.deepcopy(myobject)
 		self.objects.pop(currentName, None)
+		# commenting out following line because space for object pointer already 
+		# alloted at the time of creation of temp object
+		# self.offset = self.offset + self.objects[newName].getSymbolTableSize()
 		# print self.objects[newName][0], "last line in set object name"
 
 	def InsertVar(self, symbolName, val, type_name, length=0):
 		# print "testing",type_name
-		if symbolName in self.variables:
-			return False
+		if self.LookUpCurrentScope(symbolName):
+			raise ValueError("InsertVar called on "+symbolName+" but it is already declared")
 		else:
-			self.variables[symbolName] = [val, type_name, length]
+			self.variables[symbolName] = [val, type_name, length, self.offset]
+			if length:
+				self.offset = self.offset + self.Size(type_name.upper())*length
+				self.offsetmap[offset] = self.itemcount
+				activr.push(val)
+				self.itemcount = self.itemcount + 1
+			else:
+				self.offset = self.offset + self.Size(type_name.upper())
+				self.offsetmap[offset] = self.itemcount
+				activr.push(val)
+				self.itemcount = self.itemcount + 1
 
 	def InsertFunc(self, symbolName, argList, returnType):
 #		print symbolName, " ", argList, " ", returnType
@@ -223,17 +280,22 @@ class SymbolTable:
 	def InsertObject(self, symbolName, className, valList):
 		# print symbolName, " ", className, " insert object***************"
 		if self.LookUpCurrentScope(symbolName):
-			return False
+			raise ValueError(symbolName+" is already declared")
 		scope = self
 		while(scope):
 			if className in scope.classes:
 				# print  "className"
 				class_name = scope.classes[className][0]
-				self.objects[symbolName] = copy.deepcopy(class_name) #notice that we actually need self here instead of scope
+				self.objects[symbolName] = [copy.deepcopy(class_name), className, self.offset] #notice that we actually need self here instead of scope
+				self.offset = self.offset + self.Size("POINTER")
+				self.offsetmap[offset] = self.itemcount
+				activr.push("POINTER")
+				self.itemcount = self.itemcount + 1
 				# print class_name, " ", self.objects[symbolName],"after deepcopy"
 				# self.InvokeConstr(self.objects[symbolName], valList)
 				return True
 			scope = scope.parent
+			
 		# print "%s not found" % (className)
 		return False
 
@@ -322,5 +384,7 @@ class SymbolTable:
 			return 4
 		elif type=="DOUBLE":
 			return 8
+		elif type=="POINTER":
+			return 4
 		else:
 			return 10

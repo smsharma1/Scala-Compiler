@@ -2,11 +2,13 @@
 import ply.yacc as yacc
 import pydot
 import sys
+from activationr import *
 from symboltable import *
 # Get the token map from the lexer.  This is required.
 from lexer import tokens
 Error = 0
 graph = pydot.Dot(graph_type='digraph')
+activr = Stack()
 rootScope = SymbolTable(None, "root")
 currentScope = rootScope
 a3AC=[]
