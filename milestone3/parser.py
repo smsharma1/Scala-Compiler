@@ -266,7 +266,7 @@ def p_VariableDeclarator1(p):
 		Error = Error + 1
 	if len(p)==4:
 		if(p[3].typelist[0] == 'object'):
-			code = [p[1].place + ' = '+  p[3].place]
+			code = [p[1] + ' = '+  p[3].place]
 			currentScope.SetObjectName("temp", p[1])
 			# print self.LookUpObject(p[1]).name, " ", self.LookUpObject(p[1]).variables, "before dumper is called"
 			currentScope.Dumper(currentScope.LookUpObject(p[1]),symbol_file)
@@ -275,20 +275,20 @@ def p_VariableDeclarator1(p):
 			code = ['ARRAY ' + p[1].place + " " + str(p[3].typelist[1])]
 			currentScope.InsertVar(p[1],0,p[3].typelist[0], length= p[3].typelist[1])
 		else:
-			code = [p[1].place + ' = '+  p[3].place]
+			code = [p[1] + ' = '+  p[3].place]
 			# print p[3].typelist, " in variabledeclarator1"
 			currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node("VariableDeclarator1", [p[3]],[p[1],p[2]], order="llc",code=p[3].code + code)
 	elif len(p)==8:
-		code = [p[1].place + ' = '+  p[5].place]
+		code = [p[1] + ' = '+  p[5].place]
 		currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node("VariableDeclarator1", [p[3], p[5], p[7]],[p[1],p[2], p[4], p[6]], order="llclclc",code = p[5].code + code + p[7].code )
 	elif p[2] == ':':
-		code = [p[1].place + ' = '+  p[5].place]
+		code = [p[1] + ' = '+  p[5].place]
 		currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node("VariableDeclarator1", [p[3], p[5]],[p[1],p[2], p[4]], order="llclc",code = p[5].code + code)
 	else:
-		code = [p[1].place + ' = '+  p[3].place]
+		code = [p[1] + ' = '+  p[3].place]
 		if(p[3].typelist[0] == 'object'):
 			currentScope.SetObjectName("temp", p[1])
 			currentScope.Dumper(currentScope.LookUpObject(p[1]),symbol_file)
@@ -1575,7 +1575,7 @@ if __name__ == "__main__" :
 	if(Error):
 		print sys.exit("Your Program contain total " + str(Error) + " Errors"  )
 	else:
-		f = open('ThreeAddressCode.txt ', 'w')  
+		f = open('ThreeAddressCode.txt', 'w')  
 		for stat in a3AC:
 			f.write(stat + '\n')
 		f.close()  
