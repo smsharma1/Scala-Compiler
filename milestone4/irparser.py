@@ -1,18 +1,29 @@
 import os
 import sys
+import datafile 
 
-def check_branching(name) :
-    if name in ['jump', 'call', 'goto', 'label']:
+def checkbranching(name) :
+    if name in ['jump', 'call', 'goto', 'label:', 'ARRAY']:
         return True
     else:
         return False
 
+def checkvariable(name):
+    try:
+        int(name)
+        return False
+    except:
+        return True
 
 if __name__ == "__main__" :
     filename = sys.argv[1]
     with open(filename) as f:
         data = f.readlines()
     index = 0
+    flag = 0
+    scopefunc = 0
+    arglength = 8
+    locallength = -4
     for line in data:
         index = index +1
         listvar = line.split(' ')
@@ -20,6 +31,39 @@ if __name__ == "__main__" :
         node = [index]+[None]*4
         node[1:len(listvar)+1] = listvar
         node[len(listvar)] =  node[len(listvar)].replace('\n','')
-        print node
-        if (not check_branching[node[1]]):
+        #print node
+        if (not checkbranching[node[1]]):
+            for i in range(1: len(listvar) + 1):
+                if(checkvariable(node[i])):
+                    if(flag):
+                        if node[i] not in datafile.memorymap[scopefunc].keys():
+                            if node[i] == 'pusharg':
+                                datafile.memorymap[scopefunc][node[i+1]] = str(arglength) + '(%ebp)'
+                                arglength = arglength + 4
+                            elif (node[i] not in datafile.globalsection):
+                                datafile.memorymap[scopefunc][node[i]] = str(locallength) + '(%ebp)'
+                                locallength = locallength - 4
+                    else:
+                        datafile.globalsection.add(node[i])
+                    datafile.allvariables.add(node[i])
+        if node[1] == "ARRAY":
+            datafile.setofarray[node[2]] = node[3]
+        if node[1] == 'label' and node[2][0:4] == "func":
+            flag = 1
+            scopefunc = node[2]
+            datafile.memorymap[scopefunc] = {}
+        if node[1] == 'ret':
+            flag = 0
+            datafile.numberofarguments[scopefunc] = arglength
+            datafile.numberofvariables[scopefunc] = (-1)*locallength
+            scopefunc = 0
+            arglength = 8
+            locallength = -4
+        
+
+
+
+
+
+
 

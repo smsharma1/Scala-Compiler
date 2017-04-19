@@ -1,5 +1,5 @@
 import copy
-
+from shared import *
 class Dictlist(dict):
 	def __setitem__(self, key, value):
 		try:
@@ -238,18 +238,21 @@ class SymbolTable:
 
 	def InsertVar(self, symbolName, val, type_name, length=0):
 		# print "testing",type_name
+		global esp
 		if self.LookUpCurrentScope(symbolName):
 			raise ValueError("InsertVar called on "+symbolName+" but it is already declared")
 		else:
 			self.variables[symbolName] = [val, type_name, length, self.offset]
 			if length:
 				self.offset = self.offset + self.Size(type_name.upper())*length
-				self.offsetmap[offset] = self.itemcount
+				esp = esp + self.Size(type_name.upper())*length
+				self.offsetmap[self.offset] = self.itemcount
 				activr.push(val)
 				self.itemcount = self.itemcount + 1
 			else:
 				self.offset = self.offset + self.Size(type_name.upper())
-				self.offsetmap[offset] = self.itemcount
+				esp = esp + self.Size(type_name.upper())
+				self.offsetmap[self.offset] = self.itemcount
 				activr.push(val)
 				self.itemcount = self.itemcount + 1
 
@@ -279,6 +282,7 @@ class SymbolTable:
 	
 	def InsertObject(self, symbolName, className, valList):
 		# print symbolName, " ", className, " insert object***************"
+		global esp
 		if self.LookUpCurrentScope(symbolName):
 			raise ValueError(symbolName+" is already declared")
 		scope = self
@@ -288,7 +292,8 @@ class SymbolTable:
 				class_name = scope.classes[className][0]
 				self.objects[symbolName] = [copy.deepcopy(class_name), className, self.offset] #notice that we actually need self here instead of scope
 				self.offset = self.offset + self.Size("POINTER")
-				self.offsetmap[offset] = self.itemcount
+				esp = esp + self.Size("POINTER")
+				self.offsetmap[self.offset] = self.itemcount
 				activr.push("POINTER")
 				self.itemcount = self.itemcount + 1
 				# print class_name, " ", self.objects[symbolName],"after deepcopy"
@@ -336,6 +341,7 @@ class SymbolTable:
 		# print scope.objects, "i am symbol table"
 		# print scope.name, " in dumper"
 		offset = 0
+		print scope
 		fileh.write(scope.name+"\n")
 		for key in scope.variables:
 			if(scope.variables[key][1]=="STRING"):
@@ -369,22 +375,24 @@ class SymbolTable:
 			fileh.write(buffer)
 		fileh.write('\n')
 
-	def Size(self, type ):
-		if type=="INT":
+	def Size(self, type1 ):
+		if type1=="INT":
 			return 4
-		elif type=="CHAR":
+		elif type1=="CHAR":
 			return 2
-		elif type=="BYTE":
+		elif type1=="BYTE":
 			return 1
-		elif type=="SHORT":
+		elif type1=="SHORT":
 			return 2
-		elif type=="LONG":
+		elif type1=="LONG":
 			return 8
-		elif type=="FLOAT":
+		elif type1=="FLOAT":
 			return 4
-		elif type=="DOUBLE":
+		elif type1=="DOUBLE":
 			return 8
-		elif type=="POINTER":
+		elif type1=="POINTER":
 			return 4
+		elif "ARRAY" in type1:
+			return self.Size(type1.replace("ARRAY", ''))
 		else:
 			return 10
