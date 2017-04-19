@@ -1,5 +1,5 @@
 import copy
-
+from shared import *
 class Dictlist(dict):
 	def __setitem__(self, key, value):
 		try:
@@ -246,13 +246,13 @@ class SymbolTable:
 			if length:
 				self.offset = self.offset + self.Size(type_name.upper())*length
 				esp = esp + self.Size(type_name.upper())*length
-				self.offsetmap[offset] = self.itemcount
+				self.offsetmap[self.offset] = self.itemcount
 				activr.push(val)
 				self.itemcount = self.itemcount + 1
 			else:
 				self.offset = self.offset + self.Size(type_name.upper())
 				esp = esp + self.Size(type_name.upper())
-				self.offsetmap[offset] = self.itemcount
+				self.offsetmap[self.offset] = self.itemcount
 				activr.push(val)
 				self.itemcount = self.itemcount + 1
 
@@ -282,6 +282,7 @@ class SymbolTable:
 	
 	def InsertObject(self, symbolName, className, valList):
 		# print symbolName, " ", className, " insert object***************"
+		global esp
 		if self.LookUpCurrentScope(symbolName):
 			raise ValueError(symbolName+" is already declared")
 		scope = self
@@ -292,7 +293,7 @@ class SymbolTable:
 				self.objects[symbolName] = [copy.deepcopy(class_name), className, self.offset] #notice that we actually need self here instead of scope
 				self.offset = self.offset + self.Size("POINTER")
 				esp = esp + self.Size("POINTER")
-				self.offsetmap[offset] = self.itemcount
+				self.offsetmap[self.offset] = self.itemcount
 				activr.push("POINTER")
 				self.itemcount = self.itemcount + 1
 				# print class_name, " ", self.objects[symbolName],"after deepcopy"
@@ -340,6 +341,7 @@ class SymbolTable:
 		# print scope.objects, "i am symbol table"
 		# print scope.name, " in dumper"
 		offset = 0
+		print scope
 		fileh.write(scope.name+"\n")
 		for key in scope.variables:
 			if(scope.variables[key][1]=="STRING"):
