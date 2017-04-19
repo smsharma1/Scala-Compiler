@@ -10,8 +10,11 @@ object Good8 {
     	}
 		return c;
 	 }
-	 def sub1(a : Int,b:Int) : Int = {
+	 def sub1(a : Int,b:Int) : Int ={
 		return a;
+	 }
+	def sub2(a : Int){
+		println(a);
 	 }
 	 def sub(a : Int) : Int = {
 		return a;
@@ -59,6 +62,7 @@ object Good8 {
 		    var g : Int = sub(i/c);
 		    d = sub(i%c);
 		    d = sub(i<<c);
+			sub2(d);
 		   // d = sub(i&&c);
 		   // d = sub(i||c);
 	}
