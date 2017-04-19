@@ -368,7 +368,7 @@ def p_MethodHeader(p):
 	'''MethodHeader : MethodDefine MethodDeclarator MethodReturnTypeExtras'''
 	global currentScope
 	parentScope = currentScope.parent
-	l1 = ["label :" + p[2].meta]
+	l1 = ["label: " + p[2].meta]
 	if p[3] != None:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
 		#	print "in if part"
@@ -659,16 +659,16 @@ def p_IfThenStatement(p):
 	s_after = newtemp()
 	print s_after, "I am in IfThenStatement"
 	if p[4] == 'true':
-		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code =p[6].code + ['Label :' + s_after] )
+		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code =p[6].code + ['label: ' + s_after] )
 	elif p[4] == 'false':
-		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=['Jump ' +  s_after] + ['Label :' + s_after])
+		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=['jump ' +  s_after] + ['label: ' + s_after])
 	else:
 		if(not (p[4].typelist[0] == 'BOOL')):
 			print "Syntax error in expression of while Statement at line " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
 			#sys.exit("ERROR: While statement expression is not BOOL it is "+p[4].typelist[0])
-		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=p[4].code + ['If ' + p[4].place + ' = 0 jump ' + s_after] + p[6].code + ['Label :' + s_after])
+		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=p[4].code + ['If ' + p[4].place + ' = 0 jump ' + s_after] + p[6].code + ['label :' + s_after])
 
 def p_IfThenElseStatement(p):
 	'IfThenElseStatement : ifstat elsestat'
@@ -679,7 +679,7 @@ def p_IfThenElseStatement(p):
 	# '''IfThenElseStatement : M R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE Statement N
 	# 					| M R_IF LPARAN R_TRUE RPARAN StatementNoShortIf R_ELSE Statement N
 	# 					| M R_IF LPARAN R_FALSE RPARAN StatementNoShortIf R_ELSE Statement N'''
-	p[0] = Node("IfThenElseStatement", [p[1],p[2]],[],order='cc',code=p[1].code + p[2].code + ['Label : ' + p[1].next])
+	p[0] = Node("IfThenElseStatement", [p[1],p[2]],[],order='cc',code=p[1].code + p[2].code + ['label: ' + p[1].next])
 	# if p[4] == "true" or p[4] == "false":
 	# 	p[0] = Node("IfThenElseStatement", [p[6], p[7]],[p[2], p[4]],order='llcc')
 	# else:
@@ -698,16 +698,16 @@ def p_ifstat(p):
 	s_after = newtemp()
 	print s_else,s_after, "I am in Ifstat"
 	if p[4] == "true":
-		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=p[6].code + ['Label :' + s_else],next=s_after)
+		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=p[6].code + ['label: ' + s_else],next=s_after)
 	elif p[4] == "false":
-		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=['Jump ' +  s_after] + ['Label :' + s_else],next=s_after)
+		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=['jump ' +  s_after] + ['label: ' + s_else],next=s_after)
 	else:
 		if(not (p[4].typelist[0] == 'BOOL')):
 			print "Syntax error in expression of if then else statement at line " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
 			#sys.exit("Error in IfThenelseStatement")
-		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=p[4].code + ['If ' + p[4].place + ' = 0 jump ' + s_else] + p[6].code + [' goto ' + s_after] +  ['Label :' + s_else],next=s_after)
+		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=p[4].code + ['if ' + p[4].place + ' = 0 jump ' + s_else] + p[6].code + ['goto ' + s_after] +  ['label :' + s_else],next=s_after)
 
 def p_elsestat(p):
 	'elsestat : R_ELSE Statement N'
@@ -717,7 +717,7 @@ def p_IfThenElseStatementNoShortIf(p):
 	'''IfThenElseStatementNoShortIf : ifstat elsenoshortif'''
 	# '''IfThenElseStatementNoShortIf : ifstat R_ELSE StatementNoShortIf N'''
 
-	p[0] = Node("IfThenElseStatementNoShortIf",[p[1],p[2]],[],order='cc',code=p[1].code + p[2].code + ['Label : ' + p[1].next ])
+	p[0] = Node("IfThenElseStatementNoShortIf",[p[1],p[2]],[],order='cc',code=p[1].code + p[2].code + ['label: ' + p[1].next ])
 	# if p[4] == "true" or p[4] == "false":
 	# 	p[0] = Node("IfThenElseStatementNoShortIf", [p[6], p[8]],[p[2] ,p[4] ,p[7]],order='llclc')
 	# else:
@@ -737,11 +737,11 @@ def p_SwitchStatement(p):
 	code = []
 	ml = p[4].place.split(',,,')
 	l = len(p[4].meta)-2
-	code += ["label " + p[4].meta[0]]
+	code += ["label: " + p[4].meta[0]]
 	for i in range(0, l):
 		code += ["cmp " + ml[i] + " "  + exp]
 		code += ["je " + p[4].meta[-i-2]]
-	code += ["label "  + p[4].meta[-1]]
+	code += ["label: "  + p[4].meta[-1]]
 	p[0] = Node(p[2], [p[1],p[4]],[],order='cc',isLeaf=True,code= p[4].code + code)
 
 def p_SwitchBlockStatementGroups(p):
@@ -758,7 +758,7 @@ def p_SwitchBlockStatementGroups(p):
 		vl.append(test)
 		vl.append(lab)
 		vl.append(next)
-		l1 = ["label " + lab]
+		l1 = ["label: " + lab]
 		l2 = ["goto " + next]
 		l3 = ["goto " + test]
 		p[0].code =  l3 + l1 + p[1].code + l2
@@ -773,7 +773,7 @@ def p_SwitchBlockStatementGroups(p):
 		vl.append(lab)
 		for k in p[1].meta[1:]:
 			vl.append(k) 
-		l1 = ["label " + lab]
+		l1 = ["label: " + lab]
 		l2 = ["goto " + p[1].meta[-1]]
 
 		p[0] = Node("SwitchBlockStatementGroups", [p[1],p[2]],[],order='cc',meta = vl,code= p[1].code + l1 + p[2].code + l2,place=p[1].place + ",,,"+p[2].place )
@@ -801,13 +801,13 @@ def p_WhileStatement(p):
 	s_after = newtemp()
 	print s_begin , s_after ,"I am in While Statement"
 	if(p[4] == 'true'):
-		code = ["label "+ s_begin + ":"] + p[6].code + ["goto " + s_begin] + ["label " + s_after + ":"]
+		code = ["label: "+ s_begin] + p[6].code + ["goto " + s_begin] + ["label: " + s_after]
 		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=code)
 	elif p[4] == 'false':
-		code = ["label " + s_after + ":"]
+		code = ["label: " + s_after]
 		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=code)
 	else:
-		code = ["label "+ s_begin + ":"] + p[4].code + ['if' + p[4].place + " = 0 goto " + s_after] + p[6].code + ["goto " + s_begin] + ["label " + s_after + ":"]
+		code = ["label: "+ s_begin] + p[4].code + ['if ' + p[4].place + " = 0 goto " + s_after] + p[6].code + ["goto " + s_begin] + ["label: " + s_after]
 		if(not (p[4].typelist[0] == 'BOOL')):
 			print "Syntax error in expression of while Statement at line " + str(p.lexer.lineno)
 			global Error
@@ -825,7 +825,7 @@ def p_ForStatement(p):
 	s_begin = newtemp()
 	s_after = newtemp()
 	print s_begin,s_after,"I am in For statement"
-	code =  p[4].code +  [p[4].place + " = " + p[4].meta[2]] + ["label " + s_begin] + [" If " + p[4].place + " = " + p[4].meta[3]] + [sym + " " + s_after] + [p[4].place + " = " + p[4].place + " + 1"] + ["goto " + s_begin] + ["label " + s_after]
+	code =  p[4].code +  [p[4].place + " = " + p[4].meta[2]] + ["label: " + s_begin] + [" If " + p[4].place + " = " + p[4].meta[3]] + [sym + " " + s_after] + [p[4].place + " = " + p[4].place + " + 1"] + ["goto " + s_begin] + ["label: " + s_after]
 	p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=code)
 
 def p_M(p):
@@ -1168,7 +1168,7 @@ def p_MultiplicativeExpression(p):
 	if len(p) ==  4:
 		nodename = newtemp()
 		print nodename,"I am in Multiplicative Expression"
-		code = [nodename  + "=" + p[1].place + " " + p[2] + " " + p[3].place]
+		code = [nodename  + " = " + p[1].place + " " + p[2] + " " + p[3].place]
 		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
 		# print p[1].typelist, "multiplicativeerror" , p[3].typelist
 		if(not type_here):
@@ -1272,7 +1272,7 @@ def p_MethodInvocation(p):
 			if(len(value.returnType) > 0):
 				temp = newtemp()
 				print temp, "I am in method invocation"
-				code.append('Get ' + temp)
+				code.append('get ' + temp)
 			#print value.returnType,"checking"
 			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = value.returnType , order='cc',code = code, place= temp)
 	else:
@@ -1312,7 +1312,7 @@ def p_MethodInvocation(p):
 			if(len(value.returnType) > 0):
 				temp = newtemp()
 				print temp, "I am in method invocation"
-				code.append('Get ' + temp)
+				code.append('get ' + temp)
 			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = value.returnType , order='cc',code= code,place=temp)
 		
 	# elif len(p) ==  4:
