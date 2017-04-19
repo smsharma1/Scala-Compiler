@@ -21,6 +21,7 @@ class SymbolTable:
 		self.argList = argList
 		self.returnType = returnType
 		self.offset=0
+		self.ebp=0
 		self.size=0 #relevant for classes and objects
 		SymbolTable.uid = SymbolTable.uid+1
 		# print self.argList
@@ -186,14 +187,17 @@ class SymbolTable:
 
 	def InsertVar(self, symbolName, val, type_name, length=0):
 		# print "testing",type_name
+		global esp
 		if symbolName in self.variables:
 			return False
 		else:
 			self.variables[symbolName] = [val, type_name, length, self.offset]
 			if length:
 				self.offset = self.offset + self.Size(type_name.upper())*length
+				esp = esp + self.Size(type_name.upper())*length
 			else:
 				self.offset = self.offset + self.Size(type_name.upper())
+				esp = esp + self.Size(type_name.upper())*length
 
 	def InsertFunc(self, symbolName, argList, returnType):
 #		print symbolName, " ", argList, " ", returnType

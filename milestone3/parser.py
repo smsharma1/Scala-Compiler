@@ -8,6 +8,7 @@ from symboltable import *
 from lexer import tokens
 Error = 0
 tempcount = 0
+esp = 0
 graph = pydot.Dot(graph_type='digraph')
 activr = Stack()
 rootScope = SymbolTable(None, "root")
@@ -274,7 +275,7 @@ def p_VariableDeclarator1(p):
 			code = ['ARRAY ' + p[1].place + " " + str(p[3].typelist[1])]
 			currentScope.InsertVar(p[1],0,p[3].typelist[0], length= p[3].typelist[1])
 		else:
-			code = [[1].place + ' = '+  p[3].place]
+			code = [p[1].place + ' = '+  p[3].place]
 			# print p[3].typelist, " in variabledeclarator1"
 			currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node("VariableDeclarator1", [p[3]],[p[1],p[2]], order="llc",code=p[3].code + code)
@@ -1229,6 +1230,8 @@ def p_MethodInvocation(p):
 						# | Primary DOT Identifier LPARAN RPARAN
 	global currentScope
 	global Error
+	global esp
+	global ebp
 	code =[]
 	func_name = p[1].type
 	temp = None
@@ -1275,10 +1278,32 @@ def p_MethodInvocation(p):
 		#print value.returnType,"checking"
 		if(value == False):
 			print "Method " + p[1].type+ " at line " + str(p.lexer.lineno)
-	
 			Error = Error + 1
 			#sys.exit("Method" + p[1].type + " does not found")
 		else:
+			for idname in p[3].typelist:
+				if "ARRAY" in idname:
+					activr.push("newptr")
+					esp = esp + self.Size("POINTER")
+				else:
+					activr.push("value")
+					print idname, " ", "supposed to be argument type"
+					esp = esp + self.Size(idname)
+				itemcount = itemcount + 1
+			activr.push(ebp)
+			ebp = esp
+			activr.printstack()
+				# you need to push var equal to size
+			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = value.returnType , order='cc')
+			for idname in p[3].typelist:
+				if "ARRAY" in idname:
+					activr.pop()
+					esp = esp - self.Size("POINTER")
+				else:
+					activr.pop()
+					print idname, " ", "supposed to be argument type"
+					esp = esp - self.Size(idname)
+				itemcount = itemcount - 1
 			if(len(value.returnType) > 0):
 				temp = newtemp()
 				print temp, "I am in method invocation"
