@@ -661,7 +661,7 @@ def p_IfThenStatement(p):
 	if p[4] == 'true':
 		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code =p[6].code + ['label: ' + s_after] )
 	elif p[4] == 'false':
-		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=['jump ' +  s_after] + ['label: ' + s_after])
+		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=['jump ' +  s_after] +p[6].code+ ['label: ' + s_after])
 	else:
 		if(not (p[4].typelist[0] == 'BOOL')):
 			print "Syntax error in expression of while Statement at line " + str(p.lexer.lineno)

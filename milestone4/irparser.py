@@ -3,7 +3,13 @@ import sys
 import datafile 
 
 def checkbranching(name) :
-    if name in ['jump', 'call', 'goto', 'label:', 'ARRAY']:
+    if name in ['jump', 'call', 'goto', 'label:', 'ARRAY', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne' ]:
+        return True
+    else:
+        return False
+
+def arraysim(name):
+    if name in ['<-' , '->']:
         return True
     else:
         return False
@@ -27,18 +33,19 @@ if __name__ == "__main__" :
     for line in data:
         index = index +1
         listvar = line.split(' ')
-        # print index, line , listvar
+        print index, line , listvar
         node = [index]+[None]*5
         node[1:len(listvar)+1] = listvar
         node[len(listvar)] =  node[len(listvar)].replace('\n','')
         #print node
-        if (not checkbranching(node[1])):
+        if (not (checkbranching(node[1]) and arraysim(node[4]))):
             for i in range(1 , (len(listvar) + 1)):
                 if(checkvariable(node[i])):
                     if(flag):
                         if node[i] not in datafile.memorymap[scopefunc].keys():
                             if node[i] == 'arg':
                                 datafile.memorymap[scopefunc][node[i+1]] = str(arglength) + '(%ebp)'
+                                # print datafile.memorymap[scopefunc][node[i+1]],"asdfg"
                                 arglength = arglength + 4
                             elif (node[i] not in datafile.globalsection):
                                 datafile.memorymap[scopefunc][node[i]] = str(locallength) + '(%ebp)'
@@ -48,14 +55,14 @@ if __name__ == "__main__" :
                     datafile.allvariables.add(node[i])
         if node[1] == "ARRAY":
             datafile.setofarray[node[2]] = node[3]
-        if node[1] == 'label' and node[2][0:4] == "func":
+        if node[1] == 'label:' and node[2][0:4] == "func":
             flag = 1
             scopefunc = node[2]
             datafile.memorymap[scopefunc] = {}
         if node[1] == 'ret':
             flag = 0
-            datafile.numberofarguments[scopefunc] = arglength
-            datafile.numberofvariables[scopefunc] = (-1)*locallength
+            datafile.numberofarguments[scopefunc] = (arglength-8)/4
+            datafile.numberofvariables[scopefunc] = ((-1)*locallength - 4)/4
             scopefunc = 0
             arglength = 8
             locallength = -4
