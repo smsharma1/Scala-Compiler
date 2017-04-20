@@ -51,8 +51,10 @@ object Good8 {
      		 }
 			for ( x <- 1 until 10 )
 			{
+				var l : Int = 0;
+				l = 1;
 				continue;
-				x = x + 2;
+				break;
          		//println( "Value of a: " + a );
       		}
 			x  match 

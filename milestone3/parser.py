@@ -664,15 +664,10 @@ def p_IfThenStatement(p):
 	s_after = newtemp()
 	print s_after, "I am in IfThenStatement"
 	if p[4] == 'true':
-		p[6].breaklist[:] = [i for i in p[6].breaklist]
 		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code =p[6].code + ['label: ' + s_after], breaklist = p[6].breaklist, continuelist = p[6].continuelist )
 	elif p[4] == 'false':
-		# # ----------------------------
-		# Why no p[6].code????
-		# why even bother to make any labels in that case????????????????????
-
-		# # ---------------
-		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=['jump ' +  s_after] + ['label: ' + s_after], breaklist = p[6].breaklist, continuelist = p[6].continuelist)
+		p[6].breaklist[:] = [i+1 for i in p[6].breaklist]
+		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=['jump ' +  s_after] + p[6].code + ['label: ' + s_after], breaklist = p[6].breaklist, continuelist = p[6].continuelist)
 	else:
 		if(not (p[4].typelist[0] == 'BOOL')):
 			print "Syntax error in expression of while Statement at line " + str(p.lexer.lineno)
@@ -727,6 +722,7 @@ def p_ifstat(p):
 		p[6].continuelist[:] = [i+len(p[4].code)+1 for i in p[6].continuelist]
 		print p[6].breaklist, "breaklist in ifstat"
 		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=p[4].code + ['cmp ' + p[4].place + ' 0']+['je ' + s_else] + p[6].code + ['goto ' + s_after] +  ['label: ' + s_else],next=s_after, breaklist = p[6].breaklist, continuelist = p[6].continuelist)
+
 
 def p_elsestat(p):
 	'elsestat : R_ELSE Statement N'
@@ -1196,7 +1192,7 @@ def p_MultiplicativeExpression(p):
 	if len(p) ==  4:
 		nodename = newtemp()
 		print nodename,"I am in Multiplicative Expression"
-		code = [nodename  + "=" + p[1].place + " " + p[2] + " " + p[3].place]
+		code = [nodename  + " = " + p[1].place + " " + p[2] + " " + p[3].place]
 		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
 		# print p[1].typelist, "multiplicativeerror" , p[3].typelist
 		if(not type_here):
@@ -1300,7 +1296,7 @@ def p_MethodInvocation(p):
 			if(len(value.returnType) > 0):
 				temp = newtemp()
 				print temp, "I am in method invocation"
-				code.append('Get ' + temp)
+				code.append('get ' + temp)
 			#print value.returnType,"checking"
 			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = value.returnType , order='cc',code = code, place= temp)
 	else:
@@ -1340,7 +1336,7 @@ def p_MethodInvocation(p):
 			if(len(value.returnType) > 0):
 				temp = newtemp()
 				print temp, "I am in method invocation"
-				code.append('Get ' + temp)
+				code.append('get ' + temp)
 			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = value.returnType , order='cc',code= code,place=temp)
 		
 	# elif len(p) ==  4:
