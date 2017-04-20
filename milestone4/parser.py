@@ -269,7 +269,7 @@ def p_VariableDeclarator1(p):
 		Error = Error + 1
 	if len(p)==4:
 		if(p[3].typelist[0] == 'object'):
-			code = [p[1] + ' = '+  p[3].place]
+			code = ['= ' + p[1] + ' '+  p[3].place + ' '+ p[1]]
 			currentScope.SetObjectName("temp", p[1])
 			# print self.LookUpObject(p[1]).name, " ", self.LookUpObject(p[1]).variables, "before dumper is called"
 			currentScope.Dumper(currentScope.LookUpObject(p[1]),symbol_file)
@@ -278,20 +278,20 @@ def p_VariableDeclarator1(p):
 			code = ['ARRAY ' + p[1] + " " + str(p[3].typelist[1])]
 			currentScope.InsertVar(p[1],0,p[3].typelist[0], length= p[3].typelist[1])
 		else:
-			code = [p[1] + ' = '+  p[3].place]
+			code = ['= ' + p[1] + ' '+  p[3].place + ' '+ p[1]]
 			# print p[3].typelist, " in variabledeclarator1"
 			currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node("VariableDeclarator1", [p[3]],[p[1],p[2]], order="llc",code=p[3].code + code)
 	elif len(p)==8:
-		code = [p[1] + ' = '+  p[5].place]
+		code = ['= ' + p[1] + ' '+  p[5].place + ' '+ p[1]]
 		currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node("VariableDeclarator1", [p[3], p[5], p[7]],[p[1],p[2], p[4], p[6]], order="llclclc",code = p[5].code + code + p[7].code )
 	elif p[2] == ':':
-		code = [p[1] + ' = '+  p[5].place]
+		code = ['= ' + p[1] + ' '+  p[5].place + ' '+ p[1]]
 		currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node("VariableDeclarator1", [p[3], p[5]],[p[1],p[2], p[4]], order="llclc",code = p[5].code + code)
 	else:
-		code = [p[1] + ' = '+  p[3].place]
+		code = ['= ' + p[1] + ' '+  p[3].place + ' '+ p[1]]
 		if(p[3].typelist[0] == 'object'):
 			currentScope.SetObjectName("temp", p[1])
 			currentScope.Dumper(currentScope.LookUpObject(p[1]),symbol_file)
@@ -582,7 +582,7 @@ def p_VariableDeclarationBody(p):
 		global Error
 		Error = Error + 1
 	if len(p) == 6:
-		code = [p[1] + ' = ' + p[5].place ]
+		code = ['= ' + p[1] + ' '+  p[5].place + ' '+ p[1]]
 		# print "checking ",p[3].typelist," ",p[5].typelist
 		if(not allowed(p[3].typelist[0], p[5].typelist[0])):
 			# print p.lexer.lineno
@@ -595,7 +595,7 @@ def p_VariableDeclarationBody(p):
 	else:
 		code =[]
 		if(p[3].typelist[0] == 'object'):
-			code = [p[1] + ' = ' + p[3].place ]
+			code = ['= ' + p[1] + ' '+  p[3].place + ' '+ p[1]]
 			# print p[1]
 			currentScope.SetObjectName("temp", p[1])
 		#	print p[1] ,"jajajajj"
@@ -606,7 +606,7 @@ def p_VariableDeclarationBody(p):
 				code = ['ARRAY ' + p[1] + " " + str(p[3].typelist[1])]
 				currentScope.InsertVar(p[1],0,p[3].typelist[0], length= p[3].typelist[1])
 			else:
-				code = [p[1] + ' = ' + p[3].place ]
+				code = ['= ' + p[1] + ' '+  p[3].place + ' '+ p[1]]
 				currentScope.InsertVar(p[1],0,p[3].typelist[0])
 		p[0] = Node(p[2],[p[3]],[p[1]], order="lc",isLeaf=True,code = p[3].code + code)
 
@@ -771,13 +771,13 @@ def p_SwitchBlockStatementGroups(p):
 		vl = []
 		test = newtemp()
 		lab = newtemp()
-		next = newtemp()
-		print test,lab,next, "I am in switch statement"
+		next1 = newtemp()
+		print test,lab,next1, "I am in switch statement"
 		vl.append(test)
 		vl.append(lab)
-		vl.append(next)
+		vl.append(next1)
 		l1 = ["label: " + lab]
-		l2 = ["goto " + next]
+		l2 = ["goto " + next1]
 		l3 = ["goto " + test]
 		p[0].code =  l3 + l1 + p[1].code + l2
 		p[0].place = p[1].place
@@ -853,7 +853,7 @@ def p_ForStatement(p):
 	backpatch(p[6].code, p[6].continuelist, s_continue)
 	print p[6].breaklist, "breaklist in forstatement"
 	print p[6].continuelist, "continuelist in forstatement"
-	code =  p[4].code +  [p[4].place + " = " + p[4].meta[2]] + ["label: " + s_begin] +  ["cmp " + p[4].place + " " + p[4].meta[3]] + [sym + " " + s_after] + p[6].code + ["label: "+s_continue]+[p[4].place + " = " + p[4].place + " + 1"] + ["goto " + s_begin] + ["label: " + s_after]
+	code =  p[4].code +  [p[4].place + " = " + p[4].meta[2]] + ["label: " + s_begin] +  ["cmp " + p[4].place + " " + p[4].meta[3]] + [sym + " " + s_after] + p[6].code + ["label: "+s_continue]+["+ " + p[4].place + " 1 " + p[4].place ] + ["goto " + s_begin] + ["label: " + s_after]
 	p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=code)
 
 def p_M(p):
@@ -993,7 +993,8 @@ def p_Assignment(p):
 				#| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
 	#print p[1].typelist,"hello ",p[3].typelist
 	if p[2]=="=":
-		code = [p[1].place + " = " + p[3].place]
+		
+		code = ["= " + p[1].place + " " + p[3].place + " " + p[1].place]
 		# print p[1].typelist[0], " " ,  p[3].typelist[0], "assignment"
 		if not allowed(p[1].typelist[0], p[3].typelist[0]) :
 			print "Assignment mismatch error at line " + str(p.lexer.lineno)
@@ -1002,7 +1003,7 @@ def p_Assignment(p):
 		p[0] = Node(p[2], [p[1], p[3]],[], order="cc",isLeaf=True,code = p[1].code + p[3].code + code)
 						#return sys.exit("assignment mismatch error")
 	else:
-		code = [p[1].place + " " + p[2].type  + " " +  p[3].place ]
+		code = [p[2].type+ " " + p[1].place + " " + p[3].place + " " + p[1].place]
 		# print p[1].typelist[0], " " ,p[2].type, " " , p[3].typelist[0], "assignment"
 		if not allowed(p[1].typelist[0], p[3].typelist[0]) :
 			print "Assignment mismatch error at line " + str(p.lexer.lineno)
@@ -1026,7 +1027,7 @@ def p_OrExpression(p):
 			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		nodename = newtemp()
 		print nodename,"I am in OrExpression"
-		code = [nodename  + " = " + p[1].place + " " + p[2] + " " + p[3].place]
+		code = [p[2] + " " + p[1].place + " " + p[3].place + " " + nodename]
 		p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 
 def p_AndExpression(p):
@@ -1040,7 +1041,7 @@ def p_AndExpression(p):
 			#sys.exit("Error: " + p[1].typelist[0] + " " + p[3].typelist[0] + " type mismatch")
 		nodename = newtemp()
 		print nodename,"I am in And Expression"
-		code = [nodename  + " = " + p[1].place + " " + p[2] + " " + p[3].place]
+		code = [p[2] + " " + p[1].place + " " + p[3].place + " " + nodename]
 		p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 	else:
 		p[0] = p[1]
@@ -1058,7 +1059,7 @@ def p_XorExpression(p):
 			#sys.exit("Error: ", p[1].typelist[0], " ", p[3].typelist[0]," type mismatch")
 		nodename = newtemp()
 		print nodename,"I am in Xorexpression"
-		code = [nodename  + " = " + p[1].place + " " + p[2] + " " + p[3].place]
+		code = [p[2] + " " + p[1].place + " " + p[3].place + " " + nodename]
 		p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 
 
@@ -1076,12 +1077,12 @@ def p_EqualityExpression(p):
 		if p[2] == "==":
 			nodename = newtemp()
 			print nodename,"I am in Equality Expression"
-			code = ["cmp "+  p[1].place + " "+ p[3].place] + ['je nextstat + 3'] + [nodename + " = 0"] +["goto nextstat + 2", nodename + " = 1"]
+			code = ["cmp "+  p[1].place + " "+ p[3].place] + ['je nextstat + 3'] + ["= " + nodename + " 0 " + nodename] +["goto nextstat + 2", "= " + nodename + " 1 " + nodename]
 			p[0] = Node(p[2], [p[1], p[3]], [],typelist = ['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == "!=":
 			nodename = newtemp()
 			print nodename,"I am in Equality Expression"
-			code = ["cmp " + p[1].place + " " + p[3].place] + ["je nextstat + 3"] +[nodename + " = 0"] +["goto nextstat + 2", nodename + " = 1"]
+			code = ["cmp " + p[1].place + " " + p[3].place] + ["je nextstat + 3"] +["= " + nodename + " 0 " + nodename] +["goto nextstat + 2", "= " + nodename + " 1 " + nodename]
 			p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)	
 	else:
 		p[0] = p[1]
@@ -1104,22 +1105,22 @@ def p_RelationalExpression(p):
 		if p[2] == "<":
 			nodename = newtemp()
 			print nodename,"I am in Relational Expression"
-			code = ["cmp " + p[1].place + " " + p[3].place] + ["jl nextstat + 3"] +[nodename + " = 0","goto nextstat + 2", nodename + " = 1"]
+			code = ["cmp " + p[1].place + " " + p[3].place] + ["jl nextstat + 3"] +["= " + nodename + " 0 " + nodename,"goto nextstat + 2", "= " + nodename + " 1 " + nodename]
 			p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename )
 		elif p[2] == ">":
 			nodename = newtemp()
 			print nodename,"I am in Relational Expression"
-			code = ["cmp " + p[1].place + " " + p[3].place] + ["jg nextstat + 3"] + [nodename + " = 0", "goto nextstat + 2", nodename + " = 1"]
+			code = ["cmp " + p[1].place + " " + p[3].place] + ["jg nextstat + 3"] + ["= " + nodename + " 0 " + nodename, "goto nextstat + 2", "= " + nodename + " 1 " + nodename]
 			p[0] = Node(">", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == "<=":
 			nodename = newtemp()
 			print nodename,"I am in Relational Expression"
-			code = ["cmp " + p[1].place + " " + p[3].place] + ["jle nextstat + 3"] + [nodename + " = 0", "goto nextstat + 2", nodename + " = 1"]
+			code = ["cmp " + p[1].place + " " + p[3].place] + ["jle nextstat + 3"] + ["= " + nodename + " 0 " + nodename, "goto nextstat + 2", "= " + nodename + " 1 " + nodename]
 			p[0] = Node("<=", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == ">=":
 			nodename = newtemp()
 			print nodename,"I am in Relational Expression"
-			code = ["cmp " + p[1].place + " " + p[3].place] + ["jge nextstat + 3"] + [nodename + " = 0", "goto nextstat + 2", nodename + " = 1"]
+			code = ["cmp " + p[1].place + " " + p[3].place] + ["jge nextstat + 3"] + ["= " + nodename + " 0 " + nodename, "goto nextstat + 2", "= " + nodename + " 1 " + nodename]
 			p[0] = Node(">=", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == "instanceof":
 			p[0] = Node("instanceof", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
@@ -1141,17 +1142,18 @@ def p_ShiftExpression(p):
 		if p[2] == "<<":
 			nodename = newtemp()
 			print nodename,"I am in Shift Expression"
-			code = [nodename  + " = " + p[1].place + " " + p[2] + " " + p[3].place]
+			
+			code = [p[2] + " " + p[1].place + " " + p[3].place + " " + nodename]
 			p[0] = Node("<<", [p[1], p[3]], [],typelist=[type_here],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == ">>":
 			nodename = newtemp()
 			print nodename,"I am in Shift Expression"
-			code = [nodename  + " = " + p[1].place + " " + p[2] + " " + p[3].place]
+			code = [p[2] + " " + p[1].place + " " + p[3].place + " " + nodename]
 			p[0] = Node("<<", [p[1], p[3]], [],typelist=[type_here],order='cc',isLeaf=True)
 		elif p[2] == ">>>":
 			nodename = newtemp()
 			print nodename,"I am in Shift Expression"
-			code = [nodename  + " = " + p[1].place + " " + p[2] + " " + p[3].place]
+			code = [p[2] + " " + p[1].place + " " + p[3].place + " " + nodename]
 			p[0] = Node(">>>", [p[1], p[3]], [],typelist=[type_here],order='cc',isLeaf=True, code=p[1].code + p[3].code + code, place=nodename)
 	else:
 		p[0] = p[1]
@@ -1171,12 +1173,12 @@ def p_AdditiveExpression(p):
 		if p[2] == "+":
 			nodename = newtemp()
 			print nodename,"I am in Additive Expression"
-			code = [nodename  + " = " + p[1].place + " " + p[2] + " " + p[3].place]
+			code = [p[2] + " " + p[1].place + " " + p[3].place + " " + nodename]
 			p[0] = Node("+", [p[1],p[3]], [ ],typelist=[type_here],order='cc',isLeaf=True,code= p[1].code + p[3].code + code,place=nodename)
 		else:
 			nodename = newtemp()
 			print nodename,"I am in Additive Expression"
-			code = [nodename  + " = " + p[1].place + " " + p[2] + " " + p[3].place]
+			code = [p[2] + " " + p[1].place + " " + p[3].place + " " + nodename]
 			p[0] = Node("-", [p[1],p[3]], [ ],typelist=[type_here],order='cc',isLeaf=True,code= p[1].code + p[3].code + code,place=nodename)
 	#	print p[0].code
 	#	print p[0].place
@@ -1192,7 +1194,7 @@ def p_MultiplicativeExpression(p):
 	if len(p) ==  4:
 		nodename = newtemp()
 		print nodename,"I am in Multiplicative Expression"
-		code = [nodename  + " = " + p[1].place + " " + p[2] + " " + p[3].place]
+		code = [p[2] + " " + p[1].place + " " + p[3].place + " " + nodename]
 		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
 		# print p[1].typelist, "multiplicativeerror" , p[3].typelist
 		if(not type_here):
@@ -1230,7 +1232,8 @@ def p_UnaryExpressionNotPlusMinus(p):
 	if len(p) ==  3:
 		nodename = newtemp()
 		print nodename,"I am in Unary Expression Not Plus Minus Expression"
-		code = [nodename  + "="  + p[1] + " " + p[2].place]
+		code = [p[1] + " " + p[2].place + " " + nodename]
+		# code = [nodename  + "="  + p[1] + " " + p[2].place]
 		if(not p[2].typelist == ['BOOL']):
 			print "Type mismatch error at line " + str(p.lexer.lineno)
 			global Error
@@ -1437,7 +1440,8 @@ def p_ArrayAccess(p):
 	if len(p) == 5:
 		temp = newtemp()
 		print temp, "I am in ArrayAcess"
-		l1 = [ temp + " = " + p[1].place + " -> " + p[3].place]
+		l1 = [ "-> " + p[1].place + " " +p[3].place + " " + temp]
+		# l1 = [ temp + " = " + p[1].place + " -> " + p[3].place]
 		p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]],typelist =[p[1].typelist[0][5:]] , order="clcl",code=p[3].code + l1,place = temp)
 	else:
 		temp = newtemp()
@@ -1445,9 +1449,11 @@ def p_ArrayAccess(p):
 		print temp,temp1, " I am in arrayaccess "
 		#TODO VERY IMP
 		#l=currentScope.LookUpArray(p[1].type)
-		#column = l[2]
-		code = [temp2 + ' = ' + str(column) ]+ [temp2 + ' = ' +  temp2 + ' * ' + p[3].place] + [temp2 + ' = '+ temp2 + ' + ' + p[5].place]
-		l1 = [ temp + " = " + p[1].place + " -> " + temp2]
+		# column = l[2]
+		l1 = [ "* " + temp2 + " " +p[3].place + " " + temp2]
+		code = [temp2 + ' = ' + str(column) ]+ ["* " + temp2 + " " +p[3].place + " " + temp2] + [ "+ " + temp2 + " " +p[5].place + " " + temp2]
+		l1 = [ "-> " + p[1].place + " " + temp2 + " " + temp]
+		# l1 = [ temp + " = " + p[1].place + " -> " + temp2]
 		p[0] = Node('ArrayAccess',[p[1],p[3],p[5]],[p[2],p[4],p[6]],typelist=[p[1].typelist[0][10:]], order="clclcl",code= p[5].code+p[3].code + code+l1,place=temp)
 
 def p_AmbiguousName(p):
