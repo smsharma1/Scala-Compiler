@@ -39,17 +39,20 @@ object Good8 {
          		if( x == 2 )
 				 {
 					a[i] = x;
+					break;
             		x = x + 1 * 4;
          		}
 				else
 				{
+					continue;
 					a[i] = x*10;
 				}
+			
      		 }
 			for ( x <- 1 until 10 )
 			{
-				continue x;
-				break x;
+				continue;
+				x = x + 2;
          		//println( "Value of a: " + a );
       		}
 			x  match 
@@ -58,11 +61,11 @@ object Good8 {
 				case c2 => "two"
 				case c3 => "three"
    			}
-		    var f : Int  = sub(i);
+		    /*var f : Int  = sub(i);
 		    var g : Int = sub(i/c);
 		    d = sub(i%c);
 		    d = sub(i<<c);
-			sub2(d);
+			sub2(d);*/
 		   // d = sub(i&&c);
 		   // d = sub(i||c);
 	}
