@@ -28,16 +28,16 @@ if __name__ == "__main__" :
         index = index +1
         listvar = line.split(' ')
         # print index, line , listvar
-        node = [index]+[None]*4
+        node = [index]+[None]*5
         node[1:len(listvar)+1] = listvar
         node[len(listvar)] =  node[len(listvar)].replace('\n','')
         #print node
-        if (not checkbranching[node[1]]):
-            for i in range(1: len(listvar) + 1):
+        if (not checkbranching(node[1])):
+            for i in range(1 , (len(listvar) + 1)):
                 if(checkvariable(node[i])):
                     if(flag):
                         if node[i] not in datafile.memorymap[scopefunc].keys():
-                            if node[i] == 'pusharg':
+                            if node[i] == 'arg':
                                 datafile.memorymap[scopefunc][node[i+1]] = str(arglength) + '(%ebp)'
                                 arglength = arglength + 4
                             elif (node[i] not in datafile.globalsection):
@@ -59,7 +59,16 @@ if __name__ == "__main__" :
             scopefunc = 0
             arglength = 8
             locallength = -4
-        
+        if node[1] == 'cmp':
+            datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],None))
+            continue
+        datafile.instruction.append(datafile.a3acinst(int(node[0]),node[3],node[4],node[5],node[2],node[1]))
+    print datafile.allvariables, "all variables"
+    print datafile.globalsection, 'globalsection'
+    print datafile.instruction, 'instruction'
+    print datafile.memorymap, 'memorymap'
+    print datafile.numberofarguments, 'numberofarguments'
+    print datafile.numberofvariables, 'numberofvariabels'        
 
 
 

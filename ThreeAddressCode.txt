@@ -81,6 +81,8 @@ x = 1
 label: t30
  If x = 10
 jg t31
+l = 0
+l = 1
 x = x + 1
 goto t30
 label: t31

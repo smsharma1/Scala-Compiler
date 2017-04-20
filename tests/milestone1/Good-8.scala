@@ -48,6 +48,8 @@ object Good8 {
      		 }
 			for ( x <- 1 until 10 )
 			{
+				var l : Int = 0;
+				l = 1;
 				continue x;
 				break x;
          		//println( "Value of a: " + a );
