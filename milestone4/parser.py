@@ -364,7 +364,7 @@ def p_MethodDeclaration(p):
 	'MethodDeclaration : MethodHeader MethodBody'
 	#code1 = ['goto ' + p[1].meta[2:]]
 	#code2 = ['label: ' + p[1].meta[2:]]
-	p[0] = Node("MethodDeclaration", [p[1], p[2]],[], order="cc",code= p[1].code + p[2].code)
+	p[0] = Node("MethodDeclaration", [p[1], p[2]],[], order="cc",code= p[1].code + p[2].code + ['ret'])
 #<method header> ::= def <method declarator> : <type> = | def <method declarator> =
 def p_MethodHeader(p):
 	'''MethodHeader : MethodDefine MethodDeclarator MethodReturnTypeExtras'''
@@ -942,14 +942,14 @@ def p_ReturnStatement(p):
 	'''ReturnStatement : R_RETURN Expression EndStatement
 					| R_RETURN EndStatement'''
 	if len(p) ==  4:
-		code = ['ret ' + p[2].place]
+		code = ['pusharg ' + p[2].place]
 		if not (currentScope.returnType == p[2].typelist):
 			print "Actual returned object has different Type than function declared at " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
 		p[0] = Node(p[1], [p[2]], [],order='c',isLeaf=True,code= p[2].code + code)
 	else:
-		code = ['ret']
+		code = ['ret1']
 		p[0] = Node(p[1], [],[],isLeaf=True,code=code)
 
 
