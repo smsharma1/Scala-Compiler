@@ -3,13 +3,7 @@ import sys
 import datafile 
 
 def checkbranching(name) :
-    if name in ['jump', 'call', 'goto', 'label:', 'ARRAY', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne' ]:
-        return True
-    else:
-        return False
-
-def arraysim(name):
-    if name in ['<-' , '->']:
+    if name in ['jump', 'call', 'goto', 'label:', 'ARRAY', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne', '->', '<-' ]:
         return True
     else:
         return False
@@ -34,12 +28,12 @@ if __name__ == "__main__" :
         index = index +1
         listvar = line.split(' ')
         print index, line , listvar
-        node = [index]+[None]*5
+        node = [index]+[None]*4
         node[1:len(listvar)+1] = listvar
         node[len(listvar)] =  node[len(listvar)].replace('\n','')
         #print node
-        if (not (checkbranching(node[1]) and arraysim(node[4]))):
-            for i in range(1 , (len(listvar) + 1)):
+        if not checkbranching(node[1]):
+            for i in range(2 , (len(listvar) + 1)):
                 if(checkvariable(node[i])):
                     if(flag):
                         if node[i] not in datafile.memorymap[scopefunc].keys():
@@ -50,6 +44,7 @@ if __name__ == "__main__" :
                             elif (node[i] not in datafile.globalsection):
                                 datafile.memorymap[scopefunc][node[i]] = str(locallength) + '(%ebp)'
                                 locallength = locallength - 4
+                                #TODO procedure under procedure 
                     else:
                         datafile.globalsection.add(node[i])
                     datafile.allvariables.add(node[i])
@@ -69,7 +64,11 @@ if __name__ == "__main__" :
         if node[1] == 'cmp':
             datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],None))
             continue
-        datafile.instruction.append(datafile.a3acinst(int(node[0]),node[3],node[4],node[5],node[2],node[1]))
+        if node[3] == '`':
+            datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],None,'Unary',node[4]))
+            continue
+        datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[4]))
+
     print datafile.allvariables, "all variables"
     print datafile.globalsection, 'globalsection'
     print datafile.instruction, 'instruction'

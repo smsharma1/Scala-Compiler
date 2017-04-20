@@ -364,7 +364,7 @@ def p_MethodDeclaration(p):
 	'MethodDeclaration : MethodHeader MethodBody'
 	#code1 = ['goto ' + p[1].meta[2:]]
 	#code2 = ['label: ' + p[1].meta[2:]]
-	p[0] = Node("MethodDeclaration", [p[1], p[2]],[], order="cc",code= p[1].code + p[2].code)
+	p[0] = Node("MethodDeclaration", [p[1], p[2]],[], order="cc",code= p[1].code + p[2].code + ['ret'])
 #<method header> ::= def <method declarator> : <type> = | def <method declarator> =
 def p_MethodHeader(p):
 	'''MethodHeader : MethodDefine MethodDeclarator MethodReturnTypeExtras'''
@@ -666,12 +666,8 @@ def p_IfThenStatement(p):
 	if p[4] == 'true':
 		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code =p[6].code + ['label: ' + s_after], breaklist = p[6].breaklist, continuelist = p[6].continuelist )
 	elif p[4] == 'false':
-<<<<<<< HEAD
-		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=['jump ' +  s_after] +p[6].code+ ['label: ' + s_after])
-=======
 		p[6].breaklist[:] = [i+1 for i in p[6].breaklist]
 		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=['jump ' +  s_after] + p[6].code + ['label: ' + s_after], breaklist = p[6].breaklist, continuelist = p[6].continuelist)
->>>>>>> 2ea2d47fa18d3c608e00422f9a49a35a22882e9a
 	else:
 		if(not (p[4].typelist[0] == 'BOOL')):
 			print "Syntax error in expression of while Statement at line " + str(p.lexer.lineno)
@@ -946,14 +942,14 @@ def p_ReturnStatement(p):
 	'''ReturnStatement : R_RETURN Expression EndStatement
 					| R_RETURN EndStatement'''
 	if len(p) ==  4:
-		code = ['ret ' + p[2].place]
+		code = ['pusharg ' + p[2].place]
 		if not (currentScope.returnType == p[2].typelist):
 			print "Actual returned object has different Type than function declared at " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
 		p[0] = Node(p[1], [p[2]], [],order='c',isLeaf=True,code= p[2].code + code)
 	else:
-		code = ['ret']
+		code = ['ret1']
 		p[0] = Node(p[1], [],[],isLeaf=True,code=code)
 
 

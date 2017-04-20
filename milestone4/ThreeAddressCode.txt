@@ -5,36 +5,44 @@ t1 = 10 + 12
 c = t1
 i = 0
 label: t5
-if  i <= 4 goto nextstat + 3
+cmp i 4
+jle nextstat + 3
 t2 = 0
 goto nextstat + 2
 t2 = 1
-if t2 = 0 goto t6
+cmp t2 0
+je t6
 t3 = c + i
 c = t3
 t4 = i + 1
 i = t4
 goto t5
 label: t6
-ret c
+pusharg c
+ret
 label: func_1_sub1
 arg b
 arg a
-ret a
+pusharg a
+ret
 label: func_1_sub2
 arg a
+ret
 label: func_1_sub
 arg a
-ret a
+pusharg a
+ret
 label: func_1_main
 arg args
 ARRAY a 4
 i = 0
-if  i == 2 goto nextstat + 3
+cmp i 2
+je nextstat + 3
 t7 = 0
 goto nextstat + 2
 t7 = 1
-If t7 = 0 jump t9
+cmp t7 0
+je t9
 t8 = i + 1
 i = t8
 label: t9
@@ -54,23 +62,29 @@ get t18
 d = t18
 x = 0
 label: t28
-if  c <= d goto nextstat + 3
+cmp c d
+jle nextstat + 3
 t19 = 0
 goto nextstat + 2
 t19 = 1
-if t19 = 0 goto t29
-if  x == 2 goto nextstat + 3
+cmp t19 0
+je t29
+cmp x 2
+je nextstat + 3
 t20 = 0
 goto nextstat + 2
 t20 = 1
-if t20 = 0 jump t24
+cmp t20 0
+je t24
 t21 = a -> i
-t21 = x
+t21 = xt29
+goto 
 t22 = 1 * 4
 t23 = x + t22
 x = t23
 goto t25
 label: t24
+goto t28
 t26 = a -> i
 t27 = x * 10
 t26 = t27
@@ -79,43 +93,29 @@ goto t28
 label: t29
 x = 1
 label: t30
- If x = 10
-jg t31
+cmp x 10
+jg t32
 l = 0
 l = 1
+goto t31
+goto t32
+label: t31
 x = x + 1
 goto t30
-label: t31
-goto t32
-label: t33
-goto t34
-label: t35
-goto t34
-label: t36
-goto t34
 label: t32
-cmp c1 x
-je t33
-cmp c2 x
-je t35
-cmp c3 x
-je t36
+goto t33
 label: t34
-pusharg i
-call sub
-get t37
-f = t37
-pusharg t38
-call sub
-get t39
-g = t39
-pusharg t40
-call sub
-get t41
-d = t41
-pusharg t42
-call sub
-get t43
-d = t43
-pusharg d
-call sub2
+goto t35
+label: t36
+goto t35
+label: t37
+goto t35
+label: t33
+cmp c1 x
+je t34
+cmp c2 x
+je t36
+cmp c3 x
+je t37
+label: t35
+ret
