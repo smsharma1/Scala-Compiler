@@ -37,7 +37,7 @@ t7 = 1
 If t7 = 0 jump t9
 t8 = i + 1
 i = t8
-label:t9
+label: t9
 t10 = a -> i
 t10 = 10
 t11 = args -> i
@@ -70,7 +70,7 @@ t22 = 1 * 4
 t23 = x + t22
 x = t23
 goto t25
-label:t24
+label: t24
 t26 = a -> i
 t27 = x * 10
 t26 = t27

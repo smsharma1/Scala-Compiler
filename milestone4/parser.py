@@ -668,7 +668,7 @@ def p_IfThenStatement(p):
 			global Error
 			Error = Error + 1
 			#sys.exit("ERROR: While statement expression is not BOOL it is "+p[4].typelist[0])
-		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=p[4].code + ['If ' + p[4].place + ' = 0 jump ' + s_after] + p[6].code + ['label:' + s_after])
+		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=p[4].code + ['If ' + p[4].place + ' = 0 jump ' + s_after] + p[6].code + ['label: ' + s_after])
 
 def p_IfThenElseStatement(p):
 	'IfThenElseStatement : ifstat elsestat'
@@ -707,7 +707,7 @@ def p_ifstat(p):
 			global Error
 			Error = Error + 1
 			#sys.exit("Error in IfThenelseStatement")
-		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=p[4].code + ['if ' + p[4].place + ' = 0 jump ' + s_else] + p[6].code + ['goto ' + s_after] +  ['label:' + s_else],next=s_after)
+		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=p[4].code + ['if ' + p[4].place + ' = 0 jump ' + s_else] + p[6].code + ['goto ' + s_after] +  ['label: ' + s_else],next=s_after)
 
 def p_elsestat(p):
 	'elsestat : R_ELSE Statement N'
