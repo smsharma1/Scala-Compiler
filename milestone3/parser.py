@@ -21,7 +21,7 @@ def newtemp():
 
 class Node:
 	uid=0
-	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False,code=[],place="A",next=None,meta=None):
+	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False,code=[], breaklist = [], continuelist = [], place="A",next=None,meta=None):
 		self.meta = meta
 		self.next = next
 		self.code = code 
@@ -31,6 +31,8 @@ class Node:
 		Node.uid = Node.uid + 1
 		self.uid = Node.uid
 		self.name = type+"##"+str(self.uid)
+		self.breaklist = breaklist
+		self.continuelist = continuelist
 		if(notreenode):
 			return
 		# print self.name, " ", typelist
@@ -539,7 +541,7 @@ def p_Block(p):
 	'''Block : BLOCKOPEN BLOCKCLOSE
 			| BLOCKOPEN BlockStatements BLOCKCLOSE'''
 	if len(p)==3:
-		p[0] = Node("Block", [],[],notreenode=True,code=p[2].code)
+		p[0] = Node("Block", [],[],notreenode=True,code=p[2].code, breaklist = p[2].breaklist, continuelist = p[2].continuelist)
 	else:
 		p[0] = p[2]
 	#print p[0].code,'bbbbb'
@@ -550,7 +552,9 @@ def p_BlockStatements(p):
 	if len(p)==2:
 		p[0] = p[1]
 	else:
-		p[0] = Node("BlockStatements", [p[1],p[2]],[], order="cc",code=p[1].code + p[2].code)
+		p[2].breaklist[:] = [i+len(p[1].code) for i in p[2].breaklist]
+		p[2].continuelist[:] = [i+len(p[1].code) for i in p[2].continuelist]
+		p[0] = Node("BlockStatements", [p[1],p[2]],[], order="cc",code=p[1].code + p[2].code, breaklist = p[1].breaklist + p[2].breaklist, continuelist = p[1].continuelist + p[2].continuelist)
 	#print p[0].code,"aaaaa"
 
 def p_BlockStatement(p):
@@ -614,6 +618,7 @@ def p_Statement(p):
 				| WhileStatement
 				| ForStatement'''
 	p[0] = p[1]
+	print p[0].breaklist , " i am in statement with breaklist"
 
 
 def p_StatementWithoutTrailingSubstatement(p):
@@ -659,16 +664,19 @@ def p_IfThenStatement(p):
 	s_after = newtemp()
 	print s_after, "I am in IfThenStatement"
 	if p[4] == 'true':
-		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code =p[6].code + ['label: ' + s_after] )
+		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code =p[6].code + ['label: ' + s_after], breaklist = p[6].breaklist, continuelist = p[6].continuelist )
 	elif p[4] == 'false':
-		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=['jump ' +  s_after] + ['label: ' + s_after])
+		p[6].breaklist[:] = [i+1 for i in p[6].breaklist]
+		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=['jump ' +  s_after] + p[6].code + ['label: ' + s_after], breaklist = p[6].breaklist, continuelist = p[6].continuelist)
 	else:
 		if(not (p[4].typelist[0] == 'BOOL')):
 			print "Syntax error in expression of while Statement at line " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
 			#sys.exit("ERROR: While statement expression is not BOOL it is "+p[4].typelist[0])
-		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=p[4].code + ['If ' + p[4].place + ' = 0 jump ' + s_after] + p[6].code + ['label :' + s_after])
+		p[6].breaklist[:] = [i+len(p[4].code)+1 for i in p[6].breaklist]
+		p[6].continuelist[:] = [i+len(p[4].code)+1 for i in p[6].continuelist]
+		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=p[4].code + ['cmp ' + p[4].place + ' 0']+['je ' + s_after] + p[6].code + ['label: ' + s_after], breaklist = p[6].breaklist, continuelist = p[6].continuelist)
 
 def p_IfThenElseStatement(p):
 	'IfThenElseStatement : ifstat elsestat'
@@ -679,7 +687,10 @@ def p_IfThenElseStatement(p):
 	# '''IfThenElseStatement : M R_IF LPARAN Expression RPARAN StatementNoShortIf R_ELSE Statement N
 	# 					| M R_IF LPARAN R_TRUE RPARAN StatementNoShortIf R_ELSE Statement N
 	# 					| M R_IF LPARAN R_FALSE RPARAN StatementNoShortIf R_ELSE Statement N'''
-	p[0] = Node("IfThenElseStatement", [p[1],p[2]],[],order='cc',code=p[1].code + p[2].code + ['label: ' + p[1].next])
+	p[2].breaklist[:] = [i+len(p[1].code) for i in p[2].breaklist]
+	p[2].continuelist[:] = [i+len(p[1].code) for i in p[2].continuelist]
+	print p[1].breaklist + p[2].breaklist, " this is breaklist in if then else statement"
+	p[0] = Node("IfThenElseStatement", [p[1],p[2]],[],order='cc',code=p[1].code + p[2].code + ['label: ' + p[1].next], breaklist = p[1].breaklist + p[2].breaklist, continuelist = p[1].continuelist + p[2].continuelist)
 	# if p[4] == "true" or p[4] == "false":
 	# 	p[0] = Node("IfThenElseStatement", [p[6], p[7]],[p[2], p[4]],order='llcc')
 	# else:
@@ -698,26 +709,31 @@ def p_ifstat(p):
 	s_after = newtemp()
 	print s_else,s_after, "I am in Ifstat"
 	if p[4] == "true":
-		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=p[6].code + ['label: ' + s_else],next=s_after)
+		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=p[6].code + ['label: ' + s_else],next=s_after, breaklist = p[6].breaklist, continuelist = p[6].continuelist)
 	elif p[4] == "false":
-		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=['jump ' +  s_after] + ['label: ' + s_else],next=s_after)
+		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=['jump ' +  s_after] + ['label: ' + s_else],next=s_after, breaklist = p[6].breaklist, continuelist = p[6].continuelist)
 	else:
 		if(not (p[4].typelist[0] == 'BOOL')):
 			print "Syntax error in expression of if then else statement at line " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
 			#sys.exit("Error in IfThenelseStatement")
-		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=p[4].code + ['if ' + p[4].place + ' = 0 jump ' + s_else] + p[6].code + ['goto ' + s_after] +  ['label :' + s_else],next=s_after)
+		p[6].breaklist[:] = [i+len(p[4].code)+1 for i in p[6].breaklist]
+		p[6].continuelist[:] = [i+len(p[4].code)+1 for i in p[6].continuelist]
+		print p[6].breaklist, "breaklist in ifstat"
+		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=p[4].code + ['cmp ' + p[4].place + ' 0']+['je ' + s_else] + p[6].code + ['goto ' + s_after] +  ['label: ' + s_else],next=s_after, breaklist = p[6].breaklist, continuelist = p[6].continuelist)
+
 
 def p_elsestat(p):
 	'elsestat : R_ELSE Statement N'
-	p[0] = Node(p[1],[p[2]],[],order='c',isLeaf=True,code= p[2].code)
+	p[0] = Node(p[1],[p[2]],[],order='c',isLeaf=True,code= p[2].code, breaklist=p[2].breaklist, continuelist = p[2].continuelist)
 	
 def p_IfThenElseStatementNoShortIf(p):
 	'''IfThenElseStatementNoShortIf : ifstat elsenoshortif'''
 	# '''IfThenElseStatementNoShortIf : ifstat R_ELSE StatementNoShortIf N'''
-
-	p[0] = Node("IfThenElseStatementNoShortIf",[p[1],p[2]],[],order='cc',code=p[1].code + p[2].code + ['label: ' + p[1].next ])
+	p[2].breaklist[:] = [i+len(p[1].code) for i in p[2].breaklist]
+	p[2].continuelist[:] = [i+len(p[4].code) for i in p[2].continuelist]
+	p[0] = Node("IfThenElseStatementNoShortIf",[p[1],p[2]],[],order='cc',code=p[1].code + p[2].code + ['label: ' + p[1].next ], breaklist = p[1].breaklist + p[2].breaklist, continuelist = p[1].continuelist + p[2].continuelist)
 	# if p[4] == "true" or p[4] == "false":
 	# 	p[0] = Node("IfThenElseStatementNoShortIf", [p[6], p[8]],[p[2] ,p[4] ,p[7]],order='llclc')
 	# else:
@@ -729,7 +745,7 @@ def p_IfThenElseStatementNoShortIf(p):
 	# 	p[0] = Node("IfThenElseStatementNoShortIf", [p[4], p[6], p[8]],[p[2], p[7]],order='lcclc')
 def p_elsenoshortif(p):
 	'''elsenoshortif : R_ELSE StatementNoShortIf N '''
-	p[0] = Node(p[1],[p[2]],[],order='c',code=p[2].code)
+	p[0] = Node(p[1],[p[2]],[],order='c',code=p[2].code, breaklist = p[2].breaklist, continuelist = p[2].continuelist)
 
 def p_SwitchStatement(p):
 	'''SwitchStatement : Expression R_MATCH BLOCKOPEN SwitchBlockStatementGroups BLOCKCLOSE'''
@@ -742,6 +758,8 @@ def p_SwitchStatement(p):
 		code += ["cmp " + ml[i] + " "  + exp]
 		code += ["je " + p[4].meta[-i-2]]
 	code += ["label: "  + p[4].meta[-1]]
+	# we will backpatch here
+	backpatch(p[4].code, p[4].breaklist, p[4].meta[-1])
 	p[0] = Node(p[2], [p[1],p[4]],[],order='cc',isLeaf=True,code= p[4].code + code)
 
 def p_SwitchBlockStatementGroups(p):
@@ -764,6 +782,7 @@ def p_SwitchBlockStatementGroups(p):
 		p[0].code =  l3 + l1 + p[1].code + l2
 		p[0].place = p[1].place
 		p[0].meta = vl
+		p[0].breaklist = [i+len(l3)+len(l1) for i in p[1].breaklist]
 		# p[0] = Node("SwitchBlockStatementGroups", [p[1]],[],order='c')
 	elif len(p) == 3:
 		vl = []
@@ -775,13 +794,13 @@ def p_SwitchBlockStatementGroups(p):
 			vl.append(k) 
 		l1 = ["label: " + lab]
 		l2 = ["goto " + p[1].meta[-1]]
-
-		p[0] = Node("SwitchBlockStatementGroups", [p[1],p[2]],[],order='cc',meta = vl,code= p[1].code + l1 + p[2].code + l2,place=p[1].place + ",,,"+p[2].place )
+		p[2].breaklist = [i+len(p[1].code)+len(l1) for i in p[2].breaklist]
+		p[0] = Node("SwitchBlockStatementGroups", [p[1],p[2]],[],order='cc',meta = vl,code= p[1].code + l1 + p[2].code + l2,place=p[1].place + ",,,"+p[2].place, breaklist = p[1].breaklist + p[2].breaklist )
 	
 def p_SwitchBlock(p):
 	'''SwitchBlock : SwitchBlockHeader SwitchBlockBody'''
 	if len(p) ==  3:
-		p[0] = Node("SwitchBlock", [p[1], p[2]],[],order='cc',code=  p[2].code ,place= p[1].place)
+		p[0] = Node("SwitchBlock", [p[1], p[2]],[],order='cc',code=  p[2].code ,place= p[1].place, breaklist = p[2].breaklist)
 
 def p_SwitchBlockHeader(p):
 	'SwitchBlockHeader : R_CASE ID IMPLIES1'
@@ -790,7 +809,7 @@ def p_SwitchBlockHeader(p):
 def p_SwitchBlockBody(p):
 	'''SwitchBlockBody : Expression
 					| BlockStatements'''
-	p[0] = Node("SwitchBlockBody", [p[1]],[],order='c',code= p[1].code,place= p[1].place)
+	p[0] = Node("SwitchBlockBody", [p[1]],[],order='c',code= p[1].code,place= p[1].place, breaklist=p[1].breaklist)
 
 
 def p_WhileStatement(p):
@@ -801,13 +820,17 @@ def p_WhileStatement(p):
 	s_after = newtemp()
 	print s_begin , s_after ,"I am in While Statement"
 	if(p[4] == 'true'):
-		code = ["label: "+ s_begin] + p[6].code + ["goto " + s_begin] + ["label: " + s_after]
+		backpatch(p[6].code, p[6].breaklist, s_after)
+		code = ["label: "+ s_begin ] + p[6].code + ["goto " + s_begin] + ["label: " + s_after ]
 		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=code)
 	elif p[4] == 'false':
-		code = ["label: " + s_after]
+		backpatch(p[6].code, p[6].breaklist, s_after)
+		code = ["label: " + s_after ]
 		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=code)
 	else:
-		code = ["label: "+ s_begin] + p[4].code + ['if ' + p[4].place + " = 0 goto " + s_after] + p[6].code + ["goto " + s_begin] + ["label: " + s_after]
+		backpatch(p[6].code, p[6].breaklist, s_after)
+		backpatch(p[6].code, p[6].continuelist, s_begin)
+		code = ["label: "+ s_begin] + p[4].code + ['cmp ' + p[4].place + " 0"] + ['je ' + s_after] + p[6].code + ["goto " + s_begin] + ["label: " + s_after ]
 		if(not (p[4].typelist[0] == 'BOOL')):
 			print "Syntax error in expression of while Statement at line " + str(p.lexer.lineno)
 			global Error
@@ -823,9 +846,14 @@ def p_ForStatement(p):
 	else:
 		sym = "jg"
 	s_begin = newtemp()
+	s_continue = newtemp()
 	s_after = newtemp()
-	print s_begin,s_after,"I am in For statement"
-	code =  p[4].code +  [p[4].place + " = " + p[4].meta[2]] + ["label: " + s_begin] + [" If " + p[4].place + " = " + p[4].meta[3]] + [sym + " " + s_after] + [p[4].place + " = " + p[4].place + " + 1"] + ["goto " + s_begin] + ["label: " + s_after]
+	print s_begin,s_continue, s_after,"I am in For statement"
+	backpatch(p[6].code, p[6].breaklist, s_after)
+	backpatch(p[6].code, p[6].continuelist, s_continue)
+	print p[6].breaklist, "breaklist in forstatement"
+	print p[6].continuelist, "continuelist in forstatement"
+	code =  p[4].code +  [p[4].place + " = " + p[4].meta[2]] + ["label: " + s_begin] +  ["cmp " + p[4].place + " " + p[4].meta[3]] + [sym + " " + s_after] + p[6].code + ["label: "+s_continue]+[p[4].place + " = " + p[4].place + " + 1"] + ["goto " + s_begin] + ["label: " + s_after]
 	p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=code)
 
 def p_M(p):
@@ -898,7 +926,8 @@ def p_BreakStatement(p) :
 	if len(p) ==  4:
 		p[0] = Node(p[1], [], [p[2]],order='l',isLeaf=True)
 	else:
-		p[0] = Node(p[1], [],[],isLeaf = True)
+		code = ['goto ']
+		p[0] = Node(p[1], [],[],isLeaf = True, code = code, breaklist = [0])
 
 def p_ContinueStatement(p):
 	'''ContinueStatement : R_CONTINUE ID EndStatement
@@ -906,7 +935,8 @@ def p_ContinueStatement(p):
 	if len(p) ==  4:
 		p[0] = Node(p[1], [],[p[2]],order='l',isLeaf=True)
 	else:
-		p[0] = Node(p[1], [],[],isLeaf=True)
+		code = ['goto ']
+		p[0] = Node(p[1], [],[],isLeaf=True, code = code, continuelist = [0])
 
 def p_ReturnStatement(p):
 	'''ReturnStatement : R_RETURN Expression EndStatement
@@ -1046,14 +1076,12 @@ def p_EqualityExpression(p):
 		if p[2] == "==":
 			nodename = newtemp()
 			print nodename,"I am in Equality Expression"
-			code = ["if " + " " +  p[1].place + " " + p[2] + " " + p[3].place + " goto nextstat + 3", nodename + " = 0",
-				"goto nextstat + 2", nodename + " = 1"]
+			code = ["cmp "+  p[1].place + " "+ p[3].place] + ['je nextstat + 3'] + [nodename + " = 0"] +["goto nextstat + 2", nodename + " = 1"]
 			p[0] = Node(p[2], [p[1], p[3]], [],typelist = ['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == "!=":
 			nodename = newtemp()
 			print nodename,"I am in Equality Expression"
-			code = ["if " + " " + p[1].place + " " + p[2] + " " + p[3].place + " goto nextstat + 3", nodename + " = 0",
-				"goto nextstat + 2", nodename + " = 1"]
+			code = ["cmp " + p[1].place + " " + p[3].place] + ["je nextstat + 3"] +[nodename + " = 0"] +["goto nextstat + 2", nodename + " = 1"]
 			p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)	
 	else:
 		p[0] = p[1]
@@ -1076,26 +1104,22 @@ def p_RelationalExpression(p):
 		if p[2] == "<":
 			nodename = newtemp()
 			print nodename,"I am in Relational Expression"
-			code = ["if " + " " + p[1].place + " " + p[2] + " " + p[3].place + " goto nextstat + 3", nodename + " = 0",
-				"goto nextstat + 2", nodename + " = 1"]
+			code = ["cmp " + p[1].place + " " + p[3].place] + ["jl nextstat + 3"] +[nodename + " = 0","goto nextstat + 2", nodename + " = 1"]
 			p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename )
 		elif p[2] == ">":
 			nodename = newtemp()
 			print nodename,"I am in Relational Expression"
-			code = ["if " + " " +  p[1].place + " " + p[2] + " " + p[3].place + " goto nextstat + 3", nodename + " = 0",
-				"goto nextstat + 2", nodename + " = 1"]
+			code = ["cmp " + p[1].place + " " + p[3].place] + ["jg nextstat + 3"] + [nodename + " = 0", "goto nextstat + 2", nodename + " = 1"]
 			p[0] = Node(">", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == "<=":
 			nodename = newtemp()
 			print nodename,"I am in Relational Expression"
-			code = ["if " + " " +p[1].place + " " + p[2] + " " + p[3].place + " goto nextstat + 3", nodename + " = 0",
-				"goto nextstat + 2", nodename + " = 1"]
+			code = ["cmp " + p[1].place + " " + p[3].place] + ["jle nextstat + 3"] + [nodename + " = 0", "goto nextstat + 2", nodename + " = 1"]
 			p[0] = Node("<=", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == ">=":
 			nodename = newtemp()
 			print nodename,"I am in Relational Expression"
-			code = ["if " + " " + p[1].place + " " + p[2] + " " + p[3].place + " goto nextstat + 3", nodename + " = 0",
-				"goto nextstat + 2", nodename + " = 1"]
+			code = ["cmp " + p[1].place + " " + p[3].place] + ["jge nextstat + 3"] + [nodename + " = 0", "goto nextstat + 2", nodename + " = 1"]
 			p[0] = Node(">=", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == "instanceof":
 			p[0] = Node("instanceof", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)
