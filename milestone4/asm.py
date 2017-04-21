@@ -69,12 +69,14 @@ def JG(i):
 
 def ADD(i):
     (y, z, l) = (datafile.block[i].op1, datafile.block[i].op2, datafile.block[i].out)
+    #check if z is constant or not if not get the momloc or register if it is already in register since op r_i , r_j is similar to op r_i , M
     try :
         int(z)
         datafile.zprime = z
     except :
         register.getz(z)
         pass
+    #get the register for L to store the output of the operation 
     register.getreg(l, y, i)
     try :
         int(y)
@@ -83,6 +85,95 @@ def ADD(i):
         pass
     register.gety(y)
     datafile.blockout.append("addl " + register.mem(datafile.zprime) + ", " + register.mem(datafile.L))
-    register.UpdateAddressDescriptor(x)
+    register.UpdateAddressDescriptor(l)
     register.freereg(y, i)
     register.freereg(z, i)
+
+def SUB(i):
+    (y, z, l) = (datafile.block[i].op1, datafile.block[i].op2, datafile.block[i].out)
+    #check if z is constant or not if not get the momloc or register if it is already in register since op r_i , r_j is similar to op r_i , M
+    try :
+        int(z)
+        datafile.zprime = z
+    except :
+        register.getz(z)
+        pass
+    #get the register for L to store the output of the operation 
+    register.getreg(l, y, i)
+    try :
+        int(y)
+        data.yprime = y
+    except :
+        pass
+    register.gety(y)
+    datafile.blockout.append("subl " + register.mem(datafile.zprime) + ", " + register.mem(datafile.L))
+    register.UpdateAddressDescriptor(l)
+    register.freereg(y, i)
+    register.freereg(z, i)
+
+def AND(i):
+    (y, z, l) = (datafile.block[i].op1, datafile.block[i].op2, datafile.block[i].out)
+    #check if z is constant or not if not get the momloc or register if it is already in register since op r_i , r_j is similar to op r_i , M
+    try :
+        int(z)
+        datafile.zprime = z
+    except :
+        register.getz(z)
+        pass
+    #get the register for L to store the output of the operation 
+    register.getreg(l, y, i)
+    try :
+        int(y)
+        data.yprime = y
+    except :
+        pass
+    register.gety(y)
+    datafile.blockout.append("and " + register.mem(datafile.zprime) + ", " + register.mem(datafile.L))
+    register.UpdateAddressDescriptor(l)
+    register.freereg(y, i)
+    register.freereg(z, i)
+
+def OR(i):
+    (y, z, l) = (datafile.block[i].op1, datafile.block[i].op2, datafile.block[i].out)
+    #check if z is constant or not if not get the momloc or register if it is already in register since op r_i , r_j is similar to op r_i , M
+    try :
+        int(z)
+        datafile.zprime = z
+    except :
+        register.getz(z)
+        pass
+    #get the register for L to store the output of the operation 
+    register.getreg(l, y, i)
+    try :
+        int(y)
+        data.yprime = y
+    except :
+        pass
+    register.gety(y)
+    datafile.blockout.append("or " + register.mem(datafile.zprime) + ", " + register.mem(datafile.L))
+    register.UpdateAddressDescriptor(l)
+    register.freereg(y, i)
+    register.freereg(z, i)
+
+def XOR(i):
+    (y, z, l) = (datafile.block[i].op1, datafile.block[i].op2, datafile.block[i].out)
+    #check if z is constant or not if not get the momloc or register if it is already in register since op r_i , r_j is similar to op r_i , M
+    try :
+        int(z)
+        datafile.zprime = z
+    except :
+        register.getz(z)
+        pass
+    #get the register for L to store the output of the operation 
+    register.getreg(l, y, i)
+    try :
+        int(y)
+        data.yprime = y
+    except :
+        pass
+    register.gety(y)
+    datafile.blockout.append("xor " + register.mem(datafile.zprime) + ", " + register.mem(datafile.L))
+    register.UpdateAddressDescriptor(l)
+    register.freereg(y, i)
+    register.freereg(z, i)
+
