@@ -7,13 +7,17 @@ class a3acinst:
         self.operator = operator
         self.out = out 
 
-globalsection =  set()
-allvariables = set()
-memorymap = dict()
-setofarray = {}
-numberofvariables = dict()
-numberofarguments = dict()
-instruction = []
-block = []
-currentscope = ""
-blocknuminst = 0
+globalsection =  set() #to store global data
+allvariables = set() #to store all the variables  
+memorymap = dict() #to store the function act record
+setofarray = {}  #set of arrays
+numberofvariables = dict()  #length of variables in particular function
+numberofarguments = dict() #length of arguments 
+instruction = []  #to store the 3AC instruction
+block = []  #to store basic block
+currentscope = "" #name of  currentscope
+blocknuminst = 0  #
+registerlist = ['eax', 'ebx', 'ecx', 'edx'] #registers
+registerdescriptor = {}   #register descriptor
+addressdescriptor = {} #address descriptor 
+symtable = [] #to store next use etc
