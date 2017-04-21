@@ -1,9 +1,17 @@
 import datafile
-
+import register
 asmcode = []
+
+OperatorMap = {'+': ADD, '-': SUB, '*': MUL, '=' : ASSIGN,'/' : DIV, '%' : MOD, '^' : XOR, '&' : AND, '|' : OR, 'ret' : RETURN, 'call' : CALL, 'print' : PRINT, 'read' : READ, 'goto' : GOTO, '<-' : LOAD_ARRAY, '->' : STORE_ARRAY, 'array' : DEC, 'printstr': PRINT_STR, 'cmp': COMPARE, 'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'arg' : ARG, 'label' : LABEL, 'get' : GET}
 
 def blockasmgenerate():
     datafile.blocknuminst = len(datafile.block)
+    register.initializeblock()
+    for i in range(0,len(datafile.block) - 1):
+        datafile.L = None
+        datafile.yprime = None
+        datafile.zprime = None
+        OperatorMap[datafile.block[i].type](i)
 
 def asm():
     print(".section .data")
@@ -40,3 +48,41 @@ def asm():
             else:
                 datafile.block = datafile.instruction[blockbreaker[i] : blockbreaker[i+1]] 
     blockasmgenerate()  
+
+def JE(i):
+    datafile.blockout.append("je " + datafile.block[i].out)
+
+def JNE(i):
+    datafile.blockout.append("jne " + datafile.block[i].out)
+
+def JLE(i):
+    datafile.blockout.append("jle " + datafile.block[i].out)
+
+def JL(i):
+    datafile.blockout.append("jl " + datafile.block[i].out)
+
+def JGE(i):
+    datafile.blockout.append("jge " + datafile.block[i].out)
+
+def JG(i):
+    datafile.blockout.append("jg " + datafile.block[i].out)
+
+def ADD(i):
+    (y, z, l) = (datafile.block[i].op1, datafile.block[i].op2, datafile.block[i].out)
+    try :
+        int(z)
+        datafile.zprime = z
+    except :
+        register.getz(z)
+        pass
+    register.getreg(l, y, i)
+    try :
+        int(y)
+        data.yprime = y
+    except :
+        pass
+    register.gety(y)
+    datafile.blockout.append("addl " + register.mem(datafile.zprime) + ", " + register.mem(datafile.L))
+    register.UpdateAddressDescriptor(x)
+    register.freereg(y, i)
+    register.freereg(z, i)
