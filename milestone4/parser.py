@@ -674,8 +674,8 @@ def p_IfThenStatement(p):
 			global Error
 			Error = Error + 1
 			#sys.exit("ERROR: While statement expression is not BOOL it is "+p[4].typelist[0])
-		p[6].breaklist[:] = [i+len(p[4].code)+1 for i in p[6].breaklist]
-		p[6].continuelist[:] = [i+len(p[4].code)+1 for i in p[6].continuelist]
+		p[6].breaklist[:] = [i+len(p[4].code)+2 for i in p[6].breaklist]
+		p[6].continuelist[:] = [i+len(p[4].code)+2 for i in p[6].continuelist]
 		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=p[4].code + ['cmp ' + p[4].place + ' 0']+['je ' + s_after] + p[6].code + ['label: ' + s_after], breaklist = p[6].breaklist, continuelist = p[6].continuelist)
 
 def p_IfThenElseStatement(p):
@@ -709,17 +709,18 @@ def p_ifstat(p):
 	s_after = newtemp()
 	print s_else,s_after, "I am in Ifstat"
 	if p[4] == "true":
+		print p[6].code[p[6].breaklist[0]], " i am the code in ifstat which should be backpatched"
 		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=p[6].code + ['label: ' + s_else],next=s_after, breaklist = p[6].breaklist, continuelist = p[6].continuelist)
 	elif p[4] == "false":
-		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=['jump ' +  s_after] + ['label: ' + s_else],next=s_after, breaklist = p[6].breaklist, continuelist = p[6].continuelist)
+		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=['jump ' +  s_after] + p[6].code ['label: ' + s_else],next=s_after, breaklist = p[6].breaklist, continuelist = p[6].continuelist)
 	else:
 		if(not (p[4].typelist[0] == 'BOOL')):
 			print "Syntax error in expression of if then else statement at line " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
 			#sys.exit("Error in IfThenelseStatement")
-		p[6].breaklist[:] = [i+len(p[4].code)+1 for i in p[6].breaklist]
-		p[6].continuelist[:] = [i+len(p[4].code)+1 for i in p[6].continuelist]
+		p[6].breaklist[:] = [i+len(p[4].code)+2 for i in p[6].breaklist]
+		p[6].continuelist[:] = [i+len(p[4].code)+2 for i in p[6].continuelist]
 		print p[6].breaklist, "breaklist in ifstat"
 		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=p[4].code + ['cmp ' + p[4].place + ' 0']+['je ' + s_else] + p[6].code + ['goto ' + s_after] +  ['label: ' + s_else],next=s_after, breaklist = p[6].breaklist, continuelist = p[6].continuelist)
 
