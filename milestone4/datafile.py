@@ -14,3 +14,6 @@ setofarray = {}
 numberofvariables = dict()
 numberofarguments = dict()
 instruction = []
+block = []
+currentscope = ""
+blocknuminst = 0

@@ -7,7 +7,6 @@ ARRAY arr 4
 label: t5
 cmp i 4
 jle nextstat + 3
-<<<<<<< HEAD
 = t2 0 t2
 goto nextstat + 2
 = t2 1 t2
@@ -17,17 +16,6 @@ je t6
 = c t3 c
 + i 1 t4
 = i t4 i
-=======
-t2 = 0
-goto nextstat + 2
-t2 = 1
-cmp t2 0
-je t6
-t3 = c + i
-c = t3
-t4 = i + 1
-i = t4
->>>>>>> 48b85ca83007781ab3b94b850693e6ce3ae689ab
 goto t5
 label: t6
 pusharg c
@@ -47,7 +35,6 @@ ret
 label: func_1_main
 arg args
 ARRAY a 4
-<<<<<<< HEAD
 = i 0 i
 cmp i 2
 je nextstat + 3
@@ -58,18 +45,6 @@ cmp t7 0
 je t9
 + i 1 t8
 = i t8 i
-=======
-i = 0
-cmp i 2
-je nextstat + 3
-t7 = 0
-goto nextstat + 2
-t7 = 1
-cmp t7 0
-je t9
-t8 = i + 1
-i = t8
->>>>>>> 48b85ca83007781ab3b94b850693e6ce3ae689ab
 label: t9
 -> a i t10
 = t10 10 t10
@@ -89,20 +64,13 @@ get t18
 label: t28
 cmp c d
 jle nextstat + 3
-<<<<<<< HEAD
 = t19 0 t19
 goto nextstat + 2
 = t19 1 t19
-=======
-t19 = 0
-goto nextstat + 2
-t19 = 1
->>>>>>> 48b85ca83007781ab3b94b850693e6ce3ae689ab
 cmp t19 0
 je t29
 cmp x 2
 je nextstat + 3
-<<<<<<< HEAD
 = t20 0 t20
 goto nextstat + 2
 = t20 1 t20
@@ -120,25 +88,6 @@ goto t28
 -> a i t26
 * x 10 t27
 = t26 t27 t26
-=======
-t20 = 0
-goto nextstat + 2
-t20 = 1
-cmp t20 0
-je t24
-t21 = a -> i
-t21 = xt29
-goto 
-t22 = 1 * 4
-t23 = x + t22
-x = t23
-goto t25
-label: t24
-goto t28
-t26 = a -> i
-t27 = x * 10
-t26 = t27
->>>>>>> 48b85ca83007781ab3b94b850693e6ce3ae689ab
 label: t25
 goto t28
 label: t29
@@ -146,21 +95,12 @@ x = 1
 label: t30
 cmp x 10
 jg t32
-<<<<<<< HEAD
 = l 0 l
 = l 1 l
 goto t31
 goto t32
 label: t31
 + x 1 x
-=======
-l = 0
-l = 1
-goto t31
-goto t32
-label: t31
-x = x + 1
->>>>>>> 48b85ca83007781ab3b94b850693e6ce3ae689ab
 goto t30
 label: t32
 goto t33
@@ -178,7 +118,4 @@ je t36
 cmp c3 x
 je t37
 label: t35
-<<<<<<< HEAD
-=======
 ret
->>>>>>> 48b85ca83007781ab3b94b850693e6ce3ae689ab

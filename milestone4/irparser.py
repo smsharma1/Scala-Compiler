@@ -56,8 +56,8 @@ if __name__ == "__main__" :
             datafile.memorymap[scopefunc] = {}
         if node[1] == 'ret':
             flag = 0
-            datafile.numberofarguments[scopefunc] = (arglength-8)/4
-            datafile.numberofvariables[scopefunc] = ((-1)*locallength - 4)/4
+            datafile.numberofarguments[scopefunc] = arglength
+            datafile.numberofvariables[scopefunc] = locallength
             scopefunc = 0
             arglength = 8
             locallength = -4
@@ -71,7 +71,8 @@ if __name__ == "__main__" :
 
     print datafile.allvariables, "all variables"
     print datafile.globalsection, 'globalsection'
-    print datafile.instruction, 'instruction'
+    for inst in datafile.instruction:
+        print inst.instnumber,inst.type,inst.op1,inst.op2,inst.operator, inst.out 
     print datafile.memorymap, 'memorymap'
     print datafile.numberofarguments, 'numberofarguments'
     print datafile.numberofvariables, 'numberofvariabels'        
