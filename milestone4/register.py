@@ -36,7 +36,7 @@ def getz(z):
         if datafile.addressdescriptor[z] != None:
             datafile.zprime = datafile.addressdescriptor[z]
         else:
-            data.zprime = z
+            datafile.zprime = z
 
 def getreg(l, y, ino, special = None):
     if special != None :
