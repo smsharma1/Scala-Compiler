@@ -2,8 +2,6 @@ import datafile
 import register
 asmcode = []
 
-OperatorMap = {'+': ADD, '-': SUB, '*': MUL, '=' : ASSIGN,'/' : DIV, '%' : MOD, '^' : XOR, '&' : AND, '|' : OR, 'ret' : RETURN, 'call' : CALL, 'print' : PRINT, 'read' : READ, 'goto' : GOTO, '<-' : LOAD_ARRAY, '->' : STORE_ARRAY, 'array' : DEC, 'printstr': PRINT_STR, 'cmp': COMPARE, 'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'arg' : ARG, 'label' : LABEL, 'get' : GET}
-
 def blockasmgenerate():
     datafile.blocknuminst = len(datafile.block)
     register.initializeblock()
@@ -12,6 +10,25 @@ def blockasmgenerate():
         datafile.yprime = None
         datafile.zprime = None
         OperatorMap[datafile.block[i].type](i)
+    i = len(datafile.block) - 1
+    if i == -1:
+        return 
+    if datafile.block[i].type in ['jg', 'jge', 'je', 'jle', 'jne', 'jl', 'goto', 'jump', 'call', 'ret']:
+        register.save()
+        datafile.L = None
+        datafile.yprime = None
+        datafile.zprime = None
+        OperatorMap[datafile.block[i].type](i)
+    else:
+        datafile.L = None
+        datafile.yprime = None
+        datafile.zprime = None
+        OperatorMap[datafile.block[i].type](i)
+        register.save()
+    for b in datafile.blockout:
+        print(b)
+
+
 
 def asm():
     print(".section .data")
@@ -32,7 +49,6 @@ def asm():
         elif datafile.instruction[i].type in ['jg', 'je', 'jle', 'jge', 'je', 'jne', 'ret', 'goto', 'call' ]:
             blockbreaker.add(i+1) #any statement that follows a goto statement is a leader
     blockbreaker.add(len(datafile.instruction))
-    blockbreaker.sorted()
     blockbreaker = sorted(blockbreaker)
     for i in range (0,len(blockbreaker)-1):
         if i == 0:
@@ -177,3 +193,60 @@ def XOR(i):
     register.freereg(y, i)
     register.freereg(z, i)
 
+def PUSH_ARG(i) :
+    var = datafile.block[i].out
+    t = False
+    try:
+        int(var)
+    except:
+        t = True
+    if t and datafile.addressdescriptor[var] != None :
+        place = datafile.addressdescriptor[var]
+    else :
+        place = register.emptyregister(i)
+        datafile.blockout.append("movl  " + register.mem(var) +', ' +  register.mem(place))
+        datafile.registerdescriptor[place] = var
+    datafile.blockout.append("pushl %" + place)
+    pass
+
+def ARG(i):
+    pass
+
+def LABEL(i):
+    pass
+
+def GET(i):
+    datafile.blockout.append("movl %eax, " + register.mem(datafile.block[i].out))
+    pass
+
+#CMP destination, source
+#One has to be in register 
+def COMPARE(i):
+    (y,z) = (datafile.block[i].op1,datafile.block[i].op2)
+    try:
+        int(z)
+        datafile.zprime = z
+    except:
+        datafile.zprime = register.getz(z)
+    
+    try:
+        int(y)
+        datafile.yprime = y
+    except:
+        if datafile.addressdescriptor[y] != None:
+            datafile.L = datafile.addressdescriptor[y]
+        elif datafile.zprime in datafile.allvariables:
+            reg = register.emptyregister(i)
+            datafile.blockout.append("movl " + register.mem(y) + ", " + register.mem(reg))
+            datafile.L = reg
+            datafile.registerdescriptor[reg] = y
+            datafile.addressdescriptor[y] = reg
+        else:
+            datafile.L = y
+
+    datafile.blockout.append("cmp " + register.mem(y) + ", " + register.mem(z))
+    register.freereg(y)
+    register.freereg(z)
+    
+
+OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'arg' : ARG, 'label' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR }

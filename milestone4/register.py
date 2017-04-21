@@ -33,19 +33,19 @@ def initializeblock():
 
 def getz(z):
     if z in datafile.allvariables :
-        if datafile.addressdescriptor[z] != None:
+        if datafile.addressdescriptor[z] != None:   #check if it is in register or not 
             datafile.zprime = datafile.addressdescriptor[z]
         else:
             datafile.zprime = z
 
 def getreg(l, y, ino, special = None):
-    if special != None :
+    if special != None : #special is when operation requires an additional register 
         datafile.L = special
     elif y in datafile.allvariables and datafile.addressdescriptor[y] != None and datafile.symtable[ino][y] == 1000000007:
-        datafile.L = datafile.addressdescriptor[y]  #Consult address descriptor of Y to determine Y'. Prefer a register for Y'. If value of Y not already in L generate
+        datafile.L = datafile.addressdescriptor[y]  #Y is in register and it is dead at this instruction give l = y
         return
     elif datafile.addressdescriptor[l] != None:
-        datafile.L = datafile.addressdescriptor[l]
+        datafile.L = datafile.addressdescriptor[l] #if already posses register give it 
         return
 
     if datafile.L == None:
@@ -65,10 +65,10 @@ def getreg(l, y, ino, special = None):
         else:
             datafile.L = l
     if datafile.L in datafile.registerlist and datafile.registerdescriptor[datafile.L] != None:
-        freereg(datafile.L)
+        storereg(datafile.L)
 
 #this function free the register
-def freereg(regno):
+def storereg(regno):
     if datafile.registerdescriptor[regno] != None :
         datafile.blockout.append("movl %{}, {}".format(regno, mem(datafile.registerdescriptor[regno])))
         datafile.addressdescriptor[data.registerdescriptor[regno]] = None
@@ -121,3 +121,23 @@ def freereg(var, ino):
         if datafile.symtable[ino][var] == 1000000007 and data.addressdescriptor[var] != None:
             datafile.registerdescriptor[datafile.addressdescriptor[var]] = None
             datafile.addressdescriptor[var] = None
+
+#Find the appropriate register and return it
+def emptyregister(var,left=[]):
+    for reg in datafile.registerlist:
+        if datafile.registerdescriptor[reg] == None and reg not in left:
+            return reg
+    nextuse = -1
+    for k in datafile.registerlist:
+        if k in left:
+            continue
+        if nextuse <= datafile.symtable[var][datafile.registerdescriptor[k]]:  #we have to free the register its important 
+            reg = k
+            nextuse = datafile.symtable[ino][datafile.registerdescriptor[k]]
+    storereg(reg)    
+    return reg
+
+#before block ends save all the register
+def save():
+    for reg in datafile.registerlist:
+        storereg(reg)

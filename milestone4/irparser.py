@@ -1,6 +1,7 @@
 import os
 import sys
 import datafile 
+import asm
 
 def checkbranching(name) :
     if name in ['jump', 'call', 'goto', 'label:', 'ARRAY', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne', '->', '<-' ]:
@@ -69,13 +70,14 @@ if __name__ == "__main__" :
             continue
         datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[4]))
 
-    print datafile.allvariables, "all variables"
-    print datafile.globalsection, 'globalsection'
-    for inst in datafile.instruction:
-        print inst.instnumber,inst.type,inst.op1,inst.op2,inst.operator, inst.out 
-    print datafile.memorymap, 'memorymap'
-    print datafile.numberofarguments, 'numberofarguments'
-    print datafile.numberofvariables, 'numberofvariabels'        
+    asm.asm()
+    # print datafile.allvariables, "all variables"
+    # print datafile.globalsection, 'globalsection'
+    # for inst in datafile.instruction:
+    #     print inst.instnumber,inst.type,inst.op1,inst.op2,inst.operator, inst.out 
+    # print datafile.memorymap, 'memorymap'
+    # print datafile.numberofarguments, 'numberofarguments'
+    # print datafile.numberofvariables, 'numberofvariabels'        
 
 
 
