@@ -249,4 +249,40 @@ def COMPARE(i):
     register.freereg(z)
     
 
-OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'arg' : ARG, 'label' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR }
+def MUL(i):
+    (y, z, l) = (datafile.block[i].op1, datafile.block[i].op2, datafile.block[i].out)
+    #check if z is constant or not if not get the momloc or register if it is already in register since op r_i , r_j is similar to op r_i , M
+    try :
+        int(z)
+        datafile.zprime = z
+    except :
+        register.getz(z)
+        pass
+    #get the register for L to store the output of the operation 
+    register.getreg(l, y, i)
+    try :
+        int(y)
+        data.yprime = y
+    except :
+        pass
+    register.gety(y)
+    datafile.blockout.append("imul " + register.mem(datafile.zprime) + ", " + register.mem(datafile.L))
+    register.UpdateAddressDescriptor(l)
+    register.freereg(y, i)
+    register.freereg(z, i)
+
+def ASSIGN(i):
+    (y,l) = (datafile.block[i].op1,datafile.block[i].out)
+    register.getreg(l,y,i)
+    try :
+        int(y)
+        datafile.yprime = y
+    except :
+        pass
+    register.gety(y)
+    register.UpdateAddressDescriptor(l)
+    register.freereg(y, i)
+
+
+
+OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN }
