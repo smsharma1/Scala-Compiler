@@ -34,8 +34,8 @@ def blockasmgenerate():
 
 
 def asm():
-    print(".section .data")
-    f.write(".section .data\n")
+    print("section .data")
+    f.write("section .data\n")
     
     datafile.lineno = datafile.lineno + 1
     for data in datafile.globalsection:
@@ -52,28 +52,29 @@ def asm():
         print("\t.zero {}".format(4*int(datafile.setofarray[data])))
         f.write("\t.zero {}\n".format(4*int(datafile.setofarray[data])))
         datafile.lineno = datafile.lineno + 1
-    print("\n.section.text\n")
-    f.write("\n.section .text\n\n")
+    print("\nsection.text\n")
+    f.write("\nsection .text\n\t")
     datafile.lineno = datafile.lineno + 3
     for k,v in datafile.setofString.items() :
         print('\n'+k+':  .asciz ' +v)
         f.write('\n'+k+':  .asciz ' +v + '\n')
         datafile.lineno = datafile.lineno + 2
 
-    print('\nprintFormat:  .asciz "%d"')
-    f.write('\nprintFormat:  .asciz "%d"\n')
-    datafile.lineno = datafile.lineno + 2
-    print('\nscanFormat:  .asciz "%d"\n')
-    f.write('\nscanFormat:  .asciz "%d"\n\n')
-    datafile.lineno = datafile.lineno + 3
+    # print('\nprintFormat:  .asciz "%d"')
+    # f.write('\nprintFormat:  .asciz "%d"\n')
+    # datafile.lineno = datafile.lineno + 2
+    # print('\nscanFormat:  .asciz "%d"\n')
+    # f.write('\nscanFormat:  .asciz "%d"\n\n')
+    # datafile.lineno = datafile.lineno + 3
     # print datafile.lineno, "lineno"
-    print('_global start\n\n')
-    f.write('_global start\n\n')
+    print('global _start\n\n')
+    f.write('global _start\n\n')
     datafile.lineno = datafile.lineno + 3
     # print datafile.lineno, "lineno"
     print('_start:')
     f.write('_start:\n')
     datafile.lineno = datafile.lineno + 1
+    f.write('call func_1_main\nmov  eax, 1\nint  0x80\n')
     # print datafile.lineno, "lineno"
     blockbreaker = set()
     blockbreaker.add(0)   #starting of first block
