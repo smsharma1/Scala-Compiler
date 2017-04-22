@@ -55,6 +55,17 @@ def asm():
     print("\n.section .text\n")
     f.write("\n.section .text\n\n")
     datafile.lineno = datafile.lineno + 3
+    for k,v in datafile.setofString.items() :
+        print('\n'+k+':  .asciz ' +v)
+        f.write('\n'+k+':  .asciz ' +v + '\n')
+        datafile.lineno = datafile.lineno + 2
+
+    print('\nprintFormat:  .asciz "%d"')
+    f.write('\nprintFormat:  .asciz "%d"\n')
+    datafile.lineno = datafile.lineno + 2
+    print('\nscanFormat:  .asciz "%d"\n')
+    f.write('\nscanFormat:  .asciz "%d"\n\n')
+    datafile.lineno = datafile.lineno + 3
     # print datafile.lineno, "lineno"
     print('.global main\n\n')
     f.write('.global main\n\n')
@@ -392,7 +403,7 @@ def MUL(i):
     register.freereg(z, i)
 
 def ASSIGN(i):
-    (y,l) = (datafile.block[i].op1,datafile.block[i].out)
+    (y,l) = (datafile.block[i].op2,datafile.block[i].out)
     register.getreg(l,y,i)
     try :
         int(y)
@@ -519,5 +530,42 @@ def CALL(i):
     datafile.blockout.append('call ' + datafile.block[i].out)
     datafile.blockout.append('addl ${}, %esp'.format(datafile.numberofarguments[datafile.block[i].out]-8))
 
+def PRINTSTR(i):
+    inno = datafile.block[i].instnumber #because string is already store 
+    datafile.blockout.append('pushl $'  + 'str'+ str(inno))
+    datafile.lineno = datafile.lineno + 1
+    register.save()
+    datafile.blockout.append('call printf')
+    datafile.blockout.append('addl $4, %esp')
+    datafile.lineno = datafile.lineno + 2
 
-OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL }
+def PRINT(i):
+    l = datafile.block[i].out
+    try :
+        datafile.addressdescriptor[l]
+        datafile.blockout.append('pushl %' + datafile.addressdescriptor[l])
+        datafile.lineno = datafile.lineno + 1
+    except :
+        datafile.blockout.append('pushl ' + register.mem(l))
+        datafile.lineno = datafile.lineno + 1
+    datafile.blockout.append('pushl $printFormat')
+    datafile.lineno = datafile.lineno + 1
+    register.save()
+    datafile.blockout.append('call printf')
+    datafile.lineno = datafile.lineno + 1
+    datafile.blockout.append('addl $8, %esp')
+    datafile.lineno = datafile.lineno + 1
+
+def READ(i):
+    l = datafile.block[i].out
+    datafile.blockout.append('pushl $' + l)
+    datafile.lineno = datafile.lineno + 1
+    datafile.blockout.append('pushl $scanFormat')
+    datafile.lineno = datafile.lineno + 1
+    register.save()
+    datafile.blockout.append('call scanf')
+    datafile.lineno = datafile.lineno + 1
+    datafile.blockout.append('addl $8, %esp')
+    datafile.lineno = datafile.lineno + 1
+
+OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL, 'printstr': PRINTSTR, 'print' : PRINT, 'read' : READ }

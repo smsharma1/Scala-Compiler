@@ -1270,10 +1270,25 @@ def p_MethodInvocation(p):
 #	print p[1].name,"name",currentScope.name
 #	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
 	if(p[1].type == "println"):
-		p[0] = Node("MethodInvocation", [p[1], p[3]], [] , order='cc')
+		p[3].place = p[3].place.split(',,,')
+		for i in range(0, len(p[3].typelist)):
+			print p[3].typelist, "hey typelist"
+			if(p[3].typelist[i] == 'STRING'):
+				func_name = "printstr"
+				code.append("printstr " + p[3].place[i])
+			elif(p[3].typelist[i] == 'INT'):
+				func_name = "print"
+				code.append("print " + p[3].place[i])
+
+		p[0] = Node("MethodInvocation", [p[1], p[3]], [] , order='cc',code=p[1].code + p[3].code + code)
 		return
 	if(p[1].type == "read"):
-		p[0] = Node("MethodInvocation", [p[1], p[3]], [] , order='cc')
+		if( len(p[3].type) > 1):
+			print("read() takes only one argument")
+			Error = Error + 1
+		func_name = "read"
+		code.append("read " + p[3].place)
+		p[0] = Node("MethodInvocation", [p[1], p[3]], [] ,code =p[1].code + p[3].code + code, order='cc')
 		return
 	if p[3] == None :
 		if (currentScope.LookUpFunc(p[1].type,[])==False):
