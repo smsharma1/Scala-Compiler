@@ -2,7 +2,8 @@ import datafile
 import register
 asmcode = []
 
-#soure of instruction is tutorials point 
+#soure of instruction is tutorials point
+f = open('asmfile','w') 
 
 def blockasmgenerate():
     datafile.blocknuminst = len(datafile.block)
@@ -28,21 +29,29 @@ def blockasmgenerate():
         OperatorMap[datafile.block[i].type](i)
         register.save()
     for b in datafile.blockout:
-        print(b)
-
+        # print(b)
+        f.write(b + '\n')
 
 
 def asm():
     print(".section .data")
+    f.write(".section .data\n")
     for data in datafile.globalsection:
         print("{}:".format(data))
+        f.write("{}:\n".format(data))
         print("\t.long {}".format(1))
+        f.write("\t.long {}\n".format(1))
     for data in datafile.setofarray.keys():
         print("{}:".format(data))
+        f.write("{}:\n".format(data))
         print("\t.zero {}".format(4*int(datafile.setofarray[data])))
+        f.write("\t.zero {}\n".format(4*int(datafile.setofarray[data])))
     print("\n.section .text\n")
-    print('.global main\n')
+    f.write("\n.section .text\n\n")
+    print('.global main\n\n')
+    f.write('.global main\n\n')
     print('main:')
+    f.write('main:\n')
     blockbreaker = set()
     blockbreaker.add(0)   #starting of first block
     for i in range(0,len(datafile.instruction)):
@@ -57,13 +66,18 @@ def asm():
         if i == 0:
             datafile.block = datafile.instruction[blockbreaker[i]:blockbreaker[i+1]]
         else:
-            if datafile.instruction[blockbreaker[i]] == 'label:':
+            if datafile.instruction[blockbreaker[i]].type == 'label:':
+                print("\n{}:".format(datafile.instruction[blockbreaker[i]].out))
+                f.write("\n{}:\n".format(datafile.instruction[blockbreaker[i]].out))
                 datafile.block = datafile.instruction[blockbreaker[i] + 1 : blockbreaker[i+1]]
                 if datafile.instruction[blockbreaker[i]].op1[0:4] =='func':
                     datafile.currentscope = datafile.instruction[blockbreaker[i]].op1
                     print("\t" + "pushl %ebp")
+                    f.write("pushl %ebp\n")
                     print("\t" + "movl %esp, %ebp")
+                    f.write("movl %esp, %ebp\n")
                     print("\t" + "subl ${}, %esp".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
+                    f.write("subl ${}, %esp\n".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
             else:
                 datafile.block = datafile.instruction[blockbreaker[i] : blockbreaker[i+1]] 
         blockasmgenerate()  
@@ -97,9 +111,10 @@ def ADD(i):
         pass
     #get the register for L to store the output of the operation 
     register.getreg(l, y, i)
+    # print datafile.L , "Hello"
     try :
         int(y)
-        data.yprime = y
+        datafile.yprime = y
     except :
         pass
     register.gety(y)
@@ -121,7 +136,7 @@ def SUB(i):
     register.getreg(l, y, i)
     try :
         int(y)
-        data.yprime = y
+        datafile.yprime = y
     except :
         pass
     register.gety(y)
@@ -143,7 +158,7 @@ def AND(i):
     register.getreg(l, y, i)
     try :
         int(y)
-        data.yprime = y
+        datafile.yprime = y
     except :
         pass
     register.gety(y)
@@ -165,7 +180,7 @@ def OR(i):
     register.getreg(l, y, i)
     try :
         int(y)
-        data.yprime = y
+        datafile.yprime = y
     except :
         pass
     register.gety(y)
@@ -187,7 +202,7 @@ def XOR(i):
     register.getreg(l, y, i)
     try :
         int(y)
-        data.yprime = y
+        datafile.yprime = y
     except :
         pass
     register.gety(y)
@@ -265,7 +280,7 @@ def MUL(i):
     register.getreg(l, y, i)
     try :
         int(y)
-        data.yprime = y
+        datafile.yprime = y
     except :
         pass
     register.gety(y)
