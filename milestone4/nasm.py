@@ -108,6 +108,7 @@ def asm():
                 datafile.lineno = datafile.lineno + 1
                  
         blockasmgenerate()  
+    f.write("int_to_string:\nadd esi,9\nmov byte [esi],0\nmov ebx,10\n.next_digit:\nxor edx,edx\ndiv ebx\nadd dl,'0'\ndec esi\n  mov [esi],dl\ntest eax,eax\njnz .next_digit\nmov eax,esi\nret\n")
 
 def JE(i):
     
@@ -544,12 +545,18 @@ def PRINTSTR(i):
 
 def PRINT(i):
     l = datafile.block[i].out
+    print l , "inside print function in nasm"
     try :
         datafile.addressdescriptor[l]
         datafile.blockout.append('push ' + datafile.addressdescriptor[l])
         datafile.lineno = datafile.lineno + 1
     except :
-        datafile.blockout.append('push ' + register.mem(l))
+        datafile.blockout.append('push eax')
+        datafile.blockout.append('xor eax, eax')
+        datafile.blockout.append('mov ' + 'eax, ' register.mem(l))
+        datafile.blockout.append('push eax')
+        
+
         datafile.lineno = datafile.lineno + 1
     datafile.blockout.append('push printFormat')
     datafile.lineno = datafile.lineno + 1

@@ -4,5 +4,6 @@ object Demo {
 		var b : Int  = 20;
 		var d : Int  = 0;
 		var c : Int = a + b;
+		println(c);
 	}
 } 

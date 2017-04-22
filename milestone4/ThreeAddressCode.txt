@@ -1,4 +1,9 @@
 label: func_1_main
 arg args
-= a 55 a
+= a 10 a
+= b 20 b
+= d 0 d
++ a b t1
+= c t1 c
+print c
 ret
