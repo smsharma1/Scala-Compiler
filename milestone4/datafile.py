@@ -21,7 +21,7 @@ registerlist = ['eax', 'ebx', 'ecx', 'edx'] #registers
 registerdescriptor = {}   #register descriptor
 addressdescriptor = {} #address descriptor 
 symtable = [] #to store next use etc
-
+lineno = 0
 L = None
 yprime = None 
 zprime = None

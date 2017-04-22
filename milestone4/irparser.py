@@ -28,7 +28,7 @@ if __name__ == "__main__" :
     for line in data:
         index = index +1
         #IMP Have to handle nextstat properly
-        listvar = line.split(' ')
+        listvar = line.replace('nextstat + 3','3').replace('nextstat + 2','2').split(' ')
         print index, line , listvar
         node = [index]+[None]*4
         node[1:len(listvar)+1] = listvar

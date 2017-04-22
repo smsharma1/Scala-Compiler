@@ -11,6 +11,7 @@ arr:
 main:
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
@@ -20,62 +21,68 @@ movl %edx, -8(%ebp)
 t5:
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -86,25 +93,28 @@ jmp t5
 t6:
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -124,25 +134,28 @@ movl %esp, %ebp
 subl $-16, %esp
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -168,25 +181,28 @@ movl %esp, %ebp
 subl $-12, %esp
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -215,25 +231,28 @@ movl %esp, %ebp
 subl $-12, %esp
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -268,25 +287,28 @@ movl %esp, %ebp
 subl $-108, %esp
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -320,28 +342,31 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -375,31 +400,34 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -433,35 +461,38 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -495,16 +526,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -512,25 +544,28 @@ movl %edx, -20(%ebp)
 t10:
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -564,16 +599,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -592,25 +628,28 @@ call func_1_sub
 addl $0, %esp
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -644,16 +683,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -680,25 +720,28 @@ call func_1_sub
 addl $0, %esp
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -732,16 +775,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -775,25 +819,28 @@ movl %edx, -44(%ebp)
 t29:
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -827,16 +874,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -867,28 +915,31 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -922,16 +973,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -962,31 +1014,34 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -1020,16 +1075,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -1060,35 +1116,38 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -1122,16 +1181,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -1162,144 +1222,151 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
-movl -60(%ebp), %edx
-cmp -60(%ebp), $0
-movl %edx, -60(%ebp)
-je t30
-cmp -56(%ebp), $2
-je nextstat
-movl $10, %edx
-addl $12, %edx
-movl -12(%ebp), %ecx
-movl -16(%ebp), %ebx
-movl %ebx, -16(%ebp)
-movl %ecx, -12(%ebp)
-movl %edx, -8(%ebp)
-cmp -16(%ebp), $4
-jle nextstat
-movl -20(%ebp), %edx
-movl %edx, -20(%ebp)
-jmp nextstat
-movl -20(%ebp), %edx
-cmp -20(%ebp), $0
-movl %edx, -20(%ebp)
-je t6
-movl -12(%ebp), %edx
-addl -16(%ebp), %edx
-movl -12(%ebp), %ecx
-movl -16(%ebp), %ebx
-addl $1, %ebx
-movl -16(%ebp), %eax
-movl %eax, -16(%ebp)
-movl %ebx, -28(%ebp)
-movl %ecx, -12(%ebp)
-movl %edx, -24(%ebp)
-jmp t5
-movl  -12(%ebp), %eax
-pushl %eax
-movl %eax, -12(%ebp)
-movl %ebp, %esp
-popl %ebp
-ret
-movl  -8(%ebp), %eax
-pushl %eax
-movl %eax, -8(%ebp)
-movl %ebp, %esp
-popl %ebp
-ret
-movl %ebp, %esp
-popl %ebp
-ret
-movl  -4(%ebp), %eax
-pushl %eax
-movl %eax, -4(%ebp)
-movl %ebp, %esp
-popl %ebp
-ret
-movl $2, %eax
-movl a(, %eax, 4 ), %eax
-movl -12(%ebp), %edx
-cmp -12(%ebp), $2
-movl %eax, -8(%ebp)
-movl %edx, -12(%ebp)
-je nextstat
-movl -16(%ebp), %edx
-movl %edx, -16(%ebp)
-jmp nextstat
-movl -16(%ebp), %edx
-cmp -16(%ebp), $0
-movl %edx, -16(%ebp)
-je t10
-movl -12(%ebp), %edx
-addl $1, %edx
-movl -12(%ebp), %ecx
-movl %ecx, -12(%ebp)
-movl %edx, -20(%ebp)
-movl -12(%ebp), %eax
-movl a(, %eax, 4 ), %eax
-movl -12(%ebp), %ebx
-movl args(, %ebx, 4 ), %ebx
-movl -12(%ebp), %edx
-movl -36(%ebp), %ecx
-pushl %edx
-movl %eax, -24(%ebp)
-movl %ebx, -28(%ebp)
-movl %ecx, -36(%ebp)
-movl %edx, -12(%ebp)
-call func_1_sub
-addl $0, %esp
-movl %eax, None
-movl -44(%ebp), %edx
-movl  -48(%ebp), %eax
-pushl %eax
-movl %eax, -48(%ebp)
-movl %edx, -44(%ebp)
-call func_1_sub
-addl $0, %esp
-movl %eax, None
-movl -44(%ebp), %edx
-movl -56(%ebp), %ecx
-movl %ecx, -56(%ebp)
-movl %edx, -44(%ebp)
-cmp -36(%ebp), -44(%ebp)
-jle nextstat
-movl -60(%ebp), %edx
-movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
+movl $10, %edx
+addl $12, %edx
+lineno13
+movl -12(%ebp), %ecx
+movl -16(%ebp), %ebx
+movl %ebx, -16(%ebp)
+movl %ecx, -12(%ebp)
+movl %edx, -8(%ebp)
+cmp -16(%ebp), $4
+jle 25
+movl -20(%ebp), %edx
+movl %edx, -20(%ebp)
+jmp 27
+movl -20(%ebp), %edx
+cmp -20(%ebp), $0
+movl %edx, -20(%ebp)
+je t6
+movl -12(%ebp), %edx
+addl -16(%ebp), %edx
+lineno31
+movl -12(%ebp), %ecx
+movl -16(%ebp), %ebx
+addl $1, %ebx
+lineno34
+movl -16(%ebp), %eax
+movl %eax, -16(%ebp)
+movl %ebx, -28(%ebp)
+movl %ecx, -12(%ebp)
+movl %edx, -24(%ebp)
+jmp t5
+movl  -12(%ebp), %eax
+pushl %eax
+movl %eax, -12(%ebp)
+movl %ebp, %esp
+popl %ebp
+ret
+movl  -8(%ebp), %eax
+pushl %eax
+movl %eax, -8(%ebp)
+movl %ebp, %esp
+popl %ebp
+ret
+movl %ebp, %esp
+popl %ebp
+ret
+movl  -4(%ebp), %eax
+pushl %eax
+movl %eax, -4(%ebp)
+movl %ebp, %esp
+popl %ebp
+ret
+movl $2, %eax
+movl a(, %eax, 4 ), %eax
+movl -12(%ebp), %edx
+cmp -12(%ebp), $2
+movl %eax, -8(%ebp)
+movl %edx, -12(%ebp)
+je 93
+movl -16(%ebp), %edx
+movl %edx, -16(%ebp)
+jmp 95
+movl -16(%ebp), %edx
+cmp -16(%ebp), $0
+movl %edx, -16(%ebp)
+je t10
+movl -12(%ebp), %edx
+addl $1, %edx
+lineno99
+movl -12(%ebp), %ecx
+movl %ecx, -12(%ebp)
+movl %edx, -20(%ebp)
+movl -12(%ebp), %eax
+movl a(, %eax, 4 ), %eax
+movl -12(%ebp), %ebx
+movl args(, %ebx, 4 ), %ebx
+movl -12(%ebp), %edx
+movl -36(%ebp), %ecx
+pushl %edx
+movl %eax, -24(%ebp)
+movl %ebx, -28(%ebp)
+movl %ecx, -36(%ebp)
+movl %edx, -12(%ebp)
+call func_1_sub
+addl $0, %esp
+movl %eax, None
+movl -44(%ebp), %edx
+movl  -48(%ebp), %eax
+pushl %eax
+movl %eax, -48(%ebp)
+movl %edx, -44(%ebp)
+call func_1_sub
+addl $0, %esp
+movl %eax, None
+movl -44(%ebp), %edx
+movl -56(%ebp), %ecx
+movl %ecx, -56(%ebp)
+movl %edx, -44(%ebp)
+cmp -36(%ebp), -44(%ebp)
+jle 135
+movl -60(%ebp), %edx
+movl %edx, -60(%ebp)
+jmp 137
+movl -60(%ebp), %edx
+cmp -60(%ebp), $0
+movl %edx, -60(%ebp)
+je t30
+cmp -56(%ebp), $2
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -1333,16 +1400,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -1373,44 +1441,47 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
 je t25
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -1444,16 +1515,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -1484,19 +1556,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -1507,25 +1579,28 @@ movl %eax, -68(%ebp)
 jmp t30
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -1559,16 +1634,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -1599,19 +1675,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -1624,6 +1700,7 @@ movl $1, %edx
 imul $4, %edx
 movl -56(%ebp), %ecx
 addl %edx, %ecx
+lineno156
 movl -56(%ebp), %ebx
 movl %ebx, -56(%ebp)
 movl %ecx, -76(%ebp)
@@ -1633,25 +1710,28 @@ jmp t26
 t25:
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -1685,16 +1765,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -1725,19 +1806,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -1750,6 +1831,7 @@ movl $1, %edx
 imul $4, %edx
 movl -56(%ebp), %ecx
 addl %edx, %ecx
+lineno156
 movl -56(%ebp), %ebx
 movl %ebx, -56(%ebp)
 movl %ecx, -76(%ebp)
@@ -1758,25 +1840,28 @@ jmp t26
 jmp t29
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -1810,16 +1895,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -1850,19 +1936,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -1875,6 +1961,7 @@ movl $1, %edx
 imul $4, %edx
 movl -56(%ebp), %ecx
 addl %edx, %ecx
+lineno156
 movl -56(%ebp), %ebx
 movl %ebx, -56(%ebp)
 movl %ecx, -76(%ebp)
@@ -1891,25 +1978,28 @@ movl %edx, -80(%ebp)
 t26:
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -1943,16 +2033,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -1983,19 +2074,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -2008,6 +2099,7 @@ movl $1, %edx
 imul $4, %edx
 movl -56(%ebp), %ecx
 addl %edx, %ecx
+lineno156
 movl -56(%ebp), %ebx
 movl %ebx, -56(%ebp)
 movl %ecx, -76(%ebp)
@@ -2025,25 +2117,28 @@ jmp t29
 t30:
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -2077,16 +2172,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -2117,19 +2213,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -2142,6 +2238,7 @@ movl $1, %edx
 imul $4, %edx
 movl -56(%ebp), %ecx
 addl %edx, %ecx
+lineno156
 movl -56(%ebp), %ebx
 movl %ebx, -56(%ebp)
 movl %ecx, -76(%ebp)
@@ -2161,25 +2258,28 @@ movl %edx, -56(%ebp)
 t31:
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -2213,16 +2313,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -2253,19 +2354,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -2278,6 +2379,7 @@ movl $1, %edx
 imul $4, %edx
 movl -56(%ebp), %ecx
 addl %edx, %ecx
+lineno156
 movl -56(%ebp), %ebx
 movl %ebx, -56(%ebp)
 movl %ecx, -76(%ebp)
@@ -2297,25 +2399,28 @@ cmp -56(%ebp), $10
 jg t33
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -2349,16 +2454,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -2389,19 +2495,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -2414,6 +2520,7 @@ movl $1, %edx
 imul $4, %edx
 movl -56(%ebp), %ecx
 addl %edx, %ecx
+lineno156
 movl -56(%ebp), %ebx
 movl %ebx, -56(%ebp)
 movl %ecx, -76(%ebp)
@@ -2436,25 +2543,28 @@ movl %edx, -88(%ebp)
 jmp t32
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -2488,16 +2598,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -2528,19 +2639,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -2553,6 +2664,7 @@ movl $1, %edx
 imul $4, %edx
 movl -56(%ebp), %ecx
 addl %edx, %ecx
+lineno156
 movl -56(%ebp), %ebx
 movl %ebx, -56(%ebp)
 movl %ecx, -76(%ebp)
@@ -2578,25 +2690,28 @@ jmp t33
 t32:
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -2630,16 +2745,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -2670,19 +2786,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -2695,6 +2811,7 @@ movl $1, %edx
 imul $4, %edx
 movl -56(%ebp), %ecx
 addl %edx, %ecx
+lineno156
 movl -56(%ebp), %ebx
 movl %ebx, -56(%ebp)
 movl %ecx, -76(%ebp)
@@ -2718,31 +2835,35 @@ jmp t32
 jmp t33
 movl -56(%ebp), %edx
 addl $1, %edx
+lineno189
 movl %edx, -56(%ebp)
 jmp t31
 
 t33:
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -2776,16 +2897,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -2816,19 +2938,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -2841,6 +2963,7 @@ movl $1, %edx
 imul $4, %edx
 movl -56(%ebp), %ecx
 addl %edx, %ecx
+lineno156
 movl -56(%ebp), %ebx
 movl %ebx, -56(%ebp)
 movl %ecx, -76(%ebp)
@@ -2864,6 +2987,7 @@ jmp t32
 jmp t33
 movl -56(%ebp), %edx
 addl $1, %edx
+lineno189
 movl %edx, -56(%ebp)
 jmp t31
 jmp t34
@@ -2871,25 +2995,28 @@ jmp t34
 t35:
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -2923,16 +3050,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -2963,19 +3091,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -2988,6 +3116,7 @@ movl $1, %edx
 imul $4, %edx
 movl -56(%ebp), %ecx
 addl %edx, %ecx
+lineno156
 movl -56(%ebp), %ebx
 movl %ebx, -56(%ebp)
 movl %ecx, -76(%ebp)
@@ -3011,6 +3140,7 @@ jmp t32
 jmp t33
 movl -56(%ebp), %edx
 addl $1, %edx
+lineno189
 movl %edx, -56(%ebp)
 jmp t31
 jmp t34
@@ -3019,25 +3149,28 @@ jmp t36
 t37:
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -3071,16 +3204,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -3111,19 +3245,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -3136,6 +3270,7 @@ movl $1, %edx
 imul $4, %edx
 movl -56(%ebp), %ecx
 addl %edx, %ecx
+lineno156
 movl -56(%ebp), %ebx
 movl %ebx, -56(%ebp)
 movl %ecx, -76(%ebp)
@@ -3159,6 +3294,7 @@ jmp t32
 jmp t33
 movl -56(%ebp), %edx
 addl $1, %edx
+lineno189
 movl %edx, -56(%ebp)
 jmp t31
 jmp t34
@@ -3168,25 +3304,28 @@ jmp t36
 t38:
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -3220,16 +3359,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -3260,19 +3400,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -3285,6 +3425,7 @@ movl $1, %edx
 imul $4, %edx
 movl -56(%ebp), %ecx
 addl %edx, %ecx
+lineno156
 movl -56(%ebp), %ebx
 movl %ebx, -56(%ebp)
 movl %ecx, -76(%ebp)
@@ -3308,6 +3449,7 @@ jmp t32
 jmp t33
 movl -56(%ebp), %edx
 addl $1, %edx
+lineno189
 movl %edx, -56(%ebp)
 jmp t31
 jmp t34
@@ -3318,25 +3460,28 @@ jmp t36
 t34:
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -3370,16 +3515,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -3410,19 +3556,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -3435,6 +3581,7 @@ movl $1, %edx
 imul $4, %edx
 movl -56(%ebp), %ecx
 addl %edx, %ecx
+lineno156
 movl -56(%ebp), %ebx
 movl %ebx, -56(%ebp)
 movl %ecx, -76(%ebp)
@@ -3458,6 +3605,7 @@ jmp t32
 jmp t33
 movl -56(%ebp), %edx
 addl $1, %edx
+lineno189
 movl %edx, -56(%ebp)
 jmp t31
 jmp t34
@@ -3468,25 +3616,28 @@ cmp -92(%ebp), -56(%ebp)
 je t35
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -3520,16 +3671,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -3560,19 +3712,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -3585,6 +3737,7 @@ movl $1, %edx
 imul $4, %edx
 movl -56(%ebp), %ecx
 addl %edx, %ecx
+lineno156
 movl -56(%ebp), %ebx
 movl %ebx, -56(%ebp)
 movl %ecx, -76(%ebp)
@@ -3608,6 +3761,7 @@ jmp t32
 jmp t33
 movl -56(%ebp), %edx
 addl $1, %edx
+lineno189
 movl %edx, -56(%ebp)
 jmp t31
 jmp t34
@@ -3620,25 +3774,28 @@ cmp -96(%ebp), -56(%ebp)
 je t37
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -3672,16 +3829,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -3712,19 +3870,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -3737,6 +3895,7 @@ movl $1, %edx
 imul $4, %edx
 movl -56(%ebp), %ecx
 addl %edx, %ecx
+lineno156
 movl -56(%ebp), %ebx
 movl %ebx, -56(%ebp)
 movl %ecx, -76(%ebp)
@@ -3760,6 +3919,7 @@ jmp t32
 jmp t33
 movl -56(%ebp), %edx
 addl $1, %edx
+lineno189
 movl %edx, -56(%ebp)
 jmp t31
 jmp t34
@@ -3776,25 +3936,28 @@ je t38
 t36:
 movl $10, %edx
 addl $12, %edx
+lineno13
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 movl %ebx, -16(%ebp)
 movl %ecx, -12(%ebp)
 movl %edx, -8(%ebp)
 cmp -16(%ebp), $4
-jle nextstat
+jle 25
 movl -20(%ebp), %edx
 movl %edx, -20(%ebp)
-jmp nextstat
+jmp 27
 movl -20(%ebp), %edx
 cmp -20(%ebp), $0
 movl %edx, -20(%ebp)
 je t6
 movl -12(%ebp), %edx
 addl -16(%ebp), %edx
+lineno31
 movl -12(%ebp), %ecx
 movl -16(%ebp), %ebx
 addl $1, %ebx
+lineno34
 movl -16(%ebp), %eax
 movl %eax, -16(%ebp)
 movl %ebx, -28(%ebp)
@@ -3828,16 +3991,17 @@ movl -12(%ebp), %edx
 cmp -12(%ebp), $2
 movl %eax, -8(%ebp)
 movl %edx, -12(%ebp)
-je nextstat
+je 93
 movl -16(%ebp), %edx
 movl %edx, -16(%ebp)
-jmp nextstat
+jmp 95
 movl -16(%ebp), %edx
 cmp -16(%ebp), $0
 movl %edx, -16(%ebp)
 je t10
 movl -12(%ebp), %edx
 addl $1, %edx
+lineno99
 movl -12(%ebp), %ecx
 movl %ecx, -12(%ebp)
 movl %edx, -20(%ebp)
@@ -3868,19 +4032,19 @@ movl -56(%ebp), %ecx
 movl %ecx, -56(%ebp)
 movl %edx, -44(%ebp)
 cmp -36(%ebp), -44(%ebp)
-jle nextstat
+jle 135
 movl -60(%ebp), %edx
 movl %edx, -60(%ebp)
-jmp nextstat
+jmp 137
 movl -60(%ebp), %edx
 cmp -60(%ebp), $0
 movl %edx, -60(%ebp)
 je t30
 cmp -56(%ebp), $2
-je nextstat
+je 144
 movl -64(%ebp), %edx
 movl %edx, -64(%ebp)
-jmp nextstat
+jmp 146
 movl -64(%ebp), %edx
 cmp -64(%ebp), $0
 movl %edx, -64(%ebp)
@@ -3893,6 +4057,7 @@ movl $1, %edx
 imul $4, %edx
 movl -56(%ebp), %ecx
 addl %edx, %ecx
+lineno156
 movl -56(%ebp), %ebx
 movl %ebx, -56(%ebp)
 movl %ecx, -76(%ebp)
@@ -3916,6 +4081,7 @@ jmp t32
 jmp t33
 movl -56(%ebp), %edx
 addl $1, %edx
+lineno189
 movl %edx, -56(%ebp)
 jmp t31
 jmp t34
