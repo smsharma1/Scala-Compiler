@@ -27,6 +27,7 @@ if __name__ == "__main__" :
     locallength = -4
     for line in data:
         index = index +1
+        #IMP Have to handle nextstat properly
         listvar = line.split(' ')
         print index, line , listvar
         node = [index]+[None]*4
@@ -67,6 +68,9 @@ if __name__ == "__main__" :
             continue
         if node[3] == '`':
             datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],None,'Unary',node[4]))
+            continue
+        if node[1] in ['je','jne','jg','jge','jl','jle','goto','pusharg','call','label:']:
+            datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[2]))
             continue
         datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[4]))
 

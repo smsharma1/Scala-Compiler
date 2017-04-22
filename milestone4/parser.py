@@ -853,8 +853,8 @@ def p_ForStatement(p):
 	backpatch(p[6].code, p[6].breaklist, s_after)
 	backpatch(p[6].code, p[6].continuelist, s_continue)
 	print p[6].breaklist, "breaklist in forstatement"
-	print p[6].continuelist, "continuelist in forstatement"
-	code =  p[4].code +  [p[4].place + " = " + p[4].meta[2]] + ["label: " + s_begin] +  ["cmp " + p[4].place + " " + p[4].meta[3]] + [sym + " " + s_after] + p[6].code + ["label: "+s_continue]+["+ " + p[4].place + " 1 " + p[4].place ] + ["goto " + s_begin] + ["label: " + s_after]
+	print p[6].continuelist, "continuelist in forstatement" 
+	code =  p[4].code +  ["= " + p[4].place + " " + p[4].meta[2] + " " + p[4].place] + ["label: " + s_begin] +  ["cmp " + p[4].place + " " + p[4].meta[3]] + [sym + " " + s_after] + p[6].code + ["label: "+s_continue]+["+ " + p[4].place + " 1 " + p[4].place ] + ["goto " + s_begin] + ["label: " + s_after]
 	p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=code)
 
 def p_M(p):
@@ -994,7 +994,6 @@ def p_Assignment(p):
 				#| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
 	#print p[1].typelist,"hello ",p[3].typelist
 	if p[2]=="=":
-		
 		code = ["= " + p[1].place + " " + p[3].place + " " + p[1].place]
 		# print p[1].typelist[0], " " ,  p[3].typelist[0], "assignment"
 		if not allowed(p[1].typelist[0], p[3].typelist[0]) :
@@ -1266,7 +1265,7 @@ def p_MethodInvocation(p):
 	global esp
 	global ebp
 	code =[]
-	func_name = p[1].type
+	func_name = 'func_' +str(currentScope.parent.uid) + "_" + p[1].type
 	temp = None
 #	print p[1].name,"name",currentScope.name
 #	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
@@ -1441,7 +1440,7 @@ def p_ArrayAccess(p):
 	if len(p) == 5:
 		temp = newtemp()
 		print temp, "I am in ArrayAcess"
-		l1 = [ "-> " + p[1].place + " " +p[3].place + " " + temp]
+		l1 = [ "<- " + p[1].place + " " +p[3].place + " " + temp]
 		# l1 = [ temp + " = " + p[1].place + " -> " + p[3].place]
 		p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]],typelist =[p[1].typelist[0][5:]] , order="clcl",code=p[3].code + l1,place = temp)
 	else:
@@ -1453,7 +1452,7 @@ def p_ArrayAccess(p):
 		# column = l[2]
 		l1 = [ "* " + temp2 + " " +p[3].place + " " + temp2]
 		code = [temp2 + ' = ' + str(column) ]+ ["* " + temp2 + " " +p[3].place + " " + temp2] + [ "+ " + temp2 + " " +p[5].place + " " + temp2]
-		l1 = [ "-> " + p[1].place + " " + temp2 + " " + temp]
+		l1 = [ "<- " + p[1].place + " " + temp2 + " " + temp]
 		# l1 = [ temp + " = " + p[1].place + " -> " + temp2]
 		p[0] = Node('ArrayAccess',[p[1],p[3],p[5]],[p[2],p[4],p[6]],typelist=[p[1].typelist[0][10:]], order="clclcl",code= p[5].code+p[3].code + code+l1,place=temp)
 

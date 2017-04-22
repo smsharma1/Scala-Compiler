@@ -71,7 +71,7 @@ def getreg(l, y, ino, special = None):
 def storereg(regno):
     if datafile.registerdescriptor[regno] != None :
         datafile.blockout.append("movl %{}, {}".format(regno, mem(datafile.registerdescriptor[regno])))
-        datafile.addressdescriptor[data.registerdescriptor[regno]] = None
+        datafile.addressdescriptor[datafile.registerdescriptor[regno]] = None
         datafile.registerdescriptor[regno] = None
 
 #this function is used to find memory 
@@ -93,8 +93,9 @@ def mem(var):
 
 #This function is for Yprime 
 def gety(var):
+    print var , "in gety"
     if var in datafile.allvariables:
-        if datafile.addressdescriptor[y] != None:
+        if datafile.addressdescriptor[var] != None:
             datafile.yprime = datafile.addressdescriptor[var]
         else:
             datafile.yprime = var
@@ -118,7 +119,7 @@ def UpdateAddressDescriptor(x):
 #Free the register
 def freereg(var, ino):
     if var in datafile.allvariables :
-        if datafile.symtable[ino][var] == 1000000007 and data.addressdescriptor[var] != None:
+        if datafile.symtable[ino][var] == 1000000007 and datafile.addressdescriptor[var] != None:
             datafile.registerdescriptor[datafile.addressdescriptor[var]] = None
             datafile.addressdescriptor[var] = None
 

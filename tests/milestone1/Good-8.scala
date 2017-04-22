@@ -21,6 +21,7 @@ object Good8 {
 	 }
 	def main(args: Array[String]) {
         	var a = new Array[Int](4);
+			a[2] = 10;
 			var i : Int = 0;
 			if( i == 2 )
 			{
