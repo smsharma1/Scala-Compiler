@@ -1,8 +1,16 @@
 label: func_1_main
 arg args
+<<<<<<< HEAD
 = a 10 a
 = b 20 b
 = d 0 d
 + a b t1
 = c t1 c
+=======
+= a 55 a
+printstr Double quote (\") is escaped
+print 10
+print 12
+read a
+>>>>>>> bcca2d95f36254088b6da2cf6b41fe197eaa8d10
 ret

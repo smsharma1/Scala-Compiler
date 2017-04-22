@@ -11,6 +11,7 @@ globalsection =  set() #to store global data
 allvariables = set() #to store all the variables  
 memorymap = dict() #to store the function act record
 setofarray = {}  #set of arrays
+setofString = {}
 numberofvariables = dict()  #length of variables in particular function
 numberofarguments = dict() #length of arguments 
 instruction = []  #to store the 3AC instruction
@@ -21,7 +22,7 @@ registerlist = ['eax', 'ebx', 'ecx', 'edx'] #registers
 registerdescriptor = {}   #register descriptor
 addressdescriptor = {} #address descriptor 
 symtable = [] #to store next use etc
-
+lineno = 0
 L = None
 yprime = None 
 zprime = None

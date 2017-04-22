@@ -28,7 +28,7 @@ if __name__ == "__main__" :
     for line in data:
         index = index +1
         #IMP Have to handle nextstat properly
-        listvar = line.split(' ')
+        listvar = line.replace('nextstat + 3','3').replace('nextstat + 2','2').split(' ')
         print index, line , listvar
         node = [index]+[None]*4
         node[1:len(listvar)+1] = listvar
@@ -56,6 +56,8 @@ if __name__ == "__main__" :
             flag = 1
             scopefunc = node[2]
             datafile.memorymap[scopefunc] = {}
+        if node[1] == 'printstr' :
+            datafile.setofString['str'+str(node[0])] = ' '.join(node[2:])
         if node[1] == 'ret':
             flag = 0
             datafile.numberofarguments[scopefunc] = arglength
@@ -69,7 +71,7 @@ if __name__ == "__main__" :
         if node[3] == '`':
             datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],None,'Unary',node[4]))
             continue
-        if node[1] in ['je','jne','jg','jge','jl','jle','goto','pusharg','call','label:']:
+        if node[1] in ['je','jne','jg','jge','jl','jle','goto','pusharg','call','label:','print','printstr','read']:
             datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[2]))
             continue
         datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[4]))
@@ -79,7 +81,7 @@ if __name__ == "__main__" :
     # print datafile.globalsection, 'globalsection'
     # for inst in datafile.instruction:
     #     print inst.instnumber,inst.type,inst.op1,inst.op2,inst.operator, inst.out 
-    # print datafile.memorymap, 'memorymap'
+    print datafile.memorymap, 'memorymap'
     # print datafile.numberofarguments, 'numberofarguments'
     # print datafile.numberofvariables, 'numberofvariabels'        
 

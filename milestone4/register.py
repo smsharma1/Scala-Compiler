@@ -71,6 +71,7 @@ def getreg(l, y, ino, special = None):
 def storereg(regno):
     if datafile.registerdescriptor[regno] != None :
         datafile.blockout.append("movl %{}, {}".format(regno, mem(datafile.registerdescriptor[regno])))
+        datafile.lineno = datafile.lineno + 1
         datafile.addressdescriptor[datafile.registerdescriptor[regno]] = None
         datafile.registerdescriptor[regno] = None
 
@@ -93,7 +94,7 @@ def mem(var):
 
 #This function is for Yprime 
 def gety(var):
-    print var , "in gety"
+    # print var , "in gety"
     if var in datafile.allvariables:
         if datafile.addressdescriptor[var] != None:
             datafile.yprime = datafile.addressdescriptor[var]
@@ -101,6 +102,7 @@ def gety(var):
             datafile.yprime = var
     if datafile.yprime != datafile.L :
         datafile.blockout.append("movl " + mem(datafile.yprime) + ", " + mem(datafile.L))
+        datafile.lineno = datafile.lineno + 1
 
 #Update the addressdescriptor after operation is done
 def UpdateAddressDescriptor(x):
