@@ -52,7 +52,7 @@ def asm():
         print("\t.zero {}".format(4*int(datafile.setofarray[data])))
         f.write("\t.zero {}\n".format(4*int(datafile.setofarray[data])))
         datafile.lineno = datafile.lineno + 1
-    print("\n.section .text\n")
+    print("\n.section.text\n")
     f.write("\n.section .text\n\n")
     datafile.lineno = datafile.lineno + 3
     for k,v in datafile.setofString.items() :
@@ -67,12 +67,12 @@ def asm():
     f.write('\nscanFormat:  .asciz "%d"\n\n')
     datafile.lineno = datafile.lineno + 3
     # print datafile.lineno, "lineno"
-    print('.global main\n\n')
-    f.write('.global main\n\n')
+    print('_global start\n\n')
+    f.write('_global start\n\n')
     datafile.lineno = datafile.lineno + 3
     # print datafile.lineno, "lineno"
-    print('main:')
-    f.write('main:\n')
+    print('_start:')
+    f.write('_start:\n')
     datafile.lineno = datafile.lineno + 1
     # print datafile.lineno, "lineno"
     blockbreaker = set()
@@ -96,14 +96,14 @@ def asm():
             datafile.block = datafile.instruction[blockbreaker[i] + 1 : blockbreaker[i+1]]
             if datafile.instruction[blockbreaker[i]].op1[0:4] =='func':
                 datafile.currentscope = datafile.instruction[blockbreaker[i]].op1
-                print("\t" + "pushl %ebp")
-                f.write("pushl %ebp\n")
+                print("\t" + "push ebp")
+                f.write("push ebp\n")
                 datafile.lineno = datafile.lineno + 1
-                print("\t" + "movl %esp, %ebp")
-                f.write("movl %esp, %ebp\n")
+                print("\t" + "mov ebp, esp")
+                f.write("mov ebp, esp\n")
                 datafile.lineno = datafile.lineno + 1
-                print("\t" + "subl ${}, %esp".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
-                f.write("subl ${}, %esp\n".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
+                print("\t" + "sub esp, {}".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
+                f.write("sub esp, {}\n".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
                 datafile.lineno = datafile.lineno + 1
                  
         blockasmgenerate()  
@@ -211,7 +211,7 @@ def ADD(i):
         pass
     register.gety(y)
     
-    datafile.blockout.append("addl " + register.mem(datafile.zprime) + ", " + register.mem(datafile.L))
+    datafile.blockout.append("add " + register.mem(datafile.L) + ", "+register.mem(datafile.zprime) )
     # datafile.blockout.append("lineno" + str(datafile.lineno))
     datafile.lineno = datafile.lineno + 1
     register.UpdateAddressDescriptor(l)
@@ -236,7 +236,7 @@ def SUB(i):
         pass
     register.gety(y)
     
-    datafile.blockout.append("subl " + register.mem(datafile.zprime) + ", " + register.mem(datafile.L))
+    datafile.blockout.append("sub " + register.mem(datafile.L)  + ", " + register.mem(datafile.zprime) )
     datafile.lineno = datafile.lineno + 1    
     register.UpdateAddressDescriptor(l)
     register.freereg(y, i)
@@ -260,7 +260,7 @@ def AND(i):
         pass
     register.gety(y)
     
-    datafile.blockout.append("and " + register.mem(datafile.zprime) + ", " + register.mem(datafile.L))
+    datafile.blockout.append("and " + register.mem(datafile.L)  + ", " + register.mem(datafile.zprime))
     datafile.lineno = datafile.lineno + 1    
     register.UpdateAddressDescriptor(l)
     register.freereg(y, i)
@@ -284,7 +284,7 @@ def OR(i):
         pass
     register.gety(y)
     
-    datafile.blockout.append("or " + register.mem(datafile.zprime) + ", " + register.mem(datafile.L))
+    datafile.blockout.append("or " +register.mem(datafile.L) + ", " + register.mem(datafile.zprime) )
     datafile.lineno = datafile.lineno + 1    
     register.UpdateAddressDescriptor(l)
     register.freereg(y, i)
@@ -308,7 +308,7 @@ def XOR(i):
         pass
     register.gety(y)
     
-    datafile.blockout.append("xor " + register.mem(datafile.zprime) + ", " + register.mem(datafile.L))
+    datafile.blockout.append("xor " + register.mem(datafile.L) + ", " + register.mem(datafile.zprime) )
     datafile.lineno = datafile.lineno + 1
     register.UpdateAddressDescriptor(l)
     register.freereg(y, i)
@@ -326,10 +326,10 @@ def PUSH_ARG(i) :
         place = datafile.addressdescriptor[var]
     else :
         place = register.emptyregister(i)
-        datafile.blockout.append("movl  " + register.mem(var) +', ' +  register.mem(place))
+        datafile.blockout.append("mov  " +  register.mem(place) +', ' + register.mem(var))
         datafile.lineno = datafile.lineno + 1
         datafile.registerdescriptor[place] = var
-    datafile.blockout.append("pushl %" + place)
+    datafile.blockout.append("push" + place)
     datafile.lineno = datafile.lineno + 1
     pass
 
@@ -341,7 +341,7 @@ def LABEL(i):
 
 def GET(i):
     
-    datafile.blockout.append("movl %eax, " + register.mem(datafile.block[i].out))
+    datafile.blockout.append("mov "+register.mem(datafile.block[i].out)+", eax" )
     datafile.lineno = datafile.lineno + 1
     pass
 
@@ -363,7 +363,7 @@ def COMPARE(i):
             datafile.L = datafile.addressdescriptor[y]
         elif datafile.zprime in datafile.allvariables:
             reg = register.emptyregister(i)
-            datafile.blockout.append("movl " + register.mem(y) + ", " + register.mem(reg))
+            datafile.blockout.append("mov " + register.mem(reg) + ", " + register.mem(y) )
             datafile.lineno = datafile.lineno + 1
             datafile.L = reg
             datafile.registerdescriptor[reg] = y
@@ -371,7 +371,7 @@ def COMPARE(i):
         else:
             datafile.L = y
 
-    datafile.blockout.append("cmp " + register.mem(y) + ", " + register.mem(z))
+    datafile.blockout.append("cmp " +  register.mem(z) + ", " +register.mem(y))
     datafile.lineno = datafile.lineno + 1
     register.freereg(y,i)
     register.freereg(z,i)
@@ -394,7 +394,7 @@ def MUL(i):
         pass
     register.gety(y)
     
-    datafile.blockout.append("imul " + register.mem(datafile.zprime) + ", " + register.mem(datafile.L))
+    datafile.blockout.append("imul " +  register.mem(datafile.zprime) + ", " + register.mem(datafile.L))
     datafile.lineno = datafile.lineno + 1
     register.UpdateAddressDescriptor(l)
     register.freereg(y, i)
@@ -415,11 +415,11 @@ def ASSIGN(i):
 def RETURN(i):
     
     if datafile.block[i].out != None:
-        datafile.blockout.append("movl " + register.mem(datafile.block[i].out) + ", %eax")
+        datafile.blockout.append("mov " +"eax, " + register.mem(datafile.block[i].out))
         datafile.lineno = datafile.lineno + 1
-    datafile.blockout.append("movl %ebp, %esp")
+    datafile.blockout.append("mov esp, ebp")
     datafile.lineno = datafile.lineno + 1
-    datafile.blockout.append("popl %ebp")
+    datafile.blockout.append("pop ebp")
     datafile.lineno = datafile.lineno + 1
     datafile.blockout.append("ret")
     datafile.lineno = datafile.lineno + 1
@@ -429,12 +429,12 @@ def DIV(i):
     (l, y, z) = (datafile.block[i].out, datafile.block[i].op1, datafile.block[i].op2)
     register.storereg('edx')
     
-    datafile.blockout.append("xor %edx, %edx")
+    datafile.blockout.append("xor edx, edx")
     datafile.lineno = datafile.lineno + 1
     try :
         int(z)
         reg = register.emptyregister(i,['edx', 'eax'])
-        datafile.blockout.append('mov $' + z + ", %" + reg)
+        datafile.blockout.append('mov ' + reg + ", " + z)
         datafile.lineno = datafile.lineno + 1
         datafile.zprime = reg
     except :
@@ -449,7 +449,7 @@ def DIV(i):
     except :
         pass
     register.gety(y)
-    datafile.blockout.append("idivl " + register.mem(datafile.zprime))
+    datafile.blockout.append("idiv " + register.mem(datafile.zprime))
     datafile.lineno = datafile.lineno + 1
     register.UpdateAddressDescriptor(l)
     register.freereg(y, i)
@@ -459,13 +459,13 @@ def MOD(i):
     (l, y, z) = (datafile.block[i].out, datafile.block[i].op1, datafile.block[i].op2)
     register.storereg('edx')
     
-    datafile.blockout.append("xor %edx, %edx")
+    datafile.blockout.append("xor edx, edx")
     datafile.lineno = datafile.lineno + 1
     try :
         int(z)
         datafile.zprime = z
         reg = register.emptyregister(i,['eax', 'edx'])
-        datafile.blockout.append('mov $' + z + ", %" + reg)
+        datafile.blockout.append('mov ' + reg + ", " + z)
         datafile.lineno = datafile.lineno + 1
         datafile.zprime = reg
 
@@ -481,7 +481,7 @@ def MOD(i):
     except :
         pass
     register.gety(y)
-    datafile.blockout.append("idivl " + register.mem(datafile.zprime))
+    datafile.blockout.append("idiv " + register.mem(datafile.zprime))
     datafile.lineno = datafile.lineno + 1
     datafile.L = 'edx'    #since the remainder is store in edx 
     register.update(l)
@@ -498,10 +498,14 @@ def ARRAYLOAD(i):
         register.getz(z)
     
     reg = register.emptyregister(i)
-    datafile.blockout.append("movl " + register.mem(datafile.zprime) + ", " + register.mem(reg))
+    datafile.blockout.append("mov " + register.mem(reg) + ", " + register.mem(datafile.zprime) )
     datafile.lineno = datafile.lineno + 1
     datafile.L = reg
-    datafile.blockout.append("movl " + y + "(, %" + reg +", 4 ), %" + reg )
+
+
+
+
+    datafile.blockout.append("mov " + y + "(, %" + reg +", 4 ), %" + reg )
     datafile.lineno = datafile.lineno + 1
     register.UpdateAddressDescriptor(l)
 
@@ -526,44 +530,44 @@ def CALL(i):
     
     datafile.lineno = datafile.lineno + 1
     datafile.blockout.append('call ' + datafile.block[i].out)
-    datafile.blockout.append('addl ${}, %esp'.format(datafile.numberofarguments[datafile.block[i].out]-8))
+    datafile.blockout.append('add esp, {}'.format(datafile.numberofarguments[datafile.block[i].out]-8))
 
 def PRINTSTR(i):
     inno = datafile.block[i].instnumber #because string is already store 
-    datafile.blockout.append('pushl $'  + 'str'+ str(inno))
+    datafile.blockout.append('push '  + 'str'+ str(inno))
     datafile.lineno = datafile.lineno + 1
     register.save()
     datafile.blockout.append('call printf')
-    datafile.blockout.append('addl $4, %esp')
+    datafile.blockout.append('add esp, 4')
     datafile.lineno = datafile.lineno + 2
 
 def PRINT(i):
     l = datafile.block[i].out
     try :
         datafile.addressdescriptor[l]
-        datafile.blockout.append('pushl %' + datafile.addressdescriptor[l])
+        datafile.blockout.append('push ' + datafile.addressdescriptor[l])
         datafile.lineno = datafile.lineno + 1
     except :
-        datafile.blockout.append('pushl ' + register.mem(l))
+        datafile.blockout.append('push ' + register.mem(l))
         datafile.lineno = datafile.lineno + 1
-    datafile.blockout.append('pushl $printFormat')
+    datafile.blockout.append('push printFormat')
     datafile.lineno = datafile.lineno + 1
     register.save()
     datafile.blockout.append('call printf')
     datafile.lineno = datafile.lineno + 1
-    datafile.blockout.append('addl $8, %esp')
+    datafile.blockout.append('add esp, 8')
     datafile.lineno = datafile.lineno + 1
 
 def READ(i):
     l = datafile.block[i].out
-    datafile.blockout.append('pushl $' + l)
+    datafile.blockout.append('push ' + l)
     datafile.lineno = datafile.lineno + 1
-    datafile.blockout.append('pushl $scanFormat')
+    datafile.blockout.append('push scanFormat')
     datafile.lineno = datafile.lineno + 1
     register.save()
     datafile.blockout.append('call scanf')
     datafile.lineno = datafile.lineno + 1
-    datafile.blockout.append('addl $8, %esp')
+    datafile.blockout.append('add esp, 8')
     datafile.lineno = datafile.lineno + 1
 
 OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL, 'printstr': PRINTSTR, 'print' : PRINT, 'read' : READ }

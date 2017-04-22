@@ -1,7 +1,7 @@
 import os
 import sys
 import datafile 
-import asm
+import nasm
 
 def checkbranching(name) :
     if name in ['jump', 'call', 'goto', 'label:', 'ARRAY', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne', '->', '<-' ]:
@@ -40,11 +40,11 @@ if __name__ == "__main__" :
                     if(flag):
                         if node[i] not in datafile.memorymap[scopefunc].keys():
                             if node[i] == 'arg':
-                                datafile.memorymap[scopefunc][node[i+1]] = str(arglength) + '(%ebp)'
+                                datafile.memorymap[scopefunc][node[i+1]] = '['+str(arglength) + ' + ebp]'
                                 # print datafile.memorymap[scopefunc][node[i+1]],"asdfg"
                                 arglength = arglength + 4
                             elif (node[i] not in datafile.globalsection):
-                                datafile.memorymap[scopefunc][node[i]] = str(locallength) + '(%ebp)'
+                                datafile.memorymap[scopefunc][node[i]] = '['+ str(locallength) + ' + ebp]'
                                 locallength = locallength - 4
                                 #TODO procedure under procedure 
                     else:
@@ -76,7 +76,7 @@ if __name__ == "__main__" :
             continue
         datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[4]))
 
-    asm.asm()
+    nasm.asm()
     # print datafile.allvariables, "all variables"
     # print datafile.globalsection, 'globalsection'
     # for inst in datafile.instruction:
