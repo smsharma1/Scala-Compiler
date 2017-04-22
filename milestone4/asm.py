@@ -88,26 +88,24 @@ def asm():
     for i in range (0,len(blockbreaker)-1):
         if i == 0:
             datafile.block = datafile.instruction[blockbreaker[i]:blockbreaker[i+1]]
-        else:
-            if datafile.instruction[blockbreaker[i]].type == 'label:':
-                print("\n{}:".format(datafile.instruction[blockbreaker[i]].out))
-                f.write("\n{}:\n".format(datafile.instruction[blockbreaker[i]].out))
-                # f.write("lineno" + str(datafile.lineno) + "\n")
-                datafile.lineno = datafile.lineno + 2
-                datafile.block = datafile.instruction[blockbreaker[i] + 1 : blockbreaker[i+1]]
-                if datafile.instruction[blockbreaker[i]].op1[0:4] =='func':
-                    datafile.currentscope = datafile.instruction[blockbreaker[i]].op1
-                    print("\t" + "pushl %ebp")
-                    f.write("pushl %ebp\n")
-                    datafile.lineno = datafile.lineno + 1
-                    print("\t" + "movl %esp, %ebp")
-                    f.write("movl %esp, %ebp\n")
-                    datafile.lineno = datafile.lineno + 1
-                    print("\t" + "subl ${}, %esp".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
-                    f.write("subl ${}, %esp\n".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
-                    datafile.lineno = datafile.lineno + 1
-            else:
-                datafile.block = datafile.instruction[blockbreaker[i] : blockbreaker[i+1]] 
+        if datafile.instruction[blockbreaker[i]].type == 'label:':
+            print("\n{}:".format(datafile.instruction[blockbreaker[i]].out))
+            f.write("\n{}:\n".format(datafile.instruction[blockbreaker[i]].out))
+            # f.write("lineno" + str(datafile.lineno) + "\n")
+            datafile.lineno = datafile.lineno + 2
+            datafile.block = datafile.instruction[blockbreaker[i] + 1 : blockbreaker[i+1]]
+            if datafile.instruction[blockbreaker[i]].op1[0:4] =='func':
+                datafile.currentscope = datafile.instruction[blockbreaker[i]].op1
+                print("\t" + "pushl %ebp")
+                f.write("pushl %ebp\n")
+                datafile.lineno = datafile.lineno + 1
+                print("\t" + "movl %esp, %ebp")
+                f.write("movl %esp, %ebp\n")
+                datafile.lineno = datafile.lineno + 1
+                print("\t" + "subl ${}, %esp".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
+                f.write("subl ${}, %esp\n".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
+                datafile.lineno = datafile.lineno + 1
+                 
         blockasmgenerate()  
 
 def JE(i):

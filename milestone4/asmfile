@@ -12,6 +12,11 @@ scanFormat:  .asciz "%d"
 .global main
 
 main:
+
+func_1_main:
+pushl %ebp
+movl %esp, %ebp
+subl $-36, %esp
 movl $55, %edx
 pushl $str4
 movl %edx, -8(%ebp)
