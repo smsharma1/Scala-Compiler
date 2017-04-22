@@ -103,6 +103,7 @@ def JG(i):
 def ADD(i):
     (y, z, l) = (datafile.block[i].op1, datafile.block[i].op2, datafile.block[i].out)
     #check if z is constant or not if not get the momloc or register if it is already in register since op r_i , r_j is similar to op r_i , M
+    print y,", ", z, ", ", l ,"these are y and l in add function"
     try :
         int(z)
         datafile.zprime = z
@@ -289,7 +290,8 @@ def MUL(i):
     register.freereg(z, i)
 
 def ASSIGN(i):
-    (y,l) = (datafile.block[i].op1,datafile.block[i].out)
+    (y,l) = (datafile.block[i].op2,datafile.block[i].out)
+    print y, l, "these are y and l "
     register.getreg(l,y,i)
     try :
         int(y)
