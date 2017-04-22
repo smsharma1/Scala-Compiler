@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 section .data
 
 section .text
@@ -26,3 +27,31 @@ mov [-24 + ebp], edx
 mov esp, ebp
 pop ebp
 ret
+=======
+.section .data
+
+.section .text
+
+
+printFormat:  .asciz "%d"
+
+scanFormat:  .asciz "%d"
+
+.global main
+
+main:
+
+func_1_main:
+pushl %ebp
+movl %esp, %ebp
+subl $-16, %esp
+movl $55, %edx
+movl %edx, -8(%ebp)
+movl %ebp, %esp
+popl %ebp
+ret
+
+xor %eax,%eax
+ret 
+
+>>>>>>> f1a5df979c8d3bc50434b8f709656126daa37925
