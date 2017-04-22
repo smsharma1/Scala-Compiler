@@ -7,20 +7,16 @@ printFormat:  .asciz "%d"
 
 scanFormat:  .asciz "%d"
 
-.global main
+_global start
 
-main:
+_start:
 
 func_1_main:
-pushl %ebp
-movl %esp, %ebp
-subl $-16, %esp
-movl $55, %edx
-movl %edx, -8(%ebp)
-movl %ebp, %esp
-popl %ebp
+push ebp
+mov ebp, esp
+sub esp, -16
+mov edx, 55
+mov [-8 + ebp], edx
+mov esp, ebp
+pop ebp
 ret
-
-xor %eax,%eax
-ret 
-
