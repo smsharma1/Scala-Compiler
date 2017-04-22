@@ -70,7 +70,7 @@ def getreg(l, y, ino, special = None):
 #this function free the register
 def storereg(regno):
     if datafile.registerdescriptor[regno] != None :
-        datafile.blockout.append("movl %{}, {}".format(regno, mem(datafile.registerdescriptor[regno])))
+        datafile.blockout.append("mov {}, {}".format(mem(datafile.registerdescriptor[regno]), regno))
         datafile.lineno = datafile.lineno + 1
         datafile.addressdescriptor[datafile.registerdescriptor[regno]] = None
         datafile.registerdescriptor[regno] = None
@@ -79,10 +79,10 @@ def storereg(regno):
 def mem(var):
     try :
         int(var)
-        return '$'+str(var)
+        return str(var)
     except :
         if var in datafile.registerlist:
-            return '%'+var
+            return var
         else:
             if datafile.currentscope != "" and var in datafile.memorymap[datafile.currentscope].keys():
                 return datafile.memorymap[datafile.currentscope][var]
@@ -101,7 +101,7 @@ def gety(var):
         else:
             datafile.yprime = var
     if datafile.yprime != datafile.L :
-        datafile.blockout.append("movl " + mem(datafile.yprime) + ", " + mem(datafile.L))
+        datafile.blockout.append("mov " + mem(datafile.L) + ", " + mem(datafile.yprime))
         datafile.lineno = datafile.lineno + 1
 
 #Update the addressdescriptor after operation is done
