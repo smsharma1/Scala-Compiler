@@ -1,0 +1,38 @@
+     1                                  section .data
+     2                                  
+     3 00000000 446F75626C65207175-     str4 db 'Double quote (\") is escaped',0xa
+     4 00000009 6F746520285C222920-
+     5 00000012 697320657363617065-
+     6 0000001B 640A               
+     7                                  len_str4 equ $ - str4
+     8                                  
+     9                                  section .text
+    10                                  	global _start
+    11                                  
+    12                                  _start:
+    13 00000000 E807000000              call func_1_main
+    14 00000005 B801000000              mov  eax, 1
+    15 0000000A CD80                    int  0x80
+    16                                  
+    17                                  func_1_main:
+    18 0000000C 55                      push ebp
+    19 0000000D 89E5                    mov ebp, esp
+    20 0000000F 83ECDC                  sub esp, -36
+    21 00000012 BA37000000              mov edx, 55
+    22 00000017 50                      push eax
+    23 00000018 53                      push ebx
+    24 00000019 51                      push ecx
+    25 0000001A 52                      push edx
+    26 0000001B BA1D000000              mov edx,len_str4
+    27 00000020 B9[00000000]            mov ecx,str4
+    28 00000025 BB01000000              mov ebx,1
+    29 0000002A B804000000              mov eax,4
+    30 0000002F CD80                    int 0x80
+    31 00000031 58                      pop eax
+    32 00000032 5B                      pop ebx
+    33 00000033 59                      pop ecx
+    34 00000034 5A                      pop edx
+    35 00000035 8955F8                  mov [-8 + ebp], edx
+    36 00000038 89EC                    mov esp, ebp
+    37 0000003A 5D                      pop ebp
+    38 0000003B C3                      ret

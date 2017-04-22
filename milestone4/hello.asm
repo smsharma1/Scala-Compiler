@@ -1,16 +1,44 @@
-section	.text
-   global _start     ;must be declared for linker (ld)
-	
-_start:	            ;tells linker entry point
-   mov	edx,len     ;message length
-   mov	ecx,msg     ;message to write
-   mov	ebx,1       ;file descriptor (stdout)
-   mov	eax,4       ;system call number (sys_write)
-   int	0x80        ;call kernel
-	
-   mov	eax,1       ;system call number (sys_exit)
-   int	0x80        ;call kernel
+section .data                           ;Data segment
+   userMsg db 'Please enter a number: ' ;Ask the user to enter a number
+   lenUserMsg equ $-userMsg             ;The length of the message
+   dispMsg db 'You have entered: '
+   lenDispMsg equ $-dispMsg                 
 
-section	.data
-msg db 'Hello, world!', 0xa  ;string to be printed
-len equ $ - msg     ;length of the string
+section .bss           ;Uninitialized data
+   num resb 5
+	
+section .text          ;Code Segment
+   global _start
+	
+_start:                ;User prompt
+   mov eax, 4
+   mov ebx, 1
+   mov ecx, userMsg
+   mov edx, lenUserMsg
+   int 80h
+
+   ;Read and store the user input
+   mov eax, 3
+   mov ebx, 2
+   mov ecx, num  
+   mov edx, 5          ;5 bytes (numeric, 1 for sign) of that information
+   int 80h
+	
+   ;Output the message 'The entered number is: '
+   mov eax, 4
+   mov ebx, 1
+   mov ecx, dispMsg
+   mov edx, lenDispMsg
+   int 80h  
+
+   ;Output the number entered
+   mov eax, 4
+   mov ebx, 1
+   mov ecx, num
+   mov edx, 5
+   int 80h  
+    
+   ; Exit code
+   mov eax, 1
+   mov ebx, 0
+   int 80h

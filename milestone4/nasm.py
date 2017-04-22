@@ -36,7 +36,11 @@ def blockasmgenerate():
 def asm():
     print("section .data")
     f.write("section .data\n")
-    
+    for k,v in datafile.setofString.items() :
+        print('\n'+k+ ' db '  + "'" + v + "',0xa")
+        f.write('\n'+k+ ' db '  + "'" + v + "',0xa\n")
+        f.write("len_" + k + " equ $ - " + k + "\n")
+        datafile.lineno = datafile.lineno + 2
     datafile.lineno = datafile.lineno + 1
     for data in datafile.globalsection:
         print("{}:".format(data))
@@ -55,10 +59,10 @@ def asm():
     print("\nsection.text\n")
     f.write("\nsection .text\n\t")
     datafile.lineno = datafile.lineno + 3
-    for k,v in datafile.setofString.items() :
-        print('\n'+k+':  .asciz ' +v)
-        f.write('\n'+k+':  .asciz ' +v + '\n')
-        datafile.lineno = datafile.lineno + 2
+    # for k,v in datafile.setofString.items() :
+    #     print('\n'+k+':  .asciz ' +v)
+    #     f.write('\n'+k+':  .asciz ' +v + '\n')
+    #     datafile.lineno = datafile.lineno + 2
 
     # print('\nprintFormat:  .asciz "%d"')
     # f.write('\nprintFormat:  .asciz "%d"\n')
@@ -534,13 +538,16 @@ def CALL(i):
     datafile.blockout.append('add esp, {}'.format(datafile.numberofarguments[datafile.block[i].out]-8))
 
 def PRINTSTR(i):
+    for reg in datafile.registerlist:
+        datafile.blockout.append('push ' + reg)
     inno = datafile.block[i].instnumber #because string is already store 
-    datafile.blockout.append('push '  + 'str'+ str(inno))
-    datafile.lineno = datafile.lineno + 1
-    register.save()
-    datafile.blockout.append('call printf')
-    datafile.blockout.append('add esp, 4')
-    datafile.lineno = datafile.lineno + 2
+    datafile.blockout.append('mov edx,'  + 'len_str'+ str(inno))
+    datafile.blockout.append('mov ecx,str' + str(inno))
+    datafile.blockout.append('mov ebx,1')
+    datafile.blockout.append('mov eax,4')
+    datafile.blockout.append('int 0x80')
+    for reg in datafile.registerlist:
+        datafile.blockout.append('pop ' + reg)
 
 def PRINT(i):
     l = datafile.block[i].out
@@ -559,16 +566,25 @@ def PRINT(i):
     datafile.blockout.append('add esp, 8')
     datafile.lineno = datafile.lineno + 1
 
-def READ(i):
+def READ(i): 
+    for reg in datafile.registerlist:
+        datafile.blockout.append("push " + reg)
     l = datafile.block[i].out
-    datafile.blockout.append('push ' + l)
-    datafile.lineno = datafile.lineno + 1
-    datafile.blockout.append('push scanFormat')
-    datafile.lineno = datafile.lineno + 1
-    register.save()
-    datafile.blockout.append('call scanf')
-    datafile.lineno = datafile.lineno + 1
-    datafile.blockout.append('add esp, 8')
-    datafile.lineno = datafile.lineno + 1
+    datafile.blockout.append("mov ecx,ebp")
+    k = register.mem(l)
+    if k[1] == "-":
+        datafile.blockout.append("mov edx," + k[2])
+        datafile.blockout.append("sub ecx,edx")
+    else:
+        datafile.blockout.append("mov edx," + k[1])
+        datafile.blockout.append("add ecx,edx")
+
+    datafile.blockout.append("mov eax,3")
+    datafile.blockout.append("mov ebx,2")
+    datafile.blockout.append("mov edx,4")
+    datafile.blockout.append("int 80h")
+    for reg in datafile.registerlist:
+        datafile.blockout.append("pop " + reg)
+
 
 OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL, 'printstr': PRINTSTR, 'print' : PRINT, 'read' : READ }
