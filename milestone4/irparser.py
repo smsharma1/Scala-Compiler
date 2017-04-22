@@ -68,6 +68,9 @@ if __name__ == "__main__" :
         if node[3] == '`':
             datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],None,'Unary',node[4]))
             continue
+        if node[1] in ['je','jne','jg','jge','jl','jle','goto','pusharg','call']:
+            datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[2]))
+            continue
         datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[4]))
 
     asm.asm()

@@ -2,6 +2,8 @@ import datafile
 import register
 asmcode = []
 
+#soure of instruction is tutorials point 
+
 def blockasmgenerate():
     datafile.blocknuminst = len(datafile.block)
     register.initializeblock()
@@ -50,6 +52,7 @@ def asm():
             blockbreaker.add(i+1) #any statement that follows a goto statement is a leader
     blockbreaker.add(len(datafile.instruction))
     blockbreaker = sorted(blockbreaker)
+    # print blockbreaker, "blockbreaker"
     for i in range (0,len(blockbreaker)-1):
         if i == 0:
             datafile.block = datafile.instruction[blockbreaker[i]:blockbreaker[i+1]]
@@ -63,7 +66,7 @@ def asm():
                     print("\t" + "subl ${}, %esp".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
             else:
                 datafile.block = datafile.instruction[blockbreaker[i] : blockbreaker[i+1]] 
-    blockasmgenerate()  
+        blockasmgenerate()  
 
 def JE(i):
     datafile.blockout.append("je " + datafile.block[i].out)
@@ -245,8 +248,8 @@ def COMPARE(i):
             datafile.L = y
 
     datafile.blockout.append("cmp " + register.mem(y) + ", " + register.mem(z))
-    register.freereg(y)
-    register.freereg(z)
+    register.freereg(y,i)
+    register.freereg(z,i)
     
 
 def MUL(i):
@@ -283,6 +286,93 @@ def ASSIGN(i):
     register.UpdateAddressDescriptor(l)
     register.freereg(y, i)
 
+def RETURN(i):
+    if datafile.block[i].out != None:
+        datafile.blockout.append("movl " + register.mem(datafile.block[i].out) + ", %eax")
+    datafile.blockout.append("movl %ebp, %esp")
+    datafile.blockout.append("popl %ebp")
+    datafile.blockout.append("ret")
+    datafile.currentscope = ""
+
+def DIV(i):
+    (l, y, z) = (datafile.block[i].out, datafile.block[i].op1, datafile.block[i].op2)
+    register.storereg('edx')
+    datafile.blockout.append("xor %edx, %edx")
+    try :
+        int(z)
+        reg = register.emptyregister(i,['edx', 'eax'])
+        datafile.blockout.append('mov $' + z + ", %" + reg)
+        datafile.zprime = reg
+    except :
+        if datafile.addressdescriptor[z] == 'eax':
+            register.storereg(z)
+        register.getz(z)
+        pass
+    register.getreg(l, y, i, 'eax')
+    try :
+        int(y)
+        datafile.yprime = y
+    except :
+        pass
+    register.gety(y)
+    datafile.blockout.append("idivl " + register.mem(datafile.zprime))
+    register.UpdateAddressDescriptor(l)
+    register.freereg(y, i)
+    register.freereg(z, i)
+
+def MOD(i):
+    (l, y, z) = (datafile.block[i].out, datafile.block[i].op1, datafile.block[i].op2)
+    register.storereg('edx')
+    datafile.blockout.append("xor %edx, %edx")
+    try :
+        int(z)
+        datafile.zprime = z
+        reg = register.emptyregister(i,['eax', 'edx'])
+        datafile.blockout.append('mov $' + z + ", %" + reg)
+        datafile.zprime = reg
+
+    except :
+        if datafile.addressdescriptor[z] == 'eax':
+            register.storereg(z)
+        register.getz(z)
+        pass
+    register.getreg(l, y, i, 'eax')
+    try :
+        int(y)
+        datafile.yprime = y
+    except :
+        pass
+    register.gety(y)
+    datafile.blockout.append("idivl " + register.mem(datafile.zprime))
+    datafile.L = 'edx'    #since the remainder is store in edx 
+    register.update(l)
+    register_allocator.freereg(y, i)
+    register_allocator.freereg(z, i)
+
+def ARRAYLOAD(i):
+    (l, y, z) = (datafile.block[i].out, datafile.block[i].op1, datafile.block[i].op2)
+    #sb $0, array1($3)  index addressing mode is used here
+    try:
+        int(z)
+        datafile.zprime = z
+    except:
+        register.getz(z)
+    reg = register.emptyregister(i)
+    datafile.blockout.append("movl " + register.mem(datafile.zprime) + ", " + register.mem(reg))
+    datafile.L = reg
+    datafile.blockout.append("movl " + y + "(, %" + reg +", 4 ), %" + reg )
+    register.UpdateAddressDescriptor(l)
 
 
-OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN }
+def GOTO(i):
+    datafile.blockout.append('jmp ' + datafile.block[i].out)
+
+def ARRAY(i):
+    pass
+
+def CALL(i):
+    datafile.blockout.append('call ' + datafile.block[i].out)
+    datafile.blockout.append('addl ${}, %esp'.format(datafile.numberofarguments[datafile.block[i].out]-8))
+
+
+OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL }
