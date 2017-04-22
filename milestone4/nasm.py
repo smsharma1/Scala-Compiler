@@ -417,9 +417,9 @@ def ASSIGN(i):
     register.UpdateAddressDescriptor(l)
     register.freereg(y, i)
 
-def RETURN(i):
-    
+def RETURN(i):  
     if datafile.block[i].out != None:
+        # print datafile.block[i].out, "haghahahah"
         datafile.blockout.append("mov " +"eax, " + register.mem(datafile.block[i].out))
         datafile.lineno = datafile.lineno + 1
     datafile.blockout.append("mov esp, ebp")
@@ -546,8 +546,10 @@ def PRINTSTR(i):
     datafile.blockout.append('mov ebx,1')
     datafile.blockout.append('mov eax,4')
     datafile.blockout.append('int 0x80')
-    for reg in datafile.registerlist:
-        datafile.blockout.append('pop ' + reg)
+    datafile.blockout.append('pop edx')
+    datafile.blockout.append('pop ecx')
+    datafile.blockout.append('pop ebx')
+    datafile.blockout.append('pop eax')
 
 def PRINT(i):
     l = datafile.block[i].out
@@ -583,8 +585,11 @@ def READ(i):
     datafile.blockout.append("mov ebx,2")
     datafile.blockout.append("mov edx,4")
     datafile.blockout.append("int 80h")
-    for reg in datafile.registerlist:
-        datafile.blockout.append("pop " + reg)
-
+    # for reg in datafile.registerlist.reverse():
+    #     datafile.blockout.append("pop " + reg)
+    datafile.blockout.append('pop edx')
+    datafile.blockout.append('pop ecx')
+    datafile.blockout.append('pop ebx')
+    datafile.blockout.append('pop eax')
 
 OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL, 'printstr': PRINTSTR, 'print' : PRINT, 'read' : READ }

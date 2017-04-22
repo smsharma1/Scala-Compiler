@@ -1,7 +1,8 @@
 section .data
-
-str4 db 'Double quote (\") is escaped',0xa
-len_str4 equ $ - str4
+a:
+	.zero 16
+arr:
+	.zero 16
 
 section .text
 	global _start
@@ -11,40 +12,4136 @@ call func_1_main
 mov  eax, 1
 int  0x80
 
-func_1_main:
+func_1_add:
 push ebp
 mov ebp, esp
 sub esp, -36
-mov edx, 55
-push eax
-push ebx
-push ecx
-push edx
-mov edx,len_str4
-mov ecx,str4
-mov ebx,1
-mov eax,4
-int 0x80
-pop eax
-pop ebx
-pop ecx
-pop edx
-push eax
-push ebx
-push ecx
-push edx
-mov ecx,ebp
-mov edx,8
-sub ecx,edx
-mov eax,3
-mov ebx,2
-mov edx,4
-int 80h
-pop eax
-pop ebx
-pop ecx
-pop edx
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
 mov [-8 + ebp], edx
+
+t5:
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+
+t6:
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+
+func_1_sub1:
+push ebp
+mov ebp, esp
+sub esp, -16
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+
+func_1_sub2:
+push ebp
+mov ebp, esp
+sub esp, -12
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+
+func_1_sub:
+push ebp
+mov ebp, esp
+sub esp, -12
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+
+func_1_main:
+push ebp
+mov ebp, esp
+sub esp, -108
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+
+t10:
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+
+t29:
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+cmp [-44 + ebp], [-36 + ebp]
+jle 177
+
+t25:
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+cmp [-44 + ebp], [-36 + ebp]
+jle 177
+jmp t29
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+cmp [-44 + ebp], [-36 + ebp]
+jle 177
+jmp t29
+jmp t29
+
+t26:
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+cmp [-44 + ebp], [-36 + ebp]
+jle 177
+jmp t29
+jmp t29
+jmp t29
+
+t30:
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+cmp [-44 + ebp], [-36 + ebp]
+jle 177
+jmp t29
+jmp t29
+jmp t29
+mov edx, 1
+mov [-56 + ebp], edx
+
+t31:
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+cmp [-44 + ebp], [-36 + ebp]
+jle 177
+jmp t29
+jmp t29
+jmp t29
+mov edx, 1
+mov [-56 + ebp], edx
+cmp 10, [-56 + ebp]
+jg t33
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+cmp [-44 + ebp], [-36 + ebp]
+jle 177
+jmp t29
+jmp t29
+jmp t29
+mov edx, 1
+mov [-56 + ebp], edx
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+cmp [-44 + ebp], [-36 + ebp]
+jle 177
+jmp t29
+jmp t29
+jmp t29
+mov edx, 1
+mov [-56 + ebp], edx
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+
+t32:
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+cmp [-44 + ebp], [-36 + ebp]
+jle 177
+jmp t29
+jmp t29
+jmp t29
+mov edx, 1
+mov [-56 + ebp], edx
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+mov edx, [-56 + ebp]
+add edx, 1
+mov [-56 + ebp], edx
+jmp t31
+
+t33:
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+cmp [-44 + ebp], [-36 + ebp]
+jle 177
+jmp t29
+jmp t29
+jmp t29
+mov edx, 1
+mov [-56 + ebp], edx
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+mov edx, [-56 + ebp]
+add edx, 1
+mov [-56 + ebp], edx
+jmp t31
+jmp t34
+
+t35:
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+cmp [-44 + ebp], [-36 + ebp]
+jle 177
+jmp t29
+jmp t29
+jmp t29
+mov edx, 1
+mov [-56 + ebp], edx
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+mov edx, [-56 + ebp]
+add edx, 1
+mov [-56 + ebp], edx
+jmp t31
+jmp t34
+jmp t36
+
+t37:
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+cmp [-44 + ebp], [-36 + ebp]
+jle 177
+jmp t29
+jmp t29
+jmp t29
+mov edx, 1
+mov [-56 + ebp], edx
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+mov edx, [-56 + ebp]
+add edx, 1
+mov [-56 + ebp], edx
+jmp t31
+jmp t34
+jmp t36
+jmp t36
+
+t38:
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+cmp [-44 + ebp], [-36 + ebp]
+jle 177
+jmp t29
+jmp t29
+jmp t29
+mov edx, 1
+mov [-56 + ebp], edx
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+mov edx, [-56 + ebp]
+add edx, 1
+mov [-56 + ebp], edx
+jmp t31
+jmp t34
+jmp t36
+jmp t36
+jmp t36
+
+t34:
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+cmp [-44 + ebp], [-36 + ebp]
+jle 177
+jmp t29
+jmp t29
+jmp t29
+mov edx, 1
+mov [-56 + ebp], edx
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+mov edx, [-56 + ebp]
+add edx, 1
+mov [-56 + ebp], edx
+jmp t31
+jmp t34
+jmp t36
+jmp t36
+jmp t36
+cmp [-56 + ebp], [-92 + ebp]
+je t35
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+cmp [-44 + ebp], [-36 + ebp]
+jle 177
+jmp t29
+jmp t29
+jmp t29
+mov edx, 1
+mov [-56 + ebp], edx
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+mov edx, [-56 + ebp]
+add edx, 1
+mov [-56 + ebp], edx
+jmp t31
+jmp t34
+jmp t36
+jmp t36
+jmp t36
+cmp [-56 + ebp], [-92 + ebp]
+je t35
+cmp [-56 + ebp], [-92 + ebp]
+je t35
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+cmp [-44 + ebp], [-36 + ebp]
+jle 177
+jmp t29
+jmp t29
+jmp t29
+mov edx, 1
+mov [-56 + ebp], edx
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+mov edx, [-56 + ebp]
+add edx, 1
+mov [-56 + ebp], edx
+jmp t31
+jmp t34
+jmp t36
+jmp t36
+jmp t36
+cmp [-56 + ebp], [-92 + ebp]
+je t35
+cmp [-56 + ebp], [-92 + ebp]
+je t35
+cmp [-56 + ebp], [-92 + ebp]
+je t35
+
+t36:
+mov edx, 10
+add edx, 12
+mov ecx, edx
+mov ebx, 0
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-8 + ebp], edx
+cmp 4, [-16 + ebp]
+jle 30
+cmp 4, [-16 + ebp]
+jle 32
+cmp 4, [-16 + ebp]
+jle 34
+cmp 4, [-16 + ebp]
+jle 36
+mov  eax, [-12 + ebp]
+pusheax
+mov [-12 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-8 + ebp]
+pusheax
+mov [-8 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+push [-4 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov esp, ebp
+pop ebp
+ret
+mov  eax, [-4 + ebp]
+pusheax
+mov [-4 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 91
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 99
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 107
+mov eax, 2
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov edx, 0
+cmp 2, [-12 + ebp]
+mov [-8 + ebp], eax
+mov [-12 + ebp], edx
+je 115
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+mov eax, [-12 + ebp]
+mov a(, %eax, 4 ), %eax
+mov eax, 10
+mov ebx, [-12 + ebp]
+mov args(, %ebx, 4 ), %ebx
+mov ebx, [-32 + ebp]
+mov edx, 10
+mov ecx, 0
+pushedx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+mov [-36 + ebp], ecx
+mov [-12 + ebp], edx
+call func_1_sub
+add esp, 0
+cmp [-44 + ebp], [-36 + ebp]
+jle 163
+cmp [-44 + ebp], [-36 + ebp]
+jle 165
+cmp [-44 + ebp], [-36 + ebp]
+jle 167
+cmp [-44 + ebp], [-36 + ebp]
+jle 169
+cmp [-44 + ebp], [-36 + ebp]
+jle 171
+cmp [-44 + ebp], [-36 + ebp]
+jle 173
+cmp [-44 + ebp], [-36 + ebp]
+jle 175
+cmp [-44 + ebp], [-36 + ebp]
+jle 177
+jmp t29
+jmp t29
+jmp t29
+mov edx, 1
+mov [-56 + ebp], edx
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+cmp 10, [-56 + ebp]
+jg t33
+mov edx, [-56 + ebp]
+add edx, 1
+mov [-56 + ebp], edx
+jmp t31
+jmp t34
+jmp t36
+jmp t36
+jmp t36
+cmp [-56 + ebp], [-92 + ebp]
+je t35
+cmp [-56 + ebp], [-92 + ebp]
+je t35
+cmp [-56 + ebp], [-92 + ebp]
+je t35
 mov esp, ebp
 pop ebp
 ret
