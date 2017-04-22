@@ -3,8 +3,6 @@
 .section .text
 
 
-str4:  .asciz Double quote (\") is escaped
-
 printFormat:  .asciz "%d"
 
 scanFormat:  .asciz "%d"
@@ -16,24 +14,12 @@ main:
 func_1_main:
 pushl %ebp
 movl %esp, %ebp
-subl $-36, %esp
+subl $-16, %esp
 movl $55, %edx
-pushl $str4
 movl %edx, -8(%ebp)
-call printf
-addl $4, %esp
-pushl $10
-pushl $printFormat
-call printf
-addl $8, %esp
-pushl $12
-pushl $printFormat
-call printf
-addl $8, %esp
-pushl $a
-pushl $scanFormat
-call scanf
-addl $8, %esp
 movl %ebp, %esp
 popl %ebp
 ret
+
+xor %eax,%eax
+ret 

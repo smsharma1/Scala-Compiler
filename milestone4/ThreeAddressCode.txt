@@ -1,8 +1,4 @@
 label: func_1_main
 arg args
 = a 55 a
-printstr Double quote (\") is escaped
-print 10
-print 12
-read a
 ret
