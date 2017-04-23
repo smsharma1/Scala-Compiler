@@ -71,7 +71,7 @@ if __name__ == "__main__" :
         if node[3] == '`':
             datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],None,'Unary',node[4]))
             continue
-        if node[1] in ['je','jne','jg','jge','jl','jle','goto','pusharg','call','label:','print','printstr','read']:
+        if node[1] in ['je','jne','jg','jge','jl','jle','goto','pusharg','call','label:','print','printstr','read','ret']:
             datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[2]))
             continue
         datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[4]))
@@ -79,9 +79,9 @@ if __name__ == "__main__" :
     nasm.asm()
     # print datafile.allvariables, "all variables"
     # print datafile.globalsection, 'globalsection'
-    # for inst in datafile.instruction:
-    #     print inst.instnumber,inst.type,inst.op1,inst.op2,inst.operator, inst.out 
-    print datafile.memorymap, 'memorymap'
+    for inst in datafile.instruction:
+        print inst.instnumber,inst.type,inst.op1,inst.op2,inst.operator, inst.out 
+    # print datafile.memorymap, 'memorymap'
     # print datafile.numberofarguments, 'numberofarguments'
     # print datafile.numberofvariables, 'numberofvariabels'        
 

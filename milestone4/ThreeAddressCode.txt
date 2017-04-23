@@ -1,7 +1,7 @@
 label: func_1_main
 arg args
-= a 10 a
-= b 20 b
+= a 9 a
+= b 3 b
 = d 0 d
 + a b t1
 = c t1 c
