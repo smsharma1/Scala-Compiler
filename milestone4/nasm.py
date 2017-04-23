@@ -36,6 +36,7 @@ def blockasmgenerate():
 def asm():
     print("section .data")
     f.write("section .data\n")
+    f.write("\n tempbuffer db '          '")
     for k,v in datafile.setofString.items() :
         print('\n'+k+ ' db '  + "'" + v + "',0xa")
         f.write('\n'+k+ ' db '  + "'" + v + "',0xa\n")
@@ -555,23 +556,34 @@ def PRINT(i):
     print l , "inside print function in nasm"
     try :
         datafile.addressdescriptor[l]
-        datafile.blockout.append('push ' + datafile.addressdescriptor[l])
-        datafile.lineno = datafile.lineno + 1
+        # datafile.blockout.append('push eax\npush ebx\npush ecx\npush edx\n')
+        datafile.blockout.append('push eax')
+        datafile.blockout.append('xor eax, eax')
+        datafile.blockout.append('mov ' + 'eax, ' +  datafile.addressdescriptor[l])
+        datafile.lineno = datafile.lineno + 3
     except :
         datafile.blockout.append('push eax')
         datafile.blockout.append('xor eax, eax')
-        datafile.blockout.append('mov ' + 'eax, ' register.mem(l))
-        datafile.blockout.append('push eax')
-        
-
-        datafile.lineno = datafile.lineno + 1
-    datafile.blockout.append('push printFormat')
-    datafile.lineno = datafile.lineno + 1
-    register.save()
-    datafile.blockout.append('call printf')
-    datafile.lineno = datafile.lineno + 1
-    datafile.blockout.append('add esp, 8')
-    datafile.lineno = datafile.lineno + 1
+        datafile.blockout.append('mov ' + 'eax, ' + register.mem(l))
+    # datafile.blockout.append('sub esp, 10')
+    # datafile.blockout.append('mov esi, tempbuffer')
+    datafile.blockout.append("add eax, '0'")
+    # datafile.blockout.append('push ebx\npush edx')
+    # datafile.blockout.append('call int_to_string')
+    # datafile.blockout.append('pop edx\npop ebx')
+    datafile.blockout.append('mov edx, 1')
+    datafile.blockout.append('push eax')
+    datafile.blockout.append('mov ecx, esp')
+    datafile.blockout.append('mov ebx, 1')
+    datafile.blockout.append('mov eax,4')
+    datafile.blockout.append('int 0x80')
+    datafile.blockout.append('pop eax')
+    datafile.blockout.append('pop eax')
+    # datafile.blockout.append('pop edx\npop ecx\npop ebx\npop eax\n')
+    datafile.lineno = datafile.lineno + 14
+    # register.save()
+    # datafile.blockout.append('add esp, 8')
+    # datafile.lineno = datafile.lineno + 1
 
 def READ(i): 
     for reg in datafile.registerlist:
