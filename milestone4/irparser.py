@@ -81,7 +81,7 @@ if __name__ == "__main__" :
     # print datafile.globalsection, 'globalsection'
     for inst in datafile.instruction:
         print inst.instnumber,inst.type,inst.op1,inst.op2,inst.operator, inst.out 
-    # print datafile.memorymap, 'memorymap'
+    print datafile.memorymap, 'memorymap'
     # print datafile.numberofarguments, 'numberofarguments'
     # print datafile.numberofvariables, 'numberofvariabels'        
 

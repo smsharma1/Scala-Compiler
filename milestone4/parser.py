@@ -309,6 +309,7 @@ def p_FuncArgumentListExtras(p):
 		if(p[0].meta is None): p[1].meta = 0
 		code = []
 		k = p[1].place.split(',,,')
+		print p[1].place.split(',,,') , "hello there"
     	k.reverse()
     	for k1 in k:
         	code.append("arg " + k1)
@@ -618,7 +619,7 @@ def p_Statement(p):
 				| WhileStatement
 				| ForStatement'''
 	p[0] = p[1]
-	print p[0].breaklist , " i am in statement with breaklist"
+	# print p[0].breaklist , " i am in statement with breaklist"
 
 
 def p_StatementWithoutTrailingSubstatement(p):
@@ -689,7 +690,7 @@ def p_IfThenElseStatement(p):
 	# 					| M R_IF LPARAN R_FALSE RPARAN StatementNoShortIf R_ELSE Statement N'''
 	p[2].breaklist[:] = [i+len(p[1].code) for i in p[2].breaklist]
 	p[2].continuelist[:] = [i+len(p[1].code) for i in p[2].continuelist]
-	print p[1].breaklist + p[2].breaklist, " this is breaklist in if then else statement"
+	# print p[1].breaklist + p[2].breaklist, " this is breaklist in if then else statement"
 	p[0] = Node("IfThenElseStatement", [p[1],p[2]],[],order='cc',code=p[1].code + p[2].code + ['label: ' + p[1].next], breaklist = p[1].breaklist + p[2].breaklist, continuelist = p[1].continuelist + p[2].continuelist)
 	# if p[4] == "true" or p[4] == "false":
 	# 	p[0] = Node("IfThenElseStatement", [p[6], p[7]],[p[2], p[4]],order='llcc')
@@ -709,7 +710,7 @@ def p_ifstat(p):
 	s_after = newtemp()
 	print s_else,s_after, "I am in Ifstat"
 	if p[4] == "true":
-		print p[6].code[p[6].breaklist[0]], " i am the code in ifstat which should be backpatched"
+		# print p[6].code[p[6].breaklist[0]], " i am the code in ifstat which should be backpatched"
 		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=p[6].code + ['label: ' + s_else],next=s_after, breaklist = p[6].breaklist, continuelist = p[6].continuelist)
 	elif p[4] == "false":
 		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=['jump ' +  s_after] + p[6].code ['label: ' + s_else],next=s_after, breaklist = p[6].breaklist, continuelist = p[6].continuelist)
@@ -721,7 +722,7 @@ def p_ifstat(p):
 			#sys.exit("Error in IfThenelseStatement")
 		p[6].breaklist[:] = [i+len(p[4].code)+2 for i in p[6].breaklist]
 		p[6].continuelist[:] = [i+len(p[4].code)+2 for i in p[6].continuelist]
-		print p[6].breaklist, "breaklist in ifstat"
+		# print p[6].breaklist, "breaklist in ifstat"
 		p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=p[4].code + ['cmp ' + p[4].place + ' 0']+['je ' + s_else] + p[6].code + ['goto ' + s_after] +  ['label: ' + s_else],next=s_after, breaklist = p[6].breaklist, continuelist = p[6].continuelist)
 
 
@@ -852,8 +853,8 @@ def p_ForStatement(p):
 	print s_begin,s_continue, s_after,"I am in For statement"
 	backpatch(p[6].code, p[6].breaklist, s_after)
 	backpatch(p[6].code, p[6].continuelist, s_continue)
-	print p[6].breaklist, "breaklist in forstatement"
-	print p[6].continuelist, "continuelist in forstatement" 
+	# print p[6].breaklist, "breaklist in forstatement"
+	# print p[6].continuelist, "continuelist in forstatement" 
 	code =  p[4].code +  ["= " + p[4].place + " " + p[4].meta[2] + " " + p[4].place] + ["label: " + s_begin] +  ["cmp " + p[4].place + " " + p[4].meta[3]] + [sym + " " + s_after] + p[6].code + ["label: "+s_continue]+["+ " + p[4].place + " 1 " + p[4].place ] + ["goto " + s_begin] + ["label: " + s_after]
 	p[0] = Node(p[2], [p[4], p[6]],[],order='cc',isLeaf=True,code=code)
 
@@ -1334,7 +1335,7 @@ def p_MethodInvocation(p):
 					esp = esp + currentScope.Size("POINTER")
 				else:
 					activr.push("value")
-					print idname, " ", "supposed to be argument type"
+					# print idname, " ", "supposed to be argument type"
 					esp = esp + currentScope.Size(idname)
 				currentScope.itemcount = currentScope.itemcount + 1
 			activr.push(ebp)
@@ -1348,7 +1349,7 @@ def p_MethodInvocation(p):
 					esp = esp - currentScope.Size("POINTER")
 				else:
 					activr.pop()
-					print idname, " ", "supposed to be argument type"
+					# print idname, " ", "supposed to be argument type"
 					esp = esp - currentScope.Size(idname)
 				currentScope.itemcount = currentScope.itemcount - 1
 			if(len(value.returnType) > 0):
