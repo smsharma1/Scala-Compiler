@@ -1,0 +1,20 @@
+object Fibonacci {
+    def fibo(n : Int) : Int = {
+        var f = new Array[Int](10);
+        var i : Int = 0;
+        f[0] = 0;
+        f[1] = 1;
+        for ( i <- 2 until n )
+		{
+			f[i] = f[i - 1] + f[i - 2];
+      	}
+        var t : Int = f[n];
+        return t;
+    }
+    def main(args: Array[String])
+    {
+            var k : Int = fibo(9);
+    }
+}
+
+
