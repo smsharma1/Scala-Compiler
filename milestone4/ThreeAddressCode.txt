@@ -1,79 +1,33 @@
-label: func_1_func
-arg x
-* x x t1
-* t1 x t2
-* x x t3
-- t2 t3 t4
-+ t4 2.0 t5
-= k t5 k
-pusharg k
-ret
-label: func_1_derivFunc
-arg x
-* 3 x t6
-* t6 x t7
-* 2 x t8
-- t7 t8 t9
-= k t9 k
-pusharg k
-ret
-label: func_1_newtonRaphson
-arg x
-pusharg x
-call func_1_func
-get t10
-pusharg x
-call func_1_derivFunc
-get t11
-/ t10 t11 t12
-= h t12 h
-= t h t
-cmp t 0
-jl nextstat + 3
-= t13 0 t13
-goto nextstat + 2
-= t13 1 t13
-cmp t13 0
-je t15
-* t -1 t14
-= t t14 t
-label: t15
-label: t24
-cmp t 0.001
-jge nextstat + 3
-= t16 0 t16
-goto nextstat + 2
-= t16 1 t16
-cmp t16 0
-je t25
-pusharg x
-call func_4_func
-get t17
-pusharg x
-call func_4_derivFunc
-get t18
-/ t17 t18 t19
-= h t19 h
-- x h t20
-= x t20 x
-= t h t
-cmp t 0
-jl nextstat + 3
-= t21 0 t21
-goto nextstat + 2
-= t21 1 t21
-cmp t21 0
-je t23
-* t -1 t22
-= t t22 t
-label: t23
-goto t24
-label: t25
-printstr The value of the root is :
+label: func_1_sub
+arg h
+arg g
+arg f
+arg e
+arg d
+arg c
+arg b
+arg a
+- a b t1
+* c d t2
++ t1 t2 t3
++ t3 e t4
+* f g t5
+- t4 t5 t6
++ t6 h t7
+pusharg t7
 ret
 label: func_1_main
 arg args
-= x -20 x
-pusharg x
-call func_1_newtonRaphson
+pusharg 1
+pusharg 2
+pusharg 3
+pusharg 4
+pusharg 5
+pusharg 6
+pusharg 7
+pusharg 8
+call func_1_sub
+get t8
+= k t8 k
+print k
 ret

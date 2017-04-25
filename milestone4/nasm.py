@@ -334,7 +334,7 @@ def PUSH_ARG(i) :
         datafile.blockout.append("mov  " +  register.mem(place) +', ' + register.mem(var))
         datafile.lineno = datafile.lineno + 1
         datafile.registerdescriptor[place] = var
-    datafile.blockout.append("push" + place)
+    datafile.blockout.append("push " + place)
     datafile.lineno = datafile.lineno + 1
     pass
 

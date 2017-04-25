@@ -2,6 +2,7 @@ import os
 import sys
 import datafile 
 import nasm
+import symboltable
 
 def checkbranching(name) :
     if name in ['jump', 'call', 'goto', 'label:', 'ARRAY', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne', '->', '<-' ]:
@@ -39,8 +40,9 @@ if __name__ == "__main__" :
                 if(checkvariable(node[i])):
                     if(flag):
                         if node[i] not in datafile.memorymap[scopefunc].keys():
-                            if node[i] == 'arg':
-                                datafile.memorymap[scopefunc][node[i+1]] = '['+str(arglength) + ' + ebp]'
+                            print node[i - 1], node[i], "checking"
+                            if node[1] == 'arg':
+                                datafile.memorymap[scopefunc][node[2]] = '['+str(arglength) + ' + ebp]'
                                 # print datafile.memorymap[scopefunc][node[i+1]],"asdfg"
                                 arglength = arglength + 4
                             elif (node[i] not in datafile.globalsection):
