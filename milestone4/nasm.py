@@ -13,6 +13,7 @@ def blockasmgenerate():
         datafile.yprime = None
         datafile.zprime = None
         OperatorMap[datafile.block[i].type](i)
+        # print datafile.block[i].type , "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",i
     i = len(datafile.block) - 1
     if i == -1:
         return 
@@ -89,10 +90,11 @@ def asm():
             blockbreaker.add(i+1) #any statement that follows a goto statement is a leader
     blockbreaker.add(len(datafile.instruction))
     blockbreaker = sorted(blockbreaker)
-    # print blockbreaker, "blockbreaker"
+    # print blockbreaker, "blockbreakerttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt"
     for i in range (0,len(blockbreaker)-1):
         if i == 0:
             datafile.block = datafile.instruction[blockbreaker[i]:blockbreaker[i+1]]
+            # print datafile.block, "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\asdasda"
         if datafile.instruction[blockbreaker[i]].type == 'label:':
             print("\n{}:".format(datafile.instruction[blockbreaker[i]].out))
             f.write("\n{}:\n".format(datafile.instruction[blockbreaker[i]].out))
@@ -110,7 +112,9 @@ def asm():
                 print("\t" + "sub esp, {}".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
                 f.write("sub esp, {}\n".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
                 datafile.lineno = datafile.lineno + 1
-                 
+        else:
+            datafile.block = datafile.instruction[blockbreaker[i]:blockbreaker[i+1]]
+        # print i , "hellokkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkhello",blockbreaker
         blockasmgenerate()  
 
 def JE(i):
@@ -354,6 +358,7 @@ def GET(i):
 #One has to be in register 
 def COMPARE(i):
     (y,z) = (datafile.block[i].op1,datafile.block[i].op2)
+    # print y,z, "aaaaaaaasdaddddddddddddddddddddddddddddddddddddddddaaaaaaaaaa",i
     try:
         int(z)
         datafile.zprime = z
@@ -369,15 +374,13 @@ def COMPARE(i):
         elif datafile.zprime in datafile.allvariables:
             reg = register.emptyregister(i)
             datafile.blockout.append("mov " + register.mem(reg) + ", " + register.mem(y) )
-            datafile.lineno = datafile.lineno + 1
             datafile.L = reg
             datafile.registerdescriptor[reg] = y
             datafile.addressdescriptor[y] = reg
         else:
             datafile.L = y
-
-    datafile.blockout.append("cmp " +  register.mem(z) + ", " +register.mem(y))
-    datafile.lineno = datafile.lineno + 1
+    # datafile.blockout.append(str(i))
+    datafile.blockout.append("cmp " +  register.mem(y) + ", " +register.mem(z))
     register.freereg(y,i)
     register.freereg(z,i)
     

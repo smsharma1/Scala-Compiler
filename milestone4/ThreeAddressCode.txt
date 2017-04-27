@@ -20,7 +20,7 @@ cmp t4 0
 je t7
 pusharg t5
 pusharg 1
-call func_2_acker
+call func_1_acker
 get t6
 pusharg t6
 label: t7
@@ -44,7 +44,7 @@ cmp n 10
 jg t15
 pusharg m
 pusharg n
-call func_6_acker
+call func_1_acker
 get t12
 print t12
 label: t14

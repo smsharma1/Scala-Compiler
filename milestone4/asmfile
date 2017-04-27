@@ -8,29 +8,878 @@ call func_1_main
 mov  eax, 1
 int  0x80
 
+func_1_acker:
+push ebp
+mov ebp, esp
+sub esp, 32
+cmp [12 + ebp], 0
+je 16
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+mov edx, [8 + ebp]
+add edx, 1
+push edx
+mov [-8 + ebp], edx
+
+t3:
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+mov edx, [8 + ebp]
+add edx, 1
+push edx
+mov [-8 + ebp], edx
+cmp [8 + ebp], 0
+je 29
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+mov edx, [8 + ebp]
+add edx, 1
+push edx
+mov [-8 + ebp], edx
+cmp [8 + ebp], 0
+je 29
+mov edx, 0
+mov [-12 + ebp], edx
+jmp 31
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+mov edx, [8 + ebp]
+add edx, 1
+push edx
+mov [-8 + ebp], edx
+cmp [8 + ebp], 0
+je 29
+mov edx, 0
+mov [-12 + ebp], edx
+jmp 31
+mov edx, 1
+cmp [-12 + ebp], 0
+mov [-12 + ebp], edx
+je t7
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+mov edx, [8 + ebp]
+add edx, 1
+push edx
+mov [-8 + ebp], edx
+cmp [8 + ebp], 0
+je 29
+mov edx, 0
+mov [-12 + ebp], edx
+jmp 31
+mov edx, 1
+cmp [-12 + ebp], 0
+mov [-12 + ebp], edx
+je t7
+mov  eax, [-16 + ebp]
+push eax
+mov  ebx, 1
+push ebx
+mov [-16 + ebp], eax
+mov 1, ebx
+call func_1_acker
+add esp, -24
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+mov edx, [8 + ebp]
+add edx, 1
+push edx
+mov [-8 + ebp], edx
+cmp [8 + ebp], 0
+je 29
+mov edx, 0
+mov [-12 + ebp], edx
+jmp 31
+mov edx, 1
+cmp [-12 + ebp], 0
+mov [-12 + ebp], edx
+je t7
+mov  eax, [-16 + ebp]
+push eax
+mov  ebx, 1
+push ebx
+mov [-16 + ebp], eax
+mov 1, ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-20 + ebp]
+push eax
+mov [-20 + ebp], eax
+
+t7:
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+mov edx, [8 + ebp]
+add edx, 1
+push edx
+mov [-8 + ebp], edx
+cmp [8 + ebp], 0
+je 29
+mov edx, 0
+mov [-12 + ebp], edx
+jmp 31
+mov edx, 1
+cmp [-12 + ebp], 0
+mov [-12 + ebp], edx
+je t7
+mov  eax, [-16 + ebp]
+push eax
+mov  ebx, 1
+push ebx
+mov [-16 + ebp], eax
+mov 1, ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-20 + ebp]
+push eax
+mov [-20 + ebp], eax
+mov  eax, [-24 + ebp]
+push eax
+mov  ebx, [-28 + ebp]
+push ebx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+call func_1_acker
+add esp, -24
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+mov edx, [8 + ebp]
+add edx, 1
+push edx
+mov [-8 + ebp], edx
+cmp [8 + ebp], 0
+je 29
+mov edx, 0
+mov [-12 + ebp], edx
+jmp 31
+mov edx, 1
+cmp [-12 + ebp], 0
+mov [-12 + ebp], edx
+je t7
+mov  eax, [-16 + ebp]
+push eax
+mov  ebx, 1
+push ebx
+mov [-16 + ebp], eax
+mov 1, ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-20 + ebp]
+push eax
+mov [-20 + ebp], eax
+mov  eax, [-24 + ebp]
+push eax
+mov  ebx, [-28 + ebp]
+push ebx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-32 + ebp]
+push eax
+mov [-32 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+
 func_1_main:
 push ebp
 mov ebp, esp
-sub esp, 20
-mov edx, 10
-mov ecx, 20
-mov ebx, 0
-mov eax, edx
-push eax
-push ebx
-mov eax,eax
-mov ebx,ecx
-imul ebx
-mov ecx,ebx
-mov eax,eax
-pop eax
-pop ebx
+sub esp, 12
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
 mov [-4 + ebp], edx
-mov edx, eax
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+mov edx, [8 + ebp]
+add edx, 1
+push edx
+mov [-8 + ebp], edx
+cmp [8 + ebp], 0
+je 29
+mov edx, 0
+mov [-12 + ebp], edx
+jmp 31
+mov edx, 1
+cmp [-12 + ebp], 0
+mov [-12 + ebp], edx
+je t7
+mov  eax, [-16 + ebp]
+push eax
+mov  ebx, 1
+push ebx
 mov [-16 + ebp], eax
-mov [-12 + ebp], ebx
+mov 1, ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-20 + ebp]
+push eax
+mov [-20 + ebp], eax
+mov  eax, [-24 + ebp]
+push eax
+mov  ebx, [-28 + ebp]
+push ebx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-32 + ebp]
+push eax
+mov [-32 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov edx, 0
+mov ecx, 0
+mov edx, 0
 mov [-8 + ebp], ecx
-mov [-20 + ebp], edx
+mov [-4 + ebp], edx
+
+t16:
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+mov edx, [8 + ebp]
+add edx, 1
+push edx
+mov [-8 + ebp], edx
+cmp [8 + ebp], 0
+je 29
+mov edx, 0
+mov [-12 + ebp], edx
+jmp 31
+mov edx, 1
+cmp [-12 + ebp], 0
+mov [-12 + ebp], edx
+je t7
+mov  eax, [-16 + ebp]
+push eax
+mov  ebx, 1
+push ebx
+mov [-16 + ebp], eax
+mov 1, ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-20 + ebp]
+push eax
+mov [-20 + ebp], eax
+mov  eax, [-24 + ebp]
+push eax
+mov  ebx, [-28 + ebp]
+push ebx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-32 + ebp]
+push eax
+mov [-32 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov edx, 0
+mov ecx, 0
+mov edx, 0
+mov [-8 + ebp], ecx
+mov [-4 + ebp], edx
+cmp [-4 + ebp], 4
+jg t18
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+mov edx, [8 + ebp]
+add edx, 1
+push edx
+mov [-8 + ebp], edx
+cmp [8 + ebp], 0
+je 29
+mov edx, 0
+mov [-12 + ebp], edx
+jmp 31
+mov edx, 1
+cmp [-12 + ebp], 0
+mov [-12 + ebp], edx
+je t7
+mov  eax, [-16 + ebp]
+push eax
+mov  ebx, 1
+push ebx
+mov [-16 + ebp], eax
+mov 1, ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-20 + ebp]
+push eax
+mov [-20 + ebp], eax
+mov  eax, [-24 + ebp]
+push eax
+mov  ebx, [-28 + ebp]
+push ebx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-32 + ebp]
+push eax
+mov [-32 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov edx, 0
+mov ecx, 0
+mov edx, 0
+mov [-8 + ebp], ecx
+mov [-4 + ebp], edx
+cmp [-4 + ebp], 4
+jg t18
+mov edx, 0
+mov [-8 + ebp], edx
+
+t13:
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+mov edx, [8 + ebp]
+add edx, 1
+push edx
+mov [-8 + ebp], edx
+cmp [8 + ebp], 0
+je 29
+mov edx, 0
+mov [-12 + ebp], edx
+jmp 31
+mov edx, 1
+cmp [-12 + ebp], 0
+mov [-12 + ebp], edx
+je t7
+mov  eax, [-16 + ebp]
+push eax
+mov  ebx, 1
+push ebx
+mov [-16 + ebp], eax
+mov 1, ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-20 + ebp]
+push eax
+mov [-20 + ebp], eax
+mov  eax, [-24 + ebp]
+push eax
+mov  ebx, [-28 + ebp]
+push ebx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-32 + ebp]
+push eax
+mov [-32 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov edx, 0
+mov ecx, 0
+mov edx, 0
+mov [-8 + ebp], ecx
+mov [-4 + ebp], edx
+cmp [-4 + ebp], 4
+jg t18
+mov edx, 0
+mov [-8 + ebp], edx
+cmp [-8 + ebp], 10
+jg t15
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+mov edx, [8 + ebp]
+add edx, 1
+push edx
+mov [-8 + ebp], edx
+cmp [8 + ebp], 0
+je 29
+mov edx, 0
+mov [-12 + ebp], edx
+jmp 31
+mov edx, 1
+cmp [-12 + ebp], 0
+mov [-12 + ebp], edx
+je t7
+mov  eax, [-16 + ebp]
+push eax
+mov  ebx, 1
+push ebx
+mov [-16 + ebp], eax
+mov 1, ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-20 + ebp]
+push eax
+mov [-20 + ebp], eax
+mov  eax, [-24 + ebp]
+push eax
+mov  ebx, [-28 + ebp]
+push ebx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-32 + ebp]
+push eax
+mov [-32 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov edx, 0
+mov ecx, 0
+mov edx, 0
+mov [-8 + ebp], ecx
+mov [-4 + ebp], edx
+cmp [-4 + ebp], 4
+jg t18
+mov edx, 0
+mov [-8 + ebp], edx
+cmp [-8 + ebp], 10
+jg t15
+mov  eax, [-4 + ebp]
+push eax
+mov  ebx, [-8 + ebp]
+push ebx
+mov [-4 + ebp], eax
+mov [-8 + ebp], ebx
+call func_1_acker
+add esp, -24
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+mov edx, [8 + ebp]
+add edx, 1
+push edx
+mov [-8 + ebp], edx
+cmp [8 + ebp], 0
+je 29
+mov edx, 0
+mov [-12 + ebp], edx
+jmp 31
+mov edx, 1
+cmp [-12 + ebp], 0
+mov [-12 + ebp], edx
+je t7
+mov  eax, [-16 + ebp]
+push eax
+mov  ebx, 1
+push ebx
+mov [-16 + ebp], eax
+mov 1, ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-20 + ebp]
+push eax
+mov [-20 + ebp], eax
+mov  eax, [-24 + ebp]
+push eax
+mov  ebx, [-28 + ebp]
+push ebx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-32 + ebp]
+push eax
+mov [-32 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov edx, 0
+mov ecx, 0
+mov edx, 0
+mov [-8 + ebp], ecx
+mov [-4 + ebp], edx
+cmp [-4 + ebp], 4
+jg t18
+mov edx, 0
+mov [-8 + ebp], edx
+cmp [-8 + ebp], 10
+jg t15
+mov  eax, [-4 + ebp]
+push eax
+mov  ebx, [-8 + ebp]
+push ebx
+mov [-4 + ebp], eax
+mov [-8 + ebp], ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+push [-12 + ebp]
+push printFormat
+call printf
+add esp, 8
+
+t14:
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+mov edx, [8 + ebp]
+add edx, 1
+push edx
+mov [-8 + ebp], edx
+cmp [8 + ebp], 0
+je 29
+mov edx, 0
+mov [-12 + ebp], edx
+jmp 31
+mov edx, 1
+cmp [-12 + ebp], 0
+mov [-12 + ebp], edx
+je t7
+mov  eax, [-16 + ebp]
+push eax
+mov  ebx, 1
+push ebx
+mov [-16 + ebp], eax
+mov 1, ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-20 + ebp]
+push eax
+mov [-20 + ebp], eax
+mov  eax, [-24 + ebp]
+push eax
+mov  ebx, [-28 + ebp]
+push ebx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-32 + ebp]
+push eax
+mov [-32 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov edx, 0
+mov ecx, 0
+mov edx, 0
+mov [-8 + ebp], ecx
+mov [-4 + ebp], edx
+cmp [-4 + ebp], 4
+jg t18
+mov edx, 0
+mov [-8 + ebp], edx
+cmp [-8 + ebp], 10
+jg t15
+mov  eax, [-4 + ebp]
+push eax
+mov  ebx, [-8 + ebp]
+push ebx
+mov [-4 + ebp], eax
+mov [-8 + ebp], ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+push [-12 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov edx, [-8 + ebp]
+add edx, 1
+mov [-8 + ebp], edx
+jmp t13
+
+t15:
+
+t17:
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+mov edx, [8 + ebp]
+add edx, 1
+push edx
+mov [-8 + ebp], edx
+cmp [8 + ebp], 0
+je 29
+mov edx, 0
+mov [-12 + ebp], edx
+jmp 31
+mov edx, 1
+cmp [-12 + ebp], 0
+mov [-12 + ebp], edx
+je t7
+mov  eax, [-16 + ebp]
+push eax
+mov  ebx, 1
+push ebx
+mov [-16 + ebp], eax
+mov 1, ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-20 + ebp]
+push eax
+mov [-20 + ebp], eax
+mov  eax, [-24 + ebp]
+push eax
+mov  ebx, [-28 + ebp]
+push ebx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-32 + ebp]
+push eax
+mov [-32 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov edx, 0
+mov ecx, 0
+mov edx, 0
+mov [-8 + ebp], ecx
+mov [-4 + ebp], edx
+cmp [-4 + ebp], 4
+jg t18
+mov edx, 0
+mov [-8 + ebp], edx
+cmp [-8 + ebp], 10
+jg t15
+mov  eax, [-4 + ebp]
+push eax
+mov  ebx, [-8 + ebp]
+push ebx
+mov [-4 + ebp], eax
+mov [-8 + ebp], ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+push [-12 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov edx, [-8 + ebp]
+add edx, 1
+mov [-8 + ebp], edx
+jmp t13
+mov edx, [-4 + ebp]
+add edx, 1
+mov [-4 + ebp], edx
+jmp t16
+
+t18:
+cmp [12 + ebp], 0
+je 16
+mov edx, 0
+mov [-4 + ebp], edx
+jmp 18
+mov edx, 1
+cmp [-4 + ebp], 0
+mov [-4 + ebp], edx
+je t3
+mov edx, [8 + ebp]
+add edx, 1
+push edx
+mov [-8 + ebp], edx
+cmp [8 + ebp], 0
+je 29
+mov edx, 0
+mov [-12 + ebp], edx
+jmp 31
+mov edx, 1
+cmp [-12 + ebp], 0
+mov [-12 + ebp], edx
+je t7
+mov  eax, [-16 + ebp]
+push eax
+mov  ebx, 1
+push ebx
+mov [-16 + ebp], eax
+mov 1, ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-20 + ebp]
+push eax
+mov [-20 + ebp], eax
+mov  eax, [-24 + ebp]
+push eax
+mov  ebx, [-28 + ebp]
+push ebx
+mov [-24 + ebp], eax
+mov [-28 + ebp], ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+mov  eax, [-32 + ebp]
+push eax
+mov [-32 + ebp], eax
+mov esp, ebp
+pop ebp
+ret
+mov edx, 0
+mov ecx, 0
+mov edx, 0
+mov [-8 + ebp], ecx
+mov [-4 + ebp], edx
+cmp [-4 + ebp], 4
+jg t18
+mov edx, 0
+mov [-8 + ebp], edx
+cmp [-8 + ebp], 10
+jg t15
+mov  eax, [-4 + ebp]
+push eax
+mov  ebx, [-8 + ebp]
+push ebx
+mov [-4 + ebp], eax
+mov [-8 + ebp], ebx
+call func_1_acker
+add esp, -24
+mov None, eax
+push [-12 + ebp]
+push printFormat
+call printf
+add esp, 8
+mov edx, [-8 + ebp]
+add edx, 1
+mov [-8 + ebp], edx
+jmp t13
+mov edx, [-4 + ebp]
+add edx, 1
+mov [-4 + ebp], edx
+jmp t16
 mov esp, ebp
 pop ebp
 ret
