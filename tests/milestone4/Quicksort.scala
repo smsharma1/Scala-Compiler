@@ -1,30 +1,29 @@
 object sort {
+    var a = new Array[Int](4);
 
-    def quicksort(arr: Array[Int]) {
-
-      def arr(i: Int):Int = {
+    def arr(i: Int):Int = {
         return 2;
       }
 
-        def swap(i: Int, j: Int): Int= {
-            var t = arr(i); 
-            t = arr(j); 
-            return 1;
-        }
+    def swap(i: Int, j: Int): Int= {
+        var t = arr[i]; 
+        t = arr[j]; 
+        return 1;
+    }
 
-        def sort(l: Int, r: Int) {
-            val pivot = swap((l + r),2);
-            var i = l;
-            var j = r;
-            while (i <= j) {
-                while (arr(i) < pivot) i = i + 1;
-                while (arr(j) > pivot) j = j + 1;
-                if (i <= j) {
-                    swap(i, j);
-                    i = i + 1;
-                    j = j + 1;
-                }
-            }
+    def sort(l: Int, r: Int) {
+        var pivot = swap((l + r),2);
+        var i = l;
+        var j = r;
+        while (i <= j) {
+            while (arr[i] < pivot) i = i + 1;
+            while (arr[j] > pivot) j = j + 1;
+            if (i <= j) {
+            swap(i, j);
+            i = i + 1;
+            j = j + 1;
+        }
+    }
             if (l < j) sort(l, j);
             if (j < r) sort(i, r);
         }

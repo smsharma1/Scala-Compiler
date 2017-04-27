@@ -1,40 +1,24 @@
-label: func_1_add
-arg arr1
-ARRAY arr 4
-+ 10 12 t1
-= c t1 c
-= i 0 i
-label: t5
-cmp i 4
-jle nextstat + 3
-= t2 0 t2
-goto nextstat + 2
-= t2 1 t2
-cmp t2 0
-je t6
-+ c i t3
-= c t3 c
-+ i 1 t4
-= i t4 i
-goto t5
-label: t6
-pusharg c
-ret
-label: func_1_sub1
+label: func_1_sub
+arg h
+arg g
+arg f
+arg e
+arg d
+arg c
 arg b
 arg a
-pusharg a
-ret
-label: func_1_sub2
-arg a
-print a
-ret
-label: func_1_sub
-arg a
-pusharg a
+- a b t1
+* c d t2
++ t1 t2 t3
++ t3 e t4
+* f g t5
+- t4 t5 t6
++ t6 h t7
+pusharg t7
 ret
 label: func_1_main
 arg args
+<<<<<<< HEAD
 <<<<<<< HEAD
 = a 9 a
 = b 3 b
@@ -130,4 +114,18 @@ cmp c3 x
 je t38
 label: t36
 >>>>>>> 1cd64532d22a6875f709330afd4e3e251fce18c7
+=======
+pusharg 1
+pusharg 2
+pusharg 3
+pusharg 4
+pusharg 5
+pusharg 6
+pusharg 7
+pusharg 8
+call func_1_sub
+get t8
+= k t8 k
+print k
+>>>>>>> f45d527e7cff98a84cdd90470fbf7bde99c46db2
 ret

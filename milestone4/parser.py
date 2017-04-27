@@ -946,6 +946,8 @@ def p_ReturnStatement(p):
 	if len(p) ==  4:
 		code = ['pusharg ' + p[2].place]
 		if not (currentScope.returnType == p[2].typelist):
+			print currentScope.name
+			print currentScope.returnType, p[2].typelist
 			print "Actual returned object has different Type than function declared at " + str(p.lexer.lineno)
 			global Error
 			Error = Error + 1
@@ -994,6 +996,7 @@ def p_Assignment(p):
 				| ArrayAccess EQUALASS OrExpression'''
 				#| AmbiguousName LSQRB Expression COMMA Expression RSQRB EQUALASS OrExpression'''
 	#print p[1].typelist,"hello ",p[3].typelist
+
 	if p[2]=="=":
 		code = ["= " + p[1].place + " " + p[3].place + " " + p[1].place]
 		# print p[1].typelist[0], " " ,  p[3].typelist[0], "assignment"
@@ -1197,7 +1200,7 @@ def p_MultiplicativeExpression(p):
 		print nodename,"I am in Multiplicative Expression"
 		code = [p[2] + " " + p[1].place + " " + p[3].place + " " + nodename]
 		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
-		# print p[1].typelist, "multiplicativeerror" , p[3].typelist
+		print p[1].typelist, "multiplicativeerror" , p[3].typelist, type_here
 		if(not type_here):
 			print "Type mismatch error at line " + str(p.lexer.lineno)
 			global Error
@@ -1395,7 +1398,7 @@ def p_PrimaryNoNewArray(p):
 	if len(p) == 4:
 		p[0] = p[2]
 	else:
-	#	print p[1].type,"we are in p_PrimaryNoNewArray", p[1].typelist
+		print p[1].type,"we are in p_PrimaryNoNewArray", p[1].typelist
 		p[0] = p[1]
 # <class instance creation expression> ::= new <class type> ( <argument list>? )
 
@@ -1456,6 +1459,7 @@ def p_ArrayAccess(p):
 	if len(p) == 5:
 		temp = newtemp()
 		print temp, "I am in ArrayAcess"
+		print p[3].type
 		l1 = [ "<- " + p[1].place + " " +p[3].place + " " + temp]
 		# l1 = [ temp + " = " + p[1].place + " -> " + p[3].place]
 		p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]],typelist =[p[1].typelist[0][5:]] , order="clcl",code=p[3].code + l1,place = temp)
@@ -1592,6 +1596,8 @@ def allowed(type1, type2):
 def higher(type1, type2):
 	if (type1 == "DOUBLE" and type2 == "DOUBLE"):
 		return "DOUBLE"
+	elif (type1 == "FLOAT" and type2 == "FLOAT"):
+		return "FLOAT"
 	elif((type1=="DOUBLE" and (type2=="FLOAT" or type2 == "INT")) or (type2=="DOUBLE" and (type1=="FLOAT" or type1 == "INT"))):
 		return "DOUBLE"
 	elif((type1=="FLOAT" and type2=="INT") or (type2=="FLOAT" and type1=="INT")):

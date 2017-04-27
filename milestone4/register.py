@@ -134,9 +134,14 @@ def emptyregister(var,left=[]):
     for k in datafile.registerlist:
         if k in left:
             continue
-        if nextuse <= datafile.symtable[var][datafile.registerdescriptor[k]]:  #we have to free the register its important 
-            reg = k
-            nextuse = datafile.symtable[ino][datafile.registerdescriptor[k]]
+        try:
+            int(datafile.registerdescriptor[k])
+            continue
+        except:
+            print var, k ,datafile.registerdescriptor[k],datafile.symtable, "checking in emptyregister"
+            if nextuse <= datafile.symtable[var][datafile.registerdescriptor[k]]:  #we have to free the register its important 
+                reg = k
+                nextuse = datafile.symtable[ino][datafile.registerdescriptor[k]]
     storereg(reg)    
     return reg
 

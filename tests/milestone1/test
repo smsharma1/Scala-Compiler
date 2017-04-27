@@ -1,0 +1,9 @@
+object manyparameters {
+    def sub1(a : Int, b : Int) : Int ={
+		return a - b;
+	 }
+    def main(args: Array[String]) {
+        var k : Int = sub1(1,2);
+        println(k);
+    }
+}
