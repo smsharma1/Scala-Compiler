@@ -4,6 +4,6 @@ object manyparameters {
 	 }
     def main(args: Array[String]) {
         var k : Int = sub(1,2,3,4,5,6,7,8);
-        println(k);
+     //   println(k);
     }
 }

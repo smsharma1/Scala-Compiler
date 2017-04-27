@@ -1,33 +1,8 @@
-label: func_1_sub
-arg h
-arg g
-arg f
-arg e
-arg d
-arg c
-arg b
-arg a
-- a b t1
-* c d t2
-+ t1 t2 t3
-+ t3 e t4
-* f g t5
-- t4 t5 t6
-+ t6 h t7
-pusharg t7
-ret
 label: func_1_main
 arg args
-pusharg 1
-pusharg 2
-pusharg 3
-pusharg 4
-pusharg 5
-pusharg 6
-pusharg 7
-pusharg 8
-call func_1_sub
-get t8
-= k t8 k
-print k
+= a 10 a
+= b 20 b
+= d 0 d
+* a b t1
+= c t1 c
 ret

@@ -62,8 +62,8 @@ if __name__ == "__main__" :
             datafile.setofString['str'+str(node[0])] = ' '.join(node[2:])
         if node[1] == 'ret':
             flag = 0
-            datafile.numberofarguments[scopefunc] = arglength
-            datafile.numberofvariables[scopefunc] = locallength
+            datafile.numberofarguments[scopefunc] = -arglength
+            datafile.numberofvariables[scopefunc] = -locallength
             scopefunc = 0
             arglength = 8
             locallength = -4

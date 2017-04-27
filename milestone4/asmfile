@@ -8,165 +8,29 @@ call func_1_main
 mov  eax, 1
 int  0x80
 
-func_1_sub:
-push ebp
-mov ebp, esp
-sub esp, -36
-mov edx, [36 + ebp]
-sub edx, [32 + ebp]
-mov ecx, [28 + ebp]
-imul [24 + ebp], ecx
-mov ebx, edx
-add ebx, ecx
-mov eax, ebx
-add eax, [20 + ebp]
-mov [-4 + ebp], edx
-mov edx, [16 + ebp]
-imul [12 + ebp], edx
-mov [-8 + ebp], ecx
-mov ecx, eax
-sub ecx, edx
-mov [-20 + ebp], edx
-mov edx, ecx
-add edx, [8 + ebp]
-push edx
-mov [-16 + ebp], eax
-mov [-12 + ebp], ebx
-mov [-24 + ebp], ecx
-mov [-28 + ebp], edx
-mov esp, ebp
-pop ebp
-ret
-
 func_1_main:
 push ebp
 mov ebp, esp
-sub esp, -16
-mov edx, [36 + ebp]
-sub edx, [32 + ebp]
-mov ecx, [28 + ebp]
-imul [24 + ebp], ecx
-mov ebx, edx
-add ebx, ecx
-mov eax, ebx
-add eax, [20 + ebp]
+sub esp, 20
+mov edx, 10
+mov ecx, 20
+mov ebx, 0
+mov eax, edx
+push eax
+push ebx
+mov eax,eax
+mov ebx,ecx
+imul ebx
+mov ecx,ebx
+mov eax,eax
+pop eax
+pop ebx
 mov [-4 + ebp], edx
-mov edx, [16 + ebp]
-imul [12 + ebp], edx
-mov [-8 + ebp], ecx
-mov ecx, eax
-sub ecx, edx
-mov [-20 + ebp], edx
-mov edx, ecx
-add edx, [8 + ebp]
-push edx
+mov edx, eax
 mov [-16 + ebp], eax
 mov [-12 + ebp], ebx
-mov [-24 + ebp], ecx
-mov [-28 + ebp], edx
+mov [-8 + ebp], ecx
+mov [-20 + ebp], edx
 mov esp, ebp
 pop ebp
 ret
-mov  eax, 1
-push eax
-mov  ebx, 2
-push ebx
-mov  ecx, 3
-push ecx
-mov  edx, 4
-push edx
-mov 4, edx
-mov  edx, 5
-push edx
-mov 5, edx
-mov  edx, 6
-push edx
-mov 6, edx
-mov  edx, 7
-push edx
-mov 7, edx
-mov  edx, 8
-push edx
-mov 1, eax
-mov 2, ebx
-mov 3, ecx
-mov 8, edx
-call func_1_sub
-add esp, 32
-mov edx, [36 + ebp]
-sub edx, [32 + ebp]
-mov ecx, [28 + ebp]
-imul [24 + ebp], ecx
-mov ebx, edx
-add ebx, ecx
-mov eax, ebx
-add eax, [20 + ebp]
-mov [-4 + ebp], edx
-mov edx, [16 + ebp]
-imul [12 + ebp], edx
-mov [-8 + ebp], ecx
-mov ecx, eax
-sub ecx, edx
-mov [-20 + ebp], edx
-mov edx, ecx
-add edx, [8 + ebp]
-push edx
-mov [-16 + ebp], eax
-mov [-12 + ebp], ebx
-mov [-24 + ebp], ecx
-mov [-28 + ebp], edx
-mov esp, ebp
-pop ebp
-ret
-mov  eax, 1
-push eax
-mov  ebx, 2
-push ebx
-mov  ecx, 3
-push ecx
-mov  edx, 4
-push edx
-mov 4, edx
-mov  edx, 5
-push edx
-mov 5, edx
-mov  edx, 6
-push edx
-mov 6, edx
-mov  edx, 7
-push edx
-mov 7, edx
-mov  edx, 8
-push edx
-mov 1, eax
-mov 2, ebx
-mov 3, ecx
-mov 8, edx
-call func_1_sub
-add esp, 32
-mov  eax, 1
-push eax
-mov  ebx, 2
-push ebx
-mov  ecx, 3
-push ecx
-mov  edx, 4
-push edx
-mov 4, edx
-mov  edx, 5
-push edx
-mov 5, edx
-mov  edx, 6
-push edx
-mov 6, edx
-mov  edx, 7
-push edx
-mov 7, edx
-mov  edx, 8
-push edx
-mov 1, eax
-mov 2, ebx
-mov 3, ecx
-mov 8, edx
-call func_1_sub
-add esp, 32

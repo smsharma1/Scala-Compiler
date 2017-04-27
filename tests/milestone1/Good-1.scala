@@ -3,6 +3,6 @@ object Good1 {
 	var a : Int = 	55	;
 	println("Double quote (\") is escaped");
 //	println(10,12);
-	read(a);
+//	read(a);
    }
 }
