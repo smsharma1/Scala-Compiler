@@ -382,7 +382,12 @@ def p_MethodHeader(p):
 		else:
 			parentScope.functions[p[2].typelist[0]] = currentScope
 			currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
+<<<<<<< HEAD
 			print currentScope.name ," i am in method header see me please"
+=======
+			print currentScope.name,"ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+
+>>>>>>> ee696f6a32e326abf15537d2a230b425d713c416
 		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + p[3].typelist,order="ccc",meta=p[2].meta,code=l1 + p[2].code)
 	else:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
@@ -397,7 +402,8 @@ def p_MethodHeader(p):
 def p_MethodDefine(p):
 	'''MethodDefine : R_DEF'''
 	global currentScope
-	currentScope = currentScope.NewFuncScope()		
+	currentScope = currentScope.NewFuncScope()	
+	# print "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"	
 	p[0] = Node(p[1], [],[], isLeaf=True)
 	
 
@@ -864,6 +870,8 @@ def p_M(p):
 	'M : empty'
 	global currentScope
 	newscope = currentScope.NewFuncScope()
+	newscope.returnType = currentScope.returnType
+	# print "dddddddddddddddddddddddddddddddddddddddd"
 	newscope.parent = currentScope
 	newscope.returnType = currentScope.returnType
 	currentScope = newscope
@@ -1276,7 +1284,12 @@ def p_MethodInvocation(p):
 	global esp
 	global ebp
 	code =[]
+<<<<<<< HEAD
 	func_name = 'func_' +str(1) + "_" + p[1].type
+=======
+	print p[1],"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	func_name = 'func_' +str(currentScope.parent.uid) + "_" + p[1].type
+>>>>>>> ee696f6a32e326abf15537d2a230b425d713c416
 	temp = None
 #	print p[1].name,"name",currentScope.name
 #	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)

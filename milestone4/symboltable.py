@@ -321,8 +321,8 @@ class SymbolTable:
 		return SymbolTable(self, "temp")
 
 	def InsertFuncDetails(self, symbolName, argList, returnType):
-	#	print symbolName, " ", argList, " ", returnType
-	#	print "hello in insertfuncdetails"
+		print symbolName, " ", argList, " ", returnType
+		print "hello in insertfuncdetails"
 		self.argList = argList
 		self.name = symbolName
 		self.returnType = returnType

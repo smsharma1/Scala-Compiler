@@ -8,5 +8,6 @@ object Demo {
 		read(d);
 		println(d);
 		println("hello world");
+		var c : Int = a * b;
 	}
 } 

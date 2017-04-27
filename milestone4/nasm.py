@@ -403,8 +403,15 @@ def MUL(i):
     except :
         pass
     register.gety(y)
-    
-    datafile.blockout.append("imul " +  register.mem(datafile.zprime) + ", " + register.mem(datafile.L))
+    datafile.blockout.append("push eax")
+    datafile.blockout.append("push ebx")
+    datafile.blockout.append("mov eax," + register.mem(datafile.L))
+    datafile.blockout.append("mov ebx," + register.mem(datafile.zprime))
+    datafile.blockout.append("imul ebx")
+    datafile.blockout.append("mov " + register.mem(datafile.zprime) + ",ebx")
+    datafile.blockout.append("mov " + register.mem(datafile.L) + ",eax")
+    datafile.blockout.append("pop eax")
+    datafile.blockout.append("pop ebx")
     datafile.lineno = datafile.lineno + 1
     register.UpdateAddressDescriptor(l)
     register.freereg(y, i)
