@@ -12,9 +12,8 @@ def blockasmgenerate():
         datafile.L = None
         datafile.yprime = None
         datafile.zprime = None
-        print i ," i am in blockasmgenerate ok ...."
+        print i ," i am in blockasmgenerate ok ....",datafile.block[i].type
         OperatorMap[datafile.block[i].type](i)
-        print i ," i am in blockasmgenerate afte operator map huh ok ...."
     i = len(datafile.block) - 1
     if i == -1:
         return 
@@ -95,10 +94,11 @@ def asm():
             blockbreaker.add(i+1) #any statement that follows a goto statement is a leader
     blockbreaker.add(len(datafile.instruction))
     blockbreaker = sorted(blockbreaker)
-    print blockbreaker, "blockbreaker"
     for i in range (0,len(blockbreaker)-1):
+        datafile.block = []
         if i == 0:
             datafile.block = datafile.instruction[blockbreaker[i]:blockbreaker[i+1]]
+            # print datafile.block, "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\asdasda"
         if datafile.instruction[blockbreaker[i]].type == 'label:':
             print("\n{}:".format(datafile.instruction[blockbreaker[i]].out))
             f.write("\n{}:\n".format(datafile.instruction[blockbreaker[i]].out))
@@ -352,13 +352,14 @@ def LABEL(i):
 def GET(i):
     
     datafile.blockout.append("mov "+register.mem(datafile.block[i].out)+", eax" )
-    datafile.lineno = datafile.lineno + 1
+    # datafile.lineno = datafile.lineno + 1
     pass
 
 #CMP destination, source
 #One has to be in register 
 def COMPARE(i):
     (y,z) = (datafile.block[i].op1,datafile.block[i].op2)
+    print y,z, "aaaaaaaasdaddddddddddddddddddddddddddddddddddddddddaaaaaaaaaa",i
     try:
         int(z)
         datafile.zprime = z
@@ -374,7 +375,6 @@ def COMPARE(i):
         elif datafile.zprime in datafile.allvariables:
             reg = register.emptyregister(i)
             datafile.blockout.append("mov " + register.mem(reg) + ", " + register.mem(y) )
-            datafile.lineno = datafile.lineno + 1
             datafile.L = reg
             datafile.registerdescriptor[reg] = y
             datafile.addressdescriptor[y] = reg
@@ -552,8 +552,8 @@ def CALL(i):
     
     # datafile.lineno = datafile.lineno + 1
     datafile.blockout.append('call ' + datafile.block[i].out)
-    print datafile.numberofarguments , "number of arguments ......... \n\n"
-    datafile.blockout.append('add esp, {}'.format(datafile.numberofarguments[datafile.block[i].out]-8))
+    # print datafile.numberofarguments , "number of arguments ......... \n\n"
+    # datafile.blockout.append('add esp, {}'.format(datafile.numberofarguments[datafile.block[i].out]-8))
 
 def PRINTSTR(i):
     for reg in datafile.registerlist:
