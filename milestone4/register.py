@@ -1,6 +1,7 @@
 import datafile
 
 def initializeblock():
+    datafile.blockout = []
     datafile.registerdescriptor.clear()
     for x in datafile.registerlist:
         datafile.registerdescriptor[x] = None #initially register contains nothing

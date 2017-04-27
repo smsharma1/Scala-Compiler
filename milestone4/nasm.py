@@ -12,7 +12,7 @@ def blockasmgenerate():
         datafile.L = None
         datafile.yprime = None
         datafile.zprime = None
-        print i ," i am in blockasmgenerate ok ...."
+        print i ," i am in blockasmgenerate ok ....",datafile.block[i].type
         OperatorMap[datafile.block[i].type](i)
     i = len(datafile.block) - 1
     if i == -1:
@@ -92,6 +92,7 @@ def asm():
     blockbreaker.add(len(datafile.instruction))
     blockbreaker = sorted(blockbreaker)
     for i in range (0,len(blockbreaker)-1):
+        datafile.block = []
         if i == 0:
             datafile.block = datafile.instruction[blockbreaker[i]:blockbreaker[i+1]]
             # print datafile.block, "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\asdasda"
@@ -351,14 +352,14 @@ def LABEL(i):
 def GET(i):
     
     datafile.blockout.append("mov "+register.mem(datafile.block[i].out)+", eax" )
-    datafile.lineno = datafile.lineno + 1
+    # datafile.lineno = datafile.lineno + 1
     pass
 
 #CMP destination, source
 #One has to be in register 
 def COMPARE(i):
     (y,z) = (datafile.block[i].op1,datafile.block[i].op2)
-    # print y,z, "aaaaaaaasdaddddddddddddddddddddddddddddddddddddddddaaaaaaaaaa",i
+    print y,z, "aaaaaaaasdaddddddddddddddddddddddddddddddddddddddddaaaaaaaaaa",i
     try:
         int(z)
         datafile.zprime = z
@@ -380,6 +381,7 @@ def COMPARE(i):
         else:
             datafile.L = y
     # datafile.blockout.append(str(i))
+    print register.mem(y),register.mem(z),"ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt"
     datafile.blockout.append("cmp " +  register.mem(y) + ", " +register.mem(z))
     register.freereg(y,i)
     register.freereg(z,i)
@@ -545,8 +547,8 @@ def CALL(i):
     
     datafile.lineno = datafile.lineno + 1
     datafile.blockout.append('call ' + datafile.block[i].out)
-    print datafile.numberofarguments , "number of arguments ......... \n\n"
-    datafile.blockout.append('add esp, {}'.format(datafile.numberofarguments[datafile.block[i].out]-8))
+    # print datafile.numberofarguments , "number of arguments ......... \n\n"
+    # datafile.blockout.append('add esp, {}'.format(datafile.numberofarguments[datafile.block[i].out]-8))
 
 def PRINTSTR(i):
     for reg in datafile.registerlist:

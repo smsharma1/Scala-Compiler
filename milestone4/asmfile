@@ -18,38 +18,15 @@ mov ebp, esp
 sub esp, 32
 cmp [12 + ebp], 0
 je t3
-cmp [12 + ebp], 0
-je t3
 mov edx, 0
 mov [-4 + ebp], edx
 jmp t4
 
 t3:
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
 mov edx, 1
 mov [-4 + ebp], edx
 
 t4:
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
 cmp [-4 + ebp], 0
 je t9
 mov edx, [8 + ebp]
@@ -58,34 +35,6 @@ push edx
 mov [-8 + ebp], edx
 
 t9:
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-push edx
-mov [-8 + ebp], edx
-cmp [8 + ebp], 0
-je t12
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-push edx
-mov [-8 + ebp], edx
 cmp [8 + ebp], 0
 je t12
 mov edx, 0
@@ -93,70 +42,10 @@ mov [-12 + ebp], edx
 jmp t13
 
 t12:
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-push edx
-mov [-8 + ebp], edx
-cmp [8 + ebp], 0
-je t12
-mov edx, 0
-mov [-12 + ebp], edx
-jmp t13
 mov edx, 1
 mov [-12 + ebp], edx
 
 t13:
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-push edx
-mov [-8 + ebp], edx
-cmp [8 + ebp], 0
-je t12
-mov edx, 0
-mov [-12 + ebp], edx
-jmp t13
-mov edx, 1
-mov [-12 + ebp], edx
-cmp [-12 + ebp], 0
-je t23
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-push edx
-mov [-8 + ebp], edx
-cmp [8 + ebp], 0
-je t12
-mov edx, 0
-mov [-12 + ebp], edx
-jmp t13
-mov edx, 1
-mov [-12 + ebp], edx
 cmp [-12 + ebp], 0
 je t23
 mov  eax, [-16 + ebp]
@@ -166,77 +55,12 @@ push ebx
 mov [-16 + ebp], eax
 mov 1, ebx
 call func_1_acker
-add esp, -24
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-push edx
-mov [-8 + ebp], edx
-cmp [8 + ebp], 0
-je t12
-mov edx, 0
-mov [-12 + ebp], edx
-jmp t13
-mov edx, 1
-mov [-12 + ebp], edx
-cmp [-12 + ebp], 0
-je t23
-mov  eax, [-16 + ebp]
-push eax
-mov  ebx, 1
-push ebx
-mov [-16 + ebp], eax
-mov 1, ebx
-call func_1_acker
-add esp, -24
-mov None, eax
+mov [-20 + ebp], eax
 mov  eax, [-20 + ebp]
 push eax
 mov [-20 + ebp], eax
 
 t23:
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-push edx
-mov [-8 + ebp], edx
-cmp [8 + ebp], 0
-je t12
-mov edx, 0
-mov [-12 + ebp], edx
-jmp t13
-mov edx, 1
-mov [-12 + ebp], edx
-cmp [-12 + ebp], 0
-je t23
-mov  eax, [-16 + ebp]
-push eax
-mov  ebx, 1
-push ebx
-mov [-16 + ebp], eax
-mov 1, ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-20 + ebp]
-push eax
-mov [-20 + ebp], eax
 mov  eax, [-24 + ebp]
 push eax
 mov  ebx, [-28 + ebp]
@@ -244,50 +68,7 @@ push ebx
 mov [-24 + ebp], eax
 mov [-28 + ebp], ebx
 call func_1_acker
-add esp, -24
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-push edx
-mov [-8 + ebp], edx
-cmp [8 + ebp], 0
-je t12
-mov edx, 0
-mov [-12 + ebp], edx
-jmp t13
-mov edx, 1
-mov [-12 + ebp], edx
-cmp [-12 + ebp], 0
-je t23
-mov  eax, [-16 + ebp]
-push eax
-mov  ebx, 1
-push ebx
-mov [-16 + ebp], eax
-mov 1, ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-20 + ebp]
-push eax
-mov [-20 + ebp], eax
-mov  eax, [-24 + ebp]
-push eax
-mov  ebx, [-28 + ebp]
-push ebx
-mov [-24 + ebp], eax
-mov [-28 + ebp], ebx
-call func_1_acker
-add esp, -24
-mov None, eax
+mov [-32 + ebp], eax
 mov  eax, [-32 + ebp]
 push eax
 mov [-32 + ebp], eax
@@ -299,55 +80,6 @@ func_1_main:
 push ebp
 mov ebp, esp
 sub esp, 12
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-push edx
-mov [-8 + ebp], edx
-cmp [8 + ebp], 0
-je t12
-mov edx, 0
-mov [-12 + ebp], edx
-jmp t13
-mov edx, 1
-mov [-12 + ebp], edx
-cmp [-12 + ebp], 0
-je t23
-mov  eax, [-16 + ebp]
-push eax
-mov  ebx, 1
-push ebx
-mov [-16 + ebp], eax
-mov 1, ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-20 + ebp]
-push eax
-mov [-20 + ebp], eax
-mov  eax, [-24 + ebp]
-push eax
-mov  ebx, [-28 + ebp]
-push ebx
-mov [-24 + ebp], eax
-mov [-28 + ebp], ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-32 + ebp]
-push eax
-mov [-32 + ebp], eax
-mov esp, ebp
-pop ebp
-ret
 mov edx, 0
 mov ecx, 0
 mov edx, 0
@@ -355,240 +87,12 @@ mov [-8 + ebp], ecx
 mov [-4 + ebp], edx
 
 t60:
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-push edx
-mov [-8 + ebp], edx
-cmp [8 + ebp], 0
-je t12
-mov edx, 0
-mov [-12 + ebp], edx
-jmp t13
-mov edx, 1
-mov [-12 + ebp], edx
-cmp [-12 + ebp], 0
-je t23
-mov  eax, [-16 + ebp]
-push eax
-mov  ebx, 1
-push ebx
-mov [-16 + ebp], eax
-mov 1, ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-20 + ebp]
-push eax
-mov [-20 + ebp], eax
-mov  eax, [-24 + ebp]
-push eax
-mov  ebx, [-28 + ebp]
-push ebx
-mov [-24 + ebp], eax
-mov [-28 + ebp], ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-32 + ebp]
-push eax
-mov [-32 + ebp], eax
-mov esp, ebp
-pop ebp
-ret
-mov edx, 0
-mov ecx, 0
-mov edx, 0
-mov [-8 + ebp], ecx
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 4
-jg t62
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-push edx
-mov [-8 + ebp], edx
-cmp [8 + ebp], 0
-je t12
-mov edx, 0
-mov [-12 + ebp], edx
-jmp t13
-mov edx, 1
-mov [-12 + ebp], edx
-cmp [-12 + ebp], 0
-je t23
-mov  eax, [-16 + ebp]
-push eax
-mov  ebx, 1
-push ebx
-mov [-16 + ebp], eax
-mov 1, ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-20 + ebp]
-push eax
-mov [-20 + ebp], eax
-mov  eax, [-24 + ebp]
-push eax
-mov  ebx, [-28 + ebp]
-push ebx
-mov [-24 + ebp], eax
-mov [-28 + ebp], ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-32 + ebp]
-push eax
-mov [-32 + ebp], eax
-mov esp, ebp
-pop ebp
-ret
-mov edx, 0
-mov ecx, 0
-mov edx, 0
-mov [-8 + ebp], ecx
-mov [-4 + ebp], edx
 cmp [-4 + ebp], 4
 jg t62
 mov edx, 0
 mov [-8 + ebp], edx
 
 t57:
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-push edx
-mov [-8 + ebp], edx
-cmp [8 + ebp], 0
-je t12
-mov edx, 0
-mov [-12 + ebp], edx
-jmp t13
-mov edx, 1
-mov [-12 + ebp], edx
-cmp [-12 + ebp], 0
-je t23
-mov  eax, [-16 + ebp]
-push eax
-mov  ebx, 1
-push ebx
-mov [-16 + ebp], eax
-mov 1, ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-20 + ebp]
-push eax
-mov [-20 + ebp], eax
-mov  eax, [-24 + ebp]
-push eax
-mov  ebx, [-28 + ebp]
-push ebx
-mov [-24 + ebp], eax
-mov [-28 + ebp], ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-32 + ebp]
-push eax
-mov [-32 + ebp], eax
-mov esp, ebp
-pop ebp
-ret
-mov edx, 0
-mov ecx, 0
-mov edx, 0
-mov [-8 + ebp], ecx
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 4
-jg t62
-mov edx, 0
-mov [-8 + ebp], edx
-cmp [-8 + ebp], 10
-jg t59
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-push edx
-mov [-8 + ebp], edx
-cmp [8 + ebp], 0
-je t12
-mov edx, 0
-mov [-12 + ebp], edx
-jmp t13
-mov edx, 1
-mov [-12 + ebp], edx
-cmp [-12 + ebp], 0
-je t23
-mov  eax, [-16 + ebp]
-push eax
-mov  ebx, 1
-push ebx
-mov [-16 + ebp], eax
-mov 1, ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-20 + ebp]
-push eax
-mov [-20 + ebp], eax
-mov  eax, [-24 + ebp]
-push eax
-mov  ebx, [-28 + ebp]
-push ebx
-mov [-24 + ebp], eax
-mov [-28 + ebp], ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-32 + ebp]
-push eax
-mov [-32 + ebp], eax
-mov esp, ebp
-pop ebp
-ret
-mov edx, 0
-mov ecx, 0
-mov edx, 0
-mov [-8 + ebp], ecx
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 4
-jg t62
-mov edx, 0
-mov [-8 + ebp], edx
 cmp [-8 + ebp], 10
 jg t59
 mov  eax, [-4 + ebp]
@@ -598,76 +102,7 @@ push ebx
 mov [-4 + ebp], eax
 mov [-8 + ebp], ebx
 call func_1_acker
-add esp, -24
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-push edx
-mov [-8 + ebp], edx
-cmp [8 + ebp], 0
-je t12
-mov edx, 0
-mov [-12 + ebp], edx
-jmp t13
-mov edx, 1
-mov [-12 + ebp], edx
-cmp [-12 + ebp], 0
-je t23
-mov  eax, [-16 + ebp]
-push eax
-mov  ebx, 1
-push ebx
-mov [-16 + ebp], eax
-mov 1, ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-20 + ebp]
-push eax
-mov [-20 + ebp], eax
-mov  eax, [-24 + ebp]
-push eax
-mov  ebx, [-28 + ebp]
-push ebx
-mov [-24 + ebp], eax
-mov [-28 + ebp], ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-32 + ebp]
-push eax
-mov [-32 + ebp], eax
-mov esp, ebp
-pop ebp
-ret
-mov edx, 0
-mov ecx, 0
-mov edx, 0
-mov [-8 + ebp], ecx
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 4
-jg t62
-mov edx, 0
-mov [-8 + ebp], edx
-cmp [-8 + ebp], 10
-jg t59
-mov  eax, [-4 + ebp]
-push eax
-mov  ebx, [-8 + ebp]
-push ebx
-mov [-4 + ebp], eax
-mov [-8 + ebp], ebx
-call func_1_acker
-add esp, -24
-mov None, eax
+mov [-12 + ebp], eax
 push eax
 xor eax, eax
 push eax
@@ -680,85 +115,6 @@ add esp, 8
 pop eax
 
 t58:
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-push edx
-mov [-8 + ebp], edx
-cmp [8 + ebp], 0
-je t12
-mov edx, 0
-mov [-12 + ebp], edx
-jmp t13
-mov edx, 1
-mov [-12 + ebp], edx
-cmp [-12 + ebp], 0
-je t23
-mov  eax, [-16 + ebp]
-push eax
-mov  ebx, 1
-push ebx
-mov [-16 + ebp], eax
-mov 1, ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-20 + ebp]
-push eax
-mov [-20 + ebp], eax
-mov  eax, [-24 + ebp]
-push eax
-mov  ebx, [-28 + ebp]
-push ebx
-mov [-24 + ebp], eax
-mov [-28 + ebp], ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-32 + ebp]
-push eax
-mov [-32 + ebp], eax
-mov esp, ebp
-pop ebp
-ret
-mov edx, 0
-mov ecx, 0
-mov edx, 0
-mov [-8 + ebp], ecx
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 4
-jg t62
-mov edx, 0
-mov [-8 + ebp], edx
-cmp [-8 + ebp], 10
-jg t59
-mov  eax, [-4 + ebp]
-push eax
-mov  ebx, [-8 + ebp]
-push ebx
-mov [-4 + ebp], eax
-mov [-8 + ebp], ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-push eax
-xor eax, eax
-push eax
-xor eax, eax
-mov eax, [-12 + ebp]
-push eax
-push message
-call printf
-add esp, 8
-pop eax
 mov edx, [-8 + ebp]
 add edx, 1
 mov [-8 + ebp], edx
@@ -767,182 +123,12 @@ jmp t57
 t59:
 
 t61:
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-push edx
-mov [-8 + ebp], edx
-cmp [8 + ebp], 0
-je t12
-mov edx, 0
-mov [-12 + ebp], edx
-jmp t13
-mov edx, 1
-mov [-12 + ebp], edx
-cmp [-12 + ebp], 0
-je t23
-mov  eax, [-16 + ebp]
-push eax
-mov  ebx, 1
-push ebx
-mov [-16 + ebp], eax
-mov 1, ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-20 + ebp]
-push eax
-mov [-20 + ebp], eax
-mov  eax, [-24 + ebp]
-push eax
-mov  ebx, [-28 + ebp]
-push ebx
-mov [-24 + ebp], eax
-mov [-28 + ebp], ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-32 + ebp]
-push eax
-mov [-32 + ebp], eax
-mov esp, ebp
-pop ebp
-ret
-mov edx, 0
-mov ecx, 0
-mov edx, 0
-mov [-8 + ebp], ecx
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 4
-jg t62
-mov edx, 0
-mov [-8 + ebp], edx
-cmp [-8 + ebp], 10
-jg t59
-mov  eax, [-4 + ebp]
-push eax
-mov  ebx, [-8 + ebp]
-push ebx
-mov [-4 + ebp], eax
-mov [-8 + ebp], ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-push eax
-xor eax, eax
-push eax
-xor eax, eax
-mov eax, [-12 + ebp]
-push eax
-push message
-call printf
-add esp, 8
-pop eax
-mov edx, [-8 + ebp]
-add edx, 1
-mov [-8 + ebp], edx
-jmp t57
 mov edx, [-4 + ebp]
 add edx, 1
 mov [-4 + ebp], edx
 jmp t60
 
 t62:
-cmp [12 + ebp], 0
-je t3
-mov edx, 0
-mov [-4 + ebp], edx
-jmp t4
-mov edx, 1
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 0
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-push edx
-mov [-8 + ebp], edx
-cmp [8 + ebp], 0
-je t12
-mov edx, 0
-mov [-12 + ebp], edx
-jmp t13
-mov edx, 1
-mov [-12 + ebp], edx
-cmp [-12 + ebp], 0
-je t23
-mov  eax, [-16 + ebp]
-push eax
-mov  ebx, 1
-push ebx
-mov [-16 + ebp], eax
-mov 1, ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-20 + ebp]
-push eax
-mov [-20 + ebp], eax
-mov  eax, [-24 + ebp]
-push eax
-mov  ebx, [-28 + ebp]
-push ebx
-mov [-24 + ebp], eax
-mov [-28 + ebp], ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-mov  eax, [-32 + ebp]
-push eax
-mov [-32 + ebp], eax
-mov esp, ebp
-pop ebp
-ret
-mov edx, 0
-mov ecx, 0
-mov edx, 0
-mov [-8 + ebp], ecx
-mov [-4 + ebp], edx
-cmp [-4 + ebp], 4
-jg t62
-mov edx, 0
-mov [-8 + ebp], edx
-cmp [-8 + ebp], 10
-jg t59
-mov  eax, [-4 + ebp]
-push eax
-mov  ebx, [-8 + ebp]
-push ebx
-mov [-4 + ebp], eax
-mov [-8 + ebp], ebx
-call func_1_acker
-add esp, -24
-mov None, eax
-push eax
-xor eax, eax
-push eax
-xor eax, eax
-mov eax, [-12 + ebp]
-push eax
-push message
-call printf
-add esp, 8
-pop eax
-mov edx, [-8 + ebp]
-add edx, 1
-mov [-8 + ebp], edx
-jmp t57
-mov edx, [-4 + ebp]
-add edx, 1
-mov [-4 + ebp], edx
-jmp t60
 mov esp, ebp
 pop ebp
 ret
