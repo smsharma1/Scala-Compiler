@@ -372,6 +372,7 @@ def p_MethodHeader(p):
 	global currentScope
 	parentScope = currentScope.parent
 	l1 = ["label: " + p[2].meta]
+	print ("\n\n\n\nam i vissibl now")
 	if p[3] != None:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
 		#	print "in if part"
@@ -381,8 +382,6 @@ def p_MethodHeader(p):
 		else:
 			parentScope.functions[p[2].typelist[0]] = currentScope
 			currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
-			print currentScope.name,"ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
-
 		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + p[3].typelist,order="ccc",meta=p[2].meta,code=l1 + p[2].code)
 	else:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
@@ -391,6 +390,7 @@ def p_MethodHeader(p):
 		else:
 			parentScope.functions[p[2].typelist[0]] = currentScope
 			currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:],[])
+			print currentScope.name ," i am in method header see me please"
 		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + [] ,order="ccc",meta=p[2].meta,code=l1+p[2].code)
 
 def p_MethodDefine(p):
@@ -867,6 +867,7 @@ def p_M(p):
 	newscope.returnType = currentScope.returnType
 	# print "dddddddddddddddddddddddddddddddddddddddd"
 	newscope.parent = currentScope
+	newscope.returnType = currentScope.returnType
 	currentScope = newscope
 def p_N(p):
 	'N : empty'
@@ -1076,6 +1077,8 @@ def p_EqualityExpression(p):
 	'''EqualityExpression : RelationalExpression
 						 | EqualityExpression EQUAL RelationalExpression
 						| EqualityExpression NOTEQUAL RelationalExpression'''
+	truelabel = newtemp()
+	falselabel = newtemp()
 	if len(p) ==  4:
 		if(not p[1].typelist[0] == p[3].typelist[0]):
 			print "Type mismatch error at line " + str(p.lexer.lineno)
@@ -1085,12 +1088,12 @@ def p_EqualityExpression(p):
 		if p[2] == "==":
 			nodename = newtemp()
 			print nodename,"I am in Equality Expression"
-			code = ["cmp "+  p[1].place + " "+ p[3].place] + ['je nextstat + 3'] + ["= " + nodename + " 0 " + nodename] +["goto nextstat + 2", "= " + nodename + " 1 " + nodename]
+			code = ["cmp "+  p[1].place + " "+ p[3].place] + ['je '+truelabel] + ["= " + nodename + " 0 " + nodename] +["goto " + falselabel, "label: "+truelabel, "= " + nodename + " 1 " + nodename, "label: "+falselabel]
 			p[0] = Node(p[2], [p[1], p[3]], [],typelist = ['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == "!=":
 			nodename = newtemp()
 			print nodename,"I am in Equality Expression"
-			code = ["cmp " + p[1].place + " " + p[3].place] + ["je nextstat + 3"] +["= " + nodename + " 0 " + nodename] +["goto nextstat + 2", "= " + nodename + " 1 " + nodename]
+			code = ["cmp " + p[1].place + " " + p[3].place] + ['je '+truelabel] +["= " + nodename + " 0 " + nodename] +["goto " + falselabel, "label: "+truelabel, "= " + nodename + " 1 " + nodename, "label: "+falselabel]
 			p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)	
 	else:
 		p[0] = p[1]
@@ -1105,6 +1108,8 @@ def p_RelationalExpression(p):
 	if len(p) ==  4:
 		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
 		# print p[1].typelist[0],"jjfjfjfj"
+		truelabel = newtemp()
+		falselabel = newtemp()
 		if(not type_here):
 			print "Type mismatch error at line " + str(p.lexer.lineno)
 			global Error
@@ -1113,22 +1118,22 @@ def p_RelationalExpression(p):
 		if p[2] == "<":
 			nodename = newtemp()
 			print nodename,"I am in Relational Expression"
-			code = ["cmp " + p[1].place + " " + p[3].place] + ["jl nextstat + 3"] +["= " + nodename + " 0 " + nodename,"goto nextstat + 2", "= " + nodename + " 1 " + nodename]
+			code = ["cmp " + p[1].place + " " + p[3].place] + ["jl "+truelabel] +["= " + nodename + " 0 " + nodename,"goto "+falselabel, "label: "+truelabel, "= " + nodename + " 1 " + nodename, "label: "+falselabel]
 			p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename )
 		elif p[2] == ">":
 			nodename = newtemp()
 			print nodename,"I am in Relational Expression"
-			code = ["cmp " + p[1].place + " " + p[3].place] + ["jg nextstat + 3"] + ["= " + nodename + " 0 " + nodename, "goto nextstat + 2", "= " + nodename + " 1 " + nodename]
+			code = ["cmp " + p[1].place + " " + p[3].place] + ["jg "+truelabel] + ["= " + nodename + " 0 " + nodename, "goto "+falselabel, "label: "+truelabel, "= " + nodename + " 1 " + nodename, "label: "+falselabel]
 			p[0] = Node(">", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == "<=":
 			nodename = newtemp()
 			print nodename,"I am in Relational Expression"
-			code = ["cmp " + p[1].place + " " + p[3].place] + ["jle nextstat + 3"] + ["= " + nodename + " 0 " + nodename, "goto nextstat + 2", "= " + nodename + " 1 " + nodename]
+			code = ["cmp " + p[1].place + " " + p[3].place] + ["jle "+truelabel] + ["= " + nodename + " 0 " + nodename, "goto "+falselabel, "label: "+truelabel, "= " + nodename + " 1 " + nodename, "label: "+falselabel]
 			p[0] = Node("<=", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == ">=":
 			nodename = newtemp()
 			print nodename,"I am in Relational Expression"
-			code = ["cmp " + p[1].place + " " + p[3].place] + ["jge nextstat + 3"] + ["= " + nodename + " 0 " + nodename, "goto nextstat + 2", "= " + nodename + " 1 " + nodename]
+			code = ["cmp " + p[1].place + " " + p[3].place] + ["jge "+truelabel] + ["= " + nodename + " 0 " + nodename, "goto "+falselabel, "label: "+truelabel, "= " + nodename + " 1 " + nodename, "label: "+falselabel]
 			p[0] = Node(">=", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 		elif p[2] == "instanceof":
 			p[0] = Node("instanceof", [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True)

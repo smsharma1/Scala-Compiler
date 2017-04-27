@@ -1264,7 +1264,7 @@ def p_MethodInvocation(p):
 	code =[]
 	func_name = p[1].type
 	temp = None
-#	print p[1].name,"name",currentScope.name
+	# print p[1].name,"name",currentScope.name, "can you see me now in methodinvocation       "
 #	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
 	if(p[1].type == "println"):
 		p[0] = Node("MethodInvocation", [p[1], p[3]], [] , order='cc')
