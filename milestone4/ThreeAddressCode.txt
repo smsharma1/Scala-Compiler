@@ -1,115 +1,35 @@
-label: func_1_acker
+label: func_1_fibo
 arg n
-arg m
-cmp m 0
-<<<<<<< HEAD
-je t3
+ARRAY f 10
+= i 0 i
+<- f 0 t5
 = t5 0 t5
-goto t4
-label: t3
-= t5 1 t5
-label: t4
-cmp t5 0
-je t9
-+ n 1 t6
-pusharg t6
-label: t9
-cmp n 0
-je t12
-= t14 0 t14
-goto t13
-label: t12
-= t14 1 t14
-label: t13
-cmp t14 0
-je t23
-pusharg t15
-pusharg 1
-call func_1_acker
-get t20
-pusharg t20
-label: t23
-pusharg t24
-pusharg t32
-call func_1_acker
-get t35
-pusharg t35
-=======
-je nextstat + 3
-= t1 0 t1
-goto nextstat + 2
-= t1 1 t1
-cmp t1 0
-je t3
-+ n 1 t2
-pusharg t2
-label: t3
-cmp n 0
-je nextstat + 3
-= t4 0 t4
-goto nextstat + 2
-= t4 1 t4
-cmp t4 0
-je t7
-pusharg t5
-pusharg 1
-call func_2_acker
-get t6
-pusharg t6
-label: t7
-pusharg t8
-pusharg t10
-call func_1_acker
-get t11
-pusharg t11
->>>>>>> ee696f6a32e326abf15537d2a230b425d713c416
+<- f 1 t10
+= t10 1 t10
+= i 2 i
+label: t31
+cmp i n
+jg t33
+<- f i t19
+- i 1 t20
+<- f t20 t23
+- i 2 t24
+<- f t24 t27
++ t23 t27 t28
+= t19 t28 t19
+label: t32
++ i 1 i
+goto t31
+label: t33
+<- f n t36
+= t t36 t
+pusharg t
 ret
 label: func_1_main
 arg args
-= m 0 m
-= n 0 n
-= m 0 m
-<<<<<<< HEAD
-label: t60
-cmp m 4
-jg t62
-= n 0 n
-label: t57
-cmp n 10
-jg t59
-pusharg m
-pusharg n
-call func_1_acker
-get t54
-print t54
-label: t58
-+ n 1 n
-goto t57
-label: t59
-label: t61
-+ m 1 m
-goto t60
-label: t62
-=======
-label: t16
-cmp m 4
-jg t18
-= n 0 n
-label: t13
-cmp n 10
-jg t15
-pusharg m
-pusharg n
-call func_6_acker
-get t12
-print t12
-label: t14
-+ n 1 n
-goto t13
-label: t15
-label: t17
-+ m 1 m
-goto t16
-label: t18
->>>>>>> ee696f6a32e326abf15537d2a230b425d713c416
+pusharg 9
+call func_1_fibo
+get t43
+= k t43 k
+print k
 ret
