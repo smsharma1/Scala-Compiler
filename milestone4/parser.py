@@ -381,6 +381,7 @@ def p_MethodHeader(p):
 		else:
 			parentScope.functions[p[2].typelist[0]] = currentScope
 			currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
+			print currentScope.name,"ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
 
 		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + p[3].typelist,order="ccc",meta=p[2].meta,code=l1 + p[2].code)
 	else:
@@ -395,7 +396,8 @@ def p_MethodHeader(p):
 def p_MethodDefine(p):
 	'''MethodDefine : R_DEF'''
 	global currentScope
-	currentScope = currentScope.NewFuncScope()		
+	currentScope = currentScope.NewFuncScope()	
+	# print "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"	
 	p[0] = Node(p[1], [],[], isLeaf=True)
 	
 
@@ -862,6 +864,8 @@ def p_M(p):
 	'M : empty'
 	global currentScope
 	newscope = currentScope.NewFuncScope()
+	newscope.returnType = currentScope.returnType
+	# print "dddddddddddddddddddddddddddddddddddddddd"
 	newscope.parent = currentScope
 	currentScope = newscope
 def p_N(p):
@@ -1269,6 +1273,7 @@ def p_MethodInvocation(p):
 	global esp
 	global ebp
 	code =[]
+	print p[1],"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 	func_name = 'func_' +str(currentScope.parent.uid) + "_" + p[1].type
 	temp = None
 #	print p[1].name,"name",currentScope.name

@@ -1,8 +1,58 @@
+label: func_1_acker
+arg n
+arg m
+cmp m 0
+je nextstat + 3
+= t1 0 t1
+goto nextstat + 2
+= t1 1 t1
+cmp t1 0
+je t3
++ n 1 t2
+pusharg t2
+label: t3
+cmp n 0
+je nextstat + 3
+= t4 0 t4
+goto nextstat + 2
+= t4 1 t4
+cmp t4 0
+je t7
+pusharg t5
+pusharg 1
+call func_2_acker
+get t6
+pusharg t6
+label: t7
+pusharg t8
+pusharg t10
+call func_1_acker
+get t11
+pusharg t11
+ret
 label: func_1_main
 arg args
-= a 10 a
-= b 20 b
-= d 0 d
-* a b t1
-= c t1 c
+= m 0 m
+= n 0 n
+= m 0 m
+label: t16
+cmp m 4
+jg t18
+= n 0 n
+label: t13
+cmp n 10
+jg t15
+pusharg m
+pusharg n
+call func_6_acker
+get t12
+print t12
+label: t14
++ n 1 n
+goto t13
+label: t15
+label: t17
++ m 1 m
+goto t16
+label: t18
 ret
