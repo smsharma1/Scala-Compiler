@@ -59,11 +59,16 @@ if __name__ == "__main__" :
             scopefunc = node[2]
             datafile.memorymap[scopefunc] = {}
         if node[1] == 'printstr' :
+            for i in range(0,5):
+                if node[i]:
+                    pass
+                else:
+                    node[i] = ''
             datafile.setofString['str'+str(node[0])] = ' '.join(node[2:])
         if node[1] == 'ret':
             flag = 0
-            datafile.numberofarguments[scopefunc] = arglength
-            datafile.numberofvariables[scopefunc] = locallength
+            datafile.numberofarguments[scopefunc] = -arglength
+            datafile.numberofvariables[scopefunc] = -locallength
             scopefunc = 0
             arglength = 8
             locallength = -4

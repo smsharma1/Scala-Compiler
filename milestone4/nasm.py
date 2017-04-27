@@ -12,7 +12,9 @@ def blockasmgenerate():
         datafile.L = None
         datafile.yprime = None
         datafile.zprime = None
+        print i ," i am in blockasmgenerate ok ...."
         OperatorMap[datafile.block[i].type](i)
+        print i ," i am in blockasmgenerate afte operator map huh ok ...."
     i = len(datafile.block) - 1
     if i == -1:
         return 
@@ -35,8 +37,8 @@ def blockasmgenerate():
 
 def asm():
     print("section .data")
-    f.write("section .data\n")
-    f.write("\n tempbuffer db '          '")
+    f.write("section .data\nmessage db \"Register = %d\", 10, 0\n")
+    f.write("\n formatin: db \"%d\", 0")
     for k,v in datafile.setofString.items() :
         print('\n'+k+ ' db '  + "'" + v + "',0xa")
         f.write('\n'+k+ ' db '  + "'" + v + "',0xa\n")
@@ -72,12 +74,12 @@ def asm():
     # f.write('\nscanFormat:  .asciz "%d"\n\n')
     # datafile.lineno = datafile.lineno + 3
     # print datafile.lineno, "lineno"
-    print('global _start\n\n')
-    f.write('global _start\n\n')
+    print('global main\n\n')
+    f.write('global main\nextern printf\nextern scanf\n\n')
     datafile.lineno = datafile.lineno + 3
     # print datafile.lineno, "lineno"
-    print('_start:')
-    f.write('_start:\n')
+    print('main:')
+    f.write('main:\n')
     datafile.lineno = datafile.lineno + 1
     f.write('call func_1_main\nmov  eax, 1\nint  0x80\n')
     # print datafile.lineno, "lineno"
@@ -90,7 +92,7 @@ def asm():
             blockbreaker.add(i+1) #any statement that follows a goto statement is a leader
     blockbreaker.add(len(datafile.instruction))
     blockbreaker = sorted(blockbreaker)
-    # print blockbreaker, "blockbreaker"
+    print blockbreaker, "blockbreaker"
     for i in range (0,len(blockbreaker)-1):
         if i == 0:
             datafile.block = datafile.instruction[blockbreaker[i]:blockbreaker[i+1]]
@@ -108,10 +110,11 @@ def asm():
                 print("\t" + "mov ebp, esp")
                 f.write("mov ebp, esp\n")
                 datafile.lineno = datafile.lineno + 1
-                print("\t" + "sub esp, {}".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
+                print("\t" + "add esp, {}".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
                 f.write("sub esp, {}\n".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
                 datafile.lineno = datafile.lineno + 1
-                 
+        else:
+            datafile.block = datafile.instruction[blockbreaker[i]:blockbreaker[i+1]]
         blockasmgenerate()  
     f.write("int_to_string:\nadd esi,9\nmov byte [esi],0\nmov ebx,10\n.next_digit:\nxor edx,edx\ndiv ebx\nadd dl,'0'\ndec esi\n  mov [esi],dl\ntest eax,eax\njnz .next_digit\nmov eax,esi\nret\n")
 
@@ -537,6 +540,7 @@ def CALL(i):
     
     datafile.lineno = datafile.lineno + 1
     datafile.blockout.append('call ' + datafile.block[i].out)
+    print datafile.numberofarguments , "number of arguments ......... \n\n"
     datafile.blockout.append('add esp, {}'.format(datafile.numberofarguments[datafile.block[i].out]-8))
 
 def PRINTSTR(i):
@@ -567,19 +571,23 @@ def PRINT(i):
         datafile.blockout.append('push eax')
         datafile.blockout.append('xor eax, eax')
         datafile.blockout.append('mov ' + 'eax, ' + register.mem(l))
+    datafile.blockout.append('push eax')
+    datafile.blockout.append('push message')
+    datafile.blockout.append('call printf')
+    datafile.blockout.append('add esp, 8')
     # datafile.blockout.append('sub esp, 10')
     # datafile.blockout.append('mov esi, tempbuffer')
-    datafile.blockout.append("add eax, '0'")
+    # datafile.blockout.append("add eax, '0'")
     # datafile.blockout.append('push ebx\npush edx')
     # datafile.blockout.append('call int_to_string')
     # datafile.blockout.append('pop edx\npop ebx')
-    datafile.blockout.append('mov edx, 1')
-    datafile.blockout.append('push eax')
-    datafile.blockout.append('mov ecx, esp')
-    datafile.blockout.append('mov ebx, 1')
-    datafile.blockout.append('mov eax,4')
-    datafile.blockout.append('int 0x80')
-    datafile.blockout.append('pop eax')
+    # datafile.blockout.append('mov edx, 1')
+    # datafile.blockout.append('push eax')
+    # datafile.blockout.append('mov ecx, esp')
+    # datafile.blockout.append('mov ebx, 1')
+    # datafile.blockout.append('mov eax,4')
+    # datafile.blockout.append('int 0x80')
+    # datafile.blockout.append('pop eax')
     datafile.blockout.append('pop eax')
     # datafile.blockout.append('pop edx\npop ecx\npop ebx\npop eax\n')
     datafile.lineno = datafile.lineno + 14
@@ -588,27 +596,41 @@ def PRINT(i):
     # datafile.lineno = datafile.lineno + 1
 
 def READ(i): 
-    for reg in datafile.registerlist:
-        datafile.blockout.append("push " + reg)
+    # for reg in datafile.registerlist:
+    datafile.blockout.append("push eax")
     l = datafile.block[i].out
-    datafile.blockout.append("mov ecx,ebp")
-    k = register.mem(l)
-    if k[1] == "-":
-        datafile.blockout.append("mov edx," + k[2])
-        datafile.blockout.append("sub ecx,edx")
-    else:
-        datafile.blockout.append("mov edx," + k[1])
-        datafile.blockout.append("add ecx,edx")
-
-    datafile.blockout.append("mov eax,3")
-    datafile.blockout.append("mov ebx,2")
-    datafile.blockout.append("mov edx,4")
-    datafile.blockout.append("int 80h")
+    print l, "this is l in read"
+    # datafile.blockout.append("mov ecx,ebp")
+    try:
+        datafile.addressdescriptor[l]
+        k = datafile.addressdescriptor[l]
+        datafile.blockout.append("mov eax, esp")
+    except:
+        k = register.mem(l)
+        datafile.blockout.append("lea eax," + k)
+    
+    # print k, "in read function"
+    # if k[0] == "[":
+        
+    #     # datafile.blockout.append("sub ecx,edx")
+    # else:
+    #     datafile.blockout.append("mov eax, esp")
+    datafile.blockout.append("push eax")
+    datafile.blockout.append("push formatin")
+    # datafile.blockout.append("mov eax,3")
+    # datafile.blockout.append("mov ebx,2")
+    # datafile.blockout.append("mov edx,4")
+    # datafile.blockout.append("int 80h")
     # for reg in datafile.registerlist.reverse():
     #     datafile.blockout.append("pop " + reg)
-    datafile.blockout.append('pop edx')
-    datafile.blockout.append('pop ecx')
-    datafile.blockout.append('pop ebx')
+    datafile.blockout.append("call scanf")
+    datafile.blockout.append("add esp, 8")
+    if k[0] != "[":
+        datafile.blockout.append("mov " + k + ", [esp]")
+        # datafile.blockout.append("pop eax")
+    # datafile.blockout.append('pop edx')
+    # datafile.blockout.append('pop ecx')
+    # datafile.blockout.append('pop ebx')
     datafile.blockout.append('pop eax')
 
 OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL, 'printstr': PRINTSTR, 'print' : PRINT, 'read' : READ }

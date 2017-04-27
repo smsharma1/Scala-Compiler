@@ -16,7 +16,7 @@ object Ackermann {
 		{
             for ( n <- 0 until 10 )
 		    {       
-			    print(acker(m,n));
+			    println(acker(m,n));
       	    }
       	}
 

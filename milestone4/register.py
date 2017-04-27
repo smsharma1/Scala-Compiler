@@ -81,6 +81,7 @@ def mem(var):
         int(var)
         return str(var)
     except :
+        print datafile.registerlist, "this is registerlistin mem"
         if var in datafile.registerlist:
             return var
         else:
