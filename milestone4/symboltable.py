@@ -23,12 +23,14 @@ class SymbolTable:
 		self.offset=0
 		self.offsetmap={}
 		self.itemcount=0
+		self.sizevars={}
 		self.size=0 #relevant for classes and objects
 		SymbolTable.uid = SymbolTable.uid+1
 		# print self.argList
 
 	def LookUpVar(self, symbolName):
 		scope = self
+		print scope.variables, "this is scope.variables"
 		if(self.LookUpCurrentScope(symbolName)):
 			if(symbolName in scope.variables):
 				pass
@@ -40,6 +42,24 @@ class SymbolTable:
 				return scope.variables[symbolName]
 			scope = scope.parent
 #		print symbolName, " Variable not found"
+		return False
+	
+	def LookUpVarSize(self, symbolName):
+		scope = self
+		print scope.variables, "this is scope.variables"
+		if(self.LookUpCurrentScope(symbolName)):
+			if(symbolName in scope.variables):
+				pass
+			else:
+				return False
+		while(scope):
+			if symbolName in scope.variables:
+				# print "hola ", scope.variables[symbolName]
+				return scope.variables[symbolName]
+			scope = scope.parent
+#		print symbolName, " Variable not found"
+		if symbolName in self.sizevars:
+			return self.sizevars[symbolName]
 		return False
 
 	def LookUpFunc(self, symbolName, argList):
@@ -211,6 +231,7 @@ class SymbolTable:
 						return self.variables[symbolName]
 					else:
 						raise ValueError(symbolName+" is a variable and not an array")
+				scope = scope.parent
 		else:
 			raise ValueError("No variable or array of this name found : "+symbolName)
 
@@ -243,6 +264,7 @@ class SymbolTable:
 			raise ValueError("InsertVar called on "+symbolName+" but it is already declared")
 		else:
 			self.variables[symbolName] = [val, type_name, length, self.offset]
+			self.sizevars[symbolName] = [val, type_name, length]
 			if length:
 				self.offset = self.offset + self.Size(type_name.upper())*length
 				esp = esp + self.Size(type_name.upper())*length
