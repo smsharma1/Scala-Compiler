@@ -1,6 +1,9 @@
 section .data
 message db "Register = %d", 10, 0
 formatin: db "%d", 0
+a TIMES 100 DW  0
+c TIMES 100 DW  0
+b TIMES 100 DW  0
 
 section .text
 	global main
@@ -12,128 +15,178 @@ call func_1_main
 mov  eax, 1
 int  0x80
 
-func_1_fibo:
+func_1_scana:
 push ebp
 mov ebp, esp
-<<<<<<< HEAD
-sub esp, 56
+sub esp, 24
 mov edx, 0
-lea eax,[-4 + ebp]
-add eax,0
-mov eax, 0
-lea ebx,[-4 + ebp]
-add ebx,0
-mov ebx, [ebx]
-mov ecx, ebx
-push ecx
-=======
-sub esp, 4060
+mov ecx, 0
+mov ebx, 0
 mov edx, 0
-lea eax,[-4 + ebp]
-sub eax,0
-mov ebx,0
-mov [eax],ebx
-lea ebx,[-4 + ebp]
-sub ebx,4
-mov ecx,1
-mov [ebx],ecx
-mov edx, 2
-mov [-4008 + ebp], eax
-mov [-4012 + ebp], ebx
-mov [-4004 + ebp], edx
+mov [-12 + ebp], ebx
+mov [-8 + ebp], ecx
+mov [-4 + ebp], edx
 
-t34:
+t28:
 mov eax,[8 + ebp]
-mov ebx,[-4004 + ebp]
+mov ebx,[-4 + ebp]
 cmp ebx,eax
 mov [8 + ebp], eax
-mov [-4004 + ebp], ebx
-jg t36
-mov ebx,4
-mov eax,[-4004 + ebp]
-imul ebx
-lea ebx,[-4 + ebp]
-sub ebx,eax
-mov edx, [-4004 + ebp]
-sub edx, 1
-mov [-4020 + ebp], ebx
-mov ebx,4
-mov [-4016 + ebp], eax
-mov eax,edx
-imul ebx
-lea ebx,[-4 + ebp]
-sub ebx,eax
-mov ebx, [ebx]
-mov ecx, [-4004 + ebp]
-sub ecx, 2
-mov [-4032 + ebp], ebx
-mov ebx,4
-mov [-4028 + ebp], eax
-mov eax,ecx
-imul ebx
-lea ebx,[-4 + ebp]
-sub ebx,eax
-mov ebx, [ebx]
-mov [-4024 + ebp], edx
-mov edx, [-4032 + ebp]
-add edx, ebx
-mov [-4036 + ebp], ecx
-mov ecx,[-4020 + ebp]
-mov [ecx],edx
-mov [-4040 + ebp], eax
-mov [-4044 + ebp], ebx
-mov [-4048 + ebp], edx
-
-t35:
-mov edx, [-4004 + ebp]
-add edx, 1
-mov [-4004 + ebp], edx
-jmp t34
-
-t36:
-mov ebx,4
-mov eax,[8 + ebp]
-imul ebx
-lea ebx,[-4 + ebp]
-sub ebx,eax
-mov ebx, [ebx]
-mov edx, ebx
-mov [-4052 + ebp], eax
-mov [-4056 + ebp], ebx
-mov [-4060 + ebp], edx
-mov eax, [-4060 + ebp]
-mov esp, ebp
-pop ebp
-ret
->>>>>>> dc6cae0095493b4efd004046162fedbec20a0ffa
-mov esp, ebp
-pop ebp
-ret
-
-func_1_main:
-push ebp
-mov ebp, esp
-sub esp, 8
+mov [-4 + ebp], ebx
+jg t30
 mov edx, 0
+mov [-8 + ebp], edx
+
+t25:
+mov eax,[8 + ebp]
+mov ebx,[-8 + ebp]
+cmp ebx,eax
+mov [8 + ebp], eax
+mov [-8 + ebp], ebx
+jg t27
 push eax
 mov eax, esp
 push eax
 push formatin
 call scanf
 add esp, 8
-mov edx, [esp]
 pop eax
-push edx
+mov edx, 5
+mov ebx,[-4 + ebp]
+mov eax,edx
+imul ebx
+add eax, [-8 + ebp]
+mov ebx,a
+sub ebx,eax
+mov [ecx],[-12 + ebp]
+mov [-16 + ebp], eax
+
+t26:
+mov edx, [-8 + ebp]
+add edx, 1
+mov [-8 + ebp], edx
+jmp t25
+
+t27:
+
+t29:
+mov edx, [-4 + ebp]
+add edx, 1
 mov [-4 + ebp], edx
-call func_1_fibo
-mov edx, eax
+jmp t28
+
+t30:
+mov esp, ebp
+pop ebp
+ret
+
+func_1_scanb:
+push ebp
+mov ebp, esp
+sub esp, 24
+mov edx, 0
+mov ecx, 0
+mov ebx, 0
+mov edx, 0
+mov [-12 + ebp], ebx
+mov [-8 + ebp], ecx
+mov [-4 + ebp], edx
+
+t58:
+mov eax,[8 + ebp]
+mov ebx,[-4 + ebp]
+cmp ebx,eax
+mov [8 + ebp], eax
+mov [-4 + ebp], ebx
+jg t60
+mov edx, 0
+mov [-8 + ebp], edx
+
+t55:
+mov eax,[8 + ebp]
+mov ebx,[-8 + ebp]
+cmp ebx,eax
+mov [8 + ebp], eax
+mov [-8 + ebp], ebx
+jg t57
+push eax
+mov eax, esp
+push eax
+push formatin
+call scanf
+add esp, 8
+pop eax
+mov edx, 5
+mov ebx,[-4 + ebp]
+mov eax,edx
+imul ebx
+add eax, [-8 + ebp]
+mov ebx,b
+sub ebx,eax
+mov [ecx],[-12 + ebp]
+mov [-16 + ebp], eax
+
+t56:
+mov edx, [-8 + ebp]
+add edx, 1
+mov [-8 + ebp], edx
+jmp t55
+
+t57:
+
+t59:
+mov edx, [-4 + ebp]
+add edx, 1
+mov [-4 + ebp], edx
+jmp t58
+
+t60:
+mov esp, ebp
+pop ebp
+ret
+
+func_1_printc:
+push ebp
+mov ebp, esp
+sub esp, 20
+mov edx, 0
+mov ecx, 0
+mov edx, 0
+mov [-8 + ebp], ecx
+mov [-4 + ebp], edx
+
+t84:
+mov eax,[8 + ebp]
+mov ebx,[-4 + ebp]
+cmp ebx,eax
+mov [8 + ebp], eax
+mov [-4 + ebp], ebx
+jg t86
+mov edx, 0
+mov [-8 + ebp], edx
+
+t81:
+mov eax,[8 + ebp]
+mov ebx,[-8 + ebp]
+cmp ebx,eax
+mov [8 + ebp], eax
+mov [-8 + ebp], ebx
+jg t83
+mov edx, 5
+mov ebx,[-4 + ebp]
+mov eax,edx
+imul ebx
+add eax, [-8 + ebp]
+mov ebx,a
+sub ebx,eax
+mov ebx, [ebx]
 push eax
 push ebx
 push ecx
 push edx
 
 xor eax, eax
-mov eax, edx
+mov eax, ebx
 push eax
 push message
 call printf
@@ -143,8 +196,41 @@ pop ecx
 pop ebx
 pop eax
 
-mov [-8 + ebp], eax
+mov [-12 + ebp], eax
+mov [-20 + ebp], ebx
+
+t82:
+mov edx, [-8 + ebp]
+add edx, 1
+mov [-8 + ebp], edx
+jmp t81
+
+t83:
+
+t85:
+mov edx, [-4 + ebp]
+add edx, 1
 mov [-4 + ebp], edx
+jmp t84
+
+t86:
+mov esp, ebp
+pop ebp
+ret
+
+func_1_main:
+push ebp
+mov ebp, esp
+sub esp, 0
+mov  eax, 4
+push eax
+call func_1_scana
+mov  eax, 4
+push eax
+call func_1_scanb
+mov  eax, 4
+push eax
+call func_1_printc
 mov esp, ebp
 pop ebp
 ret

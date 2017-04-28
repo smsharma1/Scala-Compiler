@@ -76,15 +76,29 @@ if __name__ == "__main__" :
                                 arglength = arglength + Size(currentScope.LookUpVarSize(node[2])[1])
                             elif (node[i] not in datafile.globalsection):
                                 datafile.memorymap[scopefunc][node[i]] = '['+ str(locallength) + ' + ebp]'
-                                print currentScope.name, " this is currentscope name"
-                                print node[2],";;;;;;;;;;;;;;;;;", currentScope.LookUpVarSize(node[2])[1], " this is the type;;;;;;;;;;;;"
+                                # print currentScope.name, " this is currentscope name"
+                                # print node[2],"777777777777777777777777777777777777777777777"#, currentScope.LookUpVarSize(node[2])[1], " this is the type;;;;;;;;;;;;"
                                 if node[1] == "ARRAY":
-                                    locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])*int(node[3])
+                                    try:
+                                        node[4]
+                                        locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])*int(node[3])*int(node[4])
+                                    except:
+                                        locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])*int(node[3])
                                 else:
+                                    # print node[2], "77777777777777777777777777777777777",currentScope.LookUpVarSize(node[2]),'88888888888888888888'
                                     locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])
                                 #TODO procedure under procedure 
                     else:
-                        datafile.globalsection.add(node[i])
+                        if node[1] == "ARRAY":
+                            try:
+                                node[4]
+                                size = Size(currentScope.LookUpVarSize(node[2])[1])*int(node[3])*int(node[4])
+                                datafile.setofarray[node[i]] = size
+                            except:
+                                size = Size(currentScope.LookUpVarSize(node[2])[1])*int(node[3])
+                                datafile.setofarray[node[i]] = size
+                        else:
+                            datafile.globalsection.add(node[i])
                     datafile.allvariables.add(node[i])
         # if node[1] == "ARRAY":
         #     datafile.setofarray[node[2]] = node[3]
@@ -124,10 +138,11 @@ if __name__ == "__main__" :
 
     nasm.asm()
     print datafile.allvariables, "all variables"
-    # print datafile.globalsection, 'globalsection'
+    print datafile.globalsection, 'globalsection'
+    print datafile.setofarray, 'setofarray'
     # for inst in datafile.instruction:
     #     print inst.instnumber,inst.type,inst.op1,inst.op2,inst.operator, inst.out 
-    print datafile.memorymap, 'memorymap'
+    # print datafile.memorymap, 'memorymap'
     # print datafile.numberofarguments, 'numberofarguments'
     # print datafile.numberofvariables, 'numberofvariabels'        
 

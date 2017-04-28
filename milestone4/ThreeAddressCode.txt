@@ -1,44 +1,93 @@
-<<<<<<< HEAD
-=======
-label: func_1_fibo
-arg n
-ARRAY f 1000
+ARRAY a 5 5
+ARRAY b 5 5
+ARRAY c 5 5
+label: func_1_scana
+arg size
 = i 0 i
--> f 0 t5
-<--> t5 0 t5
--> f 4 t10
-<--> t10 1 t10
-= i 2 i
-label: t34
-cmp i n
-jg t36
-* i 4 t20
--> f t20 t19
-- i 1 t21
-* t21 4 t25
-<- f t25 t24
-- i 2 t26
-* t26 4 t30
-<- f t30 t29
-+ t24 t29 t31
-<--> t19 t31 t19
-label: t35
+= j 0 j
+= t 0 t
+= i 0 i
+label: t28
+cmp i size
+jg t30
+= j 0 j
+label: t25
+cmp j size
+jg t27
+read t
+= t22 5 t22
+* t22 i t22
++ t22 j t22
+-> a t22 t21
+<--> t21 t t21
+label: t26
++ j 1 j
+goto t25
+label: t27
+label: t29
 + i 1 i
-goto t34
-label: t36
-* n 4 t40
-<- f t40 t39
-= t t39 t
-ret2 t
+goto t28
+label: t30
+ret
+label: func_1_scanb
+arg size
+= i 0 i
+= j 0 j
+= t 0 t
+= i 0 i
+label: t58
+cmp i size
+jg t60
+= j 0 j
+label: t55
+cmp j size
+jg t57
+read t
+= t52 5 t52
+* t52 i t52
++ t52 j t52
+-> b t52 t51
+<--> t51 t t51
+label: t56
++ j 1 j
+goto t55
+label: t57
+label: t59
++ i 1 i
+goto t58
+label: t60
+ret
+label: func_1_printc
+arg size
+= i 0 i
+= j 0 j
+= i 0 i
+label: t84
+cmp i size
+jg t86
+= j 0 j
+label: t81
+cmp j size
+jg t83
+= t78 5 t78
+* t78 i t78
++ t78 j t78
+<- a t78 t77
+print t77
+label: t82
++ j 1 j
+goto t81
+label: t83
+label: t85
++ i 1 i
+goto t84
+label: t86
 ret
 label: func_1_main
-arg args
-= k 0 k
-read k
-pusharg k
-call func_1_fibo
-get t51
-= k t51 k
-print k
+pusharg 4
+call func_1_scana
+pusharg 4
+call func_1_scanb
+pusharg 4
+call func_1_printc
 ret
->>>>>>> dc6cae0095493b4efd004046162fedbec20a0ffa
