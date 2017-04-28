@@ -16,7 +16,11 @@ int  0x80
 mov edx, 0
 mov b, edx
 
+<<<<<<< HEAD
+func_1_fibo:
+=======
 func_1_partition:
+>>>>>>> 6bac21d77fca94f8eb2c015458dfd7a61e437b26
 push ebp
 mov ebp, esp
 sub esp, 88
@@ -84,6 +88,8 @@ mov eax, ecx
 mov a(, %eax, 4 ), %eax
 mov ebx, eax
 mov [-40 + ebp], edx
+<<<<<<< HEAD
+=======
 mov edx, ecx
 mov a(, %edx, 4 ), %edx
 mov [-16 + ebp], ecx
@@ -195,6 +201,7 @@ mov [8 + ebp], ebx
 call func_1_quickSort
 
 t100:
+>>>>>>> 6bac21d77fca94f8eb2c015458dfd7a61e437b26
 mov esp, ebp
 pop ebp
 ret
@@ -203,6 +210,12 @@ func_1_print:
 push ebp
 mov ebp, esp
 sub esp, 8
+<<<<<<< HEAD
+mov  eax, 9
+push eax
+call func_1_fibo
+mov [-4 + ebp], eax
+=======
 mov edx, 0
 mov edx, 0
 mov [-4 + ebp], edx
@@ -211,6 +224,7 @@ t112:
 push edx
 push ecx
 mov ecx, [8 + ebp]
+>>>>>>> 6bac21d77fca94f8eb2c015458dfd7a61e437b26
 mov edx, [-4 + ebp]
 cmp edx, ecx
 pop ecx
@@ -226,6 +240,9 @@ push message
 call printf
 add esp, 8
 pop eax
+<<<<<<< HEAD
+mov [-8 + ebp], edx
+=======
 mov [-8 + ebp], eax
 
 t113:
@@ -277,6 +294,7 @@ mov [-4 + ebp], edx
 jmp t130
 
 t132:
+>>>>>>> 6bac21d77fca94f8eb2c015458dfd7a61e437b26
 mov esp, ebp
 pop ebp
 ret

@@ -3,6 +3,7 @@ import sys
 import datafile 
 import nasm
 import symboltable
+import pickle
 
 def checkbranching(name) :
     if name in ['jump', 'call', 'goto', 'label:', 'ARRAY', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne', '->', '<-' ]:
@@ -26,6 +27,9 @@ if __name__ == "__main__" :
     scopefunc = 0
     arglength = 8
     locallength = -4
+    symbolTable = pickle.load(open("rootScope.p", "rb"))
+    mainScope = symbolTable.singletonObject.functions['main'][0]
+    currentScope = mainScope
     for line in data:
         index = index +1
         #IMP Have to handle nextstat properly
@@ -43,10 +47,13 @@ if __name__ == "__main__" :
                             print node[i - 1], node[i], "checking"
                             if node[1] == 'arg':
                                 datafile.memorymap[scopefunc][node[2]] = '['+str(arglength) + ' + ebp]'
+                                print node[2], currentScope.LookUpVarSize(node[2])[1], " this is the type"
                                 # print datafile.memorymap[scopefunc][node[i+1]],"asdfg"
                                 arglength = arglength + 4
                             elif (node[i] not in datafile.globalsection):
                                 datafile.memorymap[scopefunc][node[i]] = '['+ str(locallength) + ' + ebp]'
+                                print currentScope.name, " this is currentscope name"
+                                print node[2], currentScope.LookUpVarSize(node[2])[1], " this is the type"
                                 locallength = locallength - 4
                                 #TODO procedure under procedure 
                     else:
@@ -57,6 +64,9 @@ if __name__ == "__main__" :
         if node[1] == 'label:' and node[2][0:4] == "func":
             flag = 1
             scopefunc = node[2]
+            newScope = currentScope.parent.functions[node[2][7:]][0]
+            newScope.returnScope = currentScope
+            currentScope = newScope
             datafile.memorymap[scopefunc] = {}
         if node[1] == 'printstr' :
             for i in range(0,5):
@@ -72,6 +82,7 @@ if __name__ == "__main__" :
             scopefunc = 0
             arglength = 8
             locallength = -4
+            currentScope = currentScope.returnScope
         if node[1] == 'cmp':
             datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],None))
             continue
