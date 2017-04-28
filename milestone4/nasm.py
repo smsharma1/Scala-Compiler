@@ -12,7 +12,7 @@ def blockasmgenerate():
         datafile.L = None
         datafile.yprime = None
         datafile.zprime = None
-        print i ," i am in blockasmgenerate ok ....",datafile.block[i].type
+        # print i ," i am in blockasmgenerate ok ....",datafile.block[i].type
         OperatorMap[datafile.block[i].type](i)
     i = len(datafile.block) - 1
     if i == -1:

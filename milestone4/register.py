@@ -82,7 +82,7 @@ def mem(var):
         int(var)
         return str(var)
     except :
-        print datafile.registerlist, "this is registerlistin mem"
+        # print datafile.registerlist, "this is registerlistin mem"
         if var in datafile.registerlist:
             return var
         else:
@@ -140,7 +140,7 @@ def emptyregister(var,left=[]):
             int(datafile.registerdescriptor[k])
             continue
         except:
-            print var, k ,datafile.registerdescriptor[k],datafile.symtable, "checking in emptyregister"
+            # print var, k ,datafile.registerdescriptor[k],datafile.symtable, "checking in emptyregister"
             if nextuse <= datafile.symtable[var][datafile.registerdescriptor[k]]:  #we have to free the register its important 
                 reg = k
                 nextuse = datafile.symtable[var][datafile.registerdescriptor[k]]
