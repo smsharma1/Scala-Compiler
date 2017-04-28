@@ -877,8 +877,6 @@ def p_M(p):
 def p_N(p):
 	'N : empty'
 	global currentScope
-	for key in currentScope.variables:
-		currentScope.parent.sizevars[key] = [currentScope.variables[key][1],currentScope.variables[key][2]]
 	for key in currentScope.sizevars:
 		currentScope.parent.sizevars[key] = currentScope.sizevars[key]
 	currentScope = currentScope.parent

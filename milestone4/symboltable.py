@@ -265,10 +265,10 @@ class SymbolTable:
 		else:
 			if arrlength:
 				self.variables[symbolName] = [val, type_name, arrlength[0],arrlength[1], self.offset]
-				self.sizevars[symbolName] = [val, type_name, arrlength[0],arrlength[1]]
+				self.sizevars[symbolName] = [val, self.Size(type_name), arrlength[0],arrlength[1]]
 			else:	
 				self.variables[symbolName] = [val, type_name, length, self.offset]
-				self.sizevars[symbolName] = [val, type_name, length]
+				self.sizevars[symbolName] = [val, self.Size(type_name), length]
 			if arrlength:
 				length = arrlength[0] * arrlength[1]
 			if length:
