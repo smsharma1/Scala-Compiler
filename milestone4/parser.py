@@ -963,7 +963,7 @@ def p_ReturnStatement(p):
 	'''ReturnStatement : R_RETURN Expression EndStatement
 					| R_RETURN EndStatement'''
 	if len(p) ==  4:
-		code = ['pusharg ' + p[2].place]
+		code = ['ret2 ' + p[2].place]
 		if not (currentScope.returnType == p[2].typelist):
 			print currentScope.name
 			print currentScope.returnType, p[2].typelist
@@ -1017,7 +1017,7 @@ def p_Assignment(p):
 	#print p[1].typelist,"hello ",p[3].typelist
 
 	if p[2]=="=":
-		code = ["= " + p[1].place  + " " +  p[3].place + " " + p[1].place ]
+		code = ["<--> " + p[1].place  + " " +  p[3].place + " " + p[1].place ]
 		p[1].meta = p[1].code
 		p[1].code = []
 		for met in p[1].meta:
@@ -1032,6 +1032,7 @@ def p_Assignment(p):
 		p[0] = Node(p[2], [p[1], p[3]],[], order="cc",isLeaf=True,code = p[1].code + p[3].code + code)
 						#return sys.exit("assignment mismatch error")
 	else:
+		print "000000000000000000000000000000000000000000000000000",p[2].type, p[1].place
 		code = [p[2].type+ " " + p[1].place + " " + p[3].place + " " + p[1].place]
 		# print p[1].typelist[0], " " ,p[2].type, " " , p[3].typelist[0], "assignment"
 		if not allowed(p[1].typelist[0], p[3].typelist[0]) :

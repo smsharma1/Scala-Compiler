@@ -6,7 +6,7 @@ import symboltable
 import pickle
 
 def checkbranching(name) :
-    if name in ['jump', 'call', 'goto', 'label:', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne']:
+    if name in ['jump', 'call', 'goto', 'label:', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne','ret','ret1','ret2']:
         return True
     else:
         return False
@@ -102,21 +102,22 @@ if __name__ == "__main__" :
                 else:
                     node[i] = ''
             datafile.setofString['str'+str(node[0])] = ' '.join(node[2:])
-        if node[1] == 'ret':
+        if node[1] == 'ret' or node[1] == 'ret1' or node[1] == 'ret2':
             flag = 0
             datafile.numberofarguments[scopefunc] = -arglength
             datafile.numberofvariables[scopefunc] = -locallength
             scopefunc = 0
             arglength = 8
             locallength = -4
-            currentScope = currentScope.returnScope
+            if node[1] == 'ret':
+                currentScope = currentScope.returnScope
         if node[1] == 'cmp':
             datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],None))
             continue
         if node[3] == '`':
             datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],None,'Unary',node[4]))
             continue
-        if node[1] in ['je','jne','jg','jge','jl','jle','goto','pusharg','call','label:','print','printstr','read','ret', 'get']:
+        if node[1] in ['je','jne','jg','jge','jl','jle','goto','pusharg','call','label:','print','printstr','read','ret', 'get', 'ret1', 'ret2']:
             datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[2]))
             continue
         datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[4]))
