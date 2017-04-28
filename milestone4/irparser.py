@@ -6,7 +6,7 @@ import symboltable
 import pickle
 
 def checkbranching(name) :
-    if name in ['jump', 'call', 'goto', 'label:', 'ARRAY', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne', '->', '<-' ]:
+    if name in ['jump', 'call', 'goto', 'label:', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne']:
         return True
     else:
         return False
@@ -77,14 +77,14 @@ if __name__ == "__main__" :
                             elif (node[i] not in datafile.globalsection):
                                 datafile.memorymap[scopefunc][node[i]] = '['+ str(locallength) + ' + ebp]'
                                 print currentScope.name, " this is currentscope name"
-                                print node[2], currentScope.LookUpVarSize(node[2])[1], " this is the type"
+                                print node[2],";;;;;;;;;;;;;;;;;", currentScope.LookUpVarSize(node[2])[1], " this is the type;;;;;;;;;;;;"
                                 locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])
                                 #TODO procedure under procedure 
                     else:
                         datafile.globalsection.add(node[i])
                     datafile.allvariables.add(node[i])
-        if node[1] == "ARRAY":
-            datafile.setofarray[node[2]] = node[3]
+        # if node[1] == "ARRAY":
+        #     datafile.setofarray[node[2]] = node[3]
         if node[1] == 'label:' and node[2][0:4] == "func":
             flag = 1
             scopefunc = node[2]
@@ -119,7 +119,7 @@ if __name__ == "__main__" :
         datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[4]))
 
     nasm.asm()
-    # print datafile.allvariables, "all variables"
+    print datafile.allvariables, "all variables"
     # print datafile.globalsection, 'globalsection'
     # for inst in datafile.instruction:
     #     print inst.instnumber,inst.type,inst.op1,inst.op2,inst.operator, inst.out 

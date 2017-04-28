@@ -1501,8 +1501,14 @@ def p_ArrayAccess(p):
 		temp = newtemp()
 		print temp, "I am in ArrayAcess"
 		print p[3].type
-		
-		l1 = [ "<- " + p[1].place + " " +p[3].place + " " + temp]
+		print p[1].typelist, "checking ArrayAccess iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
+		size = currentScope.Size(p[1].typelist[0][5:])
+		try:
+			int(p[3].place)
+			l1 = [ "<- " + p[1].place + " " +str(int(p[3].place)*size) + " " + temp]
+		except:
+			lab = newtemp()
+			l1 = ["* " + p[3].place  + " " + str(size) + " " + lab ] + [ "<- " + p[1].place + " " + lab + " " + temp]
 		# l1 = [ temp + " = " + p[1].place + " -> " + p[3].place]
 		currentScope.InsertVar(temp,0, p[1].typelist[0][5:])
 		print "\n\n", temp, "\n\n"
