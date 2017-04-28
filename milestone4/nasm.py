@@ -524,17 +524,13 @@ def ARRAYLOAD(i):
         datafile.zprime = z
     except:
         register.getz(z)
-    
+    register.gety(y)
     reg = register.emptyregister(i)
-    datafile.blockout.append("mov " + register.mem(reg) + ", " + register.mem(datafile.zprime) )
-    datafile.lineno = datafile.lineno + 1
     datafile.L = reg
-
-
-
-
-    datafile.blockout.append("mov " + y + "(, %" + reg +", 4 ), %" + reg )
-    datafile.lineno = datafile.lineno + 1
+    datafile.blockout.append("push eax")
+    datafile.blockout.append("mov " + reg + "," + register.mem(datafile.yprime))
+    datafile.blockout.append("add " + reg + "," + register.mem(datafile.zprime))
+    datafile.blockout.append("mov " + reg  + ", [" + reg + "]"  )
     register.UpdateAddressDescriptor(l)
 
 

@@ -1,6 +1,7 @@
 section .data
 message db "Register = %d", 10, 0
 formatin: db "%d", 0
+f TIMES 10 DW  0
 
 section .text
 	global main
@@ -12,40 +13,63 @@ call func_1_main
 mov  eax, 1
 int  0x80
 
-func_1_sub:
+func_1_fibo:
 push ebp
 mov ebp, esp
-sub esp, 28
-mov edx, [36 + ebp]
-sub edx, [32 + ebp]
-mov ecx, [28 + ebp]
+sub esp, 44
+mov edx, 0
 push eax
-push ebx
-mov eax,ecx
-mov ebx,[24 + ebp]
-imul ebx
-mov [24 + ebp],ebx
-mov ecx,eax
-pop eax
-pop ebx
-mov ebx, edx
-add ebx, ecx
-mov eax, ebx
-add eax, [20 + ebp]
-mov edx, [16 + ebp]
+mov eax,None
+add eax,0
+mov eax, [eax]
+mov eax, 0
 push eax
-push ebx
-mov eax,edx
-mov ebx,[12 + ebp]
-imul ebx
-mov [12 + ebp],ebx
-mov edx,eax
-pop eax
-pop ebx
-mov ecx, eax
-sub ecx, edx
-mov edx, ecx
-add edx, [8 + ebp]
+mov ebx,None
+add ebx,1
+mov ebx, [ebx]
+mov ebx, 1
+mov edx, 2
+
+t31:
+push edx
+push ecx
+mov ecx, [8 + ebp]
+mov edx, [-4 + ebp]
+cmp edx, ecx
+pop ecx
+pop edx
+jg t33
+push eax
+mov eax,None
+add eax,[-4 + ebp]
+mov eax, [eax]
+mov edx, [-4 + ebp]
+sub edx, 1
+push eax
+mov ebx,None
+add ebx,edx
+mov ebx, [ebx]
+mov ecx, [-4 + ebp]
+sub ecx, 2
+push eax
+mov edx,None
+add edx,ecx
+mov edx, [edx]
+mov ecx, ebx
+add ecx, edx
+mov eax, ecx
+
+t32:
+mov edx, [-4 + ebp]
+add edx, 1
+jmp t31
+
+t33:
+push eax
+mov eax,None
+add eax,[8 + ebp]
+mov eax, [eax]
+mov edx, eax
 push edx
 mov esp, ebp
 pop ebp
@@ -55,25 +79,19 @@ func_1_main:
 push ebp
 mov ebp, esp
 sub esp, 8
-mov  eax, 1
+mov  eax, 9
 push eax
-mov  ebx, 2
-push ebx
-mov  ecx, 3
-push ecx
-mov  edx, 4
-push edx
-mov  edx, 5
-push edx
-mov  edx, 6
-push edx
-mov  edx, 7
-push edx
-mov  edx, 8
-push edx
-call func_1_sub
+call func_1_fibo
 mov [-4 + ebp], eax
 mov edx, [-4 + ebp]
+push eax
+xor eax, eax
+mov eax, edx
+push eax
+push message
+call printf
+add esp, 8
+pop eax
 mov esp, ebp
 pop ebp
 ret

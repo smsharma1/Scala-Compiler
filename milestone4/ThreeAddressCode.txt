@@ -1,32 +1,35 @@
-label: func_1_sub
-arg h
-arg g
-arg f
-arg e
-arg d
-arg c
-arg b
-arg a
-- a b t1
-* c d t2
-+ t1 t2 t3
-+ t3 e t4
-* f g t5
-- t4 t5 t6
-+ t6 h t7
-pusharg t7
+label: func_1_fibo
+arg n
+ARRAY f 10
+= i 0 i
+<- f 0 t5
+= t5 0 t5
+<- f 1 t10
+= t10 1 t10
+= i 2 i
+label: t31
+cmp i n
+jg t33
+<- f i t19
+- i 1 t20
+<- f t20 t23
+- i 2 t24
+<- f t24 t27
++ t23 t27 t28
+= t19 t28 t19
+label: t32
++ i 1 i
+goto t31
+label: t33
+<- f n t36
+= t t36 t
+pusharg t
 ret
 label: func_1_main
 arg args
-pusharg 1
-pusharg 2
-pusharg 3
-pusharg 4
-pusharg 5
-pusharg 6
-pusharg 7
-pusharg 8
-call func_1_sub
-get t26
-= k t26 k
+pusharg 9
+call func_1_fibo
+get t43
+= k t43 k
+print k
 ret
