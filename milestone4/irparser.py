@@ -11,6 +11,30 @@ def checkbranching(name) :
     else:
         return False
 
+def Size(type1):
+    if type1=="INT":
+        return 4
+    elif type1=="CHAR":
+        return 2
+    elif type1=="BYTE":
+        return 1
+    elif type1=="SHORT":
+        return 2
+    elif type1=="LONG":
+        return 8
+    elif type1=="FLOAT":
+        return 4
+    elif type1=="DOUBLE":
+        return 8
+    elif type1=="POINTER":
+        return 4
+    elif type1=="BOOL":
+        return 4
+    elif "ARRAY" in type1:
+        return Size(type1.replace("ARRAY", ''))
+    else:
+        return 10
+
 def checkvariable(name):
     try:
         int(name)
@@ -49,12 +73,12 @@ if __name__ == "__main__" :
                                 datafile.memorymap[scopefunc][node[2]] = '['+str(arglength) + ' + ebp]'
                                 print node[2], currentScope.LookUpVarSize(node[2])[1], " this is the type"
                                 # print datafile.memorymap[scopefunc][node[i+1]],"asdfg"
-                                arglength = arglength + 4
+                                arglength = arglength + Size(currentScope.LookUpVarSize(node[2])[1])
                             elif (node[i] not in datafile.globalsection):
                                 datafile.memorymap[scopefunc][node[i]] = '['+ str(locallength) + ' + ebp]'
                                 print currentScope.name, " this is currentscope name"
                                 print node[2], currentScope.LookUpVarSize(node[2])[1], " this is the type"
-                                locallength = locallength - 4
+                                locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])
                                 #TODO procedure under procedure 
                     else:
                         datafile.globalsection.add(node[i])
@@ -99,7 +123,7 @@ if __name__ == "__main__" :
     # print datafile.globalsection, 'globalsection'
     # for inst in datafile.instruction:
     #     print inst.instnumber,inst.type,inst.op1,inst.op2,inst.operator, inst.out 
-    # print datafile.memorymap, 'memorymap'
+    print datafile.memorymap, 'memorymap'
     # print datafile.numberofarguments, 'numberofarguments'
     # print datafile.numberofvariables, 'numberofvariabels'        
 
