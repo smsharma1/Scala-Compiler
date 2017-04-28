@@ -15,7 +15,7 @@ int  0x80
 func_1_fibo:
 push ebp
 mov ebp, esp
-sub esp, 96
+sub esp, 4060
 mov edx, 0
 lea eax,[-4 + ebp]
 sub eax,0
@@ -26,66 +26,70 @@ sub ebx,4
 mov ecx,1
 mov [ebx],ecx
 mov edx, 2
-mov [-48 + ebp], eax
-mov [-52 + ebp], ebx
-mov [-44 + ebp], edx
+mov [-4008 + ebp], eax
+mov [-4012 + ebp], ebx
+mov [-4004 + ebp], edx
 
 t34:
 mov eax,[8 + ebp]
-mov ebx,[-44 + ebp]
+mov ebx,[-4004 + ebp]
 cmp ebx,eax
 mov [8 + ebp], eax
-mov [-44 + ebp], ebx
+mov [-4004 + ebp], ebx
 jg t36
 mov ebx,4
-mov eax,[-44 + ebp]
+mov eax,[-4004 + ebp]
 imul ebx
 lea ebx,[-4 + ebp]
 sub ebx,eax
-mov edx, [-44 + ebp]
+mov edx, [-4004 + ebp]
 sub edx, 1
-mov [-60 + ebp], ebx
+mov [-4020 + ebp], ebx
 mov ebx,4
-mov [-56 + ebp], eax
+mov [-4016 + ebp], eax
 mov eax,edx
 imul ebx
 lea ebx,[-4 + ebp]
 sub ebx,eax
 mov ebx, [ebx]
-mov ecx, [-44 + ebp]
+mov ecx, [-4004 + ebp]
 sub ecx, 2
-mov [-72 + ebp], ebx
+mov [-4032 + ebp], ebx
 mov ebx,4
-mov [-68 + ebp], eax
+mov [-4028 + ebp], eax
 mov eax,ecx
 imul ebx
 lea ebx,[-4 + ebp]
 sub ebx,eax
 mov ebx, [ebx]
-mov [-64 + ebp], edx
-mov edx, [-72 + ebp]
+mov [-4024 + ebp], edx
+mov edx, [-4032 + ebp]
 add edx, ebx
-mov [-76 + ebp], ecx
-mov ecx,[-60 + ebp]
+mov [-4036 + ebp], ecx
+mov ecx,[-4020 + ebp]
 mov [ecx],edx
-mov [-80 + ebp], eax
-mov [-84 + ebp], ebx
-mov [-88 + ebp], edx
+mov [-4040 + ebp], eax
+mov [-4044 + ebp], ebx
+mov [-4048 + ebp], edx
 
 t35:
-mov edx, [-44 + ebp]
+mov edx, [-4004 + ebp]
 add edx, 1
-mov [-44 + ebp], edx
+mov [-4004 + ebp], edx
 jmp t34
 
 t36:
-lea eax,[-4 + ebp]
-sub eax,36
-mov eax, [eax]
-mov edx, eax
-mov [-92 + ebp], eax
-mov [-96 + ebp], edx
-mov eax, [-96 + ebp]
+mov ebx,4
+mov eax,[8 + ebp]
+imul ebx
+lea ebx,[-4 + ebp]
+sub ebx,eax
+mov ebx, [ebx]
+mov edx, ebx
+mov [-4052 + ebp], eax
+mov [-4056 + ebp], ebx
+mov [-4060 + ebp], edx
+mov eax, [-4060 + ebp]
 mov esp, ebp
 pop ebp
 ret
@@ -97,8 +101,17 @@ func_1_main:
 push ebp
 mov ebp, esp
 sub esp, 8
-mov  eax, 9
+mov edx, 0
 push eax
+mov eax, esp
+push eax
+push formatin
+call scanf
+add esp, 8
+mov edx, [esp]
+pop eax
+push edx
+mov [-4 + ebp], edx
 call func_1_fibo
 mov edx, eax
 push eax
@@ -117,8 +130,8 @@ pop ecx
 pop ebx
 pop eax
 
-mov [-4 + ebp], eax
-mov [-8 + ebp], edx
+mov [-8 + ebp], eax
+mov [-4 + ebp], edx
 mov esp, ebp
 pop ebp
 ret

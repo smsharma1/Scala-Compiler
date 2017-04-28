@@ -1,6 +1,6 @@
 label: func_1_fibo
 arg n
-ARRAY f 10
+ARRAY f 1000
 = i 0 i
 -> f 0 t5
 <--> t5 0 t5
@@ -24,15 +24,18 @@ label: t35
 + i 1 i
 goto t34
 label: t36
-<- f 36 t39
+* n 4 t40
+<- f t40 t39
 = t t39 t
 ret2 t
 ret
 label: func_1_main
 arg args
-pusharg 9
+= k 0 k
+read k
+pusharg k
 call func_1_fibo
-get t46
-= k t46 k
+get t51
+= k t51 k
 print k
 ret
