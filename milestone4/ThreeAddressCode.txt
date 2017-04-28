@@ -1,61 +1,33 @@
-label: func_1_acker
-arg n
-arg m
-cmp m 0
-je t3
-= t5 0 t5
-goto t4
-label: t3
-= t5 1 t5
-label: t4
-cmp t5 0
-je t9
-+ n 1 t6
-ret2 t6
-label: t9
-cmp n 0
-je t12
-= t14 0 t14
-goto t13
-label: t12
-= t14 1 t14
-label: t13
-cmp t14 0
-je t23
-pusharg t15
-pusharg 1
-call func_1_acker
-get t20
-ret2 t20
-label: t23
-pusharg t24
-pusharg t32
-call func_1_acker
-get t35
-ret2 t35
+label: func_1_sub
+arg h
+arg g
+arg f
+arg e
+arg d
+arg c
+arg b
+arg a
+* a b t1
+* t1 c t2
+* t2 d t3
+* t3 e t4
+* t4 f t5
+* t5 g t6
+* t6 h t7
+ret2 t7
 ret
 label: func_1_main
-= m 0 m
-= n 0 n
-= m 0 m
-label: t60
-cmp m 4
-jg t62
-= n 0 n
-label: t57
-cmp n 10
-jg t59
-pusharg m
-pusharg n
-call func_1_acker
-get t54
-print t54
-label: t58
-+ n 1 n
-goto t57
-label: t59
-label: t61
-+ m 1 m
-goto t60
-label: t62
+arg args
+pusharg 1
+pusharg 2
+pusharg 3
+pusharg 4
+pusharg 5
+pusharg 6
+pusharg 7
+pusharg 8
+call func_1_sub
+get t26
+= k t26 k
+print k
 ret

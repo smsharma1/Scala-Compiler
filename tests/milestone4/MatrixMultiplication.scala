@@ -15,7 +15,7 @@ object sort {
                 }
             }
      }
-    def scanb(size: Int){
+   /* def scanb(size: Int){
             var i : Int = 0;
             var j : Int = 0;
             var t : Int = 0;
@@ -54,12 +54,12 @@ object sort {
                     println(a[i,j]);
                 }
             }
-     }
+     } */
      def main(){
          scana(4);
-         scanb(4);
-         multiply(4);
-         printc(4);
+         // scanb(4);
+       //  multiply(4);
+        // printc(4);
      }
 }
 

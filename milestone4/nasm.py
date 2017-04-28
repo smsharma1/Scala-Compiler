@@ -212,7 +212,7 @@ def JG(i):
 def ADD(i):
     (y, z, l) = (datafile.block[i].op1, datafile.block[i].op2, datafile.block[i].out)
     #check if z is constant or not if not get the momloc or register if it is already in register since op r_i , r_j is similar to op r_i , M
-    print y,", ", z, ", ", l ,"these are y and l in add function"
+    # print y,", ", z, ", ", l ,"these are y and l in add function"
     try :
         int(z)
         datafile.zprime = z
@@ -394,7 +394,7 @@ def COMPARE(i):
         datafile.blockout.append("mov " + reg +  "," + z)
     except:
         if datafile.addressdescriptor[z] == None:
-            print "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",datafile.addressdescriptor
+            # print "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",datafile.addressdescriptor
             datafile.blockout.append("mov " + reg +  "," + register.mem(z))
         else:
             datafile.blockout.append("mov " + reg +  "," + datafile.addressdescriptor[z])
@@ -406,7 +406,7 @@ def COMPARE(i):
         datafile.blockout.append("mov " + reg1 + "," + y)
     except:
         if datafile.addressdescriptor[y] == None:
-            print "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",y,datafile.addressdescriptor,datafile.registerdescriptor
+            # print "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",y,datafile.addressdescriptor,datafile.registerdescriptor
             datafile.blockout.append("mov " + reg1 +  "," + register.mem(y))
         else:
             datafile.blockout.append("mov " + reg1 +  "," + datafile.addressdescriptor[y])
@@ -516,17 +516,17 @@ def MUL(i):
 
 def ASSIGN(i):
     (y,l) = (datafile.block[i].op2,datafile.block[i].out)
-    print y, " " , l, "these are y and l in assgin statement ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    # print y, " " , l, "these are y and l in assgin statement ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     register.getreg(l,y,i)
     try :
         int(y)
-        print "hello from the other side |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+        # print "hello from the other side |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
         datafile.yprime = y
     except :
         pass
     register.gety(y)
     register.UpdateAddressDescriptor(l)
-    print y, " nd ", l, "i am passing these to register.freereg. Save tehm if you can!!"
+    # print y, " nd ", l, "i am passing these to register.freereg. Save tehm if you can!!"
     register.freereg(y, i)
     # datafile.blockout.append("end of assign")
 
@@ -544,12 +544,12 @@ def DEFASSIGN(i):
     except :
         if datafile.addressdescriptor[y] != None:
             if datafile.addressdescriptor[l] != None:
-                print register.mem(l) + " ##########################################"
+                # print register.mem(l) + " ##########################################"
                 datafile.blockout.append("mov " + '['+datafile.addressdescriptor[l]+']' + "," + datafile.addressdescriptor[y])
                 register.freereg(y, i)
                 return
             else:
-                print " i am here \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n"
+                # print " i am here \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n"
                 reg = register.emptyregister(i,left=[datafile.addressdescriptor[y]])
                 datafile.blockout.append('mov ' + reg + ',' + register.mem(l))
                 datafile.blockout.append("mov " + '['+reg+']' + "," + datafile.addressdescriptor[y])
@@ -557,7 +557,7 @@ def DEFASSIGN(i):
                 register.freereg(reg, i)
                 return
         else:
-            print "ajflsdfjlsjf; &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+            # print "ajflsdfjlsjf; &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
             reg = register.emptyregister(i)
             datafile.registerdescriptor[reg] = l
             datafile.blockout.append("mov " + '['+reg+']' + "," + register.mem(y))
@@ -687,7 +687,7 @@ def LOADARRAY(i):
             datafile.yprime = datafile.addressdescriptor[y]
         else:
             datafile.yprime = y
-    print datafile.yprime , '999999999999999999999999999999999999999999999999999999999999999999999999999', y
+    # print datafile.yprime , '999999999999999999999999999999999999999999999999999999999999999999999999999', y
     reg = register.emptyregister(i)
     datafile.L = reg
     t = register.mem(datafile.yprime)
@@ -712,7 +712,7 @@ def ARRAYLOAD(i):
             datafile.yprime = datafile.addressdescriptor[y]
         else:
             datafile.yprime = y
-    print datafile.yprime , 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', y
+    # print datafile.yprime , 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', y
     reg = register.emptyregister(i)
     datafile.L = reg
     t = register.mem(datafile.yprime)

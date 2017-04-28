@@ -1,13 +1,6 @@
 section .data
 message db "Register = %d", 10, 0
 formatin: db "%d", 0
-n DD 0
-t14 DD 0
-t15 DD 0
-t20 DD 0
-t35 DD 0
-t32 DD 0
-t24 DD 0
 
 section .text
 	global main
@@ -19,83 +12,39 @@ call func_1_main
 mov  eax, 1
 int  0x80
 
-func_1_acker:
+func_1_sub:
 push ebp
 mov ebp, esp
-sub esp, 8
-mov eax,0
+sub esp, 28
+mov ebx,[32 + ebp]
+mov eax,[36 + ebp]
+imul ebx
+mov ebx,[28 + ebp]
+mov [-4 + ebp], eax
+mov eax,[-4 + ebp]
+imul ebx
+mov ebx,[24 + ebp]
+mov [-8 + ebp], eax
+mov eax,[-8 + ebp]
+imul ebx
+mov ebx,[20 + ebp]
+mov [-12 + ebp], eax
+mov eax,[-12 + ebp]
+imul ebx
+mov ebx,[16 + ebp]
+mov [-16 + ebp], eax
+mov eax,[-16 + ebp]
+imul ebx
 mov ebx,[12 + ebp]
-cmp ebx,eax
-mov [12 + ebp], ebx
-je t3
-mov edx, 0
-end of assign
-mov [-4 + ebp], edx
-jmp t4
-
-t3:
-mov edx, 1
-end of assign
-mov [-4 + ebp], edx
-
-t4:
-mov eax,0
-mov ebx,[-4 + ebp]
-cmp ebx,eax
-mov [-4 + ebp], ebx
-je t9
-mov edx, [8 + ebp]
-add edx, 1
-mov [-8 + ebp], edx
-mov eax, [-8 + ebp]
-mov esp, ebp
-pop ebp
-ret
-
-t9:
-mov eax,0
+mov [-20 + ebp], eax
+mov eax,[-20 + ebp]
+imul ebx
 mov ebx,[8 + ebp]
-cmp ebx,eax
-mov [8 + ebp], ebx
-je t12
-mov edx, 0
-end of assign
-mov t14, edx
-jmp t13
-
-t12:
-mov edx, 1
-end of assign
-mov t14, edx
-
-t13:
-mov eax,0
-mov ebx,t14
-cmp ebx,eax
-mov t14, ebx
-je t23
-mov  eax, t15
-push eax
-mov  ebx, 1
-push ebx
-mov t15, eax
-call func_1_acker
-mov t20, eax
-mov eax, t20
-mov esp, ebp
-pop ebp
-ret
-
-t23:
-mov  eax, t24
-push eax
-mov  ebx, t32
-push ebx
-mov t24, eax
-mov t32, ebx
-call func_1_acker
-mov t35, eax
-mov eax, t35
+mov [-24 + ebp], eax
+mov eax,[-24 + ebp]
+imul ebx
+mov [-28 + ebp], eax
+mov eax, [-28 + ebp]
 mov esp, ebp
 pop ebp
 ret
@@ -107,45 +56,31 @@ func_1_main:
 push ebp
 mov ebp, esp
 sub esp, 8
-mov edx, 0
-end of assign
-mov ecx, 0
-end of assign
-mov edx, 0
-end of assign
-mov [8 + ebp], ecx
-mov [-4 + ebp], edx
-
-t60:
-mov eax,4
-mov ebx,[-4 + ebp]
-cmp ebx,eax
-mov [-4 + ebp], ebx
-jg t62
-mov edx, 0
-end of assign
-mov [8 + ebp], edx
-
-t57:
-mov eax,10
-mov ebx,[8 + ebp]
-cmp ebx,eax
-mov [8 + ebp], ebx
-jg t59
-mov  eax, [-4 + ebp]
+mov  eax, 1
 push eax
-mov  ebx, [8 + ebp]
+mov  ebx, 2
 push ebx
-mov [-4 + ebp], eax
-mov [8 + ebp], ebx
-call func_1_acker
+mov  ecx, 3
+push ecx
+mov  edx, 4
+push edx
+mov  edx, 5
+push edx
+mov  edx, 6
+push edx
+mov  edx, 7
+push edx
+mov  edx, 8
+push edx
+call func_1_sub
+mov edx, eax
 push eax
 push ebx
 push ecx
 push edx
 
 xor eax, eax
-mov eax, eax
+mov eax, edx
 push eax
 push message
 call printf
@@ -155,23 +90,8 @@ pop ecx
 pop ebx
 pop eax
 
-mov [-8 + ebp], eax
-
-t58:
-mov edx, [8 + ebp]
-add edx, 1
-mov [8 + ebp], edx
-jmp t57
-
-t59:
-
-t61:
-mov edx, [-4 + ebp]
-add edx, 1
-mov [-4 + ebp], edx
-jmp t60
-
-t62:
+mov [-4 + ebp], eax
+mov [-8 + ebp], edx
 mov esp, ebp
 pop ebp
 ret

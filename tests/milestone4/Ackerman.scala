@@ -1,24 +1,37 @@
 object Ackermann {
     def acker(m : Int, n : Int) : Int = {
+	var t : Int = 0;
+	var z : Int = 0;
+	var l : Int = 0;
         if(m == 0){
-            return n + 1;
+	    t = n + 1;
+            return t;
         }
         if(n == 0){
-            return acker(m - 1,1);
+		z = m - 1 ;
+	    t  = acker(z,1);
+            return t;
         }
-        return acker(m - 1, acker(m, n - 1));
+    z = n - 1;
+    l = acker(m,z);
+	z = m - 1;
+	t = acker(z, l);
+    return t; 
     }
+
     def main()
     {
         var m : Int = 0;
         var n : Int = 0;
-        for ( m <- 0 until 4 )
+		var k : Int = 0;
+        for ( m <- 0 until 3 )
 		{
-            for ( n <- 0 until 10 )
-		    {       
-			    println(acker(m,n));
-      	    }
-      	}
+            for ( n <- 0 until 9 )
+	    	{   
+				k = acker(m,n);
+	    		println(k);
+      	  	}
+      	} 
 
     }
 }
