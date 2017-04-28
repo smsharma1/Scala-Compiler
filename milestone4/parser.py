@@ -1017,7 +1017,7 @@ def p_Assignment(p):
 	#print p[1].typelist,"hello ",p[3].typelist
 
 	if p[2]=="=":
-		code = ["<- " + p[1].place  + " " +  p[3].place + " " + p[1].place ]
+		code = ["= " + p[1].place  + " " +  p[3].place + " " + p[1].place ]
 		p[1].meta = p[1].code
 		p[1].code = []
 		for met in p[1].meta:

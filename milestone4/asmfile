@@ -15,23 +15,16 @@ int  0x80
 func_1_fibo:
 push ebp
 mov ebp, esp
-sub esp, 60
+sub esp, 56
 mov edx, 0
 lea eax,[-4 + ebp]
 add eax,0
-mov ebx,eax
+mov eax, 0
+lea ebx,[-4 + ebp]
 add ebx,0
 mov ebx, [ebx]
-lea eax,[-4 + ebp]
-add eax,4
-mov ecx,eax
-add ecx,1
-mov ecx, [ecx]
-lea eax,[-4 + ebp]
-add eax,4
-mov eax, [eax]
-mov edx, eax
-push edx
+mov ecx, ebx
+push ecx
 mov esp, ebp
 pop ebp
 ret
