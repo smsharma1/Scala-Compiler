@@ -347,7 +347,7 @@ def p_VariableInitializer(p):
 							| ClassInstanceCreationExpression'''
 
 	p[0] = p[1]
-	# print p[1].typelist,"VariableInitializer",p[1].type
+	print "VariableInitializer",p[1].type
 	# p[0] = Node("VariableInitializer", [p[1]],[],typelist = p[1].typelist, order="c")
 
 def p_ArrayInitializer(p):
@@ -375,7 +375,7 @@ def p_MethodHeader(p):
 	global currentScope
 	parentScope = currentScope.parent
 	l1 = ["label: " + p[2].meta]
-	print ("\n\n\n\nam i vissibl now")
+	# print ("\n\n\n\nam i vissibl now")
 	if p[3] != None:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
 		#	print "in if part"
@@ -385,7 +385,7 @@ def p_MethodHeader(p):
 		else:
 			parentScope.functions[p[2].typelist[0]] = currentScope
 			currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:], p[3].typelist)
-			print currentScope.name ," i am in method header see me please"
+			# print currentScope.name ," i am in method header see me please"
 		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + p[3].typelist,order="ccc",meta=p[2].meta,code=l1 + p[2].code)
 	else:
 		if(currentScope.LookUpFunc(p[2].typelist[0], p[2].typelist[1:])):
@@ -883,8 +883,6 @@ def p_M(p):
 def p_N(p):
 	'N : empty'
 	global currentScope
-	for key in currentScope.variables:
-		currentScope.parent.sizevars[key] = [currentScope.variables[key][1],currentScope.variables[key][2]]
 	for key in currentScope.sizevars:
 		currentScope.parent.sizevars[key] = currentScope.sizevars[key]
 	currentScope = currentScope.parent
