@@ -524,10 +524,14 @@ def ARRAYLOAD(i):
         datafile.zprime = z
     except:
         register.getz(z)
-    register.gety(y)
+    if y in datafile.allvariables:
+        if datafile.addressdescriptor[y] != None:
+            datafile.yprime = datafile.addressdescriptor[y]
+        else:
+            datafile.yprime = y
+    print datafile.yprime , 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', y
     reg = register.emptyregister(i)
     datafile.L = reg
-    datafile.blockout.append("push eax")
     datafile.blockout.append("mov " + reg + "," + register.mem(datafile.yprime))
     datafile.blockout.append("add " + reg + "," + register.mem(datafile.zprime))
     datafile.blockout.append("mov " + reg  + ", [" + reg + "]"  )

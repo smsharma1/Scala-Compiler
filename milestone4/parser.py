@@ -1503,6 +1503,7 @@ def p_ArrayAccess(p):
 		temp = newtemp()
 		print temp, "I am in ArrayAcess"
 		print p[3].type
+		
 		l1 = [ "<- " + p[1].place + " " +p[3].place + " " + temp]
 		# l1 = [ temp + " = " + p[1].place + " -> " + p[3].place]
 		currentScope.InsertVar(temp,0, p[1].typelist[0][5:])

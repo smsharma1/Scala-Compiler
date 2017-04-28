@@ -104,7 +104,6 @@ def gety(var):
             datafile.yprime = var
     if datafile.yprime != datafile.L :
         datafile.blockout.append("mov " + mem(datafile.L) + ", " + mem(datafile.yprime))
-        datafile.lineno = datafile.lineno + 1
 
 #Update the addressdescriptor after operation is done
 def UpdateAddressDescriptor(x):

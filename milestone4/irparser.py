@@ -52,8 +52,8 @@ if __name__ == "__main__" :
                                 arglength = arglength + 4
                             elif (node[i] not in datafile.globalsection):
                                 datafile.memorymap[scopefunc][node[i]] = '['+ str(locallength) + ' + ebp]'
-                                print currentScope.name, " this is currentscope name"
-                                print node[2], currentScope.LookUpVarSize(node[2])[1], " this is the type"
+                                print currentScope.name, " this is currentscope namellllllllllllllllllllllllllllllllllllllllllllll"
+                                print node[2], currentScope.LookUpVarSize(node[2])[1], " this is the typettttttttttttttttttttttttttt"
                                 locallength = locallength - 4
                                 #TODO procedure under procedure 
                     else:
