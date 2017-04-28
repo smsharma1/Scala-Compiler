@@ -8,7 +8,7 @@ object Ackermann {
         }
         return acker(m - 1, acker(m, n - 1));
     }
-    def main(args: Array[String])
+    def main()
     {
         var m : Int = 0;
         var n : Int = 0;
