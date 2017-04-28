@@ -359,7 +359,7 @@ def GET(i):
 #One has to be in register 
 def COMPARE(i):
     (y,z) = (datafile.block[i].op1,datafile.block[i].op2)
-    print y,z, "aaaaaaaasdaddddddddddddddddddddddddddddddddddddddddaaaaaaaaaa",i
+    # print y,z, "aaaaaaaasdaddddddddddddddddddddddddddddddddddddddddaaaaaaaaaa",i
     try:
         int(z)
         datafile.zprime = z
@@ -381,7 +381,7 @@ def COMPARE(i):
         else:
             datafile.L = y
     # datafile.blockout.append(str(i))
-    print register.mem(y),register.mem(z),"ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt"
+    # print register.mem(y),register.mem(z),"ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt"
     datafile.blockout.append("cmp " +  register.mem(y) + ", " +register.mem(z))
     register.freereg(y,i)
     register.freereg(z,i)
