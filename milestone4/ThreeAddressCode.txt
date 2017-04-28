@@ -1,5 +1,39 @@
-label: func_1_acker
+label: func_1_fibo
 arg n
+<<<<<<< HEAD
+ARRAY f 10
+= i 0 i
+<- f 0 t5
+= t5 0 t5
+<- f 1 t10
+= t10 1 t10
+= i 2 i
+label: t31
+cmp i n
+jg t33
+<- f i t19
+- i 1 t20
+<- f t20 t23
+- i 2 t24
+<- f t24 t27
++ t23 t27 t28
+= t19 t28 t19
+label: t32
++ i 1 i
+goto t31
+label: t33
+<- f n t36
+= t t36 t
+pusharg t
+ret
+label: func_1_main
+arg args
+pusharg 9
+call func_1_fibo
+get t43
+= k t43 k
+print k
+=======
 arg m
 cmp m 0
 je t3
@@ -59,4 +93,5 @@ label: t61
 + m 1 m
 goto t60
 label: t62
+>>>>>>> 8b6a0cf10bc5c900c8e24e987faf4cdabe6f8892
 ret

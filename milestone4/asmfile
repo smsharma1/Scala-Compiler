@@ -2,6 +2,8 @@ section .data
 message db "Register = %d", 10, 0
 
  formatin: db "%d", 0
+f TIMES 10 DW  0
+
 section .text
 	global main
 extern printf
@@ -12,6 +14,66 @@ call func_1_main
 mov  eax, 1
 int  0x80
 
+<<<<<<< HEAD
+func_1_fibo:
+push ebp
+mov ebp, esp
+sub esp, 44
+mov edx, 0
+mov eax, 0
+mov f(, %eax, 4 ), %eax
+mov eax, 0
+mov ebx, 1
+mov f(, %ebx, 4 ), %ebx
+mov ebx, 1
+mov edx, 2
+mov [-8 + ebp], eax
+mov [-12 + ebp], ebx
+mov [-4 + ebp], edx
+
+t31:
+push edx
+push ecx
+mov ecx, [8 + ebp]
+mov edx, [-4 + ebp]
+cmp edx, ecx
+pop ecx
+pop edx
+jg t33
+mov eax, [-4 + ebp]
+mov f(, %eax, 4 ), %eax
+mov edx, [-4 + ebp]
+sub edx, 1
+mov ebx, edx
+mov f(, %ebx, 4 ), %ebx
+mov ecx, [-4 + ebp]
+sub ecx, 2
+mov [-16 + ebp], edx
+mov edx, ecx
+mov f(, %edx, 4 ), %edx
+mov [-20 + ebp], ecx
+mov ecx, ebx
+add ecx, edx
+mov eax, ecx
+mov [-36 + ebp], eax
+mov [-24 + ebp], ebx
+mov [-32 + ebp], ecx
+mov [-28 + ebp], edx
+
+t32:
+mov edx, [-4 + ebp]
+add edx, 1
+mov [-4 + ebp], edx
+jmp t31
+
+t33:
+mov eax, [8 + ebp]
+mov f(, %eax, 4 ), %eax
+mov edx, eax
+push edx
+mov [-44 + ebp], eax
+mov [-40 + ebp], edx
+=======
 func_1_acker:
 push ebp
 mov ebp, esp
@@ -72,6 +134,7 @@ mov [-32 + ebp], eax
 mov  eax, [-32 + ebp]
 push eax
 mov [-32 + ebp], eax
+>>>>>>> 8b6a0cf10bc5c900c8e24e987faf4cdabe6f8892
 mov esp, ebp
 pop ebp
 ret
@@ -79,6 +142,24 @@ ret
 func_1_main:
 push ebp
 mov ebp, esp
+<<<<<<< HEAD
+sub esp, 8
+mov  eax, 9
+push eax
+call func_1_fibo
+add esp, -20
+mov [-4 + ebp], eax
+mov edx, [-4 + ebp]
+push eax
+xor eax, eax
+mov eax, edx
+push eax
+push message
+call printf
+add esp, 8
+pop eax
+mov [-8 + ebp], edx
+=======
 sub esp, 12
 mov edx, 0
 mov ecx, 0
@@ -129,6 +210,7 @@ mov [-4 + ebp], edx
 jmp t60
 
 t62:
+>>>>>>> 8b6a0cf10bc5c900c8e24e987faf4cdabe6f8892
 mov esp, ebp
 pop ebp
 ret

@@ -37,27 +37,30 @@ def blockasmgenerate():
 def asm():
     print("section .data")
     f.write("section .data\nmessage db \"Register = %d\", 10, 0\n")
-    f.write("\n formatin: db \"%d\", 0")
-    for k,v in datafile.setofString.items() :
-        print('\n'+k+ ' db '  + "'" + v + "',0xa")
-        f.write('\n'+k+ ' db '  + "'" + v + "',0xa\n")
-        f.write("len_" + k + " equ $ - " + k + "\n")
-        datafile.lineno = datafile.lineno + 2
+    f.write("\n formatin: db \"%d\", 0\n")
+    # for k,v in datafile.setofString.items() :
+    #     print('\n'+k+ ' db '  + "'" + v + "',0xa")
+    #     f.write('\n'+k+ ' db '  + "'" + v + "',0xa\n")
+    #     f.write("len_" + k + " equ $ - " + k + "\n")
+    #     datafile.lineno = datafile.lineno + 2
     datafile.lineno = datafile.lineno + 1
     for data in datafile.globalsection:
-        print("{}:".format(data))
-        f.write("{}:\n".format(data))
-        datafile.lineno = datafile.lineno + 1
-        print("\t.long {}".format(1))
-        f.write("\t.long {}\n".format(1))
-        datafile.lineno = datafile.lineno + 1
+        f.write()
+        # print("{}:".format(data))
+        # f.write("{}:\n".format(data))
+        # datafile.lineno = datafile.lineno + 1
+        # print("\t.long {}".format(1))
+        # f.write("\t.long {}\n".format(1))
+        # datafile.lineno = datafile.lineno + 1
     for data in datafile.setofarray.keys():
-        print("{}:".format(data))
-        f.write("{}:\n".format(data))
-        datafile.lineno = datafile.lineno + 1
-        print("\t.zero {}".format(4*int(datafile.setofarray[data])))
-        f.write("\t.zero {}\n".format(4*int(datafile.setofarray[data])))
-        datafile.lineno = datafile.lineno + 1
+        # INVENTORY TIMES 8 DW 0
+        f.write(data + " TIMES " + str(datafile.setofarray[data]) + " DW  0\n")
+        # print("{}:".format(data))
+        # f.write("{}:\n".format(data))
+        # datafile.lineno = datafile.lineno + 1
+        # print("\t.zero {}".format(4*int(datafile.setofarray[data])))
+        # f.write("\t.zero {}\n".format(4*int(datafile.setofarray[data])))
+        # datafile.lineno = datafile.lineno + 1
     print("\nsection.text\n")
     f.write("\nsection .text\n\t")
     datafile.lineno = datafile.lineno + 3
@@ -337,11 +340,8 @@ def PUSH_ARG(i) :
     else :
         place = register.emptyregister(i)
         datafile.blockout.append("mov  " +  register.mem(place) +', ' + register.mem(var))
-        datafile.lineno = datafile.lineno + 1
         datafile.registerdescriptor[place] = var
     datafile.blockout.append("push " + place)
-    datafile.lineno = datafile.lineno + 1
-    pass
 
 def ARG(i):
     pass
@@ -380,9 +380,15 @@ def COMPARE(i):
             datafile.addressdescriptor[y] = reg
         else:
             datafile.L = y
-    # datafile.blockout.append(str(i))
-    # print register.mem(y),register.mem(z),"ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt"
-    datafile.blockout.append("cmp " +  register.mem(y) + ", " +register.mem(z))
+
+    datafile.blockout.append("push edx")
+    datafile.blockout.append("push ecx")
+    datafile.blockout.append("mov ecx, " + register.mem(z))
+    datafile.blockout.append("mov edx, " + register.mem(y))
+    datafile.blockout.append("cmp edx, ecx")
+    datafile.blockout.append("pop ecx")
+    datafile.blockout.append("pop edx")
+    datafile.lineno = datafile.lineno + 1
     register.freereg(y,i)
     register.freereg(z,i)
     
@@ -545,7 +551,7 @@ def ARRAY(i):
 
 def CALL(i):
     
-    datafile.lineno = datafile.lineno + 1
+    # datafile.lineno = datafile.lineno + 1
     datafile.blockout.append('call ' + datafile.block[i].out)
     # print datafile.numberofarguments , "number of arguments ......... \n\n"
     # datafile.blockout.append('add esp, {}'.format(datafile.numberofarguments[datafile.block[i].out]-8))

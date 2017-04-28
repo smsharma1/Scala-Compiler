@@ -70,7 +70,7 @@ def getreg(l, y, ino, special = None):
 
 #this function free the register
 def storereg(regno):
-    if datafile.registerdescriptor[regno] != None :
+    if datafile.registerdescriptor[regno] != None  and mem(datafile.registerdescriptor[regno])[0] == '[' :
         datafile.blockout.append("mov {}, {}".format(mem(datafile.registerdescriptor[regno]), regno))
         datafile.lineno = datafile.lineno + 1
         datafile.addressdescriptor[datafile.registerdescriptor[regno]] = None
@@ -143,7 +143,7 @@ def emptyregister(var,left=[]):
             print var, k ,datafile.registerdescriptor[k],datafile.symtable, "checking in emptyregister"
             if nextuse <= datafile.symtable[var][datafile.registerdescriptor[k]]:  #we have to free the register its important 
                 reg = k
-                nextuse = datafile.symtable[ino][datafile.registerdescriptor[k]]
+                nextuse = datafile.symtable[var][datafile.registerdescriptor[k]]
     storereg(reg)    
     return reg
 

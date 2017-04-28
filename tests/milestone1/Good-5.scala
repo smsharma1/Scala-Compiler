@@ -4,10 +4,16 @@ object Demo {
 		var b : Int  = 1000000000;
 		var d : Int  = 0;
 		var c : Int = a + b;
-		println(c);
-		read(d);
+	        var m : Int = 0;
+	        var n : Int = 0;
+		for ( m <- 0 until 4 )
+		{
+			for ( n <- 0 until 10 )
+			{
+           			println(c);
+      		}
+      	}
 		println(d);
 		println("hello world");
-		var c : Int = a * b;
 	}
 } 

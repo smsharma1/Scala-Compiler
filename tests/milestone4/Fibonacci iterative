@@ -14,6 +14,7 @@ object Fibonacci {
     def main(args: Array[String])
     {
             var k : Int = fibo(9);
+            println(k);
     }
 }
 
