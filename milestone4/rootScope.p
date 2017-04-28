@@ -99,18 +99,19 @@ I0
 ag30
 aI0
 aI0
-asS't10'
+asS't15'
 p36
 (lp37
 I0
 aS'INT'
 p38
 aI0
-aI52
-asS't'
+aI56
+asS't10'
 p39
 (lp40
 I0
+<<<<<<< HEAD
 ag30
 aI0
 aI56
@@ -119,35 +120,79 @@ p41
 (dp42
 g25
 (lp43
+=======
+aS'INT'
+p41
+aI0
+aI52
+asS't'
+p42
+(lp43
+I0
+ag30
+aI0
+aI60
+assS'sizevars'
+p44
+(dp45
+g25
+(lp46
+>>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 I0
 ag27
 aI10
 asg28
+<<<<<<< HEAD
 (lp44
+=======
+(lp47
+>>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 I0
 ag30
 aI0
 asg31
+<<<<<<< HEAD
 (lp45
+=======
+(lp48
+>>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 I0
 ag33
 aI0
 asg34
+<<<<<<< HEAD
 (lp46
+=======
+(lp49
+>>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 I0
 ag30
 aI0
 asg36
+<<<<<<< HEAD
 (lp47
+=======
+(lp50
+>>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 I0
 ag38
 aI0
 asg39
+<<<<<<< HEAD
 (lp48
+=======
+(lp51
+I0
+ag41
+aI0
+asg42
+(lp52
+>>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 I0
 ag30
 aI0
 assS'classes'
+<<<<<<< HEAD
 p49
 g7
 (g8
@@ -179,12 +224,46 @@ p61
 SymbolTable
 p63
 (dp64
+=======
+p53
+g7
+(g8
+g9
+(dp54
+tp55
+Rp56
+sS'objects'
+p57
+(dp58
+sS'offset'
+p59
+I64
+sS'returnType'
+p60
+(lp61
+g30
+asS'argList'
+p62
+(lp63
+g30
+asS'uid'
+p64
+I2
+sbasS'main'
+p65
+(lp66
+(isymboltable
+SymbolTable
+p67
+(dp68
+>>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 g2
 I0
 sg6
 g7
 (g8
 g9
+<<<<<<< HEAD
 (dp65
 tp66
 Rp67
@@ -196,6 +275,19 @@ sg20
 g4
 sg21
 (dp68
+=======
+(dp69
+tp70
+Rp71
+sg18
+I3
+sg19
+g65
+sg20
+g4
+sg21
+(dp72
+>>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 I10
 I0
 sI18
@@ -203,15 +295,23 @@ I2
 sI14
 I1
 ssg23
+<<<<<<< HEAD
 (dp69
 S'k'
 p70
 (lp71
+=======
+(dp73
+S'k'
+p74
+(lp75
+>>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 I0
 ag30
 aI0
 aI14
 asS'args'
+<<<<<<< HEAD
 p72
 (lp73
 I0
@@ -222,10 +322,23 @@ aI0
 asS't17'
 p75
 (lp76
+=======
+p76
+(lp77
+I0
+aS'ARRAYSTRING'
+p78
+aI0
+aI0
+asS't22'
+p79
+(lp80
+>>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 I0
 ag30
 aI0
 aI10
+<<<<<<< HEAD
 assg41
 (dp77
 g70
@@ -263,10 +376,50 @@ asg60
 I3
 sbastp87
 Rp88
+=======
+assg44
+(dp81
+g74
+(lp82
+I0
+ag30
+aI0
+asg76
+(lp83
+I0
+ag78
+aI0
+asg79
+(lp84
+I0
+ag30
+aI0
+assg53
+g7
+(g8
+g9
+(dp85
+tp86
+Rp87
+sg57
+(dp88
+sg59
+I18
+sg60
+(lp89
+sg62
+(lp90
+g78
+asg64
+I3
+sbastp91
+Rp92
+>>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 sg18
 I0
 sg19
 S'object'
+<<<<<<< HEAD
 p89
 sg20
 g0
@@ -291,18 +444,51 @@ sg56
 Nsg58
 (lp97
 sg60
+=======
+p93
+sg20
+g0
+sg21
+(dp94
+sg23
+(dp95
+sg44
+(dp96
+sg53
+g7
+(g8
+g9
+(dp97
+tp98
+Rp99
+sg57
+(dp100
+sg59
+I0
+sg60
+Nsg62
+(lp101
+sg64
+>>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 I1
 sbsg6
 g7
 (g8
 g9
+<<<<<<< HEAD
 (dp98
 tp99
 Rp100
+=======
+(dp102
+tp103
+Rp104
+>>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 sg18
 I0
 sg19
 S'root'
+<<<<<<< HEAD
 p101
 sg20
 Nsg21
@@ -326,5 +512,30 @@ sg56
 Nsg58
 g97
 sg60
+=======
+p105
+sg20
+Nsg21
+(dp106
+sg23
+(dp107
+sg44
+(dp108
+sg53
+g7
+(g8
+g9
+(dp109
+tp110
+Rp111
+sg57
+(dp112
+sg59
+I0
+sg60
+Nsg62
+g101
+sg64
+>>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 I0
 sb.

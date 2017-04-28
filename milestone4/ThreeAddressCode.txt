@@ -2,17 +2,32 @@ label: func_1_fibo
 arg n
 ARRAY f 10
 = i 0 i
+<<<<<<< HEAD
 <- f 4 t5
 = t5 1 t5
 <- f 4 t10
 = t t10 t
 ret2 t
+=======
+-> f 0 t5
+<- t5 0 t5
+-> f 4 t10
+<- t10 1 t10
+<- f 4 t15
+= t t15 t
+pusharg t
+>>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 ret
 label: func_1_main
 arg args
 pusharg 9
 call func_1_fibo
+<<<<<<< HEAD
 get t17
 = k t17 k
+=======
+get t22
+= k t22 k
+>>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 print k
 ret

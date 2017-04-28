@@ -15,6 +15,7 @@ int  0x80
 func_1_fibo:
 push ebp
 mov ebp, esp
+<<<<<<< HEAD
 sub esp, 20
 mov eax,0
 lea eax,[-4 + ebp]
@@ -29,6 +30,25 @@ mov eax, [-20 + ebp]
 mov esp, ebp
 pop ebp
 ret
+=======
+sub esp, 60
+mov edx, 0
+lea eax,[-4 + ebp]
+add eax,0
+mov ebx,eax
+add ebx,0
+mov ebx, [ebx]
+lea eax,[-4 + ebp]
+add eax,4
+mov ecx,eax
+add ecx,1
+mov ecx, [ecx]
+lea eax,[-4 + ebp]
+add eax,4
+mov eax, [eax]
+mov edx, eax
+push edx
+>>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 mov esp, ebp
 pop ebp
 ret
