@@ -1,149 +1,35 @@
-ARRAY a 5,5
-ARRAY b 5,5
-ARRAY c 5,5
-label: func_1_scana
-arg size
+label: func_1_fibo
+arg n
+ARRAY f 10
 = i 0 i
-= j 0 j
-= t 0 t
-= i 0 i
-label: t28
-cmp i size
-jg t30
-= j 0 j
-label: t25
-cmp j size
-jg t27
-read t
-t22 = 5
-* t22 i t22
-+ t22 j t22
-<- a t22 t21
-= t21 t t21
-label: t26
-+ j 1 j
-goto t25
-label: t27
-label: t29
+<- f 0 t5
+= t5 0 t5
+<- f 1 t10
+= t10 1 t10
+= i 2 i
+label: t31
+cmp i n
+jg t33
+<- f i t19
+- i 1 t20
+<- f t20 t23
+- i 2 t24
+<- f t24 t27
++ t23 t27 t28
+= t19 t28 t19
+label: t32
 + i 1 i
-goto t28
-label: t30
-ret
-label: func_1_scanb
-arg size
-= i 0 i
-= j 0 j
-= t 0 t
-= i 0 i
-label: t58
-cmp i size
-jg t60
-= j 0 j
-label: t55
-cmp j size
-jg t57
-read t
-t52 = 5
-* t52 i t52
-+ t52 j t52
-<- b t52 t51
-= t51 t t51
-label: t56
-+ j 1 j
-goto t55
-label: t57
-label: t59
-+ i 1 i
-goto t58
-label: t60
-ret
-label: func_1_multiply
-arg size
-= i 0 i
-= j 0 j
-= k 0 k
-= i 0 i
-label: t121
-cmp i size
-jg t123
-= j 0 j
-label: t118
-cmp j size
-jg t120
-t80 = 5
-* t80 i t80
-+ t80 j t80
-<- c t80 t79
-= t79 0 t79
-= k 0 k
-label: t115
-cmp k size
-jg t117
-t92 = 5
-* t92 i t92
-+ t92 j t92
-<- c t92 t91
-t98 = 5
-* t98 i t98
-+ t98 j t98
-<- c t98 t97
-t104 = 5
-* t104 i t104
-+ t104 k t104
-<- a t104 t103
-t110 = 5
-* t110 k t110
-+ t110 j t110
-<- b t110 t109
-* t103 t109 t111
-+ t97 t111 t112
-= t91 t112 t91
-label: t116
-+ k 1 k
-goto t115
-label: t117
-label: t119
-+ j 1 j
-goto t118
-label: t120
-label: t122
-+ i 1 i
-goto t121
-label: t123
-ret
-label: func_1_printc
-arg size
-= i 0 i
-= j 0 j
-= i 0 i
-label: t147
-cmp i size
-jg t149
-= j 0 j
-label: t144
-cmp j size
-jg t146
-t141 = 5
-* t141 i t141
-+ t141 j t141
-<- a t141 t140
-print t140
-label: t145
-+ j 1 j
-goto t144
-label: t146
-label: t148
-+ i 1 i
-goto t147
-label: t149
+goto t31
+label: t33
+<- f n t36
+= t t36 t
+pusharg t
 ret
 label: func_1_main
-pusharg 4
-call func_1_scana
-pusharg 4
-call func_1_scanb
-pusharg 4
-call func_1_multiply
-pusharg 4
-call func_1_printc
+arg args
+pusharg 9
+call func_1_fibo
+get t43
+= k t43 k
+print k
 ret

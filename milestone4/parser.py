@@ -610,8 +610,14 @@ def p_VariableDeclarationBody(p):
 		#	print p[3].typelist, "I am in typelist"
 			print p[3].typelist, p[1], "variable declaration"
 			if(p[3].typelist[0][0:5] == 'ARRAY'):
-				code = ['ARRAY ' + p[1] + " " + str(p[3].typelist[1]) + "," + str(p[3].typelist[2])]
-				currentScope.InsertVar(p[1],0,p[3].typelist[0], arrlength= [p[3].typelist[1],p[3].typelist[2]])
+				try:
+					p[3].typelist[2]
+					code = ['ARRAY ' + p[1] + " " + str(p[3].typelist[1]) + "," + str(p[3].typelist[2])]
+					currentScope.InsertVar(p[1],0,p[3].typelist[0], arrlength= [p[3].typelist[1],p[3].typelist[2]])
+				except:
+					code = ['ARRAY ' + p[1] + " " + str(p[3].typelist[1])]
+					currentScope.InsertVar(p[1],0,p[3].typelist[0], length= p[3].typelist[1])
+				
 			else:
 				code = ['= ' + p[1] + ' '+  p[3].place + ' '+ p[1]]
 				currentScope.InsertVar(p[1],0,p[3].typelist[0])
@@ -1481,9 +1487,7 @@ def p_ArrayAccess(p):
 		temp = newtemp()
 		temp2 = newtemp()
 		print temp,temp2, " I am in arrayaccess "
-		#TODO VERY IMP
 		l=currentScope.LookUpVar(p[1].type)
-		print l, "I am in Array access"
 		column = l[2]
 		code = [temp2 + ' = ' + str(column) ]+ ["* " + temp2 + " " +p[3].place + " " + temp2] + [ "+ " + temp2 + " " +p[5].place + " " + temp2]
 		l1 = [ "<- " + p[1].place + " " + temp2 + " " + temp]
@@ -1653,4 +1657,4 @@ if __name__ == "__main__" :
 	graph.write_png('parsetree.png')
 	filedot = open(filename + "dot",'w')
 	filedot.write(graph.to_string())
-	print a3AC
+	# print a3AC
