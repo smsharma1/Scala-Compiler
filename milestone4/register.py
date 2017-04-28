@@ -70,11 +70,16 @@ def getreg(l, y, ino, special = None):
 
 #this function free the register
 def storereg(regno):
-    if datafile.registerdescriptor[regno] != None and datafile.registerdescriptor[regno][0] == '[':
-        datafile.blockout.append("mov {}, {}".format(mem(datafile.registerdescriptor[regno]), regno))
-        datafile.lineno = datafile.lineno + 1
-        datafile.addressdescriptor[datafile.registerdescriptor[regno]] = None
-        datafile.registerdescriptor[regno] = None
+    print datafile.registerdescriptor[regno],"======================================================="
+    try:
+        int(datafile.registerdescriptor[regno])
+        pass
+    except:
+        if datafile.registerdescriptor[regno] != None:
+            datafile.blockout.append("mov {}, {}".format(mem(datafile.registerdescriptor[regno]), regno))
+            datafile.lineno = datafile.lineno + 1
+            datafile.addressdescriptor[datafile.registerdescriptor[regno]] = None
+            datafile.registerdescriptor[regno] = None
 
 #this function is used to find memory 
 def mem(var):
@@ -107,6 +112,7 @@ def gety(var):
 
 #Update the addressdescriptor after operation is done
 def UpdateAddressDescriptor(x):
+    print x, "<----------------------------------------------->",datafile.L,datafile.addressdescriptor
     if datafile.L in datafile.registerlist:
         datafile.addressdescriptor[x] = datafile.L
         datafile.registerdescriptor[datafile.L] = x
@@ -148,5 +154,7 @@ def emptyregister(var,left=[]):
 
 #before block ends save all the register
 def save():
+    print "''''''''''''''''''''''''''''''''''''''''''''''''''''''''"
     for reg in datafile.registerlist:
+        print "gggggggggggggggggggggggggggggg",reg,"hhhhhhhhhhhhhhhhhhhhhhhhhh"
         storereg(reg)

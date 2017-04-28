@@ -15,40 +15,80 @@ int  0x80
 func_1_fibo:
 push ebp
 mov ebp, esp
-<<<<<<< HEAD
-sub esp, 20
-mov eax,0
+sub esp, 96
+mov edx, 0
 lea eax,[-4 + ebp]
-add eax,4
-mov eax, [eax]
-mov ebx,1
+sub eax,0
+mov ebx,0
+mov [eax],ebx
+lea ebx,[-4 + ebp]
+sub ebx,4
+mov ecx,1
+mov [ebx],ecx
+mov edx, 2
+mov [-48 + ebp], eax
+mov [-52 + ebp], ebx
+mov [-44 + ebp], edx
+
+t34:
+mov eax,[8 + ebp]
+mov ebx,[-44 + ebp]
+cmp ebx,eax
+mov [8 + ebp], eax
+mov [-44 + ebp], ebx
+jg t36
+mov ebx,4
+mov eax,[-44 + ebp]
+imul ebx
+lea ebx,[-4 + ebp]
+sub ebx,eax
+mov edx, [-44 + ebp]
+sub edx, 1
+mov [-60 + ebp], ebx
+mov ebx,4
+mov [-56 + ebp], eax
+mov eax,edx
+imul ebx
+lea ebx,[-4 + ebp]
+sub ebx,eax
+mov ebx, [ebx]
+mov ecx, [-44 + ebp]
+sub ecx, 2
+mov [-72 + ebp], ebx
+mov ebx,4
+mov [-68 + ebp], eax
+mov eax,ecx
+imul ebx
+lea ebx,[-4 + ebp]
+sub ebx,eax
+mov ebx, [ebx]
+mov [-64 + ebp], edx
+mov edx, [-72 + ebp]
+add edx, ebx
+mov [-76 + ebp], ecx
+mov ecx,[-60 + ebp]
+mov [ecx],edx
+mov [-80 + ebp], eax
+mov [-84 + ebp], ebx
+mov [-88 + ebp], edx
+
+t35:
+mov edx, [-44 + ebp]
+add edx, 1
+mov [-44 + ebp], edx
+jmp t34
+
+t36:
 lea eax,[-4 + ebp]
-add eax,4
+sub eax,36
 mov eax, [eax]
-mov [-20 + ebp],eax
-mov eax, [-20 + ebp]
+mov edx, eax
+mov [-92 + ebp], eax
+mov [-96 + ebp], edx
+mov eax, [-96 + ebp]
 mov esp, ebp
 pop ebp
 ret
-=======
-sub esp, 60
-mov edx, 0
-lea eax,[-4 + ebp]
-add eax,0
-mov ebx,eax
-add ebx,0
-mov ebx, [ebx]
-lea eax,[-4 + ebp]
-add eax,4
-mov ecx,eax
-add ecx,1
-mov ecx, [ecx]
-lea eax,[-4 + ebp]
-add eax,4
-mov eax, [eax]
-mov edx, eax
-push edx
->>>>>>> 4bcc4ff0b5b108b8ba4e19509df62e4d0d1500ab
 mov esp, ebp
 pop ebp
 ret
@@ -60,18 +100,25 @@ sub esp, 8
 mov  eax, 9
 push eax
 call func_1_fibo
-mov [-4 + ebp], eax
-mov eax,[-4 + ebp]
+mov edx, eax
 push eax
+push ebx
+push ecx
+push edx
+
 xor eax, eax
-push eax
-xor eax, eax
-mov eax, [-8 + ebp]
+mov eax, edx
 push eax
 push message
 call printf
 add esp, 8
+pop edx
+pop ecx
+pop ebx
 pop eax
+
+mov [-4 + ebp], eax
+mov [-8 + ebp], edx
 mov esp, ebp
 pop ebp
 ret
