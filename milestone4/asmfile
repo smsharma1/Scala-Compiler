@@ -1,8 +1,8 @@
 section .data
 message db "Register = %d", 10, 0
-
- formatin: db "%d", 0
-f TIMES 10 DW  0
+formatin: db "%d", 0
+b DD 0
+a TIMES 10 DW  0
 
 section .text
 	global main
@@ -13,24 +13,260 @@ main:
 call func_1_main
 mov  eax, 1
 int  0x80
+mov edx, 0
+mov b, edx
 
+<<<<<<< HEAD
 func_1_fibo:
+=======
+func_1_partition:
+>>>>>>> 6bac21d77fca94f8eb2c015458dfd7a61e437b26
 push ebp
 mov ebp, esp
-sub esp, 44
-mov edx, 0
-mov eax, 0
-mov f(, %eax, 4 ), %eax
-mov eax, 0
-mov ebx, 1
-mov f(, %ebx, 4 ), %ebx
-mov ebx, 1
-mov edx, 2
+sub esp, 88
+mov eax, [8 + ebp]
+mov a(, %eax, 4 ), %eax
+mov edx, eax
+mov ecx, [12 + ebp]
+sub ecx, 1
+mov ebx, ecx
+mov [-4 + ebp], edx
+mov edx, [12 + ebp]
+mov [-20 + ebp], edx
+mov edx, [8 + ebp]
+sub edx, 1
+mov [-24 + ebp], edx
+mov edx, [-24 + ebp]
+mov [-28 + ebp], edx
+mov edx, [12 + ebp]
 mov [-8 + ebp], eax
-mov [-12 + ebp], ebx
+mov [-16 + ebp], ebx
+mov [-12 + ebp], ecx
+mov [-20 + ebp], edx
+
+t50:
+push edx
+push ecx
+mov ecx, [-28 + ebp]
+mov edx, [-20 + ebp]
+cmp edx, ecx
+pop ecx
+pop edx
+jg t52
+mov eax, [-20 + ebp]
+mov a(, %eax, 4 ), %eax
+push edx
+push ecx
+mov ecx, [-4 + ebp]
+mov edx, [-32 + ebp]
+cmp edx, ecx
+pop ecx
+pop edx
+mov [-32 + ebp], eax
+jle t23
+mov edx, 0
+mov [-36 + ebp], edx
+jmp t24
+
+t23:
+mov edx, 1
+mov [-36 + ebp], edx
+
+t24:
+push edx
+push ecx
+mov ecx, 0
+mov edx, [-36 + ebp]
+cmp edx, ecx
+pop ecx
+pop edx
+je t49
+mov edx, [-16 + ebp]
+add edx, 1
+mov ecx, edx
+mov eax, ecx
+mov a(, %eax, 4 ), %eax
+mov ebx, eax
+mov [-40 + ebp], edx
+<<<<<<< HEAD
+=======
+mov edx, ecx
+mov a(, %edx, 4 ), %edx
+mov [-16 + ebp], ecx
+mov ecx, [-20 + ebp]
+mov a(, %ecx, 4 ), %ecx
+mov edx, ecx
+mov [-52 + ebp], edx
+mov edx, [-20 + ebp]
+mov a(, %edx, 4 ), %edx
+mov edx, ebx
+mov [-48 + ebp], eax
+mov [-44 + ebp], ebx
+mov [-56 + ebp], ecx
+mov [-60 + ebp], edx
+
+t49:
+
+t51:
+mov edx, [-20 + ebp]
+add edx, 1
+mov [-20 + ebp], edx
+jmp t50
+
+t52:
+mov edx, [-16 + ebp]
+add edx, 1
+mov eax, edx
+mov a(, %eax, 4 ), %eax
+mov ecx, eax
+mov ebx, [-16 + ebp]
+add ebx, 1
+mov [-64 + ebp], edx
+mov edx, ebx
+mov a(, %edx, 4 ), %edx
+mov [-72 + ebp], ebx
+mov ebx, [8 + ebp]
+mov a(, %ebx, 4 ), %ebx
+mov edx, ebx
+mov [-76 + ebp], edx
+mov edx, [8 + ebp]
+mov a(, %edx, 4 ), %edx
+mov edx, ecx
+mov [-84 + ebp], edx
+mov edx, [-16 + ebp]
+add edx, 1
+mov [-88 + ebp], edx
+mov edx, [-88 + ebp]
+push edx
+mov [-68 + ebp], eax
+mov [-80 + ebp], ebx
+mov [-28 + ebp], ecx
+mov [-16 + ebp], edx
+mov esp, ebp
+pop ebp
+ret
+
+func_1_quickSort:
+push ebp
+mov ebp, esp
+sub esp, 20
+push edx
+push ecx
+mov ecx, [8 + ebp]
+mov edx, [12 + ebp]
+cmp edx, ecx
+pop ecx
+pop edx
+jl t78
+mov edx, 0
+mov [-4 + ebp], edx
+jmp t79
+
+t78:
+mov edx, 1
 mov [-4 + ebp], edx
 
-t31:
+t79:
+push edx
+push ecx
+mov ecx, 0
+mov edx, [-4 + ebp]
+cmp edx, ecx
+pop ecx
+pop edx
+je t100
+mov  eax, [12 + ebp]
+push eax
+mov  ebx, [8 + ebp]
+push ebx
+mov [12 + ebp], eax
+mov [8 + ebp], ebx
+call func_1_partition
+mov [-8 + ebp], eax
+mov edx, [-8 + ebp]
+mov  eax, [12 + ebp]
+push eax
+mov  ebx, [-16 + ebp]
+push ebx
+mov [12 + ebp], eax
+mov [-16 + ebp], ebx
+mov [-12 + ebp], edx
+call func_1_quickSort
+mov  eax, [-20 + ebp]
+push eax
+mov  ebx, [8 + ebp]
+push ebx
+mov [-20 + ebp], eax
+mov [8 + ebp], ebx
+call func_1_quickSort
+
+t100:
+>>>>>>> 6bac21d77fca94f8eb2c015458dfd7a61e437b26
+mov esp, ebp
+pop ebp
+ret
+
+func_1_print:
+push ebp
+mov ebp, esp
+sub esp, 8
+<<<<<<< HEAD
+mov  eax, 9
+push eax
+call func_1_fibo
+mov [-4 + ebp], eax
+=======
+mov edx, 0
+mov edx, 0
+mov [-4 + ebp], edx
+
+t112:
+push edx
+push ecx
+mov ecx, [8 + ebp]
+>>>>>>> 6bac21d77fca94f8eb2c015458dfd7a61e437b26
+mov edx, [-4 + ebp]
+cmp edx, ecx
+pop ecx
+pop edx
+jg t114
+mov eax, [-4 + ebp]
+mov a(, %eax, 4 ), %eax
+push eax
+xor eax, eax
+mov eax, eax
+push eax
+push message
+call printf
+add esp, 8
+pop eax
+<<<<<<< HEAD
+mov [-8 + ebp], edx
+=======
+mov [-8 + ebp], eax
+
+t113:
+mov edx, [-4 + ebp]
+add edx, 1
+mov [-4 + ebp], edx
+jmp t112
+
+t114:
+mov esp, ebp
+pop ebp
+ret
+
+func_1_scan:
+push ebp
+mov ebp, esp
+sub esp, 12
+mov edx, 0
+mov ecx, 0
+mov edx, 0
+mov [-8 + ebp], ecx
+mov [-4 + ebp], edx
+
+t130:
 push edx
 push ecx
 mov ecx, [8 + ebp]
@@ -38,40 +274,27 @@ mov edx, [-4 + ebp]
 cmp edx, ecx
 pop ecx
 pop edx
-jg t33
+jg t132
+push eax
+mov eax, esp
+push eax
+push formatin
+call scanf
+add esp, 8
+pop eax
 mov eax, [-4 + ebp]
-mov f(, %eax, 4 ), %eax
-mov edx, [-4 + ebp]
-sub edx, 1
-mov ebx, edx
-mov f(, %ebx, 4 ), %ebx
-mov ecx, [-4 + ebp]
-sub ecx, 2
-mov [-16 + ebp], edx
-mov edx, ecx
-mov f(, %edx, 4 ), %edx
-mov [-20 + ebp], ecx
-mov ecx, ebx
-add ecx, edx
-mov eax, ecx
-mov [-36 + ebp], eax
-mov [-24 + ebp], ebx
-mov [-32 + ebp], ecx
-mov [-28 + ebp], edx
+mov a(, %eax, 4 ), %eax
+mov eax, [-8 + ebp]
+mov [-12 + ebp], eax
 
-t32:
+t131:
 mov edx, [-4 + ebp]
 add edx, 1
 mov [-4 + ebp], edx
-jmp t31
+jmp t130
 
-t33:
-mov eax, [8 + ebp]
-mov f(, %eax, 4 ), %eax
-mov edx, eax
-push edx
-mov [-44 + ebp], eax
-mov [-40 + ebp], edx
+t132:
+>>>>>>> 6bac21d77fca94f8eb2c015458dfd7a61e437b26
 mov esp, ebp
 pop ebp
 ret
@@ -79,35 +302,22 @@ ret
 func_1_main:
 push ebp
 mov ebp, esp
-sub esp, 8
+sub esp, 0
 mov  eax, 9
 push eax
-call func_1_fibo
-mov [-4 + ebp], eax
-mov edx, [-4 + ebp]
+mov 9, eax
+call func_1_scan
+mov  eax, 0
 push eax
-xor eax, eax
-mov eax, edx
+mov  ebx, 9
+push ebx
+mov 0, eax
+mov 9, ebx
+call func_1_quickSort
+mov  eax, 9
 push eax
-push message
-call printf
-add esp, 8
-pop eax
-mov [-8 + ebp], edx
+mov 9, eax
+call func_1_print
 mov esp, ebp
 pop ebp
-ret
-int_to_string:
-add esi,9
-mov byte [esi],0
-mov ebx,10
-.next_digit:
-xor edx,edx
-div ebx
-add dl,'0'
-dec esi
-  mov [esi],dl
-test eax,eax
-jnz .next_digit
-mov eax,esi
 ret

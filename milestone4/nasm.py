@@ -12,7 +12,7 @@ def blockasmgenerate():
         datafile.L = None
         datafile.yprime = None
         datafile.zprime = None
-        print i ," i am in blockasmgenerate ok ....",datafile.block[i].type
+        # print i ," i am in blockasmgenerate ok ....",datafile.block[i].type
         OperatorMap[datafile.block[i].type](i)
     i = len(datafile.block) - 1
     if i == -1:
@@ -37,7 +37,7 @@ def blockasmgenerate():
 def asm():
     print("section .data")
     f.write("section .data\nmessage db \"Register = %d\", 10, 0\n")
-    f.write("\n formatin: db \"%d\", 0\n")
+    f.write("formatin: db \"%d\", 0\n")
     # for k,v in datafile.setofString.items() :
     #     print('\n'+k+ ' db '  + "'" + v + "',0xa")
     #     f.write('\n'+k+ ' db '  + "'" + v + "',0xa\n")
@@ -45,7 +45,12 @@ def asm():
     #     datafile.lineno = datafile.lineno + 2
     datafile.lineno = datafile.lineno + 1
     for data in datafile.globalsection:
-        f.write()
+        # DB	Define Byte	allocates 1 byte
+        # DW	Define Word	allocates 2 bytes
+        # DD	Define Doubleword	allocates 4 bytes
+        # DQ	Define Quadword	allocates 8 bytes
+        # DT	Define Ten Bytes	allocates 10 bytes
+        f.write(data + " DD 0\n" )
         # print("{}:".format(data))
         # f.write("{}:\n".format(data))
         # datafile.lineno = datafile.lineno + 1
@@ -119,7 +124,7 @@ def asm():
         else:
             datafile.block = datafile.instruction[blockbreaker[i]:blockbreaker[i+1]]
         blockasmgenerate()  
-    f.write("int_to_string:\nadd esi,9\nmov byte [esi],0\nmov ebx,10\n.next_digit:\nxor edx,edx\ndiv ebx\nadd dl,'0'\ndec esi\n  mov [esi],dl\ntest eax,eax\njnz .next_digit\nmov eax,esi\nret\n")
+    # f.write("int_to_string:\nadd esi,9\nmov byte [esi],0\nmov ebx,10\n.next_digit:\nxor edx,edx\ndiv ebx\nadd dl,'0'\ndec esi\n  mov [esi],dl\ntest eax,eax\njnz .next_digit\nmov eax,esi\nret\n")
 
 def JE(i):
     
@@ -359,7 +364,7 @@ def GET(i):
 #One has to be in register 
 def COMPARE(i):
     (y,z) = (datafile.block[i].op1,datafile.block[i].op2)
-    print y,z, "aaaaaaaasdaddddddddddddddddddddddddddddddddddddddddaaaaaaaaaa",i
+    # print y,z, "aaaaaaaasdaddddddddddddddddddddddddddddddddddddddddaaaaaaaaaa",i
     try:
         int(z)
         datafile.zprime = z
@@ -380,6 +385,7 @@ def COMPARE(i):
             datafile.addressdescriptor[y] = reg
         else:
             datafile.L = y
+
     datafile.blockout.append("push edx")
     datafile.blockout.append("push ecx")
     datafile.blockout.append("mov ecx, " + register.mem(z))
@@ -637,8 +643,12 @@ def READ(i):
     #     datafile.blockout.append("pop " + reg)
     datafile.blockout.append("call scanf")
     datafile.blockout.append("add esp, 8")
-    if k[0] != "[":
-        datafile.blockout.append("mov " + k + ", [esp]")
+    try:
+        k[0]
+        if k[0] != "[":
+            datafile.blockout.append("mov " + k + ", [esp]")
+    except:
+        pass
         # datafile.blockout.append("pop eax")
     # datafile.blockout.append('pop edx')
     # datafile.blockout.append('pop ecx')

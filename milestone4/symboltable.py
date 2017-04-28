@@ -41,7 +41,7 @@ class SymbolTable:
 				# print "hola ", scope.variables[symbolName]
 				return scope.variables[symbolName]
 			scope = scope.parent
-#		print symbolName, " Variable not found"
+		# print symbolName, " Variable not found"
 		return False
 	
 	def LookUpVarSize(self, symbolName):
@@ -257,14 +257,23 @@ class SymbolTable:
 		# self.offset = self.offset + self.objects[newName].getSymbolTableSize()
 		# print self.objects[newName][0], "last line in set object name"
 
-	def InsertVar(self, symbolName, val, type_name, length=0):
+	def InsertVar(self, symbolName, val, type_name, length=0,arrlength=[]):
 		# print "testing",type_name
 		global esp
 		if self.LookUpCurrentScope(symbolName):
 			raise ValueError("InsertVar called on "+symbolName+" but it is already declared")
 		else:
+<<<<<<< HEAD
 			self.variables[symbolName] = [val, type_name, length, self.offset]
 			self.sizevars[symbolName] = [val, type_name, length]
+=======
+			if arrlength:
+				self.variables[symbolName] = [val, type_name, arrlength[0],arrlength[1], self.offset]
+			else:	
+				self.variables[symbolName] = [val, type_name, length, self.offset]
+			if arrlength:
+				length = arrlength[0] * arrlength[1]
+>>>>>>> 6bac21d77fca94f8eb2c015458dfd7a61e437b26
 			if length:
 				self.offset = self.offset + self.Size(type_name.upper())*length
 				esp = esp + self.Size(type_name.upper())*length
@@ -344,7 +353,7 @@ class SymbolTable:
 
 	def InsertFuncDetails(self, symbolName, argList, returnType):
 		print symbolName, " ", argList, " ", returnType
-		print "hello in insertfuncdetails"
+		# print "hello in insertfuncdetails"
 		self.argList = argList
 		self.name = symbolName
 		self.returnType = returnType

@@ -275,6 +275,7 @@ def p_VariableDeclarator1(p):
 			currentScope.Dumper(currentScope.LookUpObject(p[1]),symbol_file)
 		elif "ARRAY" in p[3].typelist[0]:
 			#TO check
+			print p[3].typelist, p[1], "variable declarator1"
 			code = ['ARRAY ' + p[1] + " " + str(p[3].typelist[1])]
 			currentScope.InsertVar(p[1],0,p[3].typelist[0], length= p[3].typelist[1])
 		else:
@@ -302,6 +303,7 @@ def p_VariableDeclarator1(p):
 def p_FuncArgumentListExtras(p):
 	''' FuncArgumentListExtras : VariableDeclarators
 								| empty'''
+	k = []
 	if(p[1] == None):
 		pass
 	else:
@@ -329,6 +331,7 @@ def p_VariableDeclarators(p):
 def p_VariableDeclarator(p):
 	'''VariableDeclarator : ID COLON Type '''
 	global currentScope
+	# print currentScope.variables, "tttttttttttttttttttttttttttttttttttttttttttttttttttttt"
 	if(currentScope.LookUpVar(p[1])):
 		print "Variable " + p[1] + " already declared error at line number: " + str(p.lexer.lineno)
 		global Error 
@@ -353,7 +356,7 @@ def p_ArrayInitializer(p):
 	if len(p) == 9:
 		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8]],typelist =['ARRAY' + p[4].typelist[0], int(p[7])], order="lllcllll")
 	else:
-		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8],p[9], p[10]],typelist=['ARRAYARRAY'+p[4].typelist[0], int(p[7])*int(p[9])], order="lllcllllll")
+		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8],p[9], p[10]],typelist=['ARRAYARRAY'+p[4].typelist[0], int(p[7]),int(p[9])], order="lllcllllll")
 
 def p_EndStatement(p):
 	'''EndStatement : SEMICOLON
@@ -606,9 +609,10 @@ def p_VariableDeclarationBody(p):
 			currentScope.Dumper(currentScope.LookUpObject(p[1])[0],symbol_file)
 		else:
 		#	print p[3].typelist, "I am in typelist"
+			print p[3].typelist, p[1], "variable declaration"
 			if(p[3].typelist[0][0:5] == 'ARRAY'):
-				code = ['ARRAY ' + p[1] + " " + str(p[3].typelist[1])]
-				currentScope.InsertVar(p[1],0,p[3].typelist[0], length= p[3].typelist[1])
+				code = ['ARRAY ' + p[1] + " " + str(p[3].typelist[1]) + "," + str(p[3].typelist[2])]
+				currentScope.InsertVar(p[1],0,p[3].typelist[0], arrlength= [p[3].typelist[1],p[3].typelist[2]])
 			else:
 				code = ['= ' + p[1] + ' '+  p[3].place + ' '+ p[1]]
 				currentScope.InsertVar(p[1],0,p[3].typelist[0])
@@ -711,7 +715,7 @@ def p_ifstat(p):
 			| M R_IF LPARAN R_FALSE RPARAN StatementNoShortIf'''
 	s_else = newtemp()
 	s_after = newtemp()
-	print s_else,s_after, "I am in Ifstat"
+	# print s_else,s_after, "I am in Ifstat"
 	if p[4] == "true":
 		# print p[6].code[p[6].breaklist[0]], " i am the code in ifstat which should be backpatched"
 		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=p[6].code + ['label: ' + s_else],next=s_after, breaklist = p[6].breaklist, continuelist = p[6].continuelist)
@@ -1431,7 +1435,7 @@ def p_PrimaryNoNewArray(p):
 	if len(p) == 4:
 		p[0] = p[2]
 	else:
-		print p[1].type,"we are in p_PrimaryNoNewArray", p[1].typelist
+		# print p[1].type,"we are in p_PrimaryNoNewArray", p[1].typelist
 		p[0] = p[1]
 # <class instance creation expression> ::= new <class type> ( <argument list>? )
 
@@ -1501,12 +1505,12 @@ def p_ArrayAccess(p):
 		p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]],typelist =[p[1].typelist[0][5:]] , order="clcl",code=p[3].code + l1,place = temp)
 	else:
 		temp = newtemp()
-		temp1 = newtemp()
-		print temp,temp1, " I am in arrayaccess "
+		temp2 = newtemp()
+		print temp,temp2, " I am in arrayaccess "
 		#TODO VERY IMP
-		#l=currentScope.LookUpArray(p[1].type)
-		# column = l[2]
-		l1 = [ "* " + temp2 + " " +p[3].place + " " + temp2]
+		l=currentScope.LookUpVar(p[1].type)
+		print l, "I am in Array access"
+		column = l[2]
 		code = [temp2 + ' = ' + str(column) ]+ ["* " + temp2 + " " +p[3].place + " " + temp2] + [ "+ " + temp2 + " " +p[5].place + " " + temp2]
 		l1 = [ "<- " + p[1].place + " " + temp2 + " " + temp]
 		# l1 = [ temp + " = " + p[1].place + " -> " + temp2]
