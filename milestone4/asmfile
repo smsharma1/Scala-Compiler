@@ -15,93 +15,20 @@ int  0x80
 func_1_fibo:
 push ebp
 mov ebp, esp
-sub esp, 64
-mov edx, 0
-mov eax,[-4 + ebp]
-add eax,0
+sub esp, 20
+mov eax,0
+lea eax,[-4 + ebp]
+add eax,4
 mov eax, [eax]
-mov eax, 0
-mov ebx,[-4 + ebp]
-add ebx,4
-mov ebx, [ebx]
-mov ebx, 1
-mov edx, 2
-
-t34:
-push edx
-push ecx
-mov ecx, [8 + ebp]
-mov edx, [-8 + ebp]
-cmp edx, ecx
-pop ecx
-pop edx
-jg t36
-mov edx, [-8 + ebp]
-push eax
-push ebx
-mov eax,edx
-mov ebx,4
-imul ebx
-mov 4,ebx
-mov edx,eax
-pop eax
-pop ebx
-mov eax,[-4 + ebp]
-add eax,edx
+mov ebx,1
+lea eax,[-4 + ebp]
+add eax,4
 mov eax, [eax]
-mov ecx, [-8 + ebp]
-sub ecx, 1
-mov ebx, ecx
-push eax
-push ebx
-mov eax,ebx
-mov ebx,4
-imul ebx
-mov 4,ebx
-mov ebx,eax
-pop eax
-pop ebx
-mov edx,[-4 + ebp]
-add edx,ebx
-mov edx, [edx]
-mov ecx, [-8 + ebp]
-sub ecx, 2
-push eax
-push ebx
-mov eax,ecx
-mov ebx,4
-imul ebx
-mov 4,ebx
-mov ecx,eax
-pop eax
-pop ebx
-mov ecx,[-4 + ebp]
-add ecx,ecx
-mov ecx, [ecx]
-add edx, ecx
-mov eax, edx
-
-t35:
-mov edx, [-8 + ebp]
-add edx, 1
-jmp t34
-
-t36:
-mov edx, [8 + ebp]
-push eax
-push ebx
-mov eax,edx
-mov ebx,4
-imul ebx
-mov 4,ebx
-mov edx,eax
-pop eax
-pop ebx
-mov eax,[-4 + ebp]
-add eax,edx
-mov eax, [eax]
-mov ecx, eax
-push ecx
+mov [-20 + ebp],eax
+mov eax, [-20 + ebp]
+mov esp, ebp
+pop ebp
+ret
 mov esp, ebp
 pop ebp
 ret
@@ -114,10 +41,12 @@ mov  eax, 9
 push eax
 call func_1_fibo
 mov [-4 + ebp], eax
-mov edx, [-4 + ebp]
+mov eax,[-4 + ebp]
 push eax
 xor eax, eax
-mov eax, edx
+push eax
+xor eax, eax
+mov eax, [-8 + ebp]
 push eax
 push message
 call printf

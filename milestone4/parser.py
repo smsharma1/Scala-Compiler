@@ -963,7 +963,7 @@ def p_ReturnStatement(p):
 	'''ReturnStatement : R_RETURN Expression EndStatement
 					| R_RETURN EndStatement'''
 	if len(p) ==  4:
-		code = ['pusharg ' + p[2].place]
+		code = ['ret2 ' + p[2].place]
 		if not (currentScope.returnType == p[2].typelist):
 			print currentScope.name
 			print currentScope.returnType, p[2].typelist

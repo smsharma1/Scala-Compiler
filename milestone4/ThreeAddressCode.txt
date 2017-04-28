@@ -2,38 +2,17 @@ label: func_1_fibo
 arg n
 ARRAY f 10
 = i 0 i
-<- f 0 t5
-= t5 0 t5
+<- f 4 t5
+= t5 1 t5
 <- f 4 t10
-= t10 1 t10
-= i 2 i
-label: t34
-cmp i n
-jg t36
-* i 4 t20
-<- f t20 t19
-- i 1 t21
-* t21 4 t25
-<- f t25 t24
-- i 2 t26
-* t26 4 t30
-<- f t30 t29
-+ t24 t29 t31
-= t19 t31 t19
-label: t35
-+ i 1 i
-goto t34
-label: t36
-* n 4 t40
-<- f t40 t39
-= t t39 t
-pusharg t
+= t t10 t
+ret2 t
 ret
 label: func_1_main
 arg args
 pusharg 9
 call func_1_fibo
-get t47
-= k t47 k
+get t17
+= k t17 k
 print k
 ret
