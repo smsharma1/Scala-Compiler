@@ -876,7 +876,7 @@ def p_M(p):
 	global currentScope
 	newscope = currentScope.NewFuncScope()
 	newscope.returnType = currentScope.returnType
-	print "dddddddddddddddddddddddddddddddddddddddd"
+	# print "dddddddddddddddddddddddddddddddddddddddd"
 	newscope.parent = currentScope
 	newscope.returnType = currentScope.returnType
 	currentScope = newscope
