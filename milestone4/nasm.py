@@ -419,8 +419,12 @@ def MUL(i):
     datafile.blockout.append("mov eax," + register.mem(datafile.L))
     datafile.blockout.append("mov ebx," + register.mem(datafile.zprime))
     datafile.blockout.append("imul ebx")
-    datafile.blockout.append("mov " + register.mem(datafile.zprime) + ",ebx")
-    datafile.blockout.append("mov " + register.mem(datafile.L) + ",eax")
+    t = register.mem(datafile.zprime)
+    t1 = register.mem(datafile.L)
+    if t[0] == '[':
+        datafile.blockout.append("mov " + register.mem(datafile.zprime) + ",ebx")
+    if t1[0] == '[':
+        datafile.blockout.append("mov " + register.mem(datafile.L) + ",eax")
     datafile.blockout.append("pop eax")
     datafile.blockout.append("pop ebx")
     datafile.lineno = datafile.lineno + 1
@@ -516,6 +520,30 @@ def MOD(i):
     register_allocator.freereg(y, i)
     register_allocator.freereg(z, i)
 
+def LOADARRAY(i):
+    (l, y, z) = (datafile.block[i].out, datafile.block[i].op1, datafile.block[i].op2)
+    try:
+        int(z)
+        datafile.zprime = z
+    except:
+        register.getz(z)
+    if y in datafile.allvariables:
+        if datafile.addressdescriptor[y] != None:
+            datafile.yprime = datafile.addressdescriptor[y]
+        else:
+            datafile.yprime = y
+    print datafile.yprime , 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', y
+    reg = register.emptyregister(i)
+    datafile.L = reg
+    t = register.mem(datafile.yprime)
+    if t[0] == "[":
+        datafile.blockout.append("lea " + reg + "," + t)
+    else:
+        datafile.blockout.append("mov " + reg + "," + t)
+    # datafile.blockout.append("lea " + reg + "," + register.mem(datafile.yprime))
+    datafile.blockout.append("add " + reg + "," + register.mem(datafile.zprime))
+    register.UpdateAddressDescriptor(l)
+
 def ARRAYLOAD(i):
     (l, y, z) = (datafile.block[i].out, datafile.block[i].op1, datafile.block[i].op2)
     #sb $0, array1($3)  index addressing mode is used here
@@ -532,7 +560,11 @@ def ARRAYLOAD(i):
     print datafile.yprime , 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', y
     reg = register.emptyregister(i)
     datafile.L = reg
-    datafile.blockout.append("mov " + reg + "," + register.mem(datafile.yprime))
+    t = register.mem(datafile.yprime)
+    if t[0] == "[":
+        datafile.blockout.append("lea " + reg + "," + t)
+    else:
+        datafile.blockout.append("mov " + reg + "," + t)
     datafile.blockout.append("add " + reg + "," + register.mem(datafile.zprime))
     datafile.blockout.append("mov " + reg  + ", [" + reg + "]"  )
     register.UpdateAddressDescriptor(l)
@@ -655,4 +687,4 @@ def READ(i):
     # datafile.blockout.append('pop ebx')
     datafile.blockout.append('pop eax')
 
-OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL, 'printstr': PRINTSTR, 'print' : PRINT, 'read' : READ }
+OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL, 'printstr': PRINTSTR, 'print' : PRINT, 'read' : READ, '->': LOADARRAY }

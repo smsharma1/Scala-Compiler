@@ -78,7 +78,10 @@ if __name__ == "__main__" :
                                 datafile.memorymap[scopefunc][node[i]] = '['+ str(locallength) + ' + ebp]'
                                 print currentScope.name, " this is currentscope name"
                                 print node[2],";;;;;;;;;;;;;;;;;", currentScope.LookUpVarSize(node[2])[1], " this is the type;;;;;;;;;;;;"
-                                locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])
+                                if node[1] == "ARRAY":
+                                    locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])*int(node[3])
+                                else:
+                                    locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])
                                 #TODO procedure under procedure 
                     else:
                         datafile.globalsection.add(node[i])
