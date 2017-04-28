@@ -302,6 +302,7 @@ def p_VariableDeclarator1(p):
 def p_FuncArgumentListExtras(p):
 	''' FuncArgumentListExtras : VariableDeclarators
 								| empty'''
+	k = []
 	if(p[1] == None):
 		pass
 	else:
@@ -329,6 +330,7 @@ def p_VariableDeclarators(p):
 def p_VariableDeclarator(p):
 	'''VariableDeclarator : ID COLON Type '''
 	global currentScope
+	# print currentScope.variables, "tttttttttttttttttttttttttttttttttttttttttttttttttttttt"
 	if(currentScope.LookUpVar(p[1])):
 		print "Variable " + p[1] + " already declared error at line number: " + str(p.lexer.lineno)
 		global Error 
@@ -710,7 +712,7 @@ def p_ifstat(p):
 			| M R_IF LPARAN R_FALSE RPARAN StatementNoShortIf'''
 	s_else = newtemp()
 	s_after = newtemp()
-	print s_else,s_after, "I am in Ifstat"
+	# print s_else,s_after, "I am in Ifstat"
 	if p[4] == "true":
 		# print p[6].code[p[6].breaklist[0]], " i am the code in ifstat which should be backpatched"
 		p[0] = Node(p[2], [p[6]],[ p[4]],order='lc',isLeaf=True,code=p[6].code + ['label: ' + s_else],next=s_after, breaklist = p[6].breaklist, continuelist = p[6].continuelist)

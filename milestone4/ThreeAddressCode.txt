@@ -1,97 +1,117 @@
-label: func_1_fibo
-arg n
-<<<<<<< HEAD
-ARRAY f 10
-= i 0 i
-<- f 0 t5
-= t5 0 t5
-<- f 1 t10
-= t10 1 t10
-= i 2 i
-label: t31
-cmp i n
-jg t33
-<- f i t19
-- i 1 t20
-<- f t20 t23
-- i 2 t24
-<- f t24 t27
-+ t23 t27 t28
-= t19 t28 t19
-label: t32
-+ i 1 i
-goto t31
-label: t33
-<- f n t36
-= t t36 t
-pusharg t
-ret
-label: func_1_main
-arg args
-pusharg 9
-call func_1_fibo
-get t43
-= k t43 k
-print k
-=======
-arg m
-cmp m 0
-je t3
-= t5 0 t5
-goto t4
-label: t3
-= t5 1 t5
-label: t4
-cmp t5 0
-je t9
-+ n 1 t6
-pusharg t6
-label: t9
-cmp n 0
-je t12
-= t14 0 t14
-goto t13
-label: t12
-= t14 1 t14
-label: t13
-cmp t14 0
-je t23
-pusharg t15
-pusharg 1
-call func_1_acker
-get t20
-pusharg t20
+ARRAY a 10
+= b 0 b
+label: func_1_partition
+arg high
+arg low
+<- a high t5
+= pivot t5 pivot
+- low 1 t8
+= i t8 i
+= j low j
+- high 1 t13
+= till t13 till
+= j low j
+label: t50
+cmp j till
+jg t52
+<- a j t22
+cmp t22 pivot
+jle t23
+= t25 0 t25
+goto t24
 label: t23
-pusharg t24
-pusharg t32
-call func_1_acker
-get t35
-pusharg t35
+= t25 1 t25
+label: t24
+cmp t25 0
+je t49
++ i 1 t28
+= i t28 i
+<- a i t33
+= temp t33 temp
+<- a i t38
+<- a j t41
+= t38 t41 t38
+<- a j t46
+= t46 temp t46
+label: t49
+label: t51
++ j 1 j
+goto t50
+label: t52
++ i 1 t53
+<- a t53 t56
+= till t56 till
++ i 1 t59
+<- a t59 t62
+<- a high t65
+= t62 t65 t62
+<- a high t70
+= t70 till t70
++ i 1 t73
+= i t73 i
+pusharg i
+ret
+label: func_1_quickSort
+arg high
+arg low
+cmp low high
+jl t78
+= t80 0 t80
+goto t79
+label: t78
+= t80 1 t80
+label: t79
+cmp t80 0
+je t100
+pusharg low
+pusharg high
+call func_1_partition
+get t87
+= pi t87 pi
+pusharg low
+pusharg t92
+call func_1_quickSort
+pusharg t95
+pusharg high
+call func_1_quickSort
+label: t100
+ret
+label: func_1_print
+arg size
+= i 0 i
+= i 0 i
+label: t112
+cmp i size
+jg t114
+<- a i t109
+print t109
+label: t113
++ i 1 i
+goto t112
+label: t114
+ret
+label: func_1_scan
+arg size
+= i 0 i
+= t 0 t
+= i 0 i
+label: t130
+cmp i size
+jg t132
+read t
+<- a i t127
+= t127 t t127
+label: t131
++ i 1 i
+goto t130
+label: t132
 ret
 label: func_1_main
-arg args
-= m 0 m
-= n 0 n
-= m 0 m
-label: t60
-cmp m 4
-jg t62
-= n 0 n
-label: t57
-cmp n 10
-jg t59
-pusharg m
-pusharg n
-call func_1_acker
-get t54
-print t54
-label: t58
-+ n 1 n
-goto t57
-label: t59
-label: t61
-+ m 1 m
-goto t60
-label: t62
->>>>>>> 8b6a0cf10bc5c900c8e24e987faf4cdabe6f8892
+pusharg 9
+call func_1_scan
+pusharg 0
+pusharg 9
+call func_1_quickSort
+pusharg 9
+call func_1_print
 ret

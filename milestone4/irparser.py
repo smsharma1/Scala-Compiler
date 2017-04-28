@@ -85,7 +85,7 @@ if __name__ == "__main__" :
 
     nasm.asm()
     # print datafile.allvariables, "all variables"
-    # print datafile.globalsection, 'globalsection'
+    print datafile.globalsection, 'globalsection'
     for inst in datafile.instruction:
         print inst.instnumber,inst.type,inst.op1,inst.op2,inst.operator, inst.out 
     print datafile.memorymap, 'memorymap'
