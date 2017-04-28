@@ -102,12 +102,17 @@ def mem(var):
 #This function is for Yprime 
 def gety(var):
     # print var , "in gety"
+    print datafile.allvariables, "hare all the variables"
     if var in datafile.allvariables:
+        print "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
         if datafile.addressdescriptor[var] != None:
+            print "are you jing??????????????????????????????????/"
             datafile.yprime = datafile.addressdescriptor[var]
         else:
+            print "i am so big"
             datafile.yprime = var
     if datafile.yprime != datafile.L :
+        print mem(datafile.L), " " , mem(datafile.yprime), "              %&*&_**&^%$%^&*(*&^%$%^&*("
         datafile.blockout.append("mov " + mem(datafile.L) + ", " + mem(datafile.yprime))
 
 #Update the addressdescriptor after operation is done
@@ -127,6 +132,8 @@ def UpdateAddressDescriptor(x):
 
 #Free the register
 def freereg(var, ino):
+    # if datafile.addressdescriptor[var] == None:
+    #     print " i am happpy pyeaypyfpape ypfyfyaeyfpafypa yfpayfpadsfsajfufuckfuckf ufckf uck fju"
     if var in datafile.allvariables :
         if datafile.symtable[ino][var] == 1000000007 and datafile.addressdescriptor[var] != None:
             datafile.registerdescriptor[datafile.addressdescriptor[var]] = None

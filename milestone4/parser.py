@@ -1530,6 +1530,8 @@ def p_ArrayAccess(p):
 		code = [temp2 + ' = ' + str(column) ]+ ["* " + temp2 + " " +p[3].place + " " + temp2] + [ "+ " + temp2 + " " +p[5].place + " " + temp2]
 		l1 = [ "<- " + p[1].place + " " + temp2 + " " + temp]
 		# l1 = [ temp + " = " + p[1].place + " -> " + temp2]
+		currentScope.InsertVar(temp2,0, 'INT')
+		currentScope.InsertVar(temp,0, p[1].typelist[0][10:])
 		p[0] = Node('ArrayAccess',[p[1],p[3],p[5]],[p[2],p[4],p[6]],typelist=[p[1].typelist[0][10:]], order="clclcl",code= p[5].code+p[3].code + code+l1,place=temp)
 
 def p_AmbiguousName(p):

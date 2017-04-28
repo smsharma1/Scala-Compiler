@@ -516,15 +516,19 @@ def MUL(i):
 
 def ASSIGN(i):
     (y,l) = (datafile.block[i].op2,datafile.block[i].out)
+    print y, " " , l, "these are y and l in assgin statement ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     register.getreg(l,y,i)
     try :
         int(y)
+        print "hello from the other side |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
         datafile.yprime = y
     except :
         pass
     register.gety(y)
     register.UpdateAddressDescriptor(l)
+    print y, " nd ", l, "i am passing these to register.freereg. Save tehm if you can!!"
     register.freereg(y, i)
+    # datafile.blockout.append("end of assign")
 
 def DEFASSIGN(i):
     (y,l) = (datafile.block[i].op2,datafile.block[i].out)
