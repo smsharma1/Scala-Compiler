@@ -1240,7 +1240,7 @@ def p_MultiplicativeExpression(p):
 								| MultiplicativeExpression MODULUS UnaryExpression'''
 	if len(p) ==  4:
 		nodename = newtemp()
-		print nodename,"I am in Multiplicative Expression"
+		print nodename,"I am in Multiplicative Expression[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]"
 		code = [p[2] + " " + p[1].place + " " + p[3].place + " " + nodename]
 		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
 		print p[1].typelist, "multiplicativeerror" , p[3].typelist, type_here
@@ -1334,10 +1334,31 @@ def p_MethodInvocation(p):
 		return
 	if(p[1].type == "read"):
 		if( len(p[3].type) > 1):
-			print("read() takes only one argument")
+			print("read() takes exactly one argument")
 			Error = Error + 1
 		func_name = "read"
 		code.append("read " + p[3].place)
+		p[0] = Node("MethodInvocation", [p[1], p[3]], [] ,code =p[1].code + p[3].code + code, order='cc')
+		return
+	if(p[1].type == "fopen"):
+		if( len(p[3].meta) != 2):
+			print("fopen() takes exactly two arguments")
+			Error = Error + 1
+		for k in p[3].meta:
+			code.append("pusharg2 \"" + k+"\"")
+		func_name = "fopen"
+		code.append("call fopen")
+		temp = newtemp()
+		code.append('get ' + temp)
+		currentScope.InsertVar(temp,0, 'INT')
+		p[0] = Node("MethodInvocation", [p[1], p[3]], [] ,code =p[1].code + p[3].code + code, order='cc', typelist=['INT'], place=temp)
+		return
+	if(p[1].type == "fread"):
+		if( len(p[3].type) != 1):
+			print("fread() takes exactly one argument")
+			Error = Error + 1
+		func_name = "fread"
+		code.append("fread " + p[3].place)
 		p[0] = Node("MethodInvocation", [p[1], p[3]], [] ,code =p[1].code + p[3].code + code, order='cc')
 		return
 	if p[3] == None :
@@ -1515,6 +1536,7 @@ def p_ArrayAccess(p):
 			l1 = [ "<- " + p[1].place + " " +str(int(p[3].place)*size) + " " + temp]
 		except:
 			lab = newtemp()
+			currentScope.InsertVar(lab,0, "INT")
 			l1 = ["* " + p[3].place  + " " + str(size) + " " + lab ] + [ "<- " + p[1].place + " " + lab + " " + temp]
 		# l1 = [ temp + " = " + p[1].place + " -> " + p[3].place]
 		currentScope.InsertVar(temp,0, p[1].typelist[0][5:])
@@ -1548,6 +1570,10 @@ def p_AmbiguousName(p):
 		if p[1] == 'println':
 			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
 		elif p[1] == 'read':
+			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
+		elif p[1] == 'fopen':
+			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
+		elif p[1] == 'fread':
 			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
 		else:
 			returnType = currentScope.LookUpSymbolType(p[1])

@@ -1,19 +1,24 @@
 object newtonRaphson{
     def func( x : Float) : Float = {
-        var k : Float = x*x*x - x*x + 2.0;
+        var k : Float = x*x*x - x*x + 2;
+	println(k);
         return k;
     }
     def derivFunc( x : Float) : Float = {
         var k : Float = 3*x*x - 2*x;
+	println(k);
         return k;
     }
     def newtonRaphson(x : Float){
-        var h : Float = func(x) / derivFunc(x);
+        var h1 : Float = func(x);
+	var h2 : Float = derivFunc(x);
+	var h : Float = h1/h2;
         var t : Float = h;
+	println(h);
         if ( t < 0 ){
             t = t * (-1);
         }
-        while(t >= 0.001)
+        while(t >= 1)
         {
             h = func(x) / derivFunc(x);  
             x = x - h;
@@ -26,8 +31,9 @@ object newtonRaphson{
         println(x);
     }
      def main(args: Array[String]) {
-        var x : Float = -20;
-        newtonRaphson(x);
+        var x : Int = -20;
+	println(x);
+     //   newtonRaphson(x);
 
      }
 }

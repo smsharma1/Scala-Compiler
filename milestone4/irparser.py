@@ -6,7 +6,7 @@ import symboltable
 import pickle
 
 def checkbranching(name) :
-    if name in ['jump', 'call', 'goto', 'label:', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne','ret','ret1','ret2','printstr']:
+    if name in ['jump', 'call', 'goto', 'label:', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne','ret','ret1','ret2','printstr','pusharg2']:
         return True
     else:
         return False
@@ -114,13 +114,20 @@ if __name__ == "__main__" :
             newScope.returnScope = currentScope
             currentScope = newScope
             datafile.memorymap[scopefunc] = {}
-        if node[1] == 'printstr' :
+        if (node[1] == 'printstr') :
             for i in range(0,5):
                 if node[i]:
                     pass
                 else:
                     node[i] = ''
             datafile.setofString['str'+str(node[0])] = ' '.join(node[2:])
+        # if node[1] == 'fopen':
+        #     for i in range(0,5):
+        #         if node[i]:
+        #             pass
+        #         else:
+        #             node[i] = ''
+        #     datafile.setofString['str'+str(node[0])] = ' '.join(node[2:])
         if node[1] == 'ret':
             flag = 0
             datafile.numberofarguments[scopefunc] = -arglength
@@ -135,7 +142,14 @@ if __name__ == "__main__" :
         if node[3] == '`':
             datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],None,'Unary',node[4]))
             continue
-        if node[1] in ['je','jne','jg','jge','jl','jle','goto','pusharg','call','label:','print','printstr','read','ret', 'get', 'ret1', 'ret2']:
+        if node[1] in ['je','jne','jg','jge','jl','jle','goto','pusharg','pusharg2','call','label:','print','printstr','read','ret', 'get', 'ret1', 'ret2']:
+            if node[1] == 'pusharg2':
+                for i in range(0,5):
+                    if node[i]:
+                        pass
+                    else:
+                        node[i] = ''
+                datafile.setofString['str'+str(node[0])] = ' '.join(node[2:])
             datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[2]))
             continue
         datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[4]))
