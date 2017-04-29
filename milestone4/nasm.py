@@ -38,6 +38,12 @@ def asm():
     print("section .data")
     f.write("section .data\nmessage db \"Register = %d\", 10, 0\n")
     f.write("formatin: db \"%d\", 0\n")
+    f.write("formatdouble: db \"%lf\", 0\n")
+    # for k,v in datafile.setofString.items() :
+    #     print('\n'+k+ ' db '  + "'" + v + "',0xa")
+    #     f.write('\n'+k+ ' db '  + "'" + v + "',0xa\n")
+    #     f.write("len_" + k + " equ $ - " + k + "\n")
+    #     datafile.lineno = datafile.lineno + 2
     for k,v in datafile.setofString.items() :
         print('\n'+k+ ' db '  + "'" + v + "',0xa")
         f.write('\n'+k+ ' db '  + "'" + v + "',0xa\n")
