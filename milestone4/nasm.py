@@ -128,86 +128,83 @@ def asm():
 
 def JE(i):
     
-    if datafile.block[i].out == "2":
-        temp = 2 + datafile.lineno
-        datafile.blockout.append("je " + str(temp))
-        datafile.lineno = datafile.lineno + 1
-    elif datafile.block[i].out == "3":
-        temp = 3 + datafile.lineno
-        datafile.blockout.append("je " + str(temp))
-        datafile.lineno = datafile.lineno + 1
-    else:
-        datafile.blockout.append("je " + datafile.block[i].out)
-        datafile.lineno = datafile.lineno + 1
+    # if datafile.block[i].out == "2":
+    #     # temp = 2 + datafile.lineno
+    #     datafile.blockout.append("je " + str(temp))
+    #     datafile.lineno = datafile.lineno + 1
+    # elif datafile.block[i].out == "3":
+    #     # temp = 3 + datafile.lineno
+    #     datafile.blockout.append("je " + str(temp))
+    #     # datafile.lineno = datafile.lineno + 1
+    # else:
+    datafile.blockout.append("je " + datafile.block[i].out)
 def JNE(i):
     
-    if datafile.block[i].out == "2":
-        temp = 2 + datafile.lineno
-        datafile.blockout.append("jne " + str(temp))
-        datafile.lineno = datafile.lineno + 1
-    elif datafile.block[i].out == "3":
-        temp = 3 + datafile.lineno
-        datafile.blockout.append("jne " + str(temp))
-        datafile.lineno = datafile.lineno + 1
-    else:
-        datafile.blockout.append("jne " + datafile.block[i].out)
-        datafile.lineno = datafile.lineno + 1
+    # if datafile.block[i].out == "2":
+    #     temp = 2 + datafile.lineno
+    #     datafile.blockout.append("jne " + str(temp))
+    #     datafile.lineno = datafile.lineno + 1
+    # elif datafile.block[i].out == "3":
+    #     temp = 3 + datafile.lineno
+    #     datafile.blockout.append("jne " + str(temp))
+    #     datafile.lineno = datafile.lineno + 1
+    # else:
+    datafile.blockout.append("jne " + datafile.block[i].out)
 
 def JLE(i):
     
-    if datafile.block[i].out == "2":
-        temp = 2 + datafile.lineno
-        datafile.blockout.append("jle " + str(temp))
-        datafile.lineno = datafile.lineno + 1
-    elif datafile.block[i].out == "3":
-        temp = 3 + datafile.lineno
-        datafile.blockout.append("jle " + str(temp))
-        datafile.lineno = datafile.lineno + 1
-    else:
-        datafile.blockout.append("jle " + datafile.block[i].out)
-        datafile.lineno = datafile.lineno + 1
+    # if datafile.block[i].out == "2":
+    #     temp = 2 + datafile.lineno
+    #     datafile.blockout.append("jle " + str(temp))
+    #     datafile.lineno = datafile.lineno + 1
+    # elif datafile.block[i].out == "3":
+    #     temp = 3 + datafile.lineno
+    #     datafile.blockout.append("jle " + str(temp))
+    #     datafile.lineno = datafile.lineno + 1
+    # else:
+    datafile.blockout.append("jle " + datafile.block[i].out)
 
 def JL(i):
     
-    if datafile.block[i].out == "2":
-        temp = 2 + datafile.lineno
-        datafile.blockout.append("jl " + str(temp))
-        datafile.lineno = datafile.lineno + 1
-    elif datafile.block[i].out == "3":
-        temp = 3 + datafile.lineno
-        datafile.blockout.append("jl " + str(temp))
-        datafile.lineno = datafile.lineno + 1
-    else:
-        datafile.blockout.append("jl " + datafile.block[i].out)
-        datafile.lineno = datafile.lineno + 1
+    # if datafile.block[i].out == "2":
+    #     temp = 2 + datafile.lineno
+    #     datafile.blockout.append("jl " + str(temp))
+    #     datafile.lineno = datafile.lineno + 1
+    # elif datafile.block[i].out == "3":
+    #     temp = 3 + datafile.lineno
+    #     datafile.blockout.append("jl " + str(temp))
+    #     datafile.lineno = datafile.lineno + 1
+    
+    datafile.blockout.append("jl " + datafile.block[i].out)
+        # datafile.lineno = datafile.lineno + 1
 
 def JGE(i):
     
-    if datafile.block[i].out == "2":
-        temp = 2 + datafile.lineno
-        datafile.blockout.append("jge " + str(temp))
-        datafile.lineno = datafile.lineno + 1
-    elif datafile.block[i].out == "3":
-        temp = 3 + datafile.lineno
-        datafile.blockout.append("jge " + str(temp))
-        datafile.lineno = datafile.lineno + 1
-    else:
-        datafile.blockout.append("jge " + datafile.block[i].out)
-        datafile.lineno = datafile.lineno + 1
+    # if datafile.block[i].out == "2":
+    #     temp = 2 + datafile.lineno
+    #     datafile.blockout.append("jge " + str(temp))
+    #     datafile.lineno = datafile.lineno + 1
+    # elif datafile.block[i].out == "3":
+    #     temp = 3 + datafile.lineno
+    #     datafile.blockout.append("jge " + str(temp))
+    #     datafile.lineno = datafile.lineno + 1
+    # else:
+    datafile.blockout.append("jge " + datafile.block[i].out)
+        # datafile.lineno = datafile.lineno + 1
 
 def JG(i):
     
-    if datafile.block[i].out == "2":
-        temp = 2 + datafile.lineno
-        datafile.blockout.append("jg " + str(temp))
-        datafile.lineno = datafile.lineno + 1
-    elif datafile.block[i].out == "3":
-        temp = 3 + datafile.lineno
-        datafile.blockout.append("jg " + str(temp))
-        datafile.lineno = datafile.lineno + 1
-    else:
-        datafile.blockout.append("jg " + datafile.block[i].out)
-        datafile.lineno = datafile.lineno + 1
+    # if datafile.block[i].out == "2":
+    #     temp = 2 + datafile.lineno
+    #     datafile.blockout.append("jg " + str(temp))
+    #     datafile.lineno = datafile.lineno + 1
+    # elif datafile.block[i].out == "3":
+    #     temp = 3 + datafile.lineno
+    #     datafile.blockout.append("jg " + str(temp))
+    #     datafile.lineno = datafile.lineno + 1
+    # else:
+    datafile.blockout.append("jg " + datafile.block[i].out)
+        # datafile.lineno = datafile.lineno + 1
 
 def ADD(i):
     (y, z, l) = (datafile.block[i].op1, datafile.block[i].op2, datafile.block[i].out)
@@ -366,57 +363,76 @@ def GET(i):
 #One has to be in register 
 def COMPARE(i):
     (y,z) = (datafile.block[i].op1,datafile.block[i].op2)
-    # print y,z, "aaaaaaaasdaddddddddddddddddddddddddddddddddddddddddaaaaaaaaaa",i
+    print y,z, "aaaaaaaasdaddddddddddddddddddddddddddddddddddddddddaaaaaaaaaa",i
     try:
         int(z)
         datafile.zprime = z
     except:
-        datafile.zprime = register.getz(z)
+        register.getz(z)
     
     try:
         int(y)
         datafile.yprime = y
+        reg = register.emptyregister(i,[datafile.zprime])
+        datafile.blockout.append("mov " + reg + "," + datafile.yprime)
+        datafile.yprime = reg
     except:
         if datafile.addressdescriptor[y] != None:
             datafile.L = datafile.addressdescriptor[y]
+            datafile.yprime = datafile.addressdescriptor[y]
         elif datafile.zprime in datafile.allvariables:
             reg = register.emptyregister(i)
-            datafile.blockout.append("mov " + register.mem(reg) + ", " + register.mem(y) )
-            datafile.L = reg
+            datafile.blockout.append("mov " + reg + ", " + register.mem(y) )
+            datafile.yprime = reg
+            # datafile.L = reg
             datafile.registerdescriptor[reg] = y
             datafile.addressdescriptor[y] = reg
-        else:
-            datafile.L = y
+        elif datafile.zprime not in datafile.registerlist:
+            reg = register.emptyregister(i)
+            datafile.blockout.append("mov " + reg + ", " + register.mem(y) )
+            # datafile.L = reg
+            print "======================================____________________________",reg,register.mem(y),y
+            datafile.yprime = reg
+            datafile.registerdescriptor[reg] = y
+            datafile.addressdescriptor[y] = reg
 
-    reg = register.emptyregister(i)
-    try:
-        int(z)
-        datafile.blockout.append("mov " + reg +  "," + z)
-    except:
-        if datafile.addressdescriptor[z] == None:
-            # print "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",datafile.addressdescriptor
-            datafile.blockout.append("mov " + reg +  "," + register.mem(z))
-        else:
-            datafile.blockout.append("mov " + reg +  "," + datafile.addressdescriptor[z])
-        datafile.addressdescriptor[z] = reg
-    datafile.registerdescriptor[reg] = z
-    reg1 = register.emptyregister(i)
-    try:
-        int(y)
-        datafile.blockout.append("mov " + reg1 + "," + y)
-    except:
-        if datafile.addressdescriptor[y] == None:
-            # print "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",y,datafile.addressdescriptor,datafile.registerdescriptor
-            datafile.blockout.append("mov " + reg1 +  "," + register.mem(y))
-        else:
-            datafile.blockout.append("mov " + reg1 +  "," + datafile.addressdescriptor[y])
-        datafile.addressdescriptor[y] = reg1
-    datafile.registerdescriptor[reg1] = y
-    datafile.blockout.append("cmp " + reg1 + "," + reg)
-    register.freereg(reg,i)
-    register.freereg(reg1,i)
+        #     datafile.L = y
+    if datafile.yprime in datafile.registerlist:
+        datafile.blockout.append("cmp " + datafile.yprime + "," + register.mem(datafile.zprime))
+    else:
+        datafile.blockout.append("cmp " + register.mem(datafile.yprime) + "," + datafile.zprime)
+
     register.freereg(y,i)
     register.freereg(z,i)
+    # reg = register.emptyregister(i)
+    # try:
+    #     int(z)
+    #     datafile.blockout.append("mov " + reg +  "," + z)
+    # except:
+    #     if datafile.addressdescriptor[z] == None:
+    #         # print "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",datafile.addressdescriptor
+    #         datafile.blockout.append("mov " + reg +  "," + register.mem(z))
+    #     else:
+    #         datafile.blockout.append("mov " + reg +  "," + datafile.addressdescriptor[z])
+    #     datafile.addressdescriptor[z] = reg
+    # datafile.registerdescriptor[reg] = z
+    # reg1 = register.emptyregister(i)
+    # try:
+    #     int(y)
+    #     datafile.blockout.append("mov " + reg1 + "," + y)
+    # except:
+    #     if datafile.addressdescriptor[y] == None:
+    #         # print "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",y,datafile.addressdescriptor,datafile.registerdescriptor
+    #         datafile.blockout.append("mov " + reg1 +  "," + register.mem(y))
+    #     else:
+    #         datafile.blockout.append("mov " + reg1 +  "," + datafile.addressdescriptor[y])
+    #     datafile.addressdescriptor[y] = reg1
+    # datafile.registerdescriptor[reg1] = y
+    # datafile.blockout.append("cmp " + reg1 + "," + reg)
+    # register.freereg(reg,i)
+    # register.freereg(reg1,i)
+    # register.freereg(y,i)
+    # register.freereg(z,i)
     
 def MUL(i):
     (y, z, l) = (datafile.block[i].op1, datafile.block[i].op2, datafile.block[i].out)
@@ -560,6 +576,7 @@ def DEFASSIGN(i):
                 register.freereg(reg, i)
                 return
         else:
+            print datafile.registerdescriptor,datafile.addressdescriptor,y
             print "-------------------------------------------------------------------------------------"
             reg = register.emptyregister(i) # for l
             reg1 = register.emptyregister(i,[reg]) # for y
@@ -567,13 +584,19 @@ def DEFASSIGN(i):
             # datafile.registerdescriptor[y] = reg1
             # datafile.addressdescriptor[reg1] = y
             # datafile.registerdescriptor[reg] = l
-            datafile.blockout.append("mov " + reg + ", "+ register.mem(l))
-            datafile.blockout.append("mov " + '['+reg+']' + "," + reg1)
             datafile.L = reg
+            if datafile.addressdescriptor[l] == None:
+                datafile.blockout.append("mov " + reg + ", "+ register.mem(l))
+            else:
+                datafile.blockout.append("mov " + reg + ", "+ datafile.addressdescriptor[l])
+
+            datafile.blockout.append("mov " + '['+reg+']' + "," + reg1)
+           
             datafile.yprime = reg1
             register.UpdateAddressDescriptor(l)
-            register.UpdateAddressDescriptor(y)
+            register.freereg(y,i)
             register.freereg(reg1,i)
+            print datafile.addressdescriptor, "[][][][][][][][][][][][]][][][][][][][]",datafile.registerdescriptor
             return 
     reg1 = register.emptyregister(i, [reg])
     datafile.blockout.append("mov " + reg1 + "," + y)
@@ -598,10 +621,14 @@ def RETURN(i):
 def RETURN2(i):  
     if datafile.block[i].out != None:
         # print datafile.block[i].out, "haghahahah"
-        if datafile.addressdescriptor[datafile.block[i].out] == None:
-            datafile.blockout.append("mov " +"eax, " + register.mem(datafile.block[i].out))
-        else:
-            datafile.blockout.append("mov " +"eax, " + datafile.addressdescriptor[datafile.block[i].out])
+        try:
+            int(datafile.block[i].out)
+            datafile.blockout.append("mov eax ," + datafile.block[i].out)
+        except:
+            if datafile.addressdescriptor[datafile.block[i].out] == None:
+                datafile.blockout.append("mov " +"eax, " + register.mem(datafile.block[i].out))
+            else:
+                datafile.blockout.append("mov " +"eax, " + datafile.addressdescriptor[datafile.block[i].out])
     datafile.blockout.append("mov esp, ebp")
     datafile.lineno = datafile.lineno + 1
     datafile.blockout.append("pop ebp")
@@ -627,29 +654,32 @@ def RETURN1(i):
 def DIV(i):
     (l, y, z) = (datafile.block[i].out, datafile.block[i].op1, datafile.block[i].op2)
     register.storereg('edx')
+    register.storereg('eax')
+    # register.storereg('ebx')
     
     datafile.blockout.append("xor edx, edx")
-    datafile.lineno = datafile.lineno + 1
+    # datafile.lineno = datafile.lineno + 1
     try :
         int(z)
         reg = register.emptyregister(i,['edx', 'eax'])
         datafile.blockout.append('mov ' + reg + ", " + z)
-        datafile.lineno = datafile.lineno + 1
+        # datafile.lineno = datafile.lineno + 1
         datafile.zprime = reg
     except :
-        if datafile.addressdescriptor[z] == 'eax':
-            register.storereg(z)
-        register.getz(z)
-        pass
-    register.getreg(l, y, i, 'eax')
+        if datafile.addressdescriptor[z] == None:
+            reg = register.emptyregister(i,['edx', 'eax'])
+            datafile.blockout.append('mov ' + reg + ", " + register.mem(z))
+            datafile.zprime = reg
+
     try :
         int(y)
-        datafile.yprime = y
+        datafile.yprime = "eax"
+        datafile.blockout.append("mov eax," + y)
     except :
-        pass
-    register.gety(y)
-    datafile.blockout.append("idiv " + register.mem(datafile.zprime))
-    datafile.lineno = datafile.lineno + 1
+        datafile.blockout.append("mov eax," + register.mem(y))
+        datafile.yprime = "eax"
+    datafile.L = "eax"
+    datafile.blockout.append("idiv " +reg)
     register.UpdateAddressDescriptor(l)
     register.freereg(y, i)
     register.freereg(z, i)
@@ -721,6 +751,8 @@ def LOADARRAY(i):
     else:
         datafile.blockout.append("sub " + reg + "," + register.mem(datafile.zprime))
     register.UpdateAddressDescriptor(l)
+  #  register.UpdateAddressDescriptor(z)
+    print datafile.registerdescriptor,"*******************************************",datafile.addressdescriptor
 
 def ARRAYLOAD(i):
     (l, y, z) = (datafile.block[i].out, datafile.block[i].op1, datafile.block[i].op2)
@@ -758,6 +790,7 @@ def ARRAYLOAD(i):
         datafile.blockout.append("sub " + reg + "," + register.mem(datafile.zprime))
     datafile.blockout.append("mov " + reg  + ", [" + reg + "]"  )
     register.UpdateAddressDescriptor(l)
+  #  register.UpdateAddressDescriptor(z)
 
 
 

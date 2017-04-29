@@ -1,6 +1,6 @@
 object Fibonacci {
     def fibo(n : Int) : Int = {
-        var f = new Array[Int](10);
+        var f = new Array[Int](1000);
         var i : Int = 0;
         f[0] = 0;
         f[1] = 1;

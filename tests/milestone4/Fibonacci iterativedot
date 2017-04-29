@@ -25,7 +25,7 @@ digraph G {
 "MethodHeader##13" -> "MethodReturnTypeExtras##12";
 "var##14" [myOrder="", style=filled, fillcolor=green, myNo=1];
 "Int##15" [myOrder="", style=filled, fillcolor=green, myNo=1];
-"ArrayInitializer##16" [myOrder="new Array [ Int##15 ] ( 10 ) ", style=filled, fillcolor=red, myNo=1];
+"ArrayInitializer##16" [myOrder="new Array [ Int##15 ] ( 1000 ) ", style=filled, fillcolor=red, myNo=1];
 "new##17" [myOrder="", style=filled, fillcolor=green, myNo=1];
 "ArrayInitializer##16" -> "new##17";
 "Array##18" [myOrder="", style=filled, fillcolor=green, myNo=2];
@@ -37,8 +37,8 @@ digraph G {
 "ArrayInitializer##16" -> "]##20";
 "(##21" [myOrder="", style=filled, fillcolor=green, myNo=6];
 "ArrayInitializer##16" -> "(##21";
-"10##22" [myOrder="", style=filled, fillcolor=green, myNo=7];
-"ArrayInitializer##16" -> "10##22";
+"1000##22" [myOrder="", style=filled, fillcolor=green, myNo=7];
+"ArrayInitializer##16" -> "1000##22";
 ")##23" [myOrder="", style=filled, fillcolor=green, myNo=8];
 "ArrayInitializer##16" -> ")##23";
 "=##24" [myOrder="f ArrayInitializer##16 ", style=filled, fillcolor=green, myNo=1];

@@ -85,7 +85,7 @@ if __name__ == "__main__" :
                                     except:
                                         locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])*int(node[3])
                                 else:
-                                    # print node[2], "77777777777777777777777777777777777",currentScope.LookUpVarSize(node[2]),'88888888888888888888'
+                                    print node[2], "77777777777777777777777777777777777",currentScope.LookUpVarSize(node[2]),'88888888888888888888'
                                     locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])
                                 #TODO procedure under procedure 
                     else:
