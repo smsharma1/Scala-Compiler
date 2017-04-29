@@ -2,8 +2,8 @@ section .data
 message db "Register = %d", 10, 0
 formatin: db "%d", 0
 
-str78 db 'The value of the root is :',0xa
-len_str78 equ $ - str78
+str8 db 'Double quote (\") is escaped',0xa
+len_str8 equ $ - str8
 
 section .text
 	global main
@@ -15,195 +15,34 @@ call func_1_main
 mov  eax, 1
 int  0x80
 
-func_1_func:
+func_1_t:
 push ebp
 mov ebp, esp
-sub esp, 24
-mov edx,[8 + ebp]
-mov eax,[8 + ebp]
-imul edx
-mov edx,[8 + ebp]
-mov [-4 + ebp], eax
-mov eax,[-4 + ebp]
-imul edx
-mov edx,[8 + ebp]
-mov [-8 + ebp], eax
-mov eax,[8 + ebp]
-imul edx
-mov edx, [-8 + ebp]
-sub edx, eax
-mov ecx, edx
-add ecx, 2
-mov ebx, ecx
-mov [-12 + ebp], eax
-mov [-24 + ebp], ebx
-mov [-20 + ebp], ecx
-mov [-16 + ebp], edx
-mov eax, [-24 + ebp]
-mov esp, ebp
-pop ebp
-ret
-mov esp, ebp
-pop ebp
-ret
-
-func_1_derivFunc:
-push ebp
-mov ebp, esp
-sub esp, 20
-mov edx,[8 + ebp]
-mov eax,3
-imul edx
-mov edx,[8 + ebp]
-mov [-4 + ebp], eax
-mov eax,[-4 + ebp]
-imul edx
-mov edx,[8 + ebp]
-mov [-8 + ebp], eax
-mov eax,2
-imul edx
-mov edx, [-8 + ebp]
-sub edx, eax
-mov ecx, edx
-mov [-12 + ebp], eax
-mov [-20 + ebp], ecx
-mov [-16 + ebp], edx
-mov eax, [-20 + ebp]
-mov esp, ebp
-pop ebp
-ret
-mov esp, ebp
-pop ebp
-ret
-
-func_1_newtonRaphson:
-push ebp
-mov ebp, esp
-sub esp, 56
-mov  eax, [8 + ebp]
-push eax
-mov [8 + ebp], eax
-call func_1_func
-mov  ebx, [8 + ebp]
-push ebx
-mov [-4 + ebp], eax
-mov [8 + ebp], ebx
-call func_1_derivFunc
-mov [-8 + ebp], eax
-xor edx, edx
-mov ebx, [-8 + ebp]
-mov eax,[-4 + ebp]
-idiv ebx
-mov edx, eax
-mov ecx, edx
-cmp ecx,0
-jl t29
-mov ebx, 0
-mov [-12 + ebp], eax
-mov [-24 + ebp], ebx
-mov [-20 + ebp], ecx
-mov [-16 + ebp], edx
-jmp t30
-
-t29:
-mov edx, 1
-mov [-24 + ebp], edx
-
-t30:
-mov eax, [-24 + ebp]
-cmp eax,0
-mov [-24 + ebp], eax
-je t39
-mov edx,-1
-mov eax,[-20 + ebp]
-imul edx
-mov edx, eax
-mov [-28 + ebp], eax
-mov [-20 + ebp], edx
-
-t39:
-
-t70:
-mov eax, [-20 + ebp]
-cmp eax,None
-mov [-20 + ebp], eax
-jge t40
-mov edx, 0
-mov [-32 + ebp], edx
-jmp t41
-
-t40:
-mov edx, 1
-mov [-32 + ebp], edx
-
-t41:
-mov eax, [-32 + ebp]
-cmp eax,0
-mov [-32 + ebp], eax
-je t71
-mov  eax, [8 + ebp]
-push eax
-mov [8 + ebp], eax
-call func_1_func
-mov  ebx, [8 + ebp]
-push ebx
-mov [-36 + ebp], eax
-mov [8 + ebp], ebx
-call func_1_derivFunc
-mov [-40 + ebp], eax
-xor edx, edx
-mov ebx, [-40 + ebp]
-mov eax,[-36 + ebp]
-idiv ebx
-mov edx, eax
-mov ecx, [8 + ebp]
-sub ecx, edx
-mov ebx, ecx
-mov [-16 + ebp], edx
-mov edx, [-16 + ebp]
-cmp edx,0
-jl t59
-mov [-20 + ebp], edx
-mov edx, 0
-mov [-44 + ebp], eax
-mov [8 + ebp], ebx
-mov [-48 + ebp], ecx
-mov [-52 + ebp], edx
-jmp t60
-
-t59:
-mov edx, 1
-mov [-52 + ebp], edx
-
-t60:
-mov eax, [-52 + ebp]
-cmp eax,0
-mov [-52 + ebp], eax
-je t69
-mov edx,-1
-mov eax,[-20 + ebp]
-imul edx
-mov edx, eax
-mov [-56 + ebp], eax
-mov [-20 + ebp], edx
-
-t69:
-jmp t70
-
-t71:
+sub esp, 0
+mov eax,0
+mov [8 + ebp],eax
 push eax
 push ebx
 push ecx
 push edx
-mov edx,len_str78
-mov ecx,str78
-mov ebx,1
-mov eax,4
-int 0x80
+
+xor eax, eax
+push eax
+push ebx
+push ecx
+push edx
+
+xor eax, eax
+mov eax, [8 + ebp]
+push eax
+push message
+call printf
+add esp, 8
 pop edx
 pop ecx
 pop ebx
 pop eax
+
 mov esp, ebp
 pop ebp
 ret
@@ -212,10 +51,26 @@ func_1_main:
 push ebp
 mov ebp, esp
 sub esp, 4
-mov edx, -20
+mov edx, 55
+push eax
+push ebx
+push ecx
 push edx
+mov edx,len_str8
+mov ecx,str8
+mov ebx,1
+mov eax,4
+int 0x80
+pop edx
+pop ecx
+pop ebx
+pop eax
+mov  eax, 55
+push eax
+mov  ebx, 10
+push ebx
 mov [-4 + ebp], edx
-call func_1_newtonRaphson
+call func_1_t
 mov esp, ebp
 pop ebp
 ret

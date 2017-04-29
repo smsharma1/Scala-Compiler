@@ -1,84 +1,12 @@
-label: func_1_func
-arg x
-* x x t1
-* t1 x t2
-* x x t3
-- t2 t3 t4
-+ t4 2 t5
-= k t5 k
-ret2 k
-ret
-label: func_1_derivFunc
-arg x
-* 3 x t10
-* t10 x t11
-* 2 x t12
-- t11 t12 t13
-= k t13 k
-ret2 k
-ret
-label: func_1_newtonRaphson
-arg x
-pusharg x
-call func_1_func
-get t20
-pusharg x
-call func_1_derivFunc
-get t23
-/ t20 t23 t24
-= h t24 h
-= t h t
-cmp t 0
-jl t29
-= t31 0 t31
-goto t30
-label: t29
-= t31 1 t31
-label: t30
-cmp t31 0
-je t39
-* t -1 t36
-= t t36 t
-label: t39
-label: t70
-cmp t 0.001
-jge t40
-= t42 0 t42
-goto t41
-label: t40
-= t42 1 t42
-label: t41
-cmp t42 0
-je t71
-pusharg x
-call func_1_func
-get t47
-pusharg x
-call func_1_derivFunc
-get t50
-/ t47 t50 t51
-= h t51 h
-- x h t54
-= x t54 x
-= t h t
-cmp t 0
-jl t59
-= t61 0 t61
-goto t60
-label: t59
-= t61 1 t61
-label: t60
-cmp t61 0
-je t69
-* t -1 t66
-= t t66 t
-label: t69
-goto t70
-label: t71
-printstr The value of the root is :
+label: func_1_t
+arg a 0
+arg b
+print a
 ret
 label: func_1_main
-= x -20 x
-pusharg x
-call func_1_newtonRaphson
+= a 55 a
+printstr Double quote (\") is escaped
+pusharg 55
+pusharg 10
+call func_1_t
 ret

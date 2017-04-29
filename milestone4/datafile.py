@@ -10,6 +10,7 @@ class a3acinst:
 globalsection =  set() #to store global data
 allvariables = set() #to store all the variables  
 memorymap = dict() #to store the function act record
+meta = dict()
 setofarray = {}  #set of arrays
 setofString = {}
 numberofvariables = dict()  #length of variables in particular function

@@ -21,7 +21,8 @@ def newtemp():
 
 class Node:
 	uid=0
-	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False,code=[], breaklist = [], continuelist = [], place="A",next=None,meta=None):
+	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False,code=[], breaklist = [], continuelist = [], place="A",next=None,meta=None,defaultdict = {}):
+		self.defaultdict = defaultdict
 		self.meta = meta
 		self.next = next
 		self.code = code 
@@ -308,13 +309,19 @@ def p_FuncArgumentListExtras(p):
 		pass
 	else:
 		p[0]= p[1]
-		if(p[0].meta is None): p[1].meta = 0
+		print p[1].defaultdict,"helloiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
+		if(p[0].meta is None): 
+			p[1].meta = 0
+		# print p[0].meta,")))))000000))))))))))))))))))"
 		code = []
 		k = p[1].place.split(',,,')
-		print p[1].place.split(',,,') , "hello there"
-    	k.reverse()
-    	for k1 in k:
-        	code.append("arg " + k1)
+		# print p[1].place.split(',,,') , "hello there"
+		for k1 in k:
+			try:
+				p[0].defaultdict[k1]
+				code.append("arg " + k1 + " " + p[0].defaultdict[k1] )
+			except:
+				code.append("arg " + k1)
 		p[0].code = code
 		#print p[0].code, "aaaaaaa"
 		# p[0] = Node("FuncArgumentListExtras", [p[1]],[],typelist = p[1].typelist, order="c") 
@@ -323,13 +330,15 @@ def p_VariableDeclarators(p):
 	'''VariableDeclarators : VariableDeclarator
 						| VariableDeclarator COMMA VariableDeclarators'''
 	if len(p)==4:
-		p[0] = Node("VariableDeclarators", [p[1], p[3]],[p[2]],typelist = p[1].typelist + p[3].typelist, order="clc",place = p[1].place + ',,,' +  p[3].place) 
+		p[0] = Node("VariableDeclarators", [p[1], p[3]],[p[2]],typelist = p[1].typelist + p[3].typelist, order="clc",place = p[1].place + ',,,' +  p[3].place,defaultdict =dict(p[1].defaultdict.items() + p[3].defaultdict.items()))
+		print p[0].defaultdict,"{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}",p[1].defaultdict,p[3].defaultdict 
 	else:
 		p[0] = p[1]
 		# p[0] = Node("VariableDeclarators", [p[1]],[],typelist = p[1].typelist, order="c") 
 						
 def p_VariableDeclarator(p):
-	'''VariableDeclarator : ID COLON Type '''
+	'''VariableDeclarator : ID COLON Type 
+							| ID R_DEFAULT Expression COLON Type '''
 	global currentScope
 	# print currentScope.variables, "tttttttttttttttttttttttttttttttttttttttttttttttttttttt"
 	if(currentScope.LookUpVar(p[1])):
@@ -339,8 +348,12 @@ def p_VariableDeclarator(p):
 	else:
 		currentScope.InsertVar(p[1],0,p[3].typelist[0])
 	#print "jajajaja",p[1]
-	p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]],typelist = p[3].typelist, order="llc",place = p[1]) 
-
+	if len(p) == 4:
+		p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]],typelist = p[3].typelist, order="llc",place = p[1]) 
+	else:
+		print p[3].type, "+++++++++++++++++++++++++++++++++++++++++++++"
+		p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]],typelist = p[3].typelist, order="llc",place = p[1],defaultdict = {p[1]:p[3].type})
+		print p[0].defaultdict,"[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]"
 def p_VariableInitializer(p):
 	'''VariableInitializer : ArrayInitializer
 							| Expression

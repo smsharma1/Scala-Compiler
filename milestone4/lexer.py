@@ -9,6 +9,7 @@ reserved = {
 	#'finally' : 'R_FINALLY',
 	'import' : 'R_IMPORT',
 	'object' : 'R_OBJECT',
+	'default' : 'R_DEFAULT',
 	# 'override' : 'R_OVERRIDE',
 	# 'package' : 'R_PACKAGE',
 	# 'private' : 'R_PRIVATE',

@@ -75,6 +75,12 @@ if __name__ == "__main__" :
                             # print node[i - 1], node[i], "checking"
                             if node[1] == 'arg':
                                 datafile.memorymap[scopefunc][node[2]] = '['+str(arglength) + ' + ebp]'
+                                try:
+                                    node[3]
+                                    datafile.meta[scopefunc].append("mov eax," + node[3])
+                                    datafile.meta[scopefunc].append("mov " + '['+str(arglength) + ' + ebp],' + "eax")
+                                except:
+                                    pass
                                 # print node[2], currentScope.LookUpVarSize(node[2])[1], " this is the type"
                                 # print datafile.memorymap[scopefunc][node[i+1]],"asdfg"
                                 arglength = arglength + Size(currentScope.LookUpVarSize(node[2])[1])
@@ -89,7 +95,7 @@ if __name__ == "__main__" :
                                     except:
                                         locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])*int(node[3])
                                 else:
-                                    print node[i], "77777777777777777777777777777777777",currentScope.LookUpVarSize(node[i]),'88888888888888888888'
+                                    # print node[i], "77777777777777777777777777777777777",currentScope.LookUpVarSize(node[i]),'88888888888888888888'
                                     locallength = locallength - Size(currentScope.LookUpVarSize(node[i])[1])
                                 #TODO procedure under procedure 
                     else:
@@ -110,6 +116,7 @@ if __name__ == "__main__" :
             # print node[2], "oooooooooooooooooaoaoaoaoaoaoaoaooooooooooooooooo"
             flag = 1
             scopefunc = node[2]
+            datafile.meta[scopefunc] = []
             newScope = currentScope.parent.functions[node[2][7:]][0]
             newScope.returnScope = currentScope
             currentScope = newScope
@@ -140,10 +147,12 @@ if __name__ == "__main__" :
             continue
         datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[4]))
 
+    print datafile.meta, "metafile"
     nasm.asm()
     print datafile.allvariables, "all variables"
     print datafile.globalsection, 'globalsection'
     print datafile.setofarray, 'setofarray'
+    
     # for inst in datafile.instruction:
     #     print inst.instnumber,inst.type,inst.op1,inst.op2,inst.operator, inst.out 
     print datafile.memorymap, 'memorymap'

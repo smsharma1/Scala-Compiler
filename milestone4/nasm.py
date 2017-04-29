@@ -114,13 +114,15 @@ def asm():
                 datafile.currentscope = datafile.instruction[blockbreaker[i]].op1
                 print("\t" + "push ebp")
                 f.write("push ebp\n")
-                datafile.lineno = datafile.lineno + 1
+                # datafile.lineno = datafile.lineno + 1
                 print("\t" + "mov ebp, esp")
                 f.write("mov ebp, esp\n")
-                datafile.lineno = datafile.lineno + 1
+                # datafile.lineno = datafile.lineno + 1
                 print("\t" + "add esp, {}".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
                 f.write("sub esp, {}\n".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
-                datafile.lineno = datafile.lineno + 1
+                for m in datafile.meta[datafile.currentscope]:
+                    f.write(m + "\n")
+                # datafile.lineno = datafile.lineno + 1
         else:
             datafile.block = datafile.instruction[blockbreaker[i]:blockbreaker[i+1]]
         blockasmgenerate()  
