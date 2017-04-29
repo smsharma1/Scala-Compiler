@@ -1,10 +1,10 @@
 object newtonRaphson{
     def func( x : Float) : Float = {
-        var k : Float = x*x*x - x*x + 2.0;
+        var k : Float = x * x * x - x * x + 2;
         return k;
     }
     def derivFunc( x : Float) : Float = {
-        var k : Float = 3*x*x - 2*x;
+        var k : Float = 3 * x * x - 2 * x;
         return k;
     }
     def newtonRaphson(x : Float){
@@ -25,7 +25,7 @@ object newtonRaphson{
         println("The value of the root is :");
         println(x);
     }
-     def main(args: Array[String]) {
+     def main() {
         var x : Float = -20;
         newtonRaphson(x);
 

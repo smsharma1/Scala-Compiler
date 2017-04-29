@@ -1,8 +1,10 @@
 object Good1 {
-	def main(args: Array[String]) {
+	def t(a default 0 : Int, b : Int){
+		println(a);
+	}
+	def main() {
 	var a : Int = 	55	;
 	println("Double quote (\") is escaped");
-//	println(10,12);
-//	read(a);
+	t(55,10);
    }
 }
