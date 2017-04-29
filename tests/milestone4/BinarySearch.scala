@@ -1,6 +1,7 @@
 
 object BinarySearch {
-    def B(arr: Array[Int], l : Int, r: Int, x: Int ) : Int = {
+    var f = new Array[Int](10);
+    def B(l : Int, r: Int, x: Int ) : Int = {
         while (l <= r)
         {
             var m : Int = l + (r - l)/2;
@@ -21,14 +22,13 @@ object BinarySearch {
     }
     def main(args: Array[String])
     {
-            var f = new Array[Int](10);
             var i : Int = 0;
             for ( i <- 0 until 9 )
 		    {
 			    f[i] =  i;
       	    }
             var k : Int = 5;
-            var result : Int = B(f, 0, 9, k);
+            var result : Int = B(0, 9, k);
             if  (result == -1){ 
                 println("Element is not present in array");
             }
