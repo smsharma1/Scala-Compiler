@@ -44,6 +44,11 @@ def asm():
     #     f.write('\n'+k+ ' db '  + "'" + v + "',0xa\n")
     #     f.write("len_" + k + " equ $ - " + k + "\n")
     #     datafile.lineno = datafile.lineno + 2
+    for k,v in datafile.setofString.items() :
+        print('\n'+k+ ' db '  + "'" + v + "',0xa")
+        f.write('\n'+k+ ' db '  + "'" + v + "',0xa\n")
+        f.write("len_" + k + " equ $ - " + k + "\n")
+        # datafile.lineno = datafile.lineno + 2
     datafile.lineno = datafile.lineno + 1
     for data in datafile.globalsection:
         # DB	Define Byte	allocates 1 byte
