@@ -1,6 +1,9 @@
 section .data
 message db "Register = %d", 10, 0
 formatin: db "%d", 0
+a TIMES 100 DW  0
+c TIMES 100 DW  0
+b TIMES 100 DW  0
 
 section .text
 	global main
@@ -12,91 +15,319 @@ call func_1_main
 mov  eax, 1
 int  0x80
 
-func_1_sub:
+func_1_scana:
 push ebp
 mov ebp, esp
-<<<<<<< HEAD
-sub esp, 12
+sub esp, 32
 mov edx, 0
 mov ecx, 0
 mov ebx, 0
+mov eax, 20
 mov [-12 + ebp], ebx
-mov [-8 + ebp], ecx
-mov [-4 + ebp], edx
-=======
-sub esp, 28
-mov ebx,[32 + ebp]
-mov eax,[36 + ebp]
-imul ebx
-mov ebx,[28 + ebp]
-mov [-4 + ebp], eax
-mov eax,[-4 + ebp]
-imul ebx
-mov ebx,[24 + ebp]
-mov [-8 + ebp], eax
-mov eax,[-8 + ebp]
-imul ebx
-mov ebx,[20 + ebp]
-mov [-12 + ebp], eax
-mov eax,[-12 + ebp]
-imul ebx
-mov ebx,[16 + ebp]
+mov ebx,edx
 mov [-16 + ebp], eax
 mov eax,[-16 + ebp]
 imul ebx
-mov ebx,[12 + ebp]
-mov [-20 + ebp], eax
-mov eax,[-20 + ebp]
+add eax, ecx
+lea ebx,[-20 + ebp]
+add ebx,eax
+mov [-4 + ebp], edx
+mov edx,0
+mov [ebx],edx
+mov edx, 0
+mov [-16 + ebp], eax
+mov [-24 + ebp], ebx
+mov [-8 + ebp], ecx
+mov [-4 + ebp], edx
+
+t36:
+mov eax,[8 + ebp]
+mov ebx,[-4 + ebp]
+cmp ebx,eax
+mov [8 + ebp], eax
+mov [-4 + ebp], ebx
+jg t38
+mov edx, 0
+mov [-8 + ebp], edx
+
+t33:
+mov eax,[8 + ebp]
+mov ebx,[-8 + ebp]
+cmp ebx,eax
+mov [8 + ebp], eax
+mov [-8 + ebp], ebx
+jg t35
+push eax
+mov eax, esp
+push eax
+push formatin
+call scanf
+add esp, 8
+pop eax
+mov edx, 20
+mov ebx,[-4 + ebp]
+mov eax,edx
 imul ebx
-mov ebx,[8 + ebp]
-mov [-24 + ebp], eax
-mov eax,[-24 + ebp]
-imul ebx
+add eax, [-8 + ebp]
+lea ebx,[-20 + ebp]
+add ebx,eax
+mov edx,[-12 + ebp]
+mov [ecx],edx
 mov [-28 + ebp], eax
-mov eax, [-28 + ebp]
-mov esp, ebp
-pop ebp
-ret
->>>>>>> 8d7d3a1abc61348a4666df1fec4038df7b896238
+
+t34:
+mov edx, [-8 + ebp]
+add edx, 1
+mov [-8 + ebp], edx
+jmp t33
+
+t35:
+
+t37:
+mov edx, [-4 + ebp]
+add edx, 1
+mov [-4 + ebp], edx
+jmp t36
+
+t38:
 mov esp, ebp
 pop ebp
 ret
 
-func_1_main:
+func_1_scanb:
 push ebp
 mov ebp, esp
-<<<<<<< HEAD
-sub esp, 0
-mov  eax, 4
+sub esp, 24
+mov edx, 0
+mov ecx, 0
+mov ebx, 0
+mov edx, 0
+mov [-12 + ebp], ebx
+mov [-8 + ebp], ecx
+mov [-4 + ebp], edx
+
+t66:
+mov eax,[8 + ebp]
+mov ebx,[-4 + ebp]
+cmp ebx,eax
+mov [8 + ebp], eax
+mov [-4 + ebp], ebx
+jg t68
+mov edx, 0
+mov [-8 + ebp], edx
+
+t63:
+mov eax,[8 + ebp]
+mov ebx,[-8 + ebp]
+cmp ebx,eax
+mov [8 + ebp], eax
+mov [-8 + ebp], ebx
+jg t65
 push eax
-call func_1_scana
-=======
-sub esp, 8
-mov  eax, 1
+mov eax, esp
 push eax
-mov  ebx, 2
-push ebx
-mov  ecx, 3
-push ecx
-mov  edx, 4
-push edx
-mov  edx, 5
-push edx
-mov  edx, 6
-push edx
-mov  edx, 7
-push edx
-mov  edx, 8
-push edx
-call func_1_sub
-mov edx, eax
+push formatin
+call scanf
+add esp, 8
+pop eax
+mov edx, 20
+mov ebx,[-4 + ebp]
+mov eax,edx
+imul ebx
+add eax, [-8 + ebp]
+lea ebx,[-20 + ebp]
+add ebx,eax
+mov edx,[-12 + ebp]
+mov [ecx],edx
+mov [-16 + ebp], eax
+
+t64:
+mov edx, [-8 + ebp]
+add edx, 1
+mov [-8 + ebp], edx
+jmp t63
+
+t65:
+
+t67:
+mov edx, [-4 + ebp]
+add edx, 1
+mov [-4 + ebp], edx
+jmp t66
+
+t68:
+mov esp, ebp
+pop ebp
+ret
+
+func_1_multiply:
+push ebp
+mov ebp, esp
+sub esp, 72
+mov edx, 0
+mov ecx, 0
+mov ebx, 0
+mov edx, 0
+mov [-12 + ebp], ebx
+mov [-8 + ebp], ecx
+mov [-4 + ebp], edx
+
+t129:
+mov eax,[8 + ebp]
+mov ebx,[-4 + ebp]
+cmp ebx,eax
+mov [8 + ebp], eax
+mov [-4 + ebp], ebx
+jg t131
+mov edx, 0
+mov [-8 + ebp], edx
+
+t126:
+mov eax,[8 + ebp]
+mov ebx,[-8 + ebp]
+cmp ebx,eax
+mov [8 + ebp], eax
+mov [-8 + ebp], ebx
+jg t128
+mov edx, 20
+mov ebx,[-4 + ebp]
+mov eax,edx
+imul ebx
+add eax, [-8 + ebp]
+lea ebx,[-20 + ebp]
+add ebx,eax
+mov ecx,0
+mov [ebx],ecx
+mov edx, 0
+mov [-16 + ebp], eax
+mov [-24 + ebp], ebx
+mov [-12 + ebp], edx
+
+t123:
+mov eax,[8 + ebp]
+mov ebx,[-12 + ebp]
+cmp ebx,eax
+mov [8 + ebp], eax
+mov [-12 + ebp], ebx
+jg t125
+mov edx, 20
+mov ebx,[-4 + ebp]
+mov eax,edx
+imul ebx
+add eax, [-8 + ebp]
+lea ebx,[-20 + ebp]
+add ebx,eax
+mov edx, 20
+mov [-32 + ebp], ebx
+mov ebx,[-4 + ebp]
+mov [-28 + ebp], eax
+mov eax,edx
+imul ebx
+add eax, [-8 + ebp]
+lea ebx,[-20 + ebp]
+sub ebx,eax
+mov ebx, [ebx]
+mov edx, 20
+mov [-40 + ebp], ebx
+mov ebx,[-4 + ebp]
+mov [-36 + ebp], eax
+mov eax,edx
+imul ebx
+add eax, [-12 + ebp]
+lea ebx,[-48 + ebp]
+sub ebx,eax
+mov ebx, [ebx]
+mov edx, 20
+mov [-52 + ebp], ebx
+mov ebx,[-12 + ebp]
+mov [-44 + ebp], eax
+mov eax,edx
+imul ebx
+add eax, [-8 + ebp]
+lea ebx,[-60 + ebp]
+sub ebx,eax
+mov ebx, [ebx]
+mov [-64 + ebp], ebx
+mov ebx,[-64 + ebp]
+mov [-56 + ebp], eax
+mov eax,[-52 + ebp]
+imul ebx
+mov edx, [-40 + ebp]
+add edx, eax
+mov ebx,[-32 + ebp]
+mov [ebx],edx
+mov [-68 + ebp], eax
+mov [-72 + ebp], edx
+
+t124:
+mov edx, [-12 + ebp]
+add edx, 1
+mov [-12 + ebp], edx
+jmp t123
+
+t125:
+
+t127:
+mov edx, [-8 + ebp]
+add edx, 1
+mov [-8 + ebp], edx
+jmp t126
+
+t128:
+
+t130:
+mov edx, [-4 + ebp]
+add edx, 1
+mov [-4 + ebp], edx
+jmp t129
+
+t131:
+mov esp, ebp
+pop ebp
+ret
+
+func_1_printc:
+push ebp
+mov ebp, esp
+sub esp, 20
+mov edx, 0
+mov ecx, 0
+mov edx, 0
+mov [-8 + ebp], ecx
+mov [-4 + ebp], edx
+
+t155:
+mov eax,[8 + ebp]
+mov ebx,[-4 + ebp]
+cmp ebx,eax
+mov [8 + ebp], eax
+mov [-4 + ebp], ebx
+jg t157
+mov edx, 0
+mov [-8 + ebp], edx
+
+t152:
+mov eax,[8 + ebp]
+mov ebx,[-8 + ebp]
+cmp ebx,eax
+mov [8 + ebp], eax
+mov [-8 + ebp], ebx
+jg t154
+mov edx, 20
+mov ebx,[-4 + ebp]
+mov eax,edx
+imul ebx
+add eax, [-8 + ebp]
+lea ebx,[-16 + ebp]
+sub ebx,eax
+mov ebx, [ebx]
 push eax
 push ebx
 push ecx
 push edx
 
 xor eax, eax
-mov eax, edx
+mov eax, ebx
 push eax
 push message
 call printf
@@ -106,9 +337,44 @@ pop ecx
 pop ebx
 pop eax
 
-mov [-4 + ebp], eax
+mov [-12 + ebp], eax
+mov [-20 + ebp], ebx
+
+t153:
+mov edx, [-8 + ebp]
+add edx, 1
 mov [-8 + ebp], edx
->>>>>>> 8d7d3a1abc61348a4666df1fec4038df7b896238
+jmp t152
+
+t154:
+
+t156:
+mov edx, [-4 + ebp]
+add edx, 1
+mov [-4 + ebp], edx
+jmp t155
+
+t157:
+mov esp, ebp
+pop ebp
+ret
+
+func_1_main:
+push ebp
+mov ebp, esp
+sub esp, 0
+mov  eax, 4
+push eax
+call func_1_scana
+mov  eax, 4
+push eax
+call func_1_scanb
+mov  eax, 4
+push eax
+call func_1_multiply
+mov  eax, 4
+push eax
+call func_1_printc
 mov esp, ebp
 pop ebp
 ret

@@ -1525,9 +1525,10 @@ def p_ArrayAccess(p):
 		temp = newtemp()
 		temp2 = newtemp()
 		print temp,temp2, " I am in arrayaccess "
+		size = currentScope.Size(p[1].typelist[0][10:])
 		l=currentScope.LookUpVar(p[1].type)
 		column = l[2]
-		code = ['= ' + temp2 + " " + str(column) + " " + temp2 ]+ ["* " + temp2 + " " +p[3].place + " " + temp2] + [ "+ " + temp2 + " " +p[5].place + " " + temp2]
+		code = ['= ' + temp2 + " " + str(column * int(size)) + " " + temp2 ]+ ["* " + temp2 + " " +p[3].place + " " + temp2] + [ "+ " + temp2 + " " +p[5].place + " " + temp2]
 		l1 = [ "<- " + p[1].place + " " + temp2 + " " + temp]
 		currentScope.InsertVar(temp2,0,'INT')
 		currentScope.InsertVar(temp,0, p[1].typelist[0][10:])
