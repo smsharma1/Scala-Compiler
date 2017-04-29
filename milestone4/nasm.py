@@ -127,8 +127,8 @@ def asm():
                 # datafile.lineno = datafile.lineno + 1
                 print("\t" + "add esp, {}".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
                 f.write("sub esp, {}\n".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
-                for m in datafile.meta[datafile.currentscope]:
-                    f.write(m + "\n")
+                # for m in datafile.meta[datafile.currentscope]:
+                #     f.write(m + "\n")
                 # datafile.lineno = datafile.lineno + 1
         else:
             datafile.block = datafile.instruction[blockbreaker[i]:blockbreaker[i+1]]
@@ -343,6 +343,12 @@ def PUSH_ARG2(i):
 
 def PUSH_ARG(i) :
     var = datafile.block[i].out
+    # print datafile.block[i].op1,datafile.block[i].op2,datafile.block[i].out
+    # print var , "oooooooooooooooooooohoooooooooooooooooooooooooooooohoooooooooooooooooooooooooooooohooooooo"
+    if str(var) ==  "DEFAULT":
+        datafile.blockout.append("push " + datafile.meta[datafile.block[i].op2])
+        return
+
     t = False
     
     try:

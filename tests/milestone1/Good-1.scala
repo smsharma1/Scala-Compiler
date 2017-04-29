@@ -5,6 +5,6 @@ object Good1 {
 	def main() {
 	var a : Int = 	55	;
 	println("Double quote (\") is escaped");
-	t(55,10);
+	t(default a,10);
    }
 }

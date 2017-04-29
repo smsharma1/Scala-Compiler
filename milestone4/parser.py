@@ -332,7 +332,7 @@ def p_VariableDeclarators(p):
 						| VariableDeclarator COMMA VariableDeclarators'''
 	if len(p)==4:
 		p[0] = Node("VariableDeclarators", [p[1], p[3]],[p[2]],typelist = p[1].typelist + p[3].typelist, order="clc",place = p[1].place + ',,,' +  p[3].place,defaultdict =dict(p[1].defaultdict.items() + p[3].defaultdict.items()))
-		print p[0].defaultdict,"{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}",p[1].defaultdict,p[3].defaultdict 
+		# print p[0].defaultdict,"{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}",p[1].defaultdict,p[3].defaultdict 
 	else:
 		p[0] = p[1]
 		# p[0] = Node("VariableDeclarators", [p[1]],[],typelist = p[1].typelist, order="c") 
@@ -352,9 +352,9 @@ def p_VariableDeclarator(p):
 	if len(p) == 4:
 		p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]],typelist = p[3].typelist, order="llc",place = p[1]) 
 	else:
-		print p[3].type, "+++++++++++++++++++++++++++++++++++++++++++++"
+		# print p[3].type, "+++++++++++++++++++++++++++++++++++++++++++++"
 		p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]],typelist = p[3].typelist, order="llc",place = p[1],defaultdict = {p[1]:p[3].type})
-		print p[0].defaultdict,"[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]"
+		# print p[0].defaultdict,"[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]"
 def p_VariableInitializer(p):
 	'''VariableInitializer : ArrayInitializer
 							| Expression
@@ -408,7 +408,7 @@ def p_MethodHeader(p):
 		else:
 			parentScope.functions[p[2].typelist[0]] = currentScope
 			currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:],[])
-			print currentScope.name ," i am in method header see me please"
+			# print currentScope.name ," i am in method header see me please"
 		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + [] ,order="ccc",meta=p[2].meta,code=l1+p[2].code)
 
 def p_MethodDefine(p):
@@ -1526,8 +1526,11 @@ def p_ClassInstanceCreationExpression(p):
 # <argument list> ::= <expression> | <argument list> , <expression>
 def p_ArgumentList(p):
 	'''ArgumentList : Expression
+					| R_DEFAULT ID
 					| ArgumentList COMMA Expression'''
-	if len(p) == 2:
+	if p[1] == "default":
+		p[0] = Node('ArgumentList',[ ],[p[1]],order='l',typelist=['INT'],place= "DEFAULT " + p[2])
+	elif len(p) == 2:
 		#print p[1].typelist, " p[1].typelist in ArgumentList"
 		p[0] = p[1]
 		# p[0] = Node('ArgumentList',[p[1]],[],typelist = p[1].typelist,order='c')
