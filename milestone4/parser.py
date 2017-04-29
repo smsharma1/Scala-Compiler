@@ -316,6 +316,7 @@ def p_FuncArgumentListExtras(p):
 		code = []
 		k = p[1].place.split(',,,')
 		# print p[1].place.split(',,,') , "hello there"
+		k.reverse()
 		for k1 in k:
 			try:
 				p[0].defaultdict[k1]
