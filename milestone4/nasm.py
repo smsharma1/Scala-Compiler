@@ -39,6 +39,7 @@ def asm():
     f.write("section .data\nmessage db \"Register = %d\", 10, 0\n")
     f.write("formatin: db \"%d\", 0\n")
     f.write("formatdouble: db \"%lf\", 0\n")
+    f.write("fname: db \"data.txt\", 0 \n")
     # for k,v in datafile.setofString.items() :
     #     print('\n'+k+ ' db '  + "'" + v + "',0xa")
     #     f.write('\n'+k+ ' db '  + "'" + v + "',0xa\n")
@@ -336,6 +337,9 @@ def XOR(i):
     register.UpdateAddressDescriptor(l)
     register.freereg(y, i)
     register.freereg(z, i)
+
+def PUSH_ARG2(i):
+    pass
 
 def PUSH_ARG(i) :
     var = datafile.block[i].out
@@ -924,5 +928,22 @@ def READ(i):
     # datafile.blockout.append('pop ebx')
     datafile.blockout.append('pop eax')
 
-OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL, 'printstr': PRINTSTR, 'print' : PRINT, 'read' : READ, 'ret1' : RETURN1, 'ret2' : RETURN2, '->': LOADARRAY, '<-->': DEFASSIGN }
+def FOPEN(i):
+    (y,z) = (datafile.block[i].op1,datafile.block[i].op2)
+    register.storereg("eax")
+    reg = "eax"
+    if(y == "r"):
+        datafile.blockout.append("mov "+reg+" "+'str'+str(node[0]-1))
+    elif(y == "w"):
+        datafile.blockout.append("mov "+reg+" "+'str'+str(node[0]-1))
+    datafile.blockout.append("push "+reg)
+    datafile.blockout.append("mov "+reg+" "+'str'+str(node[0]-2))
+    datafile.blockout.append("push "+reg)
+    datafile.blockout.append("call fopen")
+
+
+def FREAD(i):
+    pass
+
+OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'pusharg2': PUSH_ARG2, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL, 'printstr': PRINTSTR, 'print' : PRINT, 'read' : READ, 'fopen' : FOPEN, 'fread' : FREAD, 'ret1' : RETURN1, 'ret2' : RETURN2, '->': LOADARRAY, '<-->': DEFASSIGN }
 
