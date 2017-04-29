@@ -557,11 +557,15 @@ def DEFASSIGN(i):
                 register.freereg(reg, i)
                 return
         else:
-            # print "ajflsdfjlsjf; &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
             reg = register.emptyregister(i)
+            reg1 = register.emptyregister(i,[reg])
+            datafile.blockout.append("mov " + reg1 + "," + register.mem(y))
+            datafile.registerdescriptor[y] = reg1
+            datafile.addressdescriptor[reg1] = y
             datafile.registerdescriptor[reg] = l
-            datafile.blockout.append("mov " + '['+reg+']' + "," + register.mem(y))
+            datafile.blockout.append("mov " + '['+reg+']' + "," + reg1)
             register.UpdateAddressDescriptor(l)
+            register.freereg(reg1,i)
             return 
     reg1 = register.emptyregister(i)
     datafile.blockout.append("mov " + reg1 + "," + y)
@@ -696,7 +700,10 @@ def LOADARRAY(i):
     else:
         datafile.blockout.append("mov " + reg + "," + t)
     # datafile.blockout.append("lea " + reg + "," + register.mem(datafile.yprime))
-    datafile.blockout.append("sub " + reg + "," + register.mem(datafile.zprime))
+    if y in datafile.globalsection:
+        datafile.blockout.append("add " + reg + "," + register.mem(datafile.zprime))
+    else:
+        datafile.blockout.append("add " + reg + "," + register.mem(datafile.zprime))
     register.UpdateAddressDescriptor(l)
 
 def ARRAYLOAD(i):
@@ -720,7 +727,10 @@ def ARRAYLOAD(i):
         datafile.blockout.append("lea " + reg + "," + t)
     else:
         datafile.blockout.append("mov " + reg + "," + t)
-    datafile.blockout.append("sub " + reg + "," + register.mem(datafile.zprime))
+    if y in datafile.globalsection:
+        datafile.blockout.append("add " + reg + "," + register.mem(datafile.zprime))
+    else:
+        datafile.blockout.append("sub " + reg + "," + register.mem(datafile.zprime))
     datafile.blockout.append("mov " + reg  + ", [" + reg + "]"  )
     register.UpdateAddressDescriptor(l)
 

@@ -1,33 +1,154 @@
-label: func_1_sub
-arg h
-arg g
-arg f
-arg e
-arg d
-arg c
-arg b
-arg a
-* a b t1
-* t1 c t2
-* t2 d t3
-* t3 e t4
-* t4 f t5
-* t5 g t6
-* t6 h t7
-ret2 t7
+ARRAY a 5 5
+ARRAY b 5 5
+ARRAY c 5 5
+label: func_1_scana
+arg size
+= i 0 i
+= j 0 j
+= t 0 t
+= t12 20 t12
+* t12 i t12
++ t12 j t12
+-> a t12 t11
+<--> t11 0 t11
+= i 0 i
+label: t36
+cmp i size
+jg t38
+= j 0 j
+label: t33
+cmp j size
+jg t35
+read t
+= t30 20 t30
+* t30 i t30
++ t30 j t30
+-> a t30 t29
+<--> t29 t t29
+label: t34
++ j 1 j
+goto t33
+label: t35
+label: t37
++ i 1 i
+goto t36
+label: t38
+ret
+label: func_1_scanb
+arg size
+= i 0 i
+= j 0 j
+= t 0 t
+= i 0 i
+label: t66
+cmp i size
+jg t68
+= j 0 j
+label: t63
+cmp j size
+jg t65
+read t
+= t60 20 t60
+* t60 i t60
++ t60 j t60
+-> b t60 t59
+<--> t59 t t59
+label: t64
++ j 1 j
+goto t63
+label: t65
+label: t67
++ i 1 i
+goto t66
+label: t68
+ret
+label: func_1_multiply
+arg size
+= i 0 i
+= j 0 j
+= k 0 k
+= i 0 i
+label: t129
+cmp i size
+jg t131
+= j 0 j
+label: t126
+cmp j size
+jg t128
+= t88 20 t88
+* t88 i t88
++ t88 j t88
+-> c t88 t87
+<--> t87 0 t87
+= k 0 k
+label: t123
+cmp k size
+jg t125
+= t100 20 t100
+* t100 i t100
++ t100 j t100
+-> c t100 t99
+= t106 20 t106
+* t106 i t106
++ t106 j t106
+<- c t106 t105
+= t112 20 t112
+* t112 i t112
++ t112 k t112
+<- a t112 t111
+= t118 20 t118
+* t118 k t118
++ t118 j t118
+<- b t118 t117
+* t111 t117 t119
++ t105 t119 t120
+<--> t99 t120 t99
+label: t124
++ k 1 k
+goto t123
+label: t125
+label: t127
++ j 1 j
+goto t126
+label: t128
+label: t130
++ i 1 i
+goto t129
+label: t131
+ret
+label: func_1_printc
+arg size
+= i 0 i
+= j 0 j
+= i 0 i
+label: t155
+cmp i size
+jg t157
+= j 0 j
+label: t152
+cmp j size
+jg t154
+= t149 20 t149
+* t149 i t149
++ t149 j t149
+<- a t149 t148
+print t148
+label: t153
++ j 1 j
+goto t152
+label: t154
+label: t156
++ i 1 i
+goto t155
+label: t157
 ret
 label: func_1_main
-arg args
-pusharg 1
-pusharg 2
-pusharg 3
 pusharg 4
-pusharg 5
-pusharg 6
-pusharg 7
-pusharg 8
-call func_1_sub
-get t26
-= k t26 k
-print k
+call func_1_scana
+pusharg 4
+call func_1_scanb
+pusharg 4
+call func_1_multiply
+pusharg 4
+call func_1_printc
 ret
