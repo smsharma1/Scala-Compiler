@@ -420,6 +420,8 @@ def COMPARE(i):
     
 def MUL(i):
     (y, z, l) = (datafile.block[i].op1, datafile.block[i].op2, datafile.block[i].out)
+    # for reg in datafile.registerlist:
+    #     register.storereg(reg)
     #check if z is constant or not if not get the momloc or register if it is already in register since op r_i , r_j is similar to op r_i , M
     # try :
     #     int(z)
@@ -436,15 +438,15 @@ def MUL(i):
     #     pass
     # register.gety(y)
     datafile.zprime = z
-    register.storereg("ebx")
+    register.storereg("edx")
     try:
         int(z)
-        datafile.blockout.append("mov ebx," + register.mem(datafile.zprime))
+        datafile.blockout.append("mov edx," + register.mem(datafile.zprime))
     except:
         if datafile.addressdescriptor[z] != None:
-            datafile.blockout.append("mov ebx," + datafile.addressdescriptor[z])
+            datafile.blockout.append("mov edx," + datafile.addressdescriptor[z])
         else:
-            datafile.blockout.append("mov ebx," + register.mem(datafile.zprime))
+            datafile.blockout.append("mov edx," + register.mem(datafile.zprime))
 
     datafile.yprime = y
     register.storereg("eax")
@@ -456,7 +458,7 @@ def MUL(i):
             datafile.blockout.append("mov eax," + datafile.addressdescriptor[y])
         else:
             datafile.blockout.append("mov eax," + register.mem(datafile.yprime))
-    datafile.blockout.append("imul ebx")
+    datafile.blockout.append("imul edx")
     datafile.addressdescriptor[l] = "eax"
     datafile.registerdescriptor["eax"] = l
 
@@ -536,20 +538,21 @@ def DEFASSIGN(i):
         int(y)
         datafile.yprime = y
         if datafile.addressdescriptor[l] != None:
+            print "*******************************************************"
             reg = datafile.addressdescriptor[l]
         else:
             reg = register.emptyregister(i)
-            datafile.registerdescriptor[reg] = l
+            datafile.L = reg
             register.UpdateAddressDescriptor(l)
     except :
         if datafile.addressdescriptor[y] != None:
             if datafile.addressdescriptor[l] != None:
-                # print register.mem(l) + " ##########################################"
+                print register.mem(l) + " ##########################################"
                 datafile.blockout.append("mov " + '['+datafile.addressdescriptor[l]+']' + "," + datafile.addressdescriptor[y])
                 register.freereg(y, i)
                 return
             else:
-                # print " i am here \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n"
+                print " i am here \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n"
                 reg = register.emptyregister(i,left=[datafile.addressdescriptor[y]])
                 datafile.blockout.append('mov ' + reg + ',' + register.mem(l))
                 datafile.blockout.append("mov " + '['+reg+']' + "," + datafile.addressdescriptor[y])
@@ -557,17 +560,22 @@ def DEFASSIGN(i):
                 register.freereg(reg, i)
                 return
         else:
-            reg = register.emptyregister(i)
-            reg1 = register.emptyregister(i,[reg])
+            print "-------------------------------------------------------------------------------------"
+            reg = register.emptyregister(i) # for l
+            reg1 = register.emptyregister(i,[reg]) # for y
             datafile.blockout.append("mov " + reg1 + "," + register.mem(y))
-            datafile.registerdescriptor[y] = reg1
-            datafile.addressdescriptor[reg1] = y
-            datafile.registerdescriptor[reg] = l
+            # datafile.registerdescriptor[y] = reg1
+            # datafile.addressdescriptor[reg1] = y
+            # datafile.registerdescriptor[reg] = l
+            datafile.blockout.append("mov " + reg + ", "+ register.mem(l))
             datafile.blockout.append("mov " + '['+reg+']' + "," + reg1)
+            datafile.L = reg
+            datafile.yprime = reg1
             register.UpdateAddressDescriptor(l)
+            register.UpdateAddressDescriptor(y)
             register.freereg(reg1,i)
             return 
-    reg1 = register.emptyregister(i)
+    reg1 = register.emptyregister(i, [reg])
     datafile.blockout.append("mov " + reg1 + "," + y)
     datafile.blockout.append("mov " + '['+reg+']' + "," + reg1)
     # datafile.blockout.append("pop ebx")
@@ -692,7 +700,14 @@ def LOADARRAY(i):
         else:
             datafile.yprime = y
     # print datafile.yprime , '999999999999999999999999999999999999999999999999999999999999999999999999999', y
-    reg = register.emptyregister(i)
+    m = []
+    reg = None
+    if register.mem(datafile.zprime) in datafile.registerlist:
+        m.append(register.mem(datafile.zprime))
+    if register.mem(datafile.yprime) in datafile.registerlist:
+        reg = register.mem(datafile.yprime)
+    if not reg:
+        reg = register.emptyregister(i,m)
     datafile.L = reg
     t = register.mem(datafile.yprime)
     if t[0] == "[":
@@ -700,10 +715,11 @@ def LOADARRAY(i):
     else:
         datafile.blockout.append("mov " + reg + "," + t)
     # datafile.blockout.append("lea " + reg + "," + register.mem(datafile.yprime))
-    if y in datafile.globalsection:
+    if (y in datafile.globalsection) or (y in datafile.setofarray):
         datafile.blockout.append("add " + reg + "," + register.mem(datafile.zprime))
+        # datafile.blockout.append("i am in loadarray")
     else:
-        datafile.blockout.append("add " + reg + "," + register.mem(datafile.zprime))
+        datafile.blockout.append("sub " + reg + "," + register.mem(datafile.zprime))
     register.UpdateAddressDescriptor(l)
 
 def ARRAYLOAD(i):
@@ -720,14 +736,23 @@ def ARRAYLOAD(i):
         else:
             datafile.yprime = y
     # print datafile.yprime , 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', y
-    reg = register.emptyregister(i)
+    m = []
+    reg = None
+    if register.mem(datafile.zprime) in datafile.registerlist:
+        m.append(register.mem(datafile.zprime))
+    if register.mem(datafile.yprime) in datafile.registerlist:
+        reg = register.mem(datafile.yprime)
+    if not reg:
+        reg = register.emptyregister(i,m)
     datafile.L = reg
+    # datafile.addressdescriptor[l] = reg
+    # datafile.registerdescriptor[reg] = l
     t = register.mem(datafile.yprime)
     if t[0] == "[":
         datafile.blockout.append("lea " + reg + "," + t)
     else:
         datafile.blockout.append("mov " + reg + "," + t)
-    if y in datafile.globalsection:
+    if (y in datafile.globalsection) or (y in datafile.setofarray):
         datafile.blockout.append("add " + reg + "," + register.mem(datafile.zprime))
     else:
         datafile.blockout.append("sub " + reg + "," + register.mem(datafile.zprime))
@@ -776,6 +801,8 @@ def PRINTSTR(i):
 def PRINT(i):
     l = datafile.block[i].out
     print l , "inside print function in nasm"
+    # for reg in datafile.registerlist:
+    #     register.storereg(reg)
     try :
         datafile.addressdescriptor[l]
         datafile.blockout.append('push eax\npush ebx\npush ecx\npush edx\n')
@@ -784,7 +811,8 @@ def PRINT(i):
         datafile.blockout.append('mov ' + 'eax, ' +  datafile.addressdescriptor[l])
         datafile.lineno = datafile.lineno + 3
     except :
-        datafile.blockout.append('push eax')
+        datafile.blockout.append('push eax\npush ebx\npush ecx\npush edx\n')
+        # datafile.blockout.append('push eax')
         datafile.blockout.append('xor eax, eax')
         datafile.blockout.append('mov ' + 'eax, ' + register.mem(l))
     datafile.blockout.append('push eax')
@@ -842,11 +870,13 @@ def READ(i):
     datafile.blockout.append("call scanf")
     datafile.blockout.append("add esp, 8")
     try:
-        k[0]
-        if k[0] != "[":
-            datafile.blockout.append("mov " + k + ", [esp]")
+        datafile.addressdescriptor[l]
+        datafile.blockout.append("mov " + k + ", [esp]")
     except:
-        pass
+        reg = register.emptyregister(i, ['eax'])
+        datafile.blockout.append("mov " + reg + ", [esp]")
+        datafile.L = reg
+        register.UpdateAddressDescriptor(l)
         # datafile.blockout.append("pop eax")
     # datafile.blockout.append('pop edx')
     # datafile.blockout.append('pop ecx')

@@ -88,6 +88,8 @@ def mem(var):
         int(var)
         return str(var)
     except :
+        if var in datafile.globalsection or var in datafile.setofarray.keys():
+            return str(var)
         # print datafile.registerlist, "this is registerlistin mem"
         if var in datafile.registerlist:
             return var
@@ -100,9 +102,6 @@ def mem(var):
             else :
                 # print "blah blah blah hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh", var ,"blah blah"
                 return str(var)
-        if var in datafile.globalsection or var in datafile.setofarray.keys():
-            return str(var)
-
 #This function is for Yprime 
 def gety(var):
     # print var , "in gety"
