@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ARRAY a 10
 label: func_1_partition
 arg high
@@ -135,4 +136,17 @@ pusharg 9
 call func_1_quickSort
 pusharg 9
 call func_1_print
+=======
+label: func_1_t
+arg a 0
+arg b
+print a
+ret
+label: func_1_main
+= a 55 a
+printstr Double quote (\") is escaped
+pusharg 55
+pusharg 10
+call func_1_t
+>>>>>>> fef380b050b04ca0d9de1ff4254417216feae35d
 ret

@@ -25,7 +25,11 @@ c__builtin__
 dict
 p9
 (dp10
+<<<<<<< HEAD
 S'print'
+=======
+S'main'
+>>>>>>> fef380b050b04ca0d9de1ff4254417216feae35d
 p11
 (lp12
 (isymboltable
@@ -43,7 +47,11 @@ tp16
 Rp17
 sS'itemcount'
 p18
+<<<<<<< HEAD
 I2
+=======
+I1
+>>>>>>> fef380b050b04ca0d9de1ff4254417216feae35d
 sS'name'
 p19
 g11
@@ -53,20 +61,29 @@ g4
 sS'offsetmap'
 p21
 (dp22
+<<<<<<< HEAD
 I8
 I1
 sI4
+=======
+I4
+>>>>>>> fef380b050b04ca0d9de1ff4254417216feae35d
 I0
 ssS'variables'
 p23
 (dp24
+<<<<<<< HEAD
 S'i'
+=======
+S'a'
+>>>>>>> fef380b050b04ca0d9de1ff4254417216feae35d
 p25
 (lp26
 I0
 aS'INT'
 p27
 aI0
+<<<<<<< HEAD
 aI4
 asS'size'
 p28
@@ -232,12 +249,54 @@ p80
 SymbolTable
 p82
 (dp83
+=======
+aI0
+assS'sizevars'
+p28
+(dp29
+g25
+(lp30
+I0
+ag27
+aI0
+assS'classes'
+p31
+g7
+(g8
+g9
+(dp32
+tp33
+Rp34
+sS'objects'
+p35
+(dp36
+sS'offset'
+p37
+I4
+sS'returnType'
+p38
+(lp39
+sS'argList'
+p40
+(lp41
+sS'uid'
+p42
+I3
+sbasS't'
+p43
+(lp44
+(isymboltable
+SymbolTable
+p45
+(dp46
+>>>>>>> fef380b050b04ca0d9de1ff4254417216feae35d
 g2
 I0
 sg6
 g7
 (g8
 g9
+<<<<<<< HEAD
 (dp84
 tp85
 Rp86
@@ -323,18 +382,46 @@ g4
 sg21
 (dp109
 I8
+=======
+(dp47
+tp48
+Rp49
+sg18
+I2
+sg19
+g43
+sg20
+g4
+sg21
+(dp50
+I8
+>>>>>>> fef380b050b04ca0d9de1ff4254417216feae35d
 I1
 sI4
 I0
 ssg23
+<<<<<<< HEAD
 (dp110
 S'high'
 p111
 (lp112
+=======
+(dp51
+g25
+(lp52
+I0
+ag27
+aI0
+aI0
+asS'b'
+p53
+(lp54
+>>>>>>> fef380b050b04ca0d9de1ff4254417216feae35d
 I0
 ag27
 aI0
 aI4
+<<<<<<< HEAD
 asS'low'
 p113
 (lp114
@@ -846,10 +933,46 @@ asg50
 I2
 sbastp252
 Rp253
+=======
+assg28
+(dp55
+g25
+(lp56
+I0
+ag27
+aI0
+asg53
+(lp57
+I0
+ag27
+aI0
+assg31
+g7
+(g8
+g9
+(dp58
+tp59
+Rp60
+sg35
+(dp61
+sg37
+I8
+sg38
+(lp62
+sg40
+(lp63
+g27
+ag27
+asg42
+I2
+sbastp64
+Rp65
+>>>>>>> fef380b050b04ca0d9de1ff4254417216feae35d
 sg18
 I1
 sg19
 S'object'
+<<<<<<< HEAD
 p254
 sg20
 g0
@@ -889,18 +1012,51 @@ sg46
 Nsg48
 (lp266
 sg50
+=======
+p66
+sg20
+g0
+sg21
+(dp67
+sg23
+(dp68
+sg28
+(dp69
+sg31
+g7
+(g8
+g9
+(dp70
+tp71
+Rp72
+sg35
+(dp73
+sg37
+I0
+sg38
+Nsg40
+(lp74
+sg42
+>>>>>>> fef380b050b04ca0d9de1ff4254417216feae35d
 I1
 sbsg6
 g7
 (g8
 g9
+<<<<<<< HEAD
 (dp267
 tp268
 Rp269
+=======
+(dp75
+tp76
+Rp77
+>>>>>>> fef380b050b04ca0d9de1ff4254417216feae35d
 sg18
 I0
 sg19
 S'root'
+<<<<<<< HEAD
 p270
 sg20
 Nsg21
@@ -924,5 +1080,30 @@ sg46
 Nsg48
 g266
 sg50
+=======
+p78
+sg20
+Nsg21
+(dp79
+sg23
+(dp80
+sg28
+(dp81
+sg31
+g7
+(g8
+g9
+(dp82
+tp83
+Rp84
+sg35
+(dp85
+sg37
+I0
+sg38
+Nsg40
+g74
+sg42
+>>>>>>> fef380b050b04ca0d9de1ff4254417216feae35d
 I0
 sb.
