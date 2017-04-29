@@ -6,19 +6,6 @@ object sort {
             var i : Int = 0;
             var j : Int = 0;
             var t : Int = 0;
-//	    a[0,0] = i;
-	//    var x : Int = 0;
-	 /*   var y : Int = 0;	   
-	   a[0 , 0] = 20;
-	   a[1 , 0] = 30;
-	   y = a[0 , 0] * a[1 , 0]; 
-	   t = a[0 , 0];
-	   x = a[1 , 0];
-	   
-	   println(t);
-	   println(x);
-	   println(y); */
-	//    println(t);
             for ( i <- 0 until size )
             {
                  for ( j <- 0 until size )
