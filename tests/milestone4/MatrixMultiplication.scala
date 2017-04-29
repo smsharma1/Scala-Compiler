@@ -6,42 +6,72 @@ object sort {
             var i : Int = 0;
             var j : Int = 0;
             var t : Int = 0;
-            a[i , j] = 0;
             for ( i <- 0 until size )
-		    {
+            {
                  for ( j <- 0 until size )
-		        {
+		{
                     read(t);
                     a[i , j] = t;
                 }
-            } 
+            }
+	    for ( i <- 0 until size )
+		{
+                 for ( j <- 0 until size )
+		 {
+ 		    t = a[i , j];
+                    println(t);
+                }
+            }   
      }
     def scanb(size: Int){
             var i : Int = 0;
             var j : Int = 0;
             var t : Int = 0;
             for ( i <- 0 until size )
-		    {
+	    {
                  for ( j <- 0 until size )
-		        {
+		 {
                     read(t);
-                    b[i,j] = t;
+                    b[i , j] = t;
                 }
             }
+	    for ( i <- 0 until size )
+		{
+                 for ( j <- 0 until size )
+		 {
+ 		    t = b[i , j];
+                    println(t);
+                }
+            } 
      }
      def multiply(size: Int){
             var i : Int = 0;
             var j : Int = 0;
             var k : Int = 0;
+	    var t : Int = 0;
+	    var x : Int = 0;
             for ( i <- 0 until size )
 		    {
                 for ( j <- 0 until size )
-		        {
-                    c[i,j] = 0;
+		     {
+                 //   c[i,j] = 0;
                     for ( k <- 0 until size )
-		            {
-                        c[i,j] = c[i,j] + a[i,k]*b[k,j];
+		    {
+		//	t = a[i,k];
+		/*	x = b[k,j];
+			t = 0;
+			t = a[i,k];
+			x = x * t;
+			println(x);
+			println(t);
+			t = 0;
+			t = c[i,j];
+			t = 101;
+			c[0,0] =  201;  */
+			c[i,j] = c[i,j] + a[i,k]*b[k,j];
                     }
+		//   println(c[i,j]);
+		    
                 }
             }
      }
@@ -49,18 +79,18 @@ object sort {
             var i : Int = 0;
             var j : Int = 0;
             for ( i <- 0 until size )
-		    {
+		  {
                  for ( j <- 0 until size )
-		        {
-                    println(a[i,j]);
+		{
+                    println(c[i,j]);
                 }
             }
      } 
      def main(){
-         scana(4);
-         scanb(4);
-         multiply(4);
-         printc(4);
+         scana(1);
+         scanb(1);
+         multiply(1);
+         printc(1);
      }
 }
 

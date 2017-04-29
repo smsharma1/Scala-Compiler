@@ -4,19 +4,21 @@ object Fibonacci {
         var i : Int = 0;
         f[0] = 0;
         f[1] = 1;
-        for ( i <- 2 until n )
-	{
-		f[i] = f[i - 1] + f[i - 2];
-      	} 
-        var t : Int = f[n];
+       for ( i <- 2 until n )
+		{
+        //    f[2] = f[0] + f[1];
+	  //  f[3] = f[1] + f[2];
+			 f[i] = f[i - 1] + f[i - 2];
+      	}
+        var t : Int = 2;
         return t;
     }
     def main()
     {
             var k : Int = 0;
-	    read(k);
-	    k = fibo(k);
-            println(k);
+	 //   read(k);
+	    k = fibo(1);
+           // println(k);
     }
 }
 

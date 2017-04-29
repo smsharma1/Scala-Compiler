@@ -1073,6 +1073,7 @@ def p_AndExpression(p):
 		nodename = newtemp()
 		currentScope.InsertVar(nodename,0, 'BOOL')
 		print nodename,"I am in And Expression"
+		code1 = p[1].code + ["cmp " + p[1].place + " 0", "jle " + falselabel]+ p[3].code + ["cmp " + p[3].place + " 0", "jle " + falselabel, "jmp "+truelabel, "label: ", falselabel]
 		code = [p[2] + " " + p[1].place + " " + p[3].place + " " + nodename]
 		p[0] = Node(p[2], [p[1], p[3]], [],typelist=['BOOL'],order='cc',isLeaf=True,code=p[1].code + p[3].code + code, place=nodename)
 	else:
@@ -1524,16 +1525,13 @@ def p_ArrayAccess(p):
 	else:
 		temp = newtemp()
 		temp2 = newtemp()
-		temp3 = newtemp()
 		print temp,temp2, " I am in arrayaccess "
-		size = currentScope.Size(p[1].typelist[0][10:])
 		l=currentScope.LookUpVar(p[1].type)
 		column = l[2]
-		code = ['= ' + temp2 + " " + str(column * int(size)) + " " + temp2 ]+ ["* " + temp2 + " " +p[3].place + " " + temp2] +["= " + temp3 + " " + p[5].place + " " + temp3] + ["* " + temp3 + " " + str(size) + " " + temp3]+[ "+ " + temp2 + " " +temp3 + " " + temp2]
+		code = ['= ' + temp2 + " " + str(column) + " " + temp2 ]+ ["* " + temp2 + " " +p[3].place + " " + temp2] + [ "+ " + temp2 + " " +p[5].place + " " + temp2]
 		l1 = [ "<- " + p[1].place + " " + temp2 + " " + temp]
 		currentScope.InsertVar(temp2,0,'INT')
 		currentScope.InsertVar(temp,0, p[1].typelist[0][10:])
-		currentScope.InsertVar(temp3,0,'INT')
 		# l1 = [ temp + " = " + p[1].place + " -> " + temp2]
 		p[0] = Node('ArrayAccess',[p[1],p[3],p[5]],[p[2],p[4],p[6]],typelist=[p[1].typelist[0][10:]], order="clclcl",code= p[5].code+p[3].code + code+l1,place=temp)
 
