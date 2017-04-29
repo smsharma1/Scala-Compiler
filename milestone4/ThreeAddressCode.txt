@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ARRAY a 5 5
 ARRAY b 5 5
 ARRAY c 5 5
@@ -6,8 +7,42 @@ arg size
 = i 0 i
 = j 0 j
 = t 0 t
+=======
+label: func_1_sub
+arg h
+arg g
+arg f
+arg e
+arg d
+arg c
+arg b
+arg a
+* a b t1
+* t1 c t2
+* t2 d t3
+* t3 e t4
+* t4 f t5
+* t5 g t6
+* t6 h t7
+ret2 t7
+>>>>>>> 8d7d3a1abc61348a4666df1fec4038df7b896238
 ret
 label: func_1_main
+arg args
+pusharg 1
+pusharg 2
+pusharg 3
 pusharg 4
+<<<<<<< HEAD
 call func_1_scana
+=======
+pusharg 5
+pusharg 6
+pusharg 7
+pusharg 8
+call func_1_sub
+get t26
+= k t26 k
+print k
+>>>>>>> 8d7d3a1abc61348a4666df1fec4038df7b896238
 ret

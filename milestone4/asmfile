@@ -1,9 +1,6 @@
 section .data
 message db "Register = %d", 10, 0
 formatin: db "%d", 0
-a TIMES 100 DW  0
-c TIMES 100 DW  0
-b TIMES 100 DW  0
 
 section .text
 	global main
@@ -15,9 +12,10 @@ call func_1_main
 mov  eax, 1
 int  0x80
 
-func_1_scana:
+func_1_sub:
 push ebp
 mov ebp, esp
+<<<<<<< HEAD
 sub esp, 12
 mov edx, 0
 mov ecx, 0
@@ -25,6 +23,41 @@ mov ebx, 0
 mov [-12 + ebp], ebx
 mov [-8 + ebp], ecx
 mov [-4 + ebp], edx
+=======
+sub esp, 28
+mov ebx,[32 + ebp]
+mov eax,[36 + ebp]
+imul ebx
+mov ebx,[28 + ebp]
+mov [-4 + ebp], eax
+mov eax,[-4 + ebp]
+imul ebx
+mov ebx,[24 + ebp]
+mov [-8 + ebp], eax
+mov eax,[-8 + ebp]
+imul ebx
+mov ebx,[20 + ebp]
+mov [-12 + ebp], eax
+mov eax,[-12 + ebp]
+imul ebx
+mov ebx,[16 + ebp]
+mov [-16 + ebp], eax
+mov eax,[-16 + ebp]
+imul ebx
+mov ebx,[12 + ebp]
+mov [-20 + ebp], eax
+mov eax,[-20 + ebp]
+imul ebx
+mov ebx,[8 + ebp]
+mov [-24 + ebp], eax
+mov eax,[-24 + ebp]
+imul ebx
+mov [-28 + ebp], eax
+mov eax, [-28 + ebp]
+mov esp, ebp
+pop ebp
+ret
+>>>>>>> 8d7d3a1abc61348a4666df1fec4038df7b896238
 mov esp, ebp
 pop ebp
 ret
@@ -32,10 +65,50 @@ ret
 func_1_main:
 push ebp
 mov ebp, esp
+<<<<<<< HEAD
 sub esp, 0
 mov  eax, 4
 push eax
 call func_1_scana
+=======
+sub esp, 8
+mov  eax, 1
+push eax
+mov  ebx, 2
+push ebx
+mov  ecx, 3
+push ecx
+mov  edx, 4
+push edx
+mov  edx, 5
+push edx
+mov  edx, 6
+push edx
+mov  edx, 7
+push edx
+mov  edx, 8
+push edx
+call func_1_sub
+mov edx, eax
+push eax
+push ebx
+push ecx
+push edx
+
+xor eax, eax
+mov eax, edx
+push eax
+push message
+call printf
+add esp, 8
+pop edx
+pop ecx
+pop ebx
+pop eax
+
+mov [-4 + ebp], eax
+mov [-8 + ebp], edx
+>>>>>>> 8d7d3a1abc61348a4666df1fec4038df7b896238
 mov esp, ebp
 pop ebp
 ret

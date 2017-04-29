@@ -71,7 +71,7 @@ if __name__ == "__main__" :
                             print node[i - 1], node[i], "checking"
                             if node[1] == 'arg':
                                 datafile.memorymap[scopefunc][node[2]] = '['+str(arglength) + ' + ebp]'
-                                print node[2], currentScope.LookUpVarSize(node[2])[1], " this is the type"
+                                # print node[2], currentScope.LookUpVarSize(node[2])[1], " this is the type"
                                 # print datafile.memorymap[scopefunc][node[i+1]],"asdfg"
                                 arglength = arglength + Size(currentScope.LookUpVarSize(node[2])[1])
                             elif (node[i] not in datafile.globalsection):
@@ -103,6 +103,7 @@ if __name__ == "__main__" :
         # if node[1] == "ARRAY":
         #     datafile.setofarray[node[2]] = node[3]
         if node[1] == 'label:' and node[2][0:4] == "func":
+            # print node[2], "oooooooooooooooooaoaoaoaoaoaoaoaooooooooooooooooo"
             flag = 1
             scopefunc = node[2]
             newScope = currentScope.parent.functions[node[2][7:]][0]
@@ -116,15 +117,14 @@ if __name__ == "__main__" :
                 else:
                     node[i] = ''
             datafile.setofString['str'+str(node[0])] = ' '.join(node[2:])
-        if node[1] == 'ret' or node[1] == 'ret1' or node[1] == 'ret2':
+        if node[1] == 'ret':
             flag = 0
             datafile.numberofarguments[scopefunc] = -arglength
             datafile.numberofvariables[scopefunc] = -locallength
             scopefunc = 0
             arglength = 8
             locallength = -4
-            if node[1] == 'ret':
-                currentScope = currentScope.returnScope
+            currentScope = currentScope.returnScope
         if node[1] == 'cmp':
             datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],None))
             continue
@@ -142,7 +142,7 @@ if __name__ == "__main__" :
     print datafile.setofarray, 'setofarray'
     # for inst in datafile.instruction:
     #     print inst.instnumber,inst.type,inst.op1,inst.op2,inst.operator, inst.out 
-    # print datafile.memorymap, 'memorymap'
+    print datafile.memorymap, 'memorymap'
     # print datafile.numberofarguments, 'numberofarguments'
     # print datafile.numberofvariables, 'numberofvariabels'        
 
