@@ -50,7 +50,7 @@ object sort {
      def main() {
          scan(9);
 	 var filep : Int = 0;
-	 filep = fopen("data.txt", "r");
+	 filep = fopen("data.txt", "w");
          quickSort(0,9);
          print(9);
      }

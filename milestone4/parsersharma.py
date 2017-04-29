@@ -21,8 +21,7 @@ def newtemp():
 
 class Node:
 	uid=0
-	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False,code=[], breaklist = [], continuelist = [], place="A",next=None,meta=None,defaultdict = {}):
-		self.defaultdict = defaultdict
+	def __init__(self,type,children,leaf,typelist=[],seqNo=1,order='',isLeaf=False,notreenode=False,code=[], breaklist = [], continuelist = [], place="A",next=None,meta=None):
 		self.meta = meta
 		self.next = next
 		self.code = code 
@@ -309,20 +308,13 @@ def p_FuncArgumentListExtras(p):
 		pass
 	else:
 		p[0]= p[1]
-		print p[1].defaultdict,"helloiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
-		if(p[0].meta is None): 
-			p[1].meta = 0
-		# print p[0].meta,")))))000000))))))))))))))))))"
+		if(p[0].meta is None): p[1].meta = 0
 		code = []
 		k = p[1].place.split(',,,')
-		# print p[1].place.split(',,,') , "hello there"
-		k.reverse()
-		for k1 in k:
-			try:
-				p[0].defaultdict[k1]
-				code.append("arg " + k1 + " " + p[0].defaultdict[k1] )
-			except:
-				code.append("arg " + k1)
+		print p[1].place.split(',,,') , "hello there"
+    	k.reverse()
+    	for k1 in k:
+        	code.append("arg " + k1)
 		p[0].code = code
 		#print p[0].code, "aaaaaaa"
 		# p[0] = Node("FuncArgumentListExtras", [p[1]],[],typelist = p[1].typelist, order="c") 
@@ -331,15 +323,13 @@ def p_VariableDeclarators(p):
 	'''VariableDeclarators : VariableDeclarator
 						| VariableDeclarator COMMA VariableDeclarators'''
 	if len(p)==4:
-		p[0] = Node("VariableDeclarators", [p[1], p[3]],[p[2]],typelist = p[1].typelist + p[3].typelist, order="clc",place = p[1].place + ',,,' +  p[3].place,defaultdict =dict(p[1].defaultdict.items() + p[3].defaultdict.items()))
-		print p[0].defaultdict,"{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}",p[1].defaultdict,p[3].defaultdict 
+		p[0] = Node("VariableDeclarators", [p[1], p[3]],[p[2]],typelist = p[1].typelist + p[3].typelist, order="clc",place = p[1].place + ',,,' +  p[3].place) 
 	else:
 		p[0] = p[1]
 		# p[0] = Node("VariableDeclarators", [p[1]],[],typelist = p[1].typelist, order="c") 
 						
 def p_VariableDeclarator(p):
-	'''VariableDeclarator : ID COLON Type 
-							| ID R_DEFAULT Expression COLON Type '''
+	'''VariableDeclarator : ID COLON Type '''
 	global currentScope
 	# print currentScope.variables, "tttttttttttttttttttttttttttttttttttttttttttttttttttttt"
 	if(currentScope.LookUpVar(p[1])):
@@ -349,12 +339,8 @@ def p_VariableDeclarator(p):
 	else:
 		currentScope.InsertVar(p[1],0,p[3].typelist[0])
 	#print "jajajaja",p[1]
-	if len(p) == 4:
-		p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]],typelist = p[3].typelist, order="llc",place = p[1]) 
-	else:
-		print p[3].type, "+++++++++++++++++++++++++++++++++++++++++++++"
-		p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]],typelist = p[3].typelist, order="llc",place = p[1],defaultdict = {p[1]:p[3].type})
-		print p[0].defaultdict,"[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]"
+	p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]],typelist = p[3].typelist, order="llc",place = p[1]) 
+
 def p_VariableInitializer(p):
 	'''VariableInitializer : ArrayInitializer
 							| Expression
@@ -1254,7 +1240,7 @@ def p_MultiplicativeExpression(p):
 								| MultiplicativeExpression MODULUS UnaryExpression'''
 	if len(p) ==  4:
 		nodename = newtemp()
-		print nodename,"I am in Multiplicative Expression[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]"
+		print nodename,"I am in Multiplicative Expression"
 		code = [p[2] + " " + p[1].place + " " + p[3].place + " " + nodename]
 		type_here = higher(p[1].typelist[0] , p[3].typelist[0])
 		print p[1].typelist, "multiplicativeerror" , p[3].typelist, type_here
@@ -1348,32 +1334,10 @@ def p_MethodInvocation(p):
 		return
 	if(p[1].type == "read"):
 		if( len(p[3].type) > 1):
-			print("read() takes exactly one argument")
+			print("read() takes only one argument")
 			Error = Error + 1
 		func_name = "read"
 		code.append("read " + p[3].place)
-		p[0] = Node("MethodInvocation", [p[1], p[3]], [] ,code =p[1].code + p[3].code + code, order='cc')
-		return
-	if(p[1].type == "fopen"):
-		if( len(p[3].meta) != 2):
-			print("fopen() takes exactly two arguments")
-			Error = Error + 1
-		for k in p[3].meta:
-			code.append("pusharg2 " + k)
-		func_name = "fopen"
-		# print "####"+p[3].meta[0]+"####"+p[3].meta[1]+"##############################################################"
-		code.append("fopen " + p[3].meta[0] + " " + p[3].meta[1])
-		temp = newtemp()
-		code.append('get ' + temp)
-		currentScope.InsertVar(temp,0, 'INT')
-		p[0] = Node("MethodInvocation", [p[1], p[3]], [] ,code =p[1].code + p[3].code + code, order='cc', typelist=['INT'], place=temp)
-		return
-	if(p[1].type == "fread"):
-		if( len(p[3].type) != 1):
-			print("fread() takes exactly one argument")
-			Error = Error + 1
-		func_name = "fread"
-		code.append("fread " + p[3].place)
 		p[0] = Node("MethodInvocation", [p[1], p[3]], [] ,code =p[1].code + p[3].code + code, order='cc')
 		return
 	if p[3] == None :
@@ -1551,7 +1515,6 @@ def p_ArrayAccess(p):
 			l1 = [ "<- " + p[1].place + " " +str(int(p[3].place)*size) + " " + temp]
 		except:
 			lab = newtemp()
-			currentScope.InsertVar(lab,0, "INT")
 			l1 = ["* " + p[3].place  + " " + str(size) + " " + lab ] + [ "<- " + p[1].place + " " + lab + " " + temp]
 		# l1 = [ temp + " = " + p[1].place + " -> " + p[3].place]
 		currentScope.InsertVar(temp,0, p[1].typelist[0][5:])
@@ -1585,10 +1548,6 @@ def p_AmbiguousName(p):
 		if p[1] == 'println':
 			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
 		elif p[1] == 'read':
-			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
-		elif p[1] == 'fopen':
-			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
-		elif p[1] == 'fread':
 			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
 		else:
 			returnType = currentScope.LookUpSymbolType(p[1])

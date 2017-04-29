@@ -39,15 +39,15 @@ def asm():
     f.write("section .data\nmessage db \"Register = %d\", 10, 0\n")
     f.write("formatin: db \"%d\", 0\n")
     f.write("formatdouble: db \"%lf\", 0\n")
-    f.write("fname: db \"data.txt\", 0 \n")
+    # f.write("fname: db \"data.txt\", 0 \n")
     # for k,v in datafile.setofString.items() :
     #     print('\n'+k+ ' db '  + "'" + v + "',0xa")
     #     f.write('\n'+k+ ' db '  + "'" + v + "',0xa\n")
     #     f.write("len_" + k + " equ $ - " + k + "\n")
     #     datafile.lineno = datafile.lineno + 2
     for k,v in datafile.setofString.items() :
-        print('\n'+k+ ' db '  + "'" + v + "',0xa")
-        f.write('\n'+k+ ' db '  + "'" + v + "',0xa\n")
+        print('\n'+k+ ' db '  + "'" + v + "'")
+        f.write('\n'+k+ ' db '  + "'" + v + "',0\n")
         f.write("len_" + k + " equ $ - " + k + "\n")
         # datafile.lineno = datafile.lineno + 2
     datafile.lineno = datafile.lineno + 1
@@ -89,7 +89,7 @@ def asm():
     # datafile.lineno = datafile.lineno + 3
     # print datafile.lineno, "lineno"
     print('global main\n\n')
-    f.write('global main\nextern printf\nextern scanf\n\n')
+    f.write('global main\nextern printf\nextern scanf\nextern fopen\n')
     datafile.lineno = datafile.lineno + 3
     # print datafile.lineno, "lineno"
     print('main:')
@@ -932,12 +932,12 @@ def FOPEN(i):
     (y,z) = (datafile.block[i].op1,datafile.block[i].op2)
     register.storereg("eax")
     reg = "eax"
-    if(y == "r"):
-        datafile.blockout.append("mov "+reg+" "+'str'+str(node[0]-1))
-    elif(y == "w"):
-        datafile.blockout.append("mov "+reg+" "+'str'+str(node[0]-1))
+    inno = datafile.block[i].instnumber
+    datafile.blockout.append("xor eax, eax")
+    datafile.blockout.append("mov "+reg+", "+'str'+str(int(inno-1)))
     datafile.blockout.append("push "+reg)
-    datafile.blockout.append("mov "+reg+" "+'str'+str(node[0]-2))
+    datafile.blockout.append("xor eax, eax")
+    datafile.blockout.append("mov "+reg+", "+'str'+str(int(inno-2)))
     datafile.blockout.append("push "+reg)
     datafile.blockout.append("call fopen")
 

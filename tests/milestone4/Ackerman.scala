@@ -1,5 +1,5 @@
 object Ackermann {
-    def acker(m : Int, n : Int) : Int = {
+    def acker(m  default 0 : Int, n : Int) : Int = {
 	var t : Int = 0;
 	var z : Int = 0;
 	var l : Int = 0;

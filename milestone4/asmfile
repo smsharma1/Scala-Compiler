@@ -2,31 +2,24 @@ section .data
 message db "Register = %d", 10, 0
 formatin: db "%d", 0
 formatdouble: db "%lf", 0
-fname: db "data.txt", 0 
 
-<<<<<<< HEAD
-str128 db '"data.txt"  ',0xa
+str128 db 'data.txt',0
 len_str128 equ $ - str128
 
-str129 db '"r"  ',0xa
+str129 db 'w',0
 len_str129 equ $ - str129
 a TIMES 40 DW  0
-=======
-str8 db 'Double quote (\") is escaped',0xa
-len_str8 equ $ - str8
->>>>>>> fef380b050b04ca0d9de1ff4254417216feae35d
 
 section .text
 	global main
 extern printf
 extern scanf
-
+extern fopen
 main:
 call func_1_main
 mov  eax, 1
 int  0x80
 
-<<<<<<< HEAD
 func_1_partition:
 push ebp
 mov ebp, esp
@@ -272,31 +265,13 @@ imul edx
 mov ebx,a
 add ebx,eax
 mov ebx, [ebx]
-=======
-func_1_t:
-push ebp
-mov ebp, esp
-sub esp, 0
-mov eax,0
-mov [8 + ebp],eax
 push eax
 push ebx
 push ecx
 push edx
 
 xor eax, eax
->>>>>>> fef380b050b04ca0d9de1ff4254417216feae35d
-push eax
-push ebx
-push ecx
-push edx
-
-xor eax, eax
-<<<<<<< HEAD
 mov eax, ebx
-=======
-mov eax, [8 + ebp]
->>>>>>> fef380b050b04ca0d9de1ff4254417216feae35d
 push eax
 push message
 call printf
@@ -306,7 +281,6 @@ pop ecx
 pop ebx
 pop eax
 
-<<<<<<< HEAD
 mov [-8 + ebp], eax
 mov [-16 + ebp], ebx
 
@@ -361,8 +335,6 @@ mov [-4 + ebp], edx
 jmp t144
 
 t146:
-=======
->>>>>>> fef380b050b04ca0d9de1ff4254417216feae35d
 mov esp, ebp
 pop ebp
 ret
@@ -370,13 +342,17 @@ ret
 func_1_main:
 push ebp
 mov ebp, esp
-<<<<<<< HEAD
 sub esp, 8
 mov  eax, 9
 push eax
 call func_1_scan
 mov edx, 0
-mov [-4 + ebp], edx
+xor eax, eax
+mov eax, str129
+push eax
+xor eax, eax
+mov eax, str128
+push eax
 call fopen
 mov edx, eax
 mov  ebx, 0
@@ -389,29 +365,6 @@ call func_1_quickSort
 mov  eax, 9
 push eax
 call func_1_print
-=======
-sub esp, 4
-mov edx, 55
-push eax
-push ebx
-push ecx
-push edx
-mov edx,len_str8
-mov ecx,str8
-mov ebx,1
-mov eax,4
-int 0x80
-pop edx
-pop ecx
-pop ebx
-pop eax
-mov  eax, 55
-push eax
-mov  ebx, 10
-push ebx
-mov [-4 + ebp], edx
-call func_1_t
->>>>>>> fef380b050b04ca0d9de1ff4254417216feae35d
 mov esp, ebp
 pop ebp
 ret

@@ -6,7 +6,7 @@ import symboltable
 import pickle
 
 def checkbranching(name) :
-    if name in ['jump', 'call', 'goto', 'label:', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne','ret','ret1','ret2','printstr','pusharg2', 'fopen']:
+    if name in ['jump', 'call', 'goto', 'label:', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne','ret','ret1','ret2','printstr','pusharg2']:
         return True
     else:
         return False
@@ -95,7 +95,7 @@ if __name__ == "__main__" :
                                     except:
                                         locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])*int(node[3])
                                 else:
-                                    print node[i], "77777777777777777777777777777777777",currentScope.LookUpVarSize(node[i]),'88888888888888888888'
+                                    # print node[i], "77777777777777777777777777777777777",currentScope.LookUpVarSize(node[i]),'88888888888888888888'
                                     locallength = locallength - Size(currentScope.LookUpVarSize(node[i])[1])
                                 #TODO procedure under procedure 
                     else:
@@ -127,7 +127,7 @@ if __name__ == "__main__" :
                     pass
                 else:
                     node[i] = ''
-            datafile.setofString['str'+str(node[0])] = ' '.join(node[2:]).strip()
+            datafile.setofString['str'+str(node[0])] = ' '.join(node[2:])
         # if node[1] == 'fopen':
         #     for i in range(0,5):
         #         if node[i]:
@@ -156,7 +156,7 @@ if __name__ == "__main__" :
                         pass
                     else:
                         node[i] = ''
-                datafile.setofString['str'+str(node[0])] = ' '.join(node[2:]).strip()
+                datafile.setofString['str'+str(node[0])] = ' '.join(node[2:])
             datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[2]))
             continue
         datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],node[3],node[1],node[4]))
