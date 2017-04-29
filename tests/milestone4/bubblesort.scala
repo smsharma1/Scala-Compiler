@@ -1,5 +1,6 @@
 object bubbleSort{
-    def bSort(arr : Array[Int], n : Int )
+    var f = new Array[Int](10);
+    def bSort(n : Int )
     {
         var i : Int = 0;
         var j : Int = 0;
@@ -8,35 +9,35 @@ object bubbleSort{
         for ( i <- 0 until n )
 		{
             var t : Int = n - i - 1;
-            for ( i <- 0 until t)
+            for ( j <- 0 until t)
 		    {
-			   if( arr[j] > arr[j + 1] )
+			   if( f[j] > f[j + 1] )
                {
-                    temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
+                    temp = f[j];
+                    f[j] = f[j + 1];
+                    f[j + 1] = temp;
                }
       	    }
       	}
         for ( i <- 0 until n)
-		{
-			println(arr[i]);
+	{
+		println(f[i]);
       	}
 
     }
+    def scanf(n:Int)
+    {
+	var i : Int = 0;
+        for ( i <- 0 until n )
+	{
+	    var x : Int  = 0; 
+            read(x);
+	    f[i] = x;
+        }
+    }
     def main(args: Array[String]) {
-        var f = new Array[Int](10);
-        f[0] = 64;
-        f[1] = 34;
-        f[2] = 25;
-        f[3] = 12;
-        f[4] = 22;
-        f[5] = 11;
-        f[6] = 90;
-        f[7] = 5;
-        f[8] = 9;
-        f[9] = 71;
-        bSort(f, 10);
+        scanf(9);
+        bSort(9);
     }
 
 }

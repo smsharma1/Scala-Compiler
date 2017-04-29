@@ -1,13 +1,12 @@
 object sort {
     var a = new Array[Int](10);
-    var b : Int = 0;
     def partition(low: Int, high: Int): Int= {
             var pivot: Int = a[high];
             var i :Int = low - 1;
             var j : Int = low;
             var till : Int = high - 1;
             for ( j <- low until till )
-			{
+	   {
                 if (a[j] <= pivot)
                 {
                     i = i + 1;    // increment index of smaller element
@@ -26,8 +25,10 @@ object sort {
             if (low < high)
             {
                 var pi : Int = partition(low, high);
-                quickSort(low, pi - 1);
-                quickSort(pi + 1, high);
+		var t : Int = pi - 1;
+		var u : Int = pi + 1;
+                quickSort(low, t);
+                quickSort(u, high);
             }
      }
      def print(size: Int){
@@ -41,7 +42,7 @@ object sort {
             var i : Int = 0;
             var t : Int = 0;
             for ( i <- 0 until size )
-		    {
+	     {
                 read(t);
                 a[i] = t;
             }

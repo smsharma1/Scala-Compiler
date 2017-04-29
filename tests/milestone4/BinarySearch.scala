@@ -5,11 +5,18 @@ object BinarySearch {
         while (l <= r)
         {
             var m : Int = l + (r - l)/2;
-            if (arr[m] == x)
+		println(m);
+		println(l);
+		println(r);
+		println(f[m]);
+		println(x);
+	//    var m = 5;
+            if (f[m] == x)
             { 
+		println(x);
                 return m;
             }   
-            if (arr[m] < x)
+            if (f[m] < x)
             { 
                 l = m + 1; 
             } 
@@ -20,22 +27,28 @@ object BinarySearch {
         }
      return -1; 
     }
-    def main(args: Array[String])
+    def main()
     {
             var i : Int = 0;
+	    var time : Int = 5;
             for ( i <- 0 until 9 )
-		    {
-			    f[i] =  i;
+	    {
+			   f[i] =  i;
+			// time = 10;
+			//   println(i);
       	    }
-            var k : Int = 5;
+            var k : Int = 0;
+		read(k);
             var result : Int = B(0, 9, k);
+	  //  var result : Int = 4;
             if  (result == -1){ 
-                println("Element is not present in array");
+               // println("Element is not present in array");
+		println(result);
             }
             else {
-                println("Element is present in array at");
+               // println("Element is present in array at");
                 println(result);
-            }
+            }  
     }
 }
 
