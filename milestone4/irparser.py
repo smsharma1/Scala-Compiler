@@ -105,8 +105,9 @@ if __name__ == "__main__" :
                                     except:
                                         locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])*int(node[3])
                                 elif node[1] == "LIST":
-                                    print "-/-/-/-/--/-/-/-/-/", currentScope.listdict[node[2]], "-/-/-/-/-/---/-/-/-/-/-/-/-"
+                                    # print "-/-/-/-/--/-/-/-/-/", currentScope.listdict[node[2]], "-/-/-/-/-/---/-/-/-/-/-/-/-"
                                     locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])*int(currentScope.listdict[node[2]])
+                                    datafile.Listoffset[node[2]]  = 0
                                 else:
                                     # print node[i], "77777777777777777777777777777777777",currentScope.LookUpVarSize(node[i]),'88888888888888888888'
                                     locallength = locallength - Size(currentScope.LookUpVarSize(node[i])[1])
@@ -123,8 +124,8 @@ if __name__ == "__main__" :
                         elif node[1] == "LIST":
                             # t = currentScope.LookUpVarSize(node[2])[1]
                             size = Size(currentScope.LookUpVarSize(node[2])[1])
-                            # print size, "AEE RAJU YE SIZE HAI RE BABA", t
                             scope = currentScope.LookUpListScope(node[2])
+                            datafile.Listoffset[node[2]]  = 0
                             datafile.setofList[node[i]] = size * int(scope.listdict[node[2]])
                         else:
                             datafile.globalsection.add(node[i])

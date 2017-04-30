@@ -28,6 +28,6 @@ lineno = 0
 L = None
 yprime = None 
 zprime = None
-Listoffset = 0
+Listoffset = {}
 
 blockout = [] #to store the output of block
