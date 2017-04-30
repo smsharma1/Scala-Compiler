@@ -17,8 +17,8 @@ def topolgical_sort(graph_unsorted):
             raise RuntimeError("A cyclic dependency occurred")
     return graph_sorted
 
-filep = open("dummytac.txt")
-data = filep.readlines()
+# filep = open("dummytac.txt")
+# data = filep.readlines()
 
 
 def removejumps(data):
@@ -57,8 +57,8 @@ def removejumps(data):
             line[1] = data[src].split(' ')[1]
             data[node] = ' '.join(line)
 
-    finaldata = ''.join(data)
-    return finaldata
+    # finaldata = ''.join(data)
+    return data
     # filew = open("correcttac.txt", "w")
     # filew.write(finaldata)
 # print removejumps(data)

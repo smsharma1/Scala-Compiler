@@ -1557,7 +1557,7 @@ if __name__ == "__main__" :
 			finaldata = linedata[index-1:index] + appenddata + linedata[index:]
 			break
 	data = '\n'.join(finaldata)
-	print data
+	# print data
 	parser.parse(data)
 	import pickle
 	pickle.dump(rootScope , open( "rootScope.p", "wb" ) )
