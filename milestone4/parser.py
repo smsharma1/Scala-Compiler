@@ -310,7 +310,7 @@ def p_FuncArgumentListExtras(p):
 		pass
 	else:
 		p[0]= p[1]
-		print p[1].defaultdict,"helloiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
+		# print p[1].defaultdict,"helloiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
 		if(p[0].meta is None): 
 			p[1].meta = 0
 		# print p[0].meta,")))))000000))))))))))))))))))"
@@ -375,9 +375,12 @@ def p_ArrayInitializer(p):
 		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8],p[9], p[10]],typelist=['ARRAYARRAY'+p[4].typelist[0], int(p[7]),int(p[9])], order="lllcllllll")
 
 def p_ListInitializer(p):
-	'''ListInitializer : R_NEW R_LIST LSQRB Type RSQRB '''
+	'''ListInitializer : R_NEW R_LIST LSQRB Type RSQRB
+						| R_NEW R_LIST LSQRB Type RSQRB LPARAN INT RPARAN '''
 	if len(p) == 6:
 		p[0] = Node('ListInitializer',[p[4]],[p[1],p[2],p[3],p[5]],typelist =['LIST@' + p[4].typelist[0]], order="lllcl")
+	else:
+		p[0] = Node('ListInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8]],typelist=['LIST@LIST@'+p[4].typelist[0], int(p[7])], order="lllcllll")
 
 
 def p_EndStatement(p):
@@ -641,9 +644,18 @@ def p_VariableDeclarationBody(p):
 					code = ['ARRAY ' + p[1] + " " + str(p[3].typelist[1])]
 					currentScope.InsertVar(p[1],0,p[3].typelist[0], length= p[3].typelist[1])
 			elif(p[3].typelist[0][0:4] == 'LIST'):
-				code = ['LIST ' + p[1]]
-				currentScope.InsertVar(p[1],0,p[3].typelist[0])
-				currentScope.listdict[p[1]] = 0
+				try:
+					p[3].typelist[1]
+					print p[3].typelist , "{{{{{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}}}}"
+					code = ['LIST ' + p[1] + " " + str(p[3].typelist[1])]
+					currentScope.InsertVar(p[1],0,p[3].typelist[0], length= p[3].typelist[1])
+					currentScope.listdict[p[1]] = {}
+					for i in range(0,p[3].typelist[1]):
+						currentScope.listdict[p[1]][str(i)] = 0
+				except:
+					code = ['LIST ' + p[1]]
+					currentScope.InsertVar(p[1],0,p[3].typelist[0])
+					currentScope.listdict[p[1]] = 0
 			else:
 				code = ['= ' + p[1] + ' '+  p[3].place + ' '+ p[1]]
 				currentScope.InsertVar(p[1],0,p[3].typelist[0])
@@ -1345,17 +1357,23 @@ def p_MethodInvocation(p):
 	func_name = 'func_1' + "_" + p[1].type
 	temp = None
 #	print p[1].name,"name",currentScope.name
-#	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
+	print p[1].type," ",p[3].place,"Method kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
 	if(p[1].type == "deletetail"):
+		p[3].place = p[3].place.split(',,,')
+		try:
+			p[3].place[1]
+			code.append("deletetail" + " " + p[3].place[0] + " " + p[3].place[1])
+		except:
+			code.append("deletetail" + " " + p[3].place[0])
 		func_name = "deletetail"
-		code.append("deletetail" + " " + p[3].place[0])
 		name = currentScope.LookUpListScope(p[3].place[0])
 		if name:
-			tem = tem - 1 
-			# name.listdict[p[3].place[0]] = name.listdict[p[3].place[0]] - 1;
-			if tem < 0:
-				Error = Error + 1
-				print "Cannot delete the Empty List " + p[3].place[0]
+			pass
+			# tem = tem - 1 
+			# # name.listdict[p[3].place[0]] = name.listdict[p[3].place[0]] - 1;
+			# if tem < 0:
+			# 	Error = Error + 1
+			# 	print "Cannot delete the Empty List " + p[3].place[0]
 		else:
 			Error = Error + 1
 			print "Error List " + p[3].place[0] + " not declared"  
@@ -1364,6 +1382,7 @@ def p_MethodInvocation(p):
 
 	if(p[1].type == "append"):
 		p[3].place = p[3].place.split(',,,')
+		print p[3].place, "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
 		for i in range(1, len(p[3].typelist)):
 			print p[3].typelist, "hey typelist"
 			if(p[3].typelist[i] == 'STRING'):
@@ -1371,15 +1390,26 @@ def p_MethodInvocation(p):
 				code.append("appendstr " + p[3].place[i] + " " + p[3].place[0] )
 
 			elif(p[3].typelist[i] == 'INT'):
-				func_name = "append"
-				code.append("append " + p[3].place[i] + " " + p[3].place[0])
-				name = currentScope.LookUpListScope(p[3].place[0])
-				if name:
-					tem = tem + 1
-					name.listdict[p[3].place[0]] = name.listdict[p[3].place[0]] + 1; 
+				if p[3].typelist[0] == "LIST@LIST@INT":
+					if i == 1:
+						continue
+					func_name = "append"
+					code.append("append " + p[3].place[i] + " " + p[3].place[0] + " " + p[3].place[1])
+					name = currentScope.LookUpListScope(p[3].place[0])
+					if name:
+						name.listdict[p[3].place[0]][p[3].place[1]] = name.listdict[p[3].place[0]][p[3].place[1]] + 1; 
+					else:
+						Error = Error + 1
+						print "Error List " + p[3].place[0] + " not declared"  
 				else:
-					Error = Error + 1
-					print "Error List " + p[3].place[0] + " not declared"  
+					func_name = "append"
+					code.append("append " + p[3].place[i] + " " + p[3].place[0])
+					name = currentScope.LookUpListScope(p[3].place[0])
+					if name:
+						name.listdict[p[3].place[0]] = name.listdict[p[3].place[0]] + 1; 
+					else:
+						Error = Error + 1
+						print "Error List " + p[3].place[0] + " not declared"  
 
 		p[0] = Node("MethodInvocation", [p[1], p[3]], [] , order='cc',code=p[1].code + p[3].code + code)
 		return

@@ -1,4 +1,5 @@
 LIST f2
+LIST f3 10
 label: func_1_t
 arg b
 arg a 0
@@ -10,10 +11,13 @@ LIST f
 append 1 f
 append 2 f
 append 3 f
+append 2 f3 1
+append 3 f3 1
 deletetail f
+deletetail f3 1
 append 4 f
-<- f 0 t21
-print t21
+<- f 0 t33
+print t33
 = a 55 a
 printstr Double quote (\") is escaped
 pusharg DEFAULT a
