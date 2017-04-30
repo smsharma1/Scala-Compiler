@@ -3,10 +3,14 @@ message db "Register = %d", 10, 0
 formatin: db "%d", 0
 formatout: db "%d ", 0
 formatdouble: db "%lf", 0
+<<<<<<< HEAD
 
 str18 db 'Double quote (\") is escaped',0
 len_str18 equ $ - str18
 f2 TIMES 0 DW  0
+=======
+a TIMES 40 DW  0
+>>>>>>> bfbfafe34f53a4445b5ed5b71e704c730306886c
 
 section .text
 	global main
@@ -22,23 +26,259 @@ call func_1_main
 mov  eax, 1
 int  0x80
 
-func_1_t:
+func_1_partition:
 push ebp
 mov ebp, esp
-sub esp, 0
-push eax
-push ebx
-push ecx
-push edx
+sub esp, 128
+mov edx,4
+mov eax,[8 + ebp]
+imul edx
+mov ebx,a
+add ebx,eax
+mov ebx, [ebx]
+mov edx, ebx
+mov ecx, [12 + ebp]
+sub ecx, 1
+mov [-12 + ebp], edx
+mov edx, ecx
+mov [-20 + ebp], edx
+mov edx, [12 + ebp]
+mov [-24 + ebp], edx
+mov edx, [8 + ebp]
+sub edx, 1
+mov [-28 + ebp], edx
+mov edx, [-28 + ebp]
+mov [-32 + ebp], edx
+mov edx, [12 + ebp]
+mov [-4 + ebp], eax
+mov [-8 + ebp], ebx
+mov [-16 + ebp], ecx
+mov [-24 + ebp], edx
 
-xor eax, eax
-push eax
-push ebx
-push ecx
-push edx
+t54:
+mov eax, [-24 + ebp]
+cmp eax,[-32 + ebp]
+mov [-24 + ebp], eax
+jg t56
+mov edx,4
+mov eax,[-24 + ebp]
+imul edx
+mov ebx,a
+add ebx,eax
+mov ebx, [ebx]
+cmp ebx,[-12 + ebp]
+mov [-36 + ebp], eax
+mov [-40 + ebp], ebx
+jle t23
+mov edx, 0
+mov [-44 + ebp], edx
+jmp t24
 
-xor eax, eax
+t23:
+mov edx, 1
+mov [-44 + ebp], edx
+
+t24:
+mov eax, [-44 + ebp]
+cmp eax,0
+mov [-44 + ebp], eax
+je t53
+mov edx, [-20 + ebp]
+add edx, 1
+mov ecx, edx
+mov [-48 + ebp], edx
+mov edx,4
+mov eax,ecx
+imul edx
+mov ebx,a
+add ebx,eax
+mov ebx, [ebx]
+mov edx, ebx
+mov [-60 + ebp], edx
+mov edx,4
+mov [-52 + ebp], eax
+mov eax,ecx
+imul edx
+mov edx,a
+add edx,eax
+mov [-68 + ebp], edx
+mov edx,4
+mov [-64 + ebp], eax
+mov eax,[-24 + ebp]
+imul edx
+mov edx,a
+add edx,eax
+mov edx, [edx]
+mov [-20 + ebp], ecx
+mov ecx,[-68 + ebp]
+mov [ecx],edx
+mov [-76 + ebp], edx
+mov edx,4
+mov [-72 + ebp], eax
+mov eax,[-24 + ebp]
+imul edx
+mov ecx,a
+add ecx,eax
+mov [-84 + ebp], ecx
+mov ecx,[-60 + ebp]
+mov edx, [-84 + ebp]
+mov [edx],ecx
+mov [-80 + ebp], eax
+mov [-56 + ebp], ebx
+mov [-84 + ebp], edx
+
+t53:
+
+t55:
+mov edx, [-24 + ebp]
+add edx, 1
+mov [-24 + ebp], edx
+jmp t54
+
+t56:
+mov edx, [-20 + ebp]
+add edx, 1
+mov [-88 + ebp], edx
+mov edx,4
+mov eax,[-88 + ebp]
+imul edx
+mov ebx,a
+add ebx,eax
+mov ebx, [ebx]
+mov edx, ebx
+mov ecx, [-20 + ebp]
+add ecx, 1
+mov [-32 + ebp], edx
+mov edx,4
+mov [-92 + ebp], eax
+mov eax,ecx
+imul edx
+mov edx,a
+add edx,eax
+mov [-108 + ebp], edx
+mov edx,4
+mov [-104 + ebp], eax
+mov eax,[8 + ebp]
+imul edx
+mov edx,a
+add edx,eax
+mov edx, [edx]
+mov [-100 + ebp], ecx
+mov ecx,[-108 + ebp]
+mov [ecx],edx
+mov [-116 + ebp], edx
+mov edx,4
+mov [-112 + ebp], eax
+mov eax,[8 + ebp]
+imul edx
+mov ecx,a
+add ecx,eax
+mov [-124 + ebp], ecx
+mov ecx,[-32 + ebp]
+mov edx, [-124 + ebp]
+mov [edx],ecx
+mov ecx, [-20 + ebp]
+add ecx, 1
+mov [-124 + ebp], edx
+mov edx, ecx
+mov [-120 + ebp], eax
+mov [-96 + ebp], ebx
+mov [-128 + ebp], ecx
+mov [-20 + ebp], edx
+mov eax, [-20 + ebp]
+mov esp, ebp
+pop ebp
+ret
+mov esp, ebp
+pop ebp
+ret
+
+func_1_quickSort:
+push ebp
+mov ebp, esp
+sub esp, 28
 mov eax, [12 + ebp]
+cmp eax,[8 + ebp]
+jl t86
+mov edx, 0
+mov [12 + ebp], eax
+mov [-4 + ebp], edx
+jmp t87
+
+t86:
+mov edx, 1
+mov [-4 + ebp], edx
+
+t87:
+mov eax, [-4 + ebp]
+cmp eax,0
+mov [-4 + ebp], eax
+je t112
+mov  eax, [12 + ebp]
+push eax
+mov  ebx, [8 + ebp]
+push ebx
+mov [12 + ebp], eax
+mov [8 + ebp], ebx
+call func_1_partition
+mov edx, eax
+mov ecx, edx
+sub ecx, 1
+mov ebx, ecx
+mov [-12 + ebp], edx
+mov edx, [-12 + ebp]
+add edx, 1
+mov [-24 + ebp], edx
+mov edx, [-24 + ebp]
+mov [-28 + ebp], edx
+mov  edx, [12 + ebp]
+push edx
+push ebx
+mov [-8 + ebp], eax
+mov [-20 + ebp], ebx
+mov [-16 + ebp], ecx
+mov [12 + ebp], edx
+call func_1_quickSort
+mov  eax, [-28 + ebp]
+push eax
+mov  ebx, [8 + ebp]
+push ebx
+mov [-28 + ebp], eax
+mov [8 + ebp], ebx
+call func_1_quickSort
+
+t112:
+mov esp, ebp
+pop ebp
+ret
+
+func_1_print:
+push ebp
+mov ebp, esp
+sub esp, 12
+mov edx, 0
+mov edx, 0
+mov [-4 + ebp], edx
+
+t125:
+mov eax, [-4 + ebp]
+cmp eax,[8 + ebp]
+mov [-4 + ebp], eax
+jg t127
+mov edx,4
+mov eax,[-4 + ebp]
+imul edx
+mov ebx,a
+add ebx,eax
+mov ebx, [ebx]
+mov [-8 + ebp], eax
+push eax
+push ebx
+push ecx
+push edx
+
+xor eax, eax
+mov eax, ebx
 push eax
 push message
 call printf
@@ -48,6 +288,62 @@ pop ecx
 pop ebx
 pop eax
 
+mov [-12 + ebp], ebx
+
+t126:
+mov edx, [-4 + ebp]
+add edx, 1
+mov [-4 + ebp], edx
+jmp t125
+
+t127:
+mov esp, ebp
+pop ebp
+ret
+
+func_1_scan:
+push ebp
+mov ebp, esp
+<<<<<<< HEAD
+sub esp, 64
+=======
+sub esp, 16
+mov edx, 0
+mov ecx, 0
+mov edx, 0
+mov [-8 + ebp], ecx
+mov [-4 + ebp], edx
+
+t144:
+mov eax, [-4 + ebp]
+cmp eax,[8 + ebp]
+mov [-4 + ebp], eax
+jg t146
+push eax
+mov eax, esp
+push eax
+push formatin
+call scanf
+add esp, 8
+mov ebx, [esp]
+pop eax
+mov edx,4
+mov eax,[-4 + ebp]
+imul edx
+mov ecx,a
+add ecx,eax
+mov [ecx],ebx
+mov [-12 + ebp], eax
+mov [-8 + ebp], ebx
+mov [-16 + ebp], ecx
+
+t145:
+mov edx, [-4 + ebp]
+add edx, 1
+mov [-4 + ebp], edx
+jmp t144
+
+t146:
 mov esp, ebp
 pop ebp
 ret
@@ -55,4 +351,19 @@ ret
 func_1_main:
 push ebp
 mov ebp, esp
-sub esp, 64
+sub esp, 0
+mov  eax, 9
+push eax
+call func_1_scan
+mov  eax, 0
+push eax
+mov  ebx, 9
+push ebx
+call func_1_quickSort
+mov  eax, 9
+push eax
+call func_1_print
+mov esp, ebp
+pop ebp
+ret
+>>>>>>> bfbfafe34f53a4445b5ed5b71e704c730306886c

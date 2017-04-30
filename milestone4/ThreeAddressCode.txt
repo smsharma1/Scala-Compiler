@@ -1,10 +1,136 @@
-LIST f2
-label: func_1_t
-arg b
-arg a 0
-print a
+ARRAY a 10
+label: func_1_partition
+arg high
+arg low
+* high 4 t4
+<- a t4 t3
+= pivot t3 pivot
+- low 1 t7
+= i t7 i
+= j low j
+- high 1 t12
+= till t12 till
+= j low j
+label: t54
+cmp j till
+jg t56
+* j 4 t22
+<- a t22 t21
+cmp t21 pivot
+jle t23
+= t25 0 t25
+goto t24
+label: t23
+= t25 1 t25
+label: t24
+cmp t25 0
+je t53
++ i 1 t28
+= i t28 i
+* i 4 t34
+<- a t34 t33
+= temp t33 temp
+* i 4 t40
+-> a t40 t39
+* j 4 t44
+<- a t44 t43
+<--> t39 t43 t39
+* j 4 t50
+-> a t50 t49
+<--> t49 temp t49
+label: t53
+label: t55
++ j 1 j
+goto t54
+label: t56
++ i 1 t57
+* t57 4 t61
+<- a t61 t60
+= till t60 till
++ i 1 t64
+* t64 4 t68
+-> a t68 t67
+* high 4 t72
+<- a t72 t71
+<--> t67 t71 t67
+* high 4 t78
+-> a t78 t77
+<--> t77 till t77
++ i 1 t81
+= i t81 i
+ret2 i
+ret
+label: func_1_quickSort
+arg high
+arg low
+cmp low high
+jl t86
+= t88 0 t88
+goto t87
+label: t86
+= t88 1 t88
+label: t87
+cmp t88 0
+je t112
+pusharg low
+pusharg high
+call func_1_partition
+get t95
+= pi t95 pi
+- pi 1 t98
+= t t98 t
++ pi 1 t101
+= u t101 u
+pusharg low
+pusharg t
+call func_1_quickSort
+pusharg u
+pusharg high
+call func_1_quickSort
+label: t112
+ret
+label: func_1_print
+arg size
+= i 0 i
+= i 0 i
+label: t125
+cmp i size
+jg t127
+* i 4 t122
+<- a t122 t121
+print t121
+label: t126
++ i 1 i
+goto t125
+label: t127
+ret
+label: func_1_scan
+arg size
+= i 0 i
+= t 0 t
+= i 0 i
+label: t144
+cmp i size
+jg t146
+read t
+* i 4 t141
+-> a t141 t140
+<--> t140 t t140
+label: t145
++ i 1 i
+goto t144
+label: t146
 ret
 label: func_1_main
+<<<<<<< HEAD
+pusharg 9
+call func_1_scan
+pusharg 0
+pusharg 9
+call func_1_quickSort
+pusharg 9
+call func_1_print
+=======
 ARRAY f1 10
 LIST f
 append 1 f
@@ -19,4 +145,16 @@ printstr Double quote (\") is escaped
 pusharg DEFAULT a
 pusharg 10
 call func_1_t
+<<<<<<< HEAD
+=======
+=======
+append 1 f
+append 2 f
+append 3 f
+<- f2 4 t23
+= j t23 j
+print j
+>>>>>>> 00b794e2c7a59dbb034c710e3d3714ca058a7630
+>>>>>>> c8fffc02e8981cfcb87b01ad086cb930ca45bf9c
+>>>>>>> bfbfafe34f53a4445b5ed5b71e704c730306886c
 ret
