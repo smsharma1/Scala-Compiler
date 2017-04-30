@@ -70,13 +70,11 @@ def getreg(l, y, ino, special = None):
 
 #this function free the register
 def storereg(regno):
-    # print datafile.registerdescriptor[regno],"======================================================="
     try:
         int(datafile.registerdescriptor[regno])
         pass
     except:
         if datafile.registerdescriptor[regno] != None:
-            # print "99999999999999999999999999999999999999999", mem(datafile.registerdescriptor[regno]),"666666"
             datafile.blockout.append("mov {}, {}".format(mem(datafile.registerdescriptor[regno]), regno))
             datafile.lineno = datafile.lineno + 1
             datafile.addressdescriptor[datafile.registerdescriptor[regno]] = None
@@ -90,7 +88,6 @@ def mem(var):
     except :
         if var in datafile.globalsection or var in datafile.setofarray.keys() or var in datafile.setofList.keys():
             return str(var)
-        # print datafile.registerlist, "this is registerlistin mem"
         if var in datafile.registerlist:
             return var
         else:
@@ -100,27 +97,19 @@ def mem(var):
                 if var in datafile.memorymap[k].keys() :
                     return datafile.memorymap[k][var]
             else :
-                # print "blah blah blah hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh", var ,"blah blah"
                 return str(var)
 #This function is for Yprime 
 def gety(var):
-    # print var , "in gety"
-    # print datafile.allvariables, "hare all the variables"
     if var in datafile.allvariables:
-        # print "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
         if datafile.addressdescriptor[var] != None:
-            # print "are you jing??????????????????????????????????/"
             datafile.yprime = datafile.addressdescriptor[var]
         else:
-            # print "i am so big"
             datafile.yprime = var
     if datafile.yprime != datafile.L :
-        # print mem(datafile.L), " " , mem(datafile.yprime), "              %&*&_**&^%$%^&*(*&^%$%^&*("
         datafile.blockout.append("mov " + mem(datafile.L) + ", " + mem(datafile.yprime))
 
 #Update the addressdescriptor after operation is done
 def UpdateAddressDescriptor(x):
-    # print x, "<----------------------------------------------->",datafile.L,datafile.addressdescriptor
     if datafile.L in datafile.registerlist:
         datafile.addressdescriptor[x] = datafile.L
         datafile.registerdescriptor[datafile.L] = x
@@ -135,8 +124,6 @@ def UpdateAddressDescriptor(x):
 
 #Free the register
 def freereg(var, ino):
-    # if datafile.addressdescriptor[var] == None:
-    #     print " i am happpy pyeaypyfpape ypfyfyaeyfpafypa yfpayfpadsfsajfufuckfuckf ufckf uck fju"
     if var in datafile.allvariables :
         if datafile.symtable[ino][var] == 1000000007 and datafile.addressdescriptor[var] != None:
             datafile.registerdescriptor[datafile.addressdescriptor[var]] = None
@@ -155,7 +142,6 @@ def emptyregister(var,left=[]):
             int(datafile.registerdescriptor[k])
             continue
         except:
-            # print var, k ,datafile.registerdescriptor[k],datafile.symtable, "checking in emptyregister"
             if nextuse <= datafile.symtable[var][datafile.registerdescriptor[k]]:  #we have to free the register its important 
                 reg = k
                 nextuse = datafile.symtable[var][datafile.registerdescriptor[k]]
@@ -164,7 +150,5 @@ def emptyregister(var,left=[]):
 
 #before block ends save all the register
 def save():
-    # print "''''''''''''''''''''''''''''''''''''''''''''''''''''''''"
     for reg in datafile.registerlist:
-        # print "gggggggggggggggggggggggggggggg",reg,"hhhhhhhhhhhhhhhhhhhhhhhhhh"
         storereg(reg)

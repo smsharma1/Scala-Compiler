@@ -16,7 +16,6 @@ symbol_file = open("Symbols.csv", "w+")
 def newtemp():
 	global tempcount
 	tempcount = tempcount + 1
-	#print "t" + str(tempcount)
 	return "t" + str(tempcount)
 
 class Node:
