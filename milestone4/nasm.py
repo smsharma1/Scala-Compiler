@@ -71,7 +71,7 @@ def asm():
     datafile.lineno = datafile.lineno + 3
 
     print('global main\n\n')
-    f.write('global main\nextern printf\nextern scanf\nextern fopen\nextern fscanf\nextern fprintf\nextern fclose\n\n')
+    f.write('global main\nextern printf\nextern scanf\nextern fopen\nextern fscanf\nextern fprintf\nextern fclose\nextern sin\n')
     datafile.lineno = datafile.lineno + 3
     print('main:')
     f.write('main:\n')

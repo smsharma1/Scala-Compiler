@@ -1,32 +1,80 @@
-LIST f3 10
-label: func_1_main
-= i 0 i
-append 2 f3 1
-append 3 f3 1
-append 4 f3 1
-append 4 f3 3
+label: func_1_acker
+arg n
+arg m 0
+= t 0 t
+= z 0 z
+= l 0 l
+cmp m 0
+je t11
+= t13 0 t13
+goto t12
+label: t11
+= t13 1 t13
+label: t12
+cmp t13 0
+je t19
++ n 1 t14
+= t t14 t
+ret2 t
+label: t19
+cmp n 0
+je t22
 = t24 0 t24
-= t25 0 t25
-* t25 4 t25
-+ t24 t25 t24
-<- f3 t24 t23
-print t23
-= t33 0 t33
-= t34 1 t34
-* t34 4 t34
-+ t33 t34 t33
-<- f3 t33 t32
-print t32
-= t42 0 t42
-= t43 2 t43
-* t43 4 t43
-+ t42 t43 t42
-<- f3 t42 t41
-print t41
-= t51 12 t51
-= t52 0 t52
-* t52 4 t52
-+ t51 t52 t51
-<- f3 t51 t50
-print t50
+goto t23
+label: t22
+= t24 1 t24
+label: t23
+cmp t24 0
+je t37
+- m 1 t25
+= z t25 z
+pusharg z
+pusharg 1
+call func_1_acker
+get t32
+= t t32 t
+ret2 t
+label: t37
+- n 1 t38
+= z t38 z
+pusharg m
+pusharg z
+call func_1_acker
+get t45
+= l t45 l
+- m 1 t48
+= z t48 z
+pusharg z
+pusharg l
+call func_1_acker
+get t55
+= t t55 t
+ret2 t
+ret
+label: func_1_main
+= m 0 m
+= n 0 n
+= k 0 k
+= m 0 m
+label: t86
+cmp m 3
+jg t88
+= n 0 n
+label: t83
+cmp n 9
+jg t85
+pusharg m
+pusharg n
+call func_1_acker
+get t78
+= k t78 k
+print k
+label: t84
++ n 1 n
+goto t83
+label: t85
+label: t87
++ m 1 m
+goto t86
+label: t88
 ret
