@@ -92,44 +92,66 @@ ret
 label: func_1_print
 arg size
 = i 0 i
+= filew 0 filew
+pusharg2 output
+pusharg2 w
+fopen output w
+get t121
+= filew t121 filew
+= out 0 out
 = i 0 i
-label: t125
+label: t141
 cmp i size
-jg t127
-* i 4 t122
-<- a t122 t121
-print t121
-label: t126
+jg t143
+* i 4 t133
+<- a t133 t132
+= out t132 out
+pusharg out
+pushaddr formatout
+pusharg filew
+fwrite filew out
+get t140
+label: t142
 + i 1 i
-goto t125
-label: t127
+goto t141
+label: t143
+pusharg filew
+fclose filew
+get t146
 ret
 label: func_1_scan
 arg size
 = i 0 i
 = t 0 t
+= filep 0 filep
+pusharg2 data.txt
+pusharg2 r
+fopen data.txt r
+get t157
+= filep t157 filep
 = i 0 i
-label: t144
+label: t175
 cmp i size
-jg t146
-read t
-* i 4 t141
--> a t141 t140
-<--> t140 t t140
-label: t145
+jg t177
+pushaddr t
+pushaddr formatin
+pusharg filep
+fread filep t
+get t168
+* i 4 t172
+-> a t172 t171
+<--> t171 t t171
+label: t176
 + i 1 i
-goto t144
-label: t146
+goto t175
+label: t177
+pusharg filep
+fclose filep
+get t180
 ret
 label: func_1_main
 pusharg 9
 call func_1_scan
-= filep 0 filep
-pusharg2 data.txt
-pusharg2 w
-fopen data.txt w
-get t155
-= filep t155 filep
 pusharg 0
 pusharg 9
 call func_1_quickSort

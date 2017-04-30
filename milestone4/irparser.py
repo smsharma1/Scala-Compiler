@@ -6,10 +6,15 @@ import symboltable
 import pickle
 
 def checkbranching(name) :
-    if name in ['jump', 'call', 'goto', 'label:', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne','ret','ret1','ret2','printstr','pusharg2', 'fopen']:
+    if name in ['jump', 'call', 'goto', 'label:', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne','ret','ret1','ret2','printstr','pusharg2','pushaddr', 'fopen', 'fwrite', 'fread', 'fclose']:
         return True
     else:
         return False
+def default(name1,name2):
+    if name1 == "pusharg" and name2 == "DEFAULT":
+        return False
+    else:
+        return True
 
 def Size(type1):
     if type1=="INT":
@@ -44,7 +49,10 @@ def checkvariable(name):
             float(name)
             return False
         except:
-            return True
+            if name == "DEFAULT":
+                return False
+            else:
+                return True
 
 if __name__ == "__main__" :
     filename = sys.argv[1]
@@ -69,7 +77,7 @@ if __name__ == "__main__" :
         #print node
         if not checkbranching(node[1]):
             for i in range(2 , (len(listvar) + 1)):
-                if(checkvariable(node[i])):
+                if(checkvariable(node[i]) and default(node[1],node[2]) ):
                     if(flag):
                         if node[i] not in datafile.memorymap[scopefunc].keys():
                             # print node[i - 1], node[i], "checking"
@@ -77,8 +85,8 @@ if __name__ == "__main__" :
                                 datafile.memorymap[scopefunc][node[2]] = '['+str(arglength) + ' + ebp]'
                                 try:
                                     node[3]
-                                    datafile.meta[scopefunc].append("mov eax," + node[3])
-                                    datafile.meta[scopefunc].append("mov " + '['+str(arglength) + ' + ebp],' + "eax")
+                                    datafile.meta[node[2]] = node[3] 
+                                #     datafile.meta[scopefunc].append("mov " + '['+str(arglength) + ' + ebp],' + "eax")
                                 except:
                                     pass
                                 # print node[2], currentScope.LookUpVarSize(node[2])[1], " this is the type"
@@ -116,7 +124,7 @@ if __name__ == "__main__" :
             # print node[2], "oooooooooooooooooaoaoaoaoaoaoaoaooooooooooooooooo"
             flag = 1
             scopefunc = node[2]
-            datafile.meta[scopefunc] = []
+            # datafile.meta[scopefunc] = {}
             newScope = currentScope.parent.functions[node[2][7:]][0]
             newScope.returnScope = currentScope
             currentScope = newScope
@@ -149,7 +157,7 @@ if __name__ == "__main__" :
         if node[3] == '`':
             datafile.instruction.append(datafile.a3acinst(int(node[0]),node[2],node[1],None,'Unary',node[4]))
             continue
-        if node[1] in ['je','jne','jg','jge','jl','jle','goto','pusharg','pusharg2','call','label:','print','printstr','read','ret', 'get', 'ret1', 'ret2']:
+        if node[1] in ['je','jne','jg','jge','jl','jle','goto','pusharg','pusharg2','pushaddr','call','label:','print','printstr','read','ret', 'get', 'ret1', 'ret2']:
             if node[1] == 'pusharg2':
                 for i in range(0,5):
                     if node[i]:

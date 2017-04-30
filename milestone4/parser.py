@@ -332,7 +332,7 @@ def p_VariableDeclarators(p):
 						| VariableDeclarator COMMA VariableDeclarators'''
 	if len(p)==4:
 		p[0] = Node("VariableDeclarators", [p[1], p[3]],[p[2]],typelist = p[1].typelist + p[3].typelist, order="clc",place = p[1].place + ',,,' +  p[3].place,defaultdict =dict(p[1].defaultdict.items() + p[3].defaultdict.items()))
-		print p[0].defaultdict,"{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}",p[1].defaultdict,p[3].defaultdict 
+		# print p[0].defaultdict,"{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}",p[1].defaultdict,p[3].defaultdict 
 	else:
 		p[0] = p[1]
 		# p[0] = Node("VariableDeclarators", [p[1]],[],typelist = p[1].typelist, order="c") 
@@ -352,9 +352,9 @@ def p_VariableDeclarator(p):
 	if len(p) == 4:
 		p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]],typelist = p[3].typelist, order="llc",place = p[1]) 
 	else:
-		print p[3].type, "+++++++++++++++++++++++++++++++++++++++++++++"
+		# print p[3].type, "+++++++++++++++++++++++++++++++++++++++++++++"
 		p[0] = Node("VariableDeclarator", [p[3]],[p[1],p[2]],typelist = p[3].typelist, order="llc",place = p[1],defaultdict = {p[1]:p[3].type})
-		print p[0].defaultdict,"[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]"
+		# print p[0].defaultdict,"[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]"
 def p_VariableInitializer(p):
 	'''VariableInitializer : ArrayInitializer
 							| Expression
@@ -408,7 +408,7 @@ def p_MethodHeader(p):
 		else:
 			parentScope.functions[p[2].typelist[0]] = currentScope
 			currentScope.InsertFuncDetails(p[2].typelist[0], p[2].typelist[1:],[])
-			print currentScope.name ," i am in method header see me please"
+			# print currentScope.name ," i am in method header see me please"
 		p[0] = Node("MethodHeader", [p[1], p[2], p[3]],[],typelist = p[2].typelist + [] ,order="ccc",meta=p[2].meta,code=l1+p[2].code)
 
 def p_MethodDefine(p):
@@ -1007,6 +1007,7 @@ def p_LeftHandSide(p):
 	'''LeftHandSide : AmbiguousName'''
 					# | FieldAccess
 	p[0] = p[1] #Node("LeftHandSide", [p[1]],[],typelist=p[1].type,order='c')
+	print p[0].type ,"999999999999999999999999999999999999999999999"
 
 def p_AssignmentOperator(p):
 	'''AssignmentOperator : EQUALASS
@@ -1046,7 +1047,7 @@ def p_Assignment(p):
 		p[0] = Node(p[2], [p[1], p[3]],[], order="cc",isLeaf=True,code = p[1].code + p[3].code + code)
 						#return sys.exit("assignment mismatch error")
 	else:
-		print "000000000000000000000000000000000000000000000000000",p[2].type, p[1].place
+		print "000000000000000000000000000000000000000000000000000",p[2].type, p[1]
 		code = [p[2].type+ " " + p[1].place + " " + p[3].place + " " + p[1].place]
 		# print p[1].typelist[0], " " ,p[2].type, " " , p[3].typelist[0], "assignment"
 		if not allowed(p[1].typelist[0], p[3].typelist[0]) :
@@ -1360,7 +1361,6 @@ def p_MethodInvocation(p):
 			Error = Error + 1
 		for k in p[3].meta:
 			code.append("pusharg2 " + k)
-		func_name = "fopen"
 		# print "####"+p[3].meta[0]+"####"+p[3].meta[1]+"##############################################################"
 		code.append("fopen " + p[3].meta[0] + " " + p[3].meta[1])
 		temp = newtemp()
@@ -1369,12 +1369,44 @@ def p_MethodInvocation(p):
 		p[0] = Node("MethodInvocation", [p[1], p[3]], [] ,code =p[1].code + p[3].code + code, order='cc', typelist=['INT'], place=temp)
 		return
 	if(p[1].type == "fread"):
-		if( len(p[3].type) != 1):
-			print("fread() takes exactly one argument")
+		if( len(p[3].meta) != 2):
+			print("fread() takes exactly 2 arguments")
 			Error = Error + 1
-		func_name = "fread"
-		code.append("fread " + p[3].place)
-		p[0] = Node("MethodInvocation", [p[1], p[3]], [] ,code =p[1].code + p[3].code + code, order='cc')
+		argstr= ""
+		code.append("pushaddr " + p[3].meta[1])
+		code.append("pushaddr formatin")
+		code.append("pusharg " + p[3].meta[0])		
+		code.append("fread " + p[3].meta[0]+ " " + p[3].meta[1])
+		temp = newtemp()
+		code.append('get ' + temp)
+		currentScope.InsertVar(temp,0, 'INT')
+		p[0] = Node("MethodInvocation", [p[1], p[3]], [] ,code =p[1].code + p[3].code + code, order='cc', typelist=['INT'], place=temp)
+		return
+	if(p[1].type == "fwrite"):
+		if( len(p[3].meta) != 2):
+			print("fwrite() takes exactly 2 arguments")
+			Error = Error + 1
+		code.append("pusharg " + p[3].meta[1])
+		code.append("pushaddr formatout")
+		code.append("pusharg " + p[3].meta[0])
+		code.append("fwrite " + p[3].meta[0] + " " + p[3].meta[1])
+		temp = newtemp()
+		code.append('get ' + temp)
+		currentScope.InsertVar(temp,0, 'INT')
+		p[0] = Node("MethodInvocation", [p[1], p[3]], [] ,code =p[1].code + p[3].code + code, order='cc', typelist=['INT'], place=temp)
+		return
+	if(p[1].type == "fclose"):
+		if( len(p[3].meta) != 1):
+			print("fclose() takes takes file pointer as only argument")
+			Error = Error + 1
+		for k in p[3].meta:
+			code.append("pusharg " + k)
+		# print "####"+p[3].meta[0]+"####"+p[3].meta[1]+"##############################################################"
+		code.append("fclose " + p[3].meta[0])
+		temp = newtemp()
+		code.append('get ' + temp)
+		currentScope.InsertVar(temp,0, 'INT')
+		p[0] = Node("MethodInvocation", [p[1], p[3]], [] ,code =p[1].code + p[3].code + code, order='cc', typelist=['INT'], place=temp)
 		return
 	if p[3] == None :
 		if (currentScope.LookUpFunc(p[1].type,[])==False):
@@ -1527,8 +1559,11 @@ def p_ClassInstanceCreationExpression(p):
 # <argument list> ::= <expression> | <argument list> , <expression>
 def p_ArgumentList(p):
 	'''ArgumentList : Expression
+					| R_DEFAULT ID
 					| ArgumentList COMMA Expression'''
-	if len(p) == 2:
+	if p[1] == "default":
+		p[0] = Node('ArgumentList',[ ],[p[1]],order='l',typelist=['INT'],place= "DEFAULT " + p[2])
+	elif len(p) == 2:
 		#print p[1].typelist, " p[1].typelist in ArgumentList"
 		p[0] = p[1]
 		# p[0] = Node('ArgumentList',[p[1]],[],typelist = p[1].typelist,order='c')
@@ -1579,16 +1614,21 @@ def p_AmbiguousName(p):
 					| AmbiguousName DOT ID'''
 	global currentScope
 	global rootScope
-	#print p[1],"hello i am here",currentScope.LookUpSymbol(p[1])
-	
+	print p[1],"hello i am here", " $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+	p[1] = p[1].strip()
 	if len(p)==2:
 		if p[1] == 'println':
 			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
 		elif p[1] == 'read':
 			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
 		elif p[1] == 'fopen':
+			print "inside fopen $%^&*%^&%^&*%^&"
 			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
 		elif p[1] == 'fread':
+			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
+		elif p[1] == 'fwrite':
+			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
+		elif p[1] == 'fclose':
 			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
 		else:
 			returnType = currentScope.LookUpSymbolType(p[1])

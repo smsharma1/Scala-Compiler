@@ -38,6 +38,7 @@ def asm():
     print("section .data")
     f.write("section .data\nmessage db \"Register = %d\", 10, 0\n")
     f.write("formatin: db \"%d\", 0\n")
+    f.write("formatout: db \"%d \", 0\n")
     f.write("formatdouble: db \"%lf\", 0\n")
     # f.write("fname: db \"data.txt\", 0 \n")
     # for k,v in datafile.setofString.items() :
@@ -89,7 +90,7 @@ def asm():
     # datafile.lineno = datafile.lineno + 3
     # print datafile.lineno, "lineno"
     print('global main\n\n')
-    f.write('global main\nextern printf\nextern scanf\nextern fopen\n')
+    f.write('global main\nextern printf\nextern scanf\nextern fopen\nextern fscanf\nextern fprintf\nextern fclose\n\n')
     datafile.lineno = datafile.lineno + 3
     # print datafile.lineno, "lineno"
     print('main:')
@@ -127,8 +128,8 @@ def asm():
                 # datafile.lineno = datafile.lineno + 1
                 print("\t" + "add esp, {}".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
                 f.write("sub esp, {}\n".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
-                for m in datafile.meta[datafile.currentscope]:
-                    f.write(m + "\n")
+                # for m in datafile.meta[datafile.currentscope]:
+                #     f.write(m + "\n")
                 # datafile.lineno = datafile.lineno + 1
         else:
             datafile.block = datafile.instruction[blockbreaker[i]:blockbreaker[i+1]]
@@ -341,8 +342,33 @@ def XOR(i):
 def PUSH_ARG2(i):
     pass
 
+def PUSH_ADDR(i):
+    var = datafile.block[i].out
+    t = False
+    
+    if(var == "formatin"):
+        datafile.blockout.append("push formatin")
+        return
+    elif(var == "formatout"):
+        datafile.blockout.append("push formatout")
+        return
+
+    if datafile.addressdescriptor[var] != None :
+        place = datafile.addressdescriptor[var]
+        register.storereg(place)
+
+    place = register.emptyregister(i)
+    datafile.blockout.append("lea  " +  register.mem(place) +', ' + register.mem(var))
+    datafile.blockout.append("push " + place)
+
 def PUSH_ARG(i) :
     var = datafile.block[i].out
+    # print datafile.block[i].op1,datafile.block[i].op2,datafile.block[i].out
+    # print var , "oooooooooooooooooooohoooooooooooooooooooooooooooooohoooooooooooooooooooooooooooooohooooooo"
+    if str(var) ==  "DEFAULT":
+        datafile.blockout.append("push " + datafile.meta[datafile.block[i].op2])
+        return
+
     t = False
     
     try:
@@ -354,6 +380,7 @@ def PUSH_ARG(i) :
     else :
         place = register.emptyregister(i)
         datafile.blockout.append("mov  " +  register.mem(place) +', ' + register.mem(var))
+        datafile.addressdescriptor[var] = place
         datafile.registerdescriptor[place] = var
     datafile.blockout.append("push " + place)
 
@@ -930,6 +957,7 @@ def READ(i):
 
 def FOPEN(i):
     (y,z) = (datafile.block[i].op1,datafile.block[i].op2)
+    datafile.blockout.append("push ebx\npush ecx\npush edx")
     register.storereg("eax")
     reg = "eax"
     inno = datafile.block[i].instnumber
@@ -940,10 +968,24 @@ def FOPEN(i):
     datafile.blockout.append("mov "+reg+", "+'str'+str(int(inno-2)))
     datafile.blockout.append("push "+reg)
     datafile.blockout.append("call fopen")
-
+    datafile.blockout.append("pop edx\npop ecx\npop ebx")
 
 def FREAD(i):
-    pass
+    (y,z) = (datafile.block[i].op1,datafile.block[i].op2)
+    register.storereg("ebx")
+    register.storereg("ecx")
+    register.storereg("edx")
+    datafile.blockout.append("call fscanf")
 
-OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'pusharg2': PUSH_ARG2, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL, 'printstr': PRINTSTR, 'print' : PRINT, 'read' : READ, 'fopen' : FOPEN, 'fread' : FREAD, 'ret1' : RETURN1, 'ret2' : RETURN2, '->': LOADARRAY, '<-->': DEFASSIGN }
+def FWRITE(i):
+    (y,z) = (datafile.block[i].op1,datafile.block[i].op2)
+    register.storereg("ebx")
+    register.storereg("ecx")
+    register.storereg("edx")
+    datafile.blockout.append("call fprintf")
+
+def FCLOSE(i):
+    datafile.blockout.append("call fclose")
+
+OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'pusharg2': PUSH_ARG2, 'pushaddr':PUSH_ADDR, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL, 'printstr': PRINTSTR, 'print' : PRINT, 'read' : READ, 'fopen' : FOPEN, 'fread' : FREAD, 'fwrite' : FWRITE, 'fclose' : FCLOSE, 'ret1' : RETURN1, 'ret2' : RETURN2, '->': LOADARRAY, '<-->': DEFASSIGN }
 

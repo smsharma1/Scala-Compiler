@@ -33,25 +33,37 @@ object sort {
      }
      def print(size: Int){
             var i : Int = 0;
+	    var filew : Int = 0;
+	    filew = fopen("output", "w");
+	    var out : Int = 0;
             for ( i <- 0 until size )
-		    {
-                println(a[i]);
+	    {
+		out = a[i];
+		fwrite(filew, out);
+//                println(a[i]);
             }
-     }
+	    fclose(filew);
+     } 
     def scan(size: Int){
             var i : Int = 0;
             var t : Int = 0;
+	    var filep : Int = 0;
+	    filep = fopen("data.txt", "r");
             for ( i <- 0 until size )
-	     {
-                read(t);
+	    {
+                fread(filep, t);
                 a[i] = t;
             }
-     }
+	    fclose(filep);
+     } 
      def main() {
-         scan(9);
-	 var filep : Int = 0;
-	 filep = fopen("data.txt", "w");
+         scan(9);	 
          quickSort(0,9);
+	// var iamwr : Int = 4;
+	// var filep : Int = 0;
+	// filep = fopen("output", "w");
+	// fwrite(filep, iamwr);
+	// fclose(filep);
          print(9);
      }
 }

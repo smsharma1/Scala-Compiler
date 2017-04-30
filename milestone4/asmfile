@@ -1,13 +1,20 @@
 section .data
 message db "Register = %d", 10, 0
 formatin: db "%d", 0
+formatout: db "%d ", 0
 formatdouble: db "%lf", 0
 
-str128 db 'data.txt',0
+str97 db 'w',0
+len_str97 equ $ - str97
+
+str96 db 'output',0
+len_str96 equ $ - str96
+
+str128 db 'r',0
 len_str128 equ $ - str128
 
-str129 db 'w',0
-len_str129 equ $ - str129
+str127 db 'data.txt',0
+len_str127 equ $ - str127
 a TIMES 40 DW  0
 
 section .text
@@ -15,6 +22,10 @@ section .text
 extern printf
 extern scanf
 extern fopen
+extern fscanf
+extern fprintf
+extern fclose
+
 main:
 call func_1_main
 mov  eax, 1
@@ -249,48 +260,63 @@ ret
 func_1_print:
 push ebp
 mov ebp, esp
-sub esp, 16
+sub esp, 36
 mov edx, 0
+mov ecx, 0
+push ebx
+push ecx
+push edx
+xor eax, eax
+mov eax, str97
+push eax
+xor eax, eax
+mov eax, str96
+push eax
+call fopen
+pop edx
+pop ecx
+pop ebx
+mov ecx, eax
+mov ebx, 0
 mov edx, 0
+mov [-12 + ebp], eax
+mov [-16 + ebp], ebx
+mov [-8 + ebp], ecx
 mov [-4 + ebp], edx
 
-t125:
+t141:
 mov eax, [-4 + ebp]
 cmp eax,[8 + ebp]
 mov [-4 + ebp], eax
-jg t127
+jg t143
 mov edx,4
 mov eax,[-4 + ebp]
 imul edx
 mov ebx,a
 add ebx,eax
 mov ebx, [ebx]
-push eax
-push ebx
-push ecx
+mov edx, ebx
 push edx
+push formatout
+mov  ecx, [-8 + ebp]
+push ecx
+mov [-28 + ebp], ebx
+mov [-8 + ebp], ecx
+mov [-16 + ebp], edx
+call fprintf
+mov [-32 + ebp], eax
 
-xor eax, eax
-mov eax, ebx
-push eax
-push message
-call printf
-add esp, 8
-pop edx
-pop ecx
-pop ebx
-pop eax
-
-mov [-8 + ebp], eax
-mov [-16 + ebp], ebx
-
-t126:
+t142:
 mov edx, [-4 + ebp]
 add edx, 1
 mov [-4 + ebp], edx
-jmp t125
+jmp t141
 
-t127:
+t143:
+mov  eax, [-8 + ebp]
+push eax
+call fclose
+mov [-36 + ebp], eax
 mov esp, ebp
 pop ebp
 ret
@@ -298,43 +324,64 @@ ret
 func_1_scan:
 push ebp
 mov ebp, esp
-sub esp, 20
+sub esp, 36
 mov edx, 0
 mov ecx, 0
+mov ebx, 0
+push ebx
+push ecx
+push edx
+xor eax, eax
+mov eax, str128
+push eax
+xor eax, eax
+mov eax, str127
+push eax
+call fopen
+pop edx
+pop ecx
+pop ebx
+mov ebx, eax
 mov edx, 0
+mov [-16 + ebp], eax
+mov [-12 + ebp], ebx
 mov [-8 + ebp], ecx
 mov [-4 + ebp], edx
 
-t144:
+t175:
 mov eax, [-4 + ebp]
 cmp eax,[8 + ebp]
 mov [-4 + ebp], eax
-jg t146
-push eax
-mov eax, esp
+jg t177
+lea  eax, [-8 + ebp]
 push eax
 push formatin
-call scanf
-add esp, 8
-mov ebx, [esp]
-pop eax
+mov  eax, [-12 + ebp]
+push eax
+call fscanf
 mov edx,4
+mov [-20 + ebp], eax
 mov eax,[-4 + ebp]
 imul edx
-mov ecx,a
-add ecx,eax
-mov [ecx],ebx
-mov [-12 + ebp], eax
-mov [-8 + ebp], ebx
-mov [-20 + ebp], ecx
+mov ebx,a
+add ebx,eax
+mov edx,[-8 + ebp]
+mov ecx, ebx
+mov [ecx],edx
+mov [-24 + ebp], eax
+mov [-32 + ebp], ecx
 
-t145:
+t176:
 mov edx, [-4 + ebp]
 add edx, 1
 mov [-4 + ebp], edx
-jmp t144
+jmp t175
 
-t146:
+t177:
+mov  eax, [-12 + ebp]
+push eax
+call fclose
+mov [-36 + ebp], eax
 mov esp, ebp
 pop ebp
 ret
@@ -342,25 +389,14 @@ ret
 func_1_main:
 push ebp
 mov ebp, esp
-sub esp, 8
+sub esp, 0
 mov  eax, 9
 push eax
 call func_1_scan
-mov edx, 0
-xor eax, eax
-mov eax, str129
+mov  eax, 0
 push eax
-xor eax, eax
-mov eax, str128
-push eax
-call fopen
-mov edx, eax
-mov  ebx, 0
+mov  ebx, 9
 push ebx
-mov  ecx, 9
-push ecx
-mov [-8 + ebp], eax
-mov [-4 + ebp], edx
 call func_1_quickSort
 mov  eax, 9
 push eax
