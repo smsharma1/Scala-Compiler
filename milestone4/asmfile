@@ -4,8 +4,9 @@ formatin: db "%d", 0
 formatdouble: db "%lf", 0
 fname: db "data.txt", 0 
 
-str8 db 'Double quote (\") is escaped',0xa
-len_str8 equ $ - str8
+str17 db 'Double quote (\") is escaped',0xa
+len_str17 equ $ - str17
+f2 TIMES 12 DW  0
 
 section .text
 	global main
@@ -50,14 +51,14 @@ ret
 func_1_main:
 push ebp
 mov ebp, esp
-sub esp, 4
+sub esp, 60
 mov edx, 55
 push eax
 push ebx
 push ecx
 push edx
-mov edx,len_str8
-mov ecx,str8
+mov edx,len_str17
+mov ecx,str17
 mov ebx,1
 mov eax,4
 int 0x80
@@ -68,7 +69,7 @@ pop eax
 push 0
 mov  eax, 10
 push eax
-mov [-4 + ebp], edx
+mov [-60 + ebp], edx
 call func_1_t
 mov esp, ebp
 pop ebp

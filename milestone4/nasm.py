@@ -65,8 +65,10 @@ def asm():
         # f.write("\t.long {}\n".format(1))
         # datafile.lineno = datafile.lineno + 1
     for data in datafile.setofarray.keys():
-        # INVENTORY TIMES 8 DW 0
         f.write(data + " TIMES " + str(datafile.setofarray[data]) + " DW  0\n")
+    for data in datafile.setofList.keys():
+        # INVENTORY TIMES 8 DW 0
+        f.write(data + " TIMES " + str(datafile.setofList[data]) + " DW  0\n")
         # print("{}:".format(data))
         # f.write("{}:\n".format(data))
         # datafile.lineno = datafile.lineno + 1
@@ -828,6 +830,9 @@ def GOTO(i):
 def ARRAY(i):
     pass
 
+def LIST(i):
+    pass
+
 def CALL(i):
     
     # datafile.lineno = datafile.lineno + 1
@@ -951,5 +956,8 @@ def FOPEN(i):
 def FREAD(i):
     pass
 
-OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'pusharg2': PUSH_ARG2, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL, 'printstr': PRINTSTR, 'print' : PRINT, 'read' : READ, 'fopen' : FOPEN, 'fread' : FREAD, 'ret1' : RETURN1, 'ret2' : RETURN2, '->': LOADARRAY, '<-->': DEFASSIGN }
+def APPEND(i):
+    pass
+
+OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'pusharg2': PUSH_ARG2, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL, 'printstr': PRINTSTR, 'print' : PRINT, 'read' : READ, 'fopen' : FOPEN, 'fread' : FREAD, 'ret1' : RETURN1, 'ret2' : RETURN2, '->': LOADARRAY, '<-->': DEFASSIGN, 'LIST' : LIST, 'append' : APPEND }
 

@@ -11,6 +11,7 @@ class Dictlist(dict):
 class SymbolTable:
 	uid = 0
 	def __init__(self, parent, name, argList=[], returnType=None): # parent scope and symbol table name
+		self.listdict = {}
 		self.functions = Dictlist()
 		self.variables = {}
 		self.classes = Dictlist()
@@ -79,7 +80,22 @@ class SymbolTable:
 						return True
 			scope = scope.parent
 		return False
-	
+
+	def LookUpListScope(self, symbolName):
+		scope = self
+		if(self.LookUpCurrentScope(symbolName)):
+			if(symbolName in scope.listdict):
+				pass
+			else:
+				return False
+		while(scope):
+		#	print "scope.functions " , scope.functions
+			if symbolName in scope.listdict.keys():
+				return scope 
+			else:
+				scope = scope.parent
+		return False
+
 	def LookUpCurrentScope(self, symbolName):
 		scope = self
 		# print symbolName
@@ -94,6 +110,8 @@ class SymbolTable:
 		elif symbolName in scope.objects:
 			# print self.objects[symbolName]
 			return ['object', self.objects[symbolName][0].name]
+		elif symbolName in scope.listdict:
+			return True
 		else:
 			return False
 

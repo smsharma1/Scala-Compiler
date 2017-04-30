@@ -1,9 +1,18 @@
+LIST f2
 label: func_1_t
 arg b
 arg a 0
 print a
 ret
 label: func_1_main
+ARRAY f1 10
+LIST f
+append 1 f
+append 2 f
+append 3 f
+append 1 f2
+append 2 f2
+append 3 f2
 = a 55 a
 printstr Double quote (\") is escaped
 pusharg DEFAULT a
