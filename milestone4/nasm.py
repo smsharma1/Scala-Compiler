@@ -786,7 +786,7 @@ def LOADARRAY(i):
     else:
         datafile.blockout.append("mov " + reg + "," + t)
     # datafile.blockout.append("lea " + reg + "," + register.mem(datafile.yprime))
-    if (y in datafile.globalsection) or (y in datafile.setofarray):
+    if (y in datafile.globalsection) or (y in datafile.setofarray) or (y in datafile.setofList):
         datafile.blockout.append("add " + reg + "," + register.mem(datafile.zprime))
         # datafile.blockout.append("i am in loadarray")
     else:
@@ -825,7 +825,7 @@ def ARRAYLOAD(i):
         datafile.blockout.append("lea " + reg + "," + t)
     else:
         datafile.blockout.append("mov " + reg + "," + t)
-    if (y in datafile.globalsection) or (y in datafile.setofarray):
+    if (y in datafile.globalsection) or (y in datafile.setofarray) or (y in datafile.setofList):
         datafile.blockout.append("add " + reg + "," + register.mem(datafile.zprime))
     else:
         datafile.blockout.append("sub " + reg + "," + register.mem(datafile.zprime))
@@ -880,6 +880,7 @@ def PRINT(i):
     print l , "inside print function in nasm"
     # for reg in datafile.registerlist:
     #     register.storereg(reg)
+    register.storereg("eax")
     try :
         datafile.addressdescriptor[l]
         datafile.blockout.append('push eax\npush ebx\npush ecx\npush edx\n')
@@ -981,6 +982,7 @@ def FREAD(i):
     register.storereg("ecx")
     register.storereg("edx")
     datafile.blockout.append("call fscanf")
+    datafile.blockout.append("add esp,8")
 
 def FWRITE(i):
     (y,z) = (datafile.block[i].op1,datafile.block[i].op2)
@@ -988,12 +990,29 @@ def FWRITE(i):
     register.storereg("ecx")
     register.storereg("edx")
     datafile.blockout.append("call fprintf")
+    datafile.blockout.append("add esp,8")
 
 def FCLOSE(i):
     datafile.blockout.append("call fclose")
+    datafile.blockout.append("add esp,8")
 
 def APPEND(i):
-    print datafile.block[i].op1 , datafile.block[i].op2 , datafile.block[i].out , "I am in APPEND"  
-    pass
+    print datafile.block[i].op1 , datafile.block[i].op2 , datafile.block[i].out , "I am in APPEND"
+    reg = register.emptyregister(i)
+    if datafile.block[i].op2 in datafile.setofList:
+        datafile.blockout.append("mov " + reg + ", " + register.mem(datafile.block[i].op2))
+        datafile.blockout.append("add " + reg + ", " +str(datafile.Listoffset[datafile.block[i].op2]))
+    else:
+        datafile.blockout.append("lea " + reg + ", " + register.mem(datafile.block[i].op2))
+        datafile.blockout.append("sub " + reg + ", " + str(datafile.Listoffset[datafile.block[i].op2]))
+    reg1 = register.emptyregister(i,[reg])
+    try:
+        int(datafile.block[i].op1)
+        datafile.blockout.append("mov " + reg1 + ", " + datafile.block[i].op1)
+    except:
+        datafile.blockout.append("mov " + reg1 + ", " + register.mem(datafile.block[i].op1))
+    datafile.blockout.append("mov [" + reg + "]" + "," + reg1)
+    datafile.Listoffset[datafile.block[i].op2]  = datafile.Listoffset[datafile.block[i].op2] + 4
+
 
 OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'pusharg2': PUSH_ARG2, 'pushaddr':PUSH_ADDR, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL, 'printstr': PRINTSTR, 'print' : PRINT, 'read' : READ, 'fopen' : FOPEN, 'fread' : FREAD, 'fwrite' : FWRITE, 'fclose' : FCLOSE, 'ret1' : RETURN1, 'ret2' : RETURN2, '->': LOADARRAY, '<-->': DEFASSIGN, 'LIST' : LIST, 'append' : APPEND }

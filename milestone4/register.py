@@ -88,7 +88,7 @@ def mem(var):
         int(var)
         return str(var)
     except :
-        if var in datafile.globalsection or var in datafile.setofarray.keys():
+        if var in datafile.globalsection or var in datafile.setofarray.keys() or var in datafile.setofList.keys():
             return str(var)
         # print datafile.registerlist, "this is registerlistin mem"
         if var in datafile.registerlist:

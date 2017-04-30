@@ -376,7 +376,7 @@ def p_ArrayInitializer(p):
 def p_ListInitializer(p):
 	'''ListInitializer : R_NEW R_LIST LSQRB Type RSQRB '''
 	if len(p) == 6:
-		p[0] = Node('ListInitializer',[p[4]],[p[1],p[2],p[3],p[5]],typelist =['LIST' + p[4].typelist[0]], order="lllcl")
+		p[0] = Node('ListInitializer',[p[4]],[p[1],p[2],p[3],p[5]],typelist =['LIST@' + p[4].typelist[0]], order="lllcl")
 
 
 def p_EndStatement(p):
@@ -1365,7 +1365,9 @@ def p_MethodInvocation(p):
 		p[0] = Node("MethodInvocation", [p[1], p[3]], [] , order='cc',code=p[1].code + p[3].code + code)
 		return
 	if(p[1].type == "println"):
+
 		p[3].place = p[3].place.split(',,,')
+		print p[3].typelist, "9999((((((((((((((((((((((((())))))))))))))))))))))))))))))((((((((((((((((()))))))"
 		for i in range(0, len(p[3].typelist)):
 			print p[3].typelist, "hey typelist"
 			if(p[3].typelist[i] == 'STRING'):
