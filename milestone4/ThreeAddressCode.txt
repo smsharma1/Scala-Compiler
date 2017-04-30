@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 label: func_1_acker
 arg n
 arg m 0
@@ -77,4 +78,26 @@ label: t87
 + m 1 m
 goto t86
 label: t88
+=======
+LIST f2
+LIST f3 10
+label: func_1_main
+ARRAY f1 10
+LIST f
+append 1 f
+append 2 f
+append 3 f
+append 2 f3 1
+append 3 f3 1
+deletetail f
+deletetail f3 1
+append 4 f
+= t32 0 t32
+= t33 1 t33
+* t33 4 t33
++ t32 t33 t32
+<- f3 t32 t31
+= a t31 a
+print a
+>>>>>>> 9d5d3dd8580551becb8e28b1c8c85266a288bac0
 ret
