@@ -6,7 +6,9 @@ object Good1 {
 	def main() {
 	var f1 = new Array[Int](10);
 	var f = new List[Int];
-	append(f2,1,2,3);
+	append(f,1,2,3);
+	deletetail(f);
+	append(f,4);
 	println(f[0]);
 	var a : Int = 	55	;
 	println("Double quote (\") is escaped");

@@ -61,7 +61,7 @@ g2
 (dp31
 S'f2'
 p32
-I3
+I0
 ssg4
 g5
 (g6
@@ -78,7 +78,7 @@ g2
 (dp38
 S'f'
 p39
-I3
+I4
 ssg4
 g5
 (g6
@@ -104,53 +104,34 @@ sI54
 I2
 ssg18
 (dp45
-S'f1'
+S't21'
 p46
 (lp47
 I0
-aS'ARRAYINT'
+aS'INT'
 p48
-aI10
 aI0
-<<<<<<< HEAD
-aI54
+aI50
 asS'f1'
-=======
-asS't23'
->>>>>>> 00b794e2c7a59dbb034c710e3d3714ca058a7630
 p49
 (lp50
 I0
-aS'INT'
+aS'ARRAYINT'
 p51
-<<<<<<< HEAD
 aI10
 aI0
-asS't23'
-=======
-aI0
-aI50
-asS'j'
->>>>>>> 00b794e2c7a59dbb034c710e3d3714ca058a7630
+asS'a'
 p52
 (lp53
 I0
 aS'INT'
 p54
 aI0
-<<<<<<< HEAD
-aI50
-asg39
-(lp55
-I0
-aS'LIST INT'
-=======
 aI54
 asg39
 (lp55
 I0
 aS'LIST@INT'
->>>>>>> 00b794e2c7a59dbb034c710e3d3714ca058a7630
 p56
 aI0
 aI40
@@ -162,20 +143,12 @@ g46
 (lp58
 I0
 ag48
-<<<<<<< HEAD
 aI0
-=======
-aI10
->>>>>>> 00b794e2c7a59dbb034c710e3d3714ca058a7630
 asg49
 (lp59
 I0
 ag51
-<<<<<<< HEAD
 aI10
-=======
-aI0
->>>>>>> 00b794e2c7a59dbb034c710e3d3714ca058a7630
 asg52
 (lp60
 I0
@@ -237,26 +210,15 @@ sI4
 I0
 ssg18
 (dp81
-<<<<<<< HEAD
-g46
+g52
 (lp82
-=======
-S'a'
-p82
-(lp83
->>>>>>> 00b794e2c7a59dbb034c710e3d3714ca058a7630
 I0
 ag54
 aI0
 aI0
 asS'b'
-<<<<<<< HEAD
 p83
 (lp84
-=======
-p84
-(lp85
->>>>>>> 00b794e2c7a59dbb034c710e3d3714ca058a7630
 I0
 ag54
 aI0
@@ -264,74 +226,42 @@ aI4
 assg20
 I0
 sg21
-<<<<<<< HEAD
 (dp85
-g46
+g52
 (lp86
 I0
-ag48
+ag54
 aI0
 asg83
 (lp87
 I0
-ag48
-=======
-(dp86
-g82
-(lp87
-I0
 ag54
-aI0
-asg84
-(lp88
-I0
-ag54
->>>>>>> 00b794e2c7a59dbb034c710e3d3714ca058a7630
 aI0
 assg23
 g5
 (g6
 g7
-<<<<<<< HEAD
 (dp88
 tp89
 Rp90
-=======
-(dp89
-tp90
-Rp91
->>>>>>> 00b794e2c7a59dbb034c710e3d3714ca058a7630
 sg27
 g29
 sg65
 I8
 sg66
-<<<<<<< HEAD
 (lp91
 sg68
 (lp92
-g48
-ag48
-asg70
-I2
-sbastp93
-Rp94
-=======
-(lp92
-sg68
-(lp93
 g54
 ag54
 asg70
 I2
-sbastp94
-Rp95
->>>>>>> 00b794e2c7a59dbb034c710e3d3714ca058a7630
+sbastp93
+Rp94
 sg11
 I1
 sg12
 S'object'
-<<<<<<< HEAD
 p95
 sg14
 (dp96
@@ -344,78 +274,40 @@ ssg18
 g32
 (lp99
 I0
-aS'LIST INT'
-p100
-=======
-p96
-sg14
-(dp97
-sg16
-(dp98
-I10
-I0
-ssg18
-(dp99
-g32
-(lp100
-I0
 aS'LIST@INT'
-p101
->>>>>>> 00b794e2c7a59dbb034c710e3d3714ca058a7630
+p100
 aI0
 aI0
 assg20
 I0
 sg21
-<<<<<<< HEAD
 (dp101
 g32
 (lp102
 I0
 ag100
-=======
-(dp102
-g32
-(lp103
-I0
-ag101
->>>>>>> 00b794e2c7a59dbb034c710e3d3714ca058a7630
 aI0
 assg23
 g5
 (g6
 g7
-<<<<<<< HEAD
 (dp103
 tp104
 Rp105
-=======
-(dp104
-tp105
-Rp106
->>>>>>> 00b794e2c7a59dbb034c710e3d3714ca058a7630
 sg27
 g0
 sg65
 I10
 sg66
 Nsg68
-<<<<<<< HEAD
 (lp106
-=======
-(lp107
->>>>>>> 00b794e2c7a59dbb034c710e3d3714ca058a7630
 sg70
 I1
 sbsg65
 I0
 sg66
 Nsg68
-<<<<<<< HEAD
 g106
-=======
-g107
->>>>>>> 00b794e2c7a59dbb034c710e3d3714ca058a7630
 sg70
 I0
 sb.

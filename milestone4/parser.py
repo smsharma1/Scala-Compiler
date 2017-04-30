@@ -8,6 +8,7 @@ from shared import *
 from lexer import tokens
 Error = 0
 tempcount = 0
+tem = 0
 graph = pydot.Dot(graph_type='digraph')
 rootScope = SymbolTable(None, "root")
 currentScope = rootScope
@@ -1338,12 +1339,29 @@ def p_MethodInvocation(p):
 	global Error
 	global esp
 	global ebp
+	global tem
 	code =[]
 	# print p[1],"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 	func_name = 'func_1' + "_" + p[1].type
 	temp = None
 #	print p[1].name,"name",currentScope.name
 #	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
+	if(p[1].type == "deletetail"):
+		func_name = "deletetail"
+		code.append("deletetail" + " " + p[3].place[0])
+		name = currentScope.LookUpListScope(p[3].place[0])
+		if name:
+			tem = tem - 1 
+			# name.listdict[p[3].place[0]] = name.listdict[p[3].place[0]] - 1;
+			if tem < 0:
+				Error = Error + 1
+				print "Cannot delete the Empty List " + p[3].place[0]
+		else:
+			Error = Error + 1
+			print "Error List " + p[3].place[0] + " not declared"  
+		p[0] = Node("MethodInvocation", [p[1], p[3]], [] , order='cc',code=p[1].code + p[3].code + code)
+		return
+
 	if(p[1].type == "append"):
 		p[3].place = p[3].place.split(',,,')
 		for i in range(1, len(p[3].typelist)):
@@ -1357,6 +1375,7 @@ def p_MethodInvocation(p):
 				code.append("append " + p[3].place[i] + " " + p[3].place[0])
 				name = currentScope.LookUpListScope(p[3].place[0])
 				if name:
+					tem = tem + 1
 					name.listdict[p[3].place[0]] = name.listdict[p[3].place[0]] + 1; 
 				else:
 					Error = Error + 1
@@ -1653,7 +1672,6 @@ def p_AmbiguousName(p):
 		elif p[1] == 'read':
 			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
 		elif p[1] == 'fopen':
-			print "inside fopen $%^&*%^&%^&*%^&"
 			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
 		elif p[1] == 'fread':
 			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
@@ -1662,6 +1680,8 @@ def p_AmbiguousName(p):
 		elif p[1] == 'fclose':
 			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
 		elif p[1] == 'append':
+			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
+		elif p[1] == 'deletetail':
 			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
 		else:
 			returnType = currentScope.LookUpSymbolType(p[1])

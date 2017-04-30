@@ -6,7 +6,7 @@ import symboltable
 import pickle
 
 def checkbranching(name) :
-    if name in ['jump','print','append', 'call', 'goto', 'label:', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne','ret','ret1','ret2','printstr','pusharg2','pushaddr', 'fopen', 'fwrite', 'fread', 'fclose']:
+    if name in ['jump','print','append', 'call', 'goto', 'label:', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne','ret','ret1','ret2','printstr','pusharg2','pushaddr', 'fopen', 'fwrite', 'fread', 'fclose', 'deletetail']:
         return True
     else:
         return False
