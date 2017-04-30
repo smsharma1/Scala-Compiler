@@ -122,6 +122,7 @@ goto t144
 label: t146
 ret
 label: func_1_main
+<<<<<<< HEAD
 pusharg 9
 call func_1_scan
 pusharg 0
@@ -129,4 +130,27 @@ pusharg 9
 call func_1_quickSort
 pusharg 9
 call func_1_print
+=======
+ARRAY f1 10
+LIST f
+append 1 f2
+append 2 f2
+append 3 f2
+<<<<<<< HEAD
+<- f 0 t23
+print t23
+= a 55 a
+printstr Double quote (\") is escaped
+pusharg DEFAULT a
+pusharg 10
+call func_1_t
+=======
+append 1 f
+append 2 f
+append 3 f
+<- f2 4 t23
+= j t23 j
+print j
+>>>>>>> 00b794e2c7a59dbb034c710e3d3714ca058a7630
+>>>>>>> c8fffc02e8981cfcb87b01ad086cb930ca45bf9c
 ret
