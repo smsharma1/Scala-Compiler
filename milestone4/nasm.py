@@ -69,7 +69,15 @@ def asm():
         f.write(data + " TIMES " + str(datafile.setofarray[data]) + " DW  0\n")
     for data in datafile.setofList.keys():
         # INVENTORY TIMES 8 DW 0
-        f.write(data + " TIMES " + str(datafile.setofList[data]) + " DW  0\n")
+        try:
+            int(datafile.setofList[data])
+            f.write(data + " TIMES " + str(datafile.setofList[data]) + " DW  0\n")
+        except:
+            max = 0
+            for t in datafile.setofList[data].keys():
+                if(datafile.setofList[data][t] > max):
+                    max = datafile.setofList[data][t]          
+            f.write(data + " TIMES " + str(max) + " DW  0\n")
         # print("{}:".format(data))
         # f.write("{}:\n".format(data))
         # datafile.lineno = datafile.lineno + 1
@@ -760,6 +768,7 @@ def MOD(i):
 
 def LOADARRAY(i):
     (l, y, z) = (datafile.block[i].out, datafile.block[i].op1, datafile.block[i].op2)
+    print datafile.setofList, "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[["
     try:
         int(z)
         datafile.zprime = z
@@ -797,7 +806,8 @@ def LOADARRAY(i):
 
 def ARRAYLOAD(i):
     (l, y, z) = (datafile.block[i].out, datafile.block[i].op1, datafile.block[i].op2)
-    #sb $0, array1($3)  index addressing mode is used here
+    print datafile.setofList, "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[",l,y,z
+
     try:
         int(z)
         datafile.zprime = z
@@ -831,7 +841,7 @@ def ARRAYLOAD(i):
         datafile.blockout.append("sub " + reg + "," + register.mem(datafile.zprime))
     datafile.blockout.append("mov " + reg  + ", [" + reg + "]"  )
     register.UpdateAddressDescriptor(l)
-  #  register.UpdateAddressDescriptor(z)
+#  register.UpdateAddressDescriptor(z)
 
 
 

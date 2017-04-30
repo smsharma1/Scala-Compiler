@@ -615,7 +615,7 @@ def p_VariableDeclarationBody(p):
 		Error = Error + 1
 	if len(p) == 6:
 		code = ['= ' + p[1] + ' '+  p[5].place + ' '+ p[1]]
-		# print "checking ",p[3].typelist," ",p[5].typelist
+		print "checking|||||||||||||||||||||||||| ",p[3].typelist," ",p[5].typelist
 		if(not allowed(p[3].typelist[0], p[5].typelist[0])):
 			# print p.lexer.lineno
 			print "Type mismatch in line " + str(p.lexer.lineno)
@@ -1672,22 +1672,50 @@ def p_ArrayAccess(p):
 		currentScope.InsertVar(temp,0, p[1].typelist[0][5:])
 		print "\n\n", temp, "\n\n"
 		print currentScope.name, " ", currentScope.variables
-		p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]],typelist =[p[1].typelist[0][5:]] , order="clcl",code=p[3].code + l1,place = temp,meta=l1)
+		if p[1].typelist[0][0:10] == "LIST@LIST@":
+			p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]],typelist =[p[1].typelist[0][10:]] , order="clcl",code=p[3].code + l1,place = temp,meta=l1)	 
+		else:
+			p[0] = Node('ArrayAccess',[p[1],p[3]],[p[2],p[4]],typelist =[p[1].typelist[0][5:]] , order="clcl",code=p[3].code + l1,place = temp,meta=l1)
 	else:
-		temp = newtemp()
-		temp2 = newtemp()
-		temp3 = newtemp()
-		print temp,temp2, " I am in arrayaccess "
-		size = currentScope.Size(p[1].typelist[0][10:])
-		l=currentScope.LookUpVar(p[1].type)
-		column = l[2]
-		code = ['= ' + temp2 + " " + str(column * int(size)) + " " + temp2 ]+ ["* " + temp2 + " " +p[3].place + " " + temp2] +["= " + temp3 + " " + p[5].place + " " + temp3] + ["* " + temp3 + " " + str(size) + " " + temp3]+[ "+ " + temp2 + " " +temp3 + " " + temp2]
-		l1 = [ "<- " + p[1].place + " " + temp2 + " " + temp]
-		currentScope.InsertVar(temp2,0,'INT')
-		currentScope.InsertVar(temp,0, p[1].typelist[0][10:])
-		currentScope.InsertVar(temp3,0,'INT')
-		# l1 = [ temp + " = " + p[1].place + " -> " + temp2]
-		p[0] = Node('ArrayAccess',[p[1],p[3],p[5]],[p[2],p[4],p[6]],typelist=[p[1].typelist[0][10:]], order="clclcl",code= p[5].code+p[3].code + code+l1,place=temp)
+		scope  = currentScope.LookUpListScope(p[1].type)
+		if scope:
+			temp = newtemp()
+			temp2 = newtemp()
+			temp3 = newtemp()
+			print p[3].type, ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+			size = currentScope.Size(p[1].typelist[0][10:])
+			l = 0
+			for m in scope.listdict[p[1].type].keys():
+				if(int(m) >= int(p[3].type)):
+					break
+				else:
+					l = l + scope.listdict[p[1].type][m]
+			
+			column = l
+			code = ['= ' + temp2 + " " + str(column * int(size)) + " " + temp2 ] +["= " + temp3 + " " + p[5].place + " " + temp3] + ["* " + temp3 + " " + str(size) + " " + temp3]+[ "+ " + temp2 + " " +temp3 + " " + temp2]
+			l1 = [ "<- " + p[1].place + " " + temp2 + " " + temp]
+			currentScope.InsertVar(temp2,0,'INT')
+			currentScope.InsertVar(temp,0, p[1].typelist[0][10:])
+			currentScope.InsertVar(temp3,0,'INT')
+			# l1 = [ temp + " = " + p[1].place + " -> " + temp2]
+			p[0] = Node('ArrayAccess',[p[1],p[3],p[5]],[p[2],p[4],p[6]],typelist=[p[1].typelist[0][10:]], order="clclcl",code= p[5].code+p[3].code + code+l1,place=temp)
+
+			print scope.listdict[p[1].type], "lllllllllllllppppppppppppppppppppl"
+		else:	
+			temp = newtemp()
+			temp2 = newtemp()
+			temp3 = newtemp()
+			print temp,temp2, " I am in arrayaccess "
+			size = currentScope.Size(p[1].typelist[0][10:])
+			l=currentScope.LookUpVar(p[1].type)
+			column = l[2]
+			code = ['= ' + temp2 + " " + str(column * int(size)) + " " + temp2 ]+ ["* " + temp2 + " " +p[3].place + " " + temp2] +["= " + temp3 + " " + p[5].place + " " + temp3] + ["* " + temp3 + " " + str(size) + " " + temp3]+[ "+ " + temp2 + " " +temp3 + " " + temp2]
+			l1 = [ "<- " + p[1].place + " " + temp2 + " " + temp]
+			currentScope.InsertVar(temp2,0,'INT')
+			currentScope.InsertVar(temp,0, p[1].typelist[0][10:])
+			currentScope.InsertVar(temp3,0,'INT')
+			# l1 = [ temp + " = " + p[1].place + " -> " + temp2]
+			p[0] = Node('ArrayAccess',[p[1],p[3],p[5]],[p[2],p[4],p[6]],typelist=[p[1].typelist[0][10:]], order="clclcl",code= p[5].code+p[3].code + code+l1,place=temp)
 
 def p_AmbiguousName(p):
 	'''AmbiguousName : ID

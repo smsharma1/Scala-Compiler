@@ -3,14 +3,7 @@ message db "Register = %d", 10, 0
 formatin: db "%d", 0
 formatout: db "%d ", 0
 formatdouble: db "%lf", 0
-<<<<<<< HEAD
-=======
-
-str22 db 'Double quote (\") is escaped',0
-len_str22 equ $ - str22
->>>>>>> 5d6241f1d64d66d91878ae45ef39a525609ff57b
-f2 TIMES 0 DW  0
-f3 TIMES {'1': 8, '0': 0, '3': 8, '2': 8, '5': 8, '4': 8, '7': 8, '6': 8, '9': 8, '8': 8} DW  0
+f3 TIMES 16 DW  0
 
 section .text
 	global main
@@ -26,55 +19,11 @@ call func_1_main
 mov  eax, 1
 int  0x80
 
-func_1_t:
-push ebp
-mov ebp, esp
-sub esp, 0
-push eax
-push ebx
-push ecx
-push edx
-
-xor eax, eax
-push eax
-push ebx
-push ecx
-push edx
-
-xor eax, eax
-mov eax, [12 + ebp]
-push eax
-push message
-call printf
-add esp, 8
-pop edx
-pop ecx
-pop ebx
-pop eax
-
-mov esp, ebp
-pop ebp
-ret
-
 func_1_main:
 push ebp
 mov ebp, esp
-sub esp, 64
-lea eax, [-44 + ebp]
-lea eax, [-44 + ebp]
-sub eax, 0
-mov ebx, 1
-mov [eax],ebx
-lea eax, [-44 + ebp]
-lea eax, [-44 + ebp]
-sub eax, 4
-mov ebx, 2
-mov [eax],ebx
-lea eax, [-44 + ebp]
-lea eax, [-44 + ebp]
-sub eax, 8
-mov ebx, 3
-mov [eax],ebx
+sub esp, 52
+mov edx, 0
 mov eax, f3
 add eax, 0
 mov ebx, 2
@@ -83,28 +32,32 @@ mov eax, f3
 add eax, 4
 mov ebx, 3
 mov [eax],ebx
-lea eax, [-44 + ebp]
-lea eax, [-44 + ebp]
-sub eax, 8
+mov eax, f3
+add eax, 8
 mov ebx, 4
 mov [eax],ebx
-lea eax,[-44 + ebp]
-sub eax,8
-mov eax, [eax]
-mov [-60 + ebp], eax
+mov eax, f3
+add eax, 0
+mov ebx, 4
+mov [eax],ebx
+mov ecx, 0
+mov ebx, 0
+mov [-4 + ebp], edx
+mov edx,4
+mov eax,ebx
+imul edx
+add ecx, eax
+mov edx,f3
+add edx,ecx
+mov edx, [edx]
+mov [-12 + ebp], eax
 push eax
 push ebx
 push ecx
 push edx
 
 xor eax, eax
-push eax
-push ebx
-push ecx
-push edx
-
-xor eax, eax
-mov eax, [-60 + ebp]
+mov eax, edx
 push eax
 push message
 call printf
@@ -114,28 +67,102 @@ pop ecx
 pop ebx
 pop eax
 
-mov edx, 55
-<<<<<<< HEAD
-=======
+mov eax, 0
+mov [-16 + ebp], edx
+mov edx, 1
+mov [-24 + ebp], edx
+mov edx,4
+mov [-20 + ebp], eax
+mov eax,[-24 + ebp]
+imul edx
+mov edx, [-20 + ebp]
+add edx, eax
+mov [-8 + ebp], ecx
+mov ecx,f3
+add ecx,edx
+mov ecx, [ecx]
+mov [-24 + ebp], eax
 push eax
 push ebx
 push ecx
 push edx
-mov edx,len_str22
-mov ecx,str22
-mov ebx,1
-mov eax,4
-int 0x80
+
+xor eax, eax
+mov eax, ecx
+push eax
+push message
+call printf
+add esp, 8
 pop edx
 pop ecx
 pop ebx
 pop eax
->>>>>>> 5d6241f1d64d66d91878ae45ef39a525609ff57b
-push 0
-mov  eax, 10
+
+mov eax, 0
+mov [-20 + ebp], edx
+mov edx, 2
+mov [-36 + ebp], edx
+mov edx,4
+mov [-32 + ebp], eax
+mov eax,[-36 + ebp]
+imul edx
+mov edx, [-32 + ebp]
+add edx, eax
+mov [-28 + ebp], ecx
+mov ecx,f3
+add ecx,edx
+mov ecx, [ecx]
+mov [-36 + ebp], eax
 push eax
-mov [-64 + ebp], edx
-call func_1_t
+push ebx
+push ecx
+push edx
+
+xor eax, eax
+mov eax, ecx
+push eax
+push message
+call printf
+add esp, 8
+pop edx
+pop ecx
+pop ebx
+pop eax
+
+mov eax, 12
+mov [-32 + ebp], edx
+mov edx, 0
+mov [-48 + ebp], edx
+mov edx,4
+mov [-44 + ebp], eax
+mov eax,[-48 + ebp]
+imul edx
+mov edx, [-44 + ebp]
+add edx, eax
+mov [-40 + ebp], ecx
+mov ecx,f3
+add ecx,edx
+mov ecx, [ecx]
+mov [-48 + ebp], eax
+push eax
+push ebx
+push ecx
+push edx
+
+xor eax, eax
+mov eax, ecx
+push eax
+push message
+call printf
+add esp, 8
+pop edx
+pop ecx
+pop ebx
+pop eax
+
+mov [-12 + ebp], ebx
+mov [-52 + ebp], ecx
+mov [-44 + ebp], edx
 mov esp, ebp
 pop ebp
 ret

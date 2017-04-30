@@ -128,7 +128,7 @@ if __name__ == "__main__" :
                         elif node[1] == "LIST":
                             #  t = currentScope.LookUpVarSize(node[2])[1]
                             if node[3] != None:
-                                print currentScope.LookUpVarSize(node[2]) , "I am here",scope.listdict[node[2]],"for List",node
+                                # print currentScope.LookUpVarSize(node[2]) , "I am here",scope.listdict[node[2]],"for List",node
                                 size = Size(currentScope.LookUpVarSize(node[2])[1])
                                 scope = currentScope.LookUpListScope(node[2])
                                 datafile.Listoffset[node[2]]  = {}
