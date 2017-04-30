@@ -1,32 +1,21 @@
+LIST f2
 LIST f3 10
 label: func_1_main
-= i 0 i
+ARRAY f1 10
+LIST f
+append 1 f
+append 2 f
+append 3 f
 append 2 f3 1
 append 3 f3 1
-append 4 f3 1
-append 4 f3 3
-= t24 0 t24
-= t25 0 t25
-* t25 4 t25
-+ t24 t25 t24
-<- f3 t24 t23
-print t23
-= t33 0 t33
-= t34 1 t34
-* t34 4 t34
-+ t33 t34 t33
-<- f3 t33 t32
-print t32
-= t42 0 t42
-= t43 2 t43
-* t43 4 t43
-+ t42 t43 t42
-<- f3 t42 t41
-print t41
-= t51 12 t51
-= t52 0 t52
-* t52 4 t52
-+ t51 t52 t51
-<- f3 t51 t50
-print t50
+deletetail f
+deletetail f3 1
+append 4 f
+= t32 0 t32
+= t33 1 t33
+* t33 4 t33
++ t32 t33 t32
+<- f3 t32 t31
+= a t31 a
+print a
 ret
