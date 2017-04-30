@@ -8,6 +8,7 @@ object Good1 {
 	var f = new List[Int];
 	append(f,1,2,3);
 	append(f2,1,2,3);
+	println(f[0]);
 	var a : Int = 	55	;
 	println("Double quote (\") is escaped");
 	t(default a,10);
