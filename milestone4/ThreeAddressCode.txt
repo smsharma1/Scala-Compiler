@@ -12,10 +12,9 @@ append 2 f
 append 3 f
 deletetail f
 append 4 f
-<- f 0 t21
+<- f 8 t21
 print t21
 = a 55 a
-printstr Double quote (\") is escaped
 pusharg DEFAULT a
 pusharg 10
 call func_1_t

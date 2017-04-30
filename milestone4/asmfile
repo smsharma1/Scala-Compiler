@@ -3,9 +3,6 @@ message db "Register = %d", 10, 0
 formatin: db "%d", 0
 formatout: db "%d ", 0
 formatdouble: db "%lf", 0
-
-str18 db 'Double quote (\") is escaped',0
-len_str18 equ $ - str18
 f2 TIMES 0 DW  0
 
 section .text
@@ -73,7 +70,7 @@ sub eax, 8
 mov ebx, 4
 mov [eax],ebx
 lea eax,[-44 + ebp]
-sub eax,0
+sub eax,8
 mov eax, [eax]
 mov [-60 + ebp], eax
 push eax
@@ -99,19 +96,6 @@ pop ebx
 pop eax
 
 mov edx, 55
-push eax
-push ebx
-push ecx
-push edx
-mov edx,len_str18
-mov ecx,str18
-mov ebx,1
-mov eax,4
-int 0x80
-pop edx
-pop ecx
-pop ebx
-pop eax
 push 0
 mov  eax, 10
 push eax

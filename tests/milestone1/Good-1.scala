@@ -9,9 +9,9 @@ object Good1 {
 	append(f,1,2,3);
 	deletetail(f);
 	append(f,4);
-	println(f[0]);
-	var a : Int = 	55	;
-	println("Double quote (\") is escaped");
+	println(f[2]);
+	var a : Int = 55;
+	// println("Double quote (\") is escaped");
 	t(default a,10);
 
    }

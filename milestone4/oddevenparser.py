@@ -14,6 +14,8 @@ rootScope = SymbolTable(None, "root")
 currentScope = rootScope
 a3AC=[]
 symbol_file = open("Symbols.csv", "w+")
+inherited=0
+undeclared=[]
 def newtemp():
 	global tempcount
 	tempcount = tempcount + 1
@@ -116,12 +118,23 @@ def p_ImportDeclarations(p):
 
 def p_ImportDeclaration(p):
 	'''ImportDeclaration : R_IMPORT AmbiguousName'''
+	if p[1].typelist[0] == "UNDELARED":
+		returnType = currentScope.LookUpSymbolType(p[1])
+		if(returnType):
+			pass
+		else:
+			print "No Symbol found for " + str(p[1].typelist[1]) + " error at line" + p[1].typelist[2]
+			global Error 
+			Error = Error + 1
 	p[0] = Node("ImportDeclaration", [p[2]],[p[1]], order = "lc")
 
 
 def p_ClassObjectsList(p):
 	'''ClassObjectsList : ClassObjectsList ClassAndObjectDeclaration
 						| ClassAndObjectDeclaration'''
+	global undeclared
+	print undeclared, "these are the undeclared @@@@@@@@@@@@@@@@$$$$$$$$$$$$$$$$$$$$$$$$$$@@@@@@@@@@@@@@@@@@@@@@"
+	
 	if len(p) ==2:
 		p[0] = p[1] #Node('ClassObjectsList',[p[1]],[], order="c")
 	else:
@@ -150,6 +163,14 @@ def p_ObjectBody(p):
 	'''ObjectBody : Block'''
 	global currentScope
 	global symbol_file
+	global undeclared
+	for func_info in undeclared:
+		try:
+			currentScope.functions[func_info[0]]
+		except:
+			print "No Symbol found for " + str(func_info[0]) + " error at line" + func_info[1]
+			global Error 
+			Error = Error + 1
 	currentScope.Dumper(currentScope, symbol_file)
 	currentScope = currentScope.parent
 
@@ -310,7 +331,7 @@ def p_FuncArgumentListExtras(p):
 		pass
 	else:
 		p[0]= p[1]
-		# print p[1].defaultdict,"helloiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
+		print p[1].defaultdict,"helloiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
 		if(p[0].meta is None): 
 			p[1].meta = 0
 		# print p[0].meta,")))))000000))))))))))))))))))"
@@ -375,12 +396,9 @@ def p_ArrayInitializer(p):
 		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8],p[9], p[10]],typelist=['ARRAYARRAY'+p[4].typelist[0], int(p[7]),int(p[9])], order="lllcllllll")
 
 def p_ListInitializer(p):
-	'''ListInitializer : R_NEW R_LIST LSQRB Type RSQRB
-						| R_NEW R_LIST LSQRB Type RSQRB LPARAN INT RPARAN '''
+	'''ListInitializer : R_NEW R_LIST LSQRB Type RSQRB '''
 	if len(p) == 6:
 		p[0] = Node('ListInitializer',[p[4]],[p[1],p[2],p[3],p[5]],typelist =['LIST@' + p[4].typelist[0]], order="lllcl")
-	else:
-		p[0] = Node('ListInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8]],typelist=['LIST@LIST@'+p[4].typelist[0], int(p[7])], order="lllcllll")
 
 
 def p_EndStatement(p):
@@ -644,18 +662,9 @@ def p_VariableDeclarationBody(p):
 					code = ['ARRAY ' + p[1] + " " + str(p[3].typelist[1])]
 					currentScope.InsertVar(p[1],0,p[3].typelist[0], length= p[3].typelist[1])
 			elif(p[3].typelist[0][0:4] == 'LIST'):
-				try:
-					p[3].typelist[1]
-					print p[3].typelist , "{{{{{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}}}}"
-					code = ['LIST ' + p[1] + " " + str(p[3].typelist[1])]
-					currentScope.InsertVar(p[1],0,p[3].typelist[0], length= p[3].typelist[1])
-					currentScope.listdict[p[1]] = {}
-					for i in range(0,p[3].typelist[1]):
-						currentScope.listdict[p[1]][str(i)] = 0
-				except:
-					code = ['LIST ' + p[1]]
-					currentScope.InsertVar(p[1],0,p[3].typelist[0])
-					currentScope.listdict[p[1]] = 0
+				code = ['LIST ' + p[1]]
+				currentScope.InsertVar(p[1],0,p[3].typelist[0])
+				currentScope.listdict[p[1]] = 0
 			else:
 				code = ['= ' + p[1] + ' '+  p[3].place + ' '+ p[1]]
 				currentScope.InsertVar(p[1],0,p[3].typelist[0])
@@ -1029,6 +1038,15 @@ def p_Expression(p):
 def p_LeftHandSide(p):
 	'''LeftHandSide : AmbiguousName'''
 					# | FieldAccess
+	if p[1].typelist[0] == "UNDELARED":
+		returnType = currentScope.LookUpSymbolType(p[1])
+		if(returnType):
+			pass
+		else:
+			print "No Symbol found for " + str(p[1].typelist[1]) + " error at line" + p[1].typelist[2]
+			global Error 
+			Error = Error + 1
+		return
 	p[0] = p[1] #Node("LeftHandSide", [p[1]],[],typelist=p[1].type,order='c')
 	print p[0].type ,"999999999999999999999999999999999999999999999"
 
@@ -1335,10 +1353,26 @@ def p_PostfixExpression(p):
 							| AmbiguousName'''
 							# | PostincrementExpression
 							# | PostdecrementExpression'''
+	if "Ambiguous Name" in p[1]:
+		if p[1].typelist[0] == "UNDELARED":
+			returnType = currentScope.LookUpSymbolType(p[1])
+			if(returnType):
+				pass
+			else:
+				print "No Symbol found for " + str(p[1].typelist[1]) + " error at line" + p[1].typelist[2]
+				global Error 
+				Error = Error + 1
+			return
 	p[0] = p[1]
 #	print p[1].type, p[1].typelist, "in postfixexpression"
 # <method invocation> ::= <method name> ( <argument list>? ) | <primary> . <identifier> ( <argument list>? ) | super . <identifier> ( <argument list>? )
 #'''method_invocation : ambiguous_name LPAREN argument_list_extras RPAREN '''
+
+# def p_M2(p):
+# 	'''M2 : empty'''
+# 	global inherited
+# 	inherited += 1
+
 def p_MethodInvocation(p):
 	'''MethodInvocation : AmbiguousName LPARAN ArgumentLists RPARAN'''
 					#		| AmbiguousName LPARAN RPARAN'''
@@ -1352,28 +1386,51 @@ def p_MethodInvocation(p):
 	global esp
 	global ebp
 	global tem
+	global undeclared
 	code =[]
 	# print p[1],"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-	func_name = 'func_1' + "_" + p[1].type
+	if p[1].typelist[0] == "UNDELARED":
+		undeclared.append([p[1].typelist[1], p[1].typelist[2]])
+		# print "No Symbol found for " + str(p[1].typelist[1]) + " error at line" + p[1].typelist[2]
+		# global Error 
+		# Error = Error + 1
+		p[1].type = p[1].typelist[1]
+		if p[3] == None:
+			code.append("call " + func_name)
+			temp = newtemp()
+			print temp, "I am in method invocation"
+			code.append('get ' + temp)
+			currentScope.InsertVar(temp,0, value.returnType[0])
+				#print value.returnType,"checking"
+			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = ['INT'] , order='cc',code = code, place= temp)
+		else:
+			for k in p[3].meta:
+				code.append("pusharg " + k)
+			code.append("call " + func_name)
+			value = currentScope.GetFuncScope(p[1].type,p[3].typelist)
+			temp = newtemp()
+			print temp, "I am in method invocation"
+			code.append('get ' + temp)
+			currentScope.InsertVar(temp,0, value.returnType[0])
+			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = ['INT'] , order='cc',code= code,place=temp)			
+
+	try:
+		func_name = 'func_1' + "_" + p[1].type
+	except:
+		pass
 	temp = None
 #	print p[1].name,"name",currentScope.name
-	print p[1].type," ",p[3].place,"Method kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
+#	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
 	if(p[1].type == "deletetail"):
-		p[3].place = p[3].place.split(',,,')
-		try:
-			p[3].place[1]
-			code.append("deletetail" + " " + p[3].place[0] + " " + p[3].place[1])
-		except:
-			code.append("deletetail" + " " + p[3].place[0])
 		func_name = "deletetail"
+		code.append("deletetail" + " " + p[3].place[0])
 		name = currentScope.LookUpListScope(p[3].place[0])
 		if name:
-			pass
-			# tem = tem - 1 
-			# # name.listdict[p[3].place[0]] = name.listdict[p[3].place[0]] - 1;
-			# if tem < 0:
-			# 	Error = Error + 1
-			# 	print "Cannot delete the Empty List " + p[3].place[0]
+			tem = tem - 1 
+			# name.listdict[p[3].place[0]] = name.listdict[p[3].place[0]] - 1;
+			if tem < 0:
+				Error = Error + 1
+				print "Cannot delete the Empty List " + p[3].place[0]
 		else:
 			Error = Error + 1
 			print "Error List " + p[3].place[0] + " not declared"  
@@ -1382,7 +1439,6 @@ def p_MethodInvocation(p):
 
 	if(p[1].type == "append"):
 		p[3].place = p[3].place.split(',,,')
-		print p[3].place, "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
 		for i in range(1, len(p[3].typelist)):
 			print p[3].typelist, "hey typelist"
 			if(p[3].typelist[i] == 'STRING'):
@@ -1390,26 +1446,15 @@ def p_MethodInvocation(p):
 				code.append("appendstr " + p[3].place[i] + " " + p[3].place[0] )
 
 			elif(p[3].typelist[i] == 'INT'):
-				if p[3].typelist[0] == "LIST@LIST@INT":
-					if i == 1:
-						continue
-					func_name = "append"
-					code.append("append " + p[3].place[i] + " " + p[3].place[0] + " " + p[3].place[1])
-					name = currentScope.LookUpListScope(p[3].place[0])
-					if name:
-						name.listdict[p[3].place[0]][p[3].place[1]] = name.listdict[p[3].place[0]][p[3].place[1]] + 1; 
-					else:
-						Error = Error + 1
-						print "Error List " + p[3].place[0] + " not declared"  
+				func_name = "append"
+				code.append("append " + p[3].place[i] + " " + p[3].place[0])
+				name = currentScope.LookUpListScope(p[3].place[0])
+				if name:
+					tem = tem + 1
+					name.listdict[p[3].place[0]] = name.listdict[p[3].place[0]] + 1; 
 				else:
-					func_name = "append"
-					code.append("append " + p[3].place[i] + " " + p[3].place[0])
-					name = currentScope.LookUpListScope(p[3].place[0])
-					if name:
-						name.listdict[p[3].place[0]] = name.listdict[p[3].place[0]] + 1; 
-					else:
-						Error = Error + 1
-						print "Error List " + p[3].place[0] + " not declared"  
+					Error = Error + 1
+					print "Error List " + p[3].place[0] + " not declared"  
 
 		p[0] = Node("MethodInvocation", [p[1], p[3]], [] , order='cc',code=p[1].code + p[3].code + code)
 		return
@@ -1604,6 +1649,15 @@ def p_ClassInstanceCreationExpression(p):
 	global Error
 #	print "here ??"
 	global currentScope
+	if p[1].typelist[0] == "UNDELARED":
+		returnType = currentScope.LookUpSymbolType(p[1])
+		if(returnType):
+			pass
+		else:
+			print "No Symbol found for " + str(p[1].typelist[1]) + " error at line" + p[1].typelist[2]
+			global Error 
+			Error = Error + 1
+		return
 	if(p[4] != None):
 		print p[2].type,"inclassinstance",p[4].typelist
 		if(not currentScope.LookUpClass(p[2].type, p[4].typelist)):
@@ -1655,6 +1709,15 @@ def p_ArrayAccess(p):
 	'''ArrayAccess : AmbiguousName LSQRB Expression RSQRB
 					| AmbiguousName LSQRB Expression COMMA Expression RSQRB'''
 					# | PrimaryNoNewArray LSQRB Expression RSQRB'''
+	if p[1].typelist[0] == "UNDELARED":
+		returnType = currentScope.LookUpSymbolType(p[1])
+		if(returnType):
+			pass
+		else:
+			print "No Symbol found for " + str(p[1].typelist[1]) + " error at line" + p[1].typelist[2]
+			global Error 
+			Error = Error + 1
+		return
 	if len(p) == 5:
 		temp = newtemp()
 		print temp, "I am in ArrayAcess"
@@ -1694,6 +1757,7 @@ def p_AmbiguousName(p):
 					| AmbiguousName DOT ID'''
 	global currentScope
 	global rootScope
+	global undeclared
 	print p[1],"hello i am here", " $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
 	p[1] = p[1].strip()
 	if len(p)==2:
@@ -1730,12 +1794,21 @@ def p_AmbiguousName(p):
 			if(returnType):
 				p[0] = Node(p[1], [], [], typelist = returnType, isLeaf=True,place=p[1])
 			else:
-				print "No Symbol found for " + str(p[1]) + " error at line " + str(p.lexer.lineno)
-				global Error 
-				Error = Error + 1
+				func_info = [p[1]]
+				undeclared = undeclared.append(func_info)
+				p[0] = Node(p[1], [], [], typelist = ['UNDECLARED', p[1], str(p.lexer.lineno)], isLeaf=True,place=p[1])
+				# else:
+				# 	print "No Symbol found for " + str(p[1]) + " error at line " + str(p.lexer.lineno)
+				# 	global Error 
+				# 	Error = Error + 1
 			#sys.exit("No symbol found for "+str(p[1]))
 		# p[0] = Node('AmbiguousName',[],[p[1]],typelist = currentScope.LookUpSymbol(p[1]),order='l')
 	else:
+		if p[1].typelist[0] == "UNDELARED":
+			print "No Symbol found for " + str(p[1].typelist[1]) + " error at line" + p[1].typelist[2]
+			global Error 
+			Error = Error + 1
+			return
 		thing = currentScope.LookDotThing(rootScope, p[1].type+"."+p[3])
 		# print "here **************************",thing
 		if(thing):
