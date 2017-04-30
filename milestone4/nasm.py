@@ -38,16 +38,17 @@ def asm():
     print("section .data")
     f.write("section .data\nmessage db \"Register = %d\", 10, 0\n")
     f.write("formatin: db \"%d\", 0\n")
+    f.write("formatout: db \"%d \", 0\n")
     f.write("formatdouble: db \"%lf\", 0\n")
-    f.write("fname: db \"data.txt\", 0 \n")
+    # f.write("fname: db \"data.txt\", 0 \n")
     # for k,v in datafile.setofString.items() :
     #     print('\n'+k+ ' db '  + "'" + v + "',0xa")
     #     f.write('\n'+k+ ' db '  + "'" + v + "',0xa\n")
     #     f.write("len_" + k + " equ $ - " + k + "\n")
     #     datafile.lineno = datafile.lineno + 2
     for k,v in datafile.setofString.items() :
-        print('\n'+k+ ' db '  + "'" + v + "',0xa")
-        f.write('\n'+k+ ' db '  + "'" + v + "',0xa\n")
+        print('\n'+k+ ' db '  + "'" + v + "'")
+        f.write('\n'+k+ ' db '  + "'" + v + "',0\n")
         f.write("len_" + k + " equ $ - " + k + "\n")
         # datafile.lineno = datafile.lineno + 2
     datafile.lineno = datafile.lineno + 1
@@ -91,7 +92,7 @@ def asm():
     # datafile.lineno = datafile.lineno + 3
     # print datafile.lineno, "lineno"
     print('global main\n\n')
-    f.write('global main\nextern printf\nextern scanf\n\n')
+    f.write('global main\nextern printf\nextern scanf\nextern fopen\nextern fscanf\nextern fprintf\nextern fclose\n\n')
     datafile.lineno = datafile.lineno + 3
     # print datafile.lineno, "lineno"
     print('main:')
@@ -343,6 +344,25 @@ def XOR(i):
 def PUSH_ARG2(i):
     pass
 
+def PUSH_ADDR(i):
+    var = datafile.block[i].out
+    t = False
+    
+    if(var == "formatin"):
+        datafile.blockout.append("push formatin")
+        return
+    elif(var == "formatout"):
+        datafile.blockout.append("push formatout")
+        return
+
+    if datafile.addressdescriptor[var] != None :
+        place = datafile.addressdescriptor[var]
+        register.storereg(place)
+
+    place = register.emptyregister(i)
+    datafile.blockout.append("lea  " +  register.mem(place) +', ' + register.mem(var))
+    datafile.blockout.append("push " + place)
+
 def PUSH_ARG(i) :
     var = datafile.block[i].out
     # print datafile.block[i].op1,datafile.block[i].op2,datafile.block[i].out
@@ -362,6 +382,7 @@ def PUSH_ARG(i) :
     else :
         place = register.emptyregister(i)
         datafile.blockout.append("mov  " +  register.mem(place) +', ' + register.mem(var))
+        datafile.addressdescriptor[var] = place
         datafile.registerdescriptor[place] = var
     datafile.blockout.append("push " + place)
 
@@ -765,7 +786,7 @@ def LOADARRAY(i):
     else:
         datafile.blockout.append("mov " + reg + "," + t)
     # datafile.blockout.append("lea " + reg + "," + register.mem(datafile.yprime))
-    if (y in datafile.globalsection) or (y in datafile.setofarray):
+    if (y in datafile.globalsection) or (y in datafile.setofarray) or (y in datafile.setofList):
         datafile.blockout.append("add " + reg + "," + register.mem(datafile.zprime))
         # datafile.blockout.append("i am in loadarray")
     else:
@@ -804,7 +825,7 @@ def ARRAYLOAD(i):
         datafile.blockout.append("lea " + reg + "," + t)
     else:
         datafile.blockout.append("mov " + reg + "," + t)
-    if (y in datafile.globalsection) or (y in datafile.setofarray):
+    if (y in datafile.globalsection) or (y in datafile.setofarray) or (y in datafile.setofList):
         datafile.blockout.append("add " + reg + "," + register.mem(datafile.zprime))
     else:
         datafile.blockout.append("sub " + reg + "," + register.mem(datafile.zprime))
@@ -859,6 +880,7 @@ def PRINT(i):
     print l , "inside print function in nasm"
     # for reg in datafile.registerlist:
     #     register.storereg(reg)
+    register.storereg("eax")
     try :
         datafile.addressdescriptor[l]
         datafile.blockout.append('push eax\npush ebx\npush ecx\npush edx\n')
@@ -941,25 +963,60 @@ def READ(i):
 
 def FOPEN(i):
     (y,z) = (datafile.block[i].op1,datafile.block[i].op2)
+    datafile.blockout.append("push ebx\npush ecx\npush edx")
     register.storereg("eax")
     reg = "eax"
-    if(y == "r"):
-        datafile.blockout.append("mov "+reg+" "+'str'+str(node[0]-1))
-    elif(y == "w"):
-        datafile.blockout.append("mov "+reg+" "+'str'+str(node[0]-1))
+    inno = datafile.block[i].instnumber
+    datafile.blockout.append("xor eax, eax")
+    datafile.blockout.append("mov "+reg+", "+'str'+str(int(inno-1)))
     datafile.blockout.append("push "+reg)
-    datafile.blockout.append("mov "+reg+" "+'str'+str(node[0]-2))
+    datafile.blockout.append("xor eax, eax")
+    datafile.blockout.append("mov "+reg+", "+'str'+str(int(inno-2)))
     datafile.blockout.append("push "+reg)
     datafile.blockout.append("call fopen")
-
+    datafile.blockout.append("pop edx\npop ecx\npop ebx")
 
 def FREAD(i):
-    pass
+    (y,z) = (datafile.block[i].op1,datafile.block[i].op2)
+    register.storereg("ebx")
+    register.storereg("ecx")
+    register.storereg("edx")
+    datafile.blockout.append("call fscanf")
+    datafile.blockout.append("add esp,8")
+
+def FWRITE(i):
+    (y,z) = (datafile.block[i].op1,datafile.block[i].op2)
+    register.storereg("ebx")
+    register.storereg("ecx")
+    register.storereg("edx")
+    datafile.blockout.append("call fprintf")
+    datafile.blockout.append("add esp,8")
+
+def FCLOSE(i):
+    datafile.blockout.append("call fclose")
+    datafile.blockout.append("add esp,8")
 
 def APPEND(i):
-    # print datafile.block[i].op1 , datafile.block[i].op2 , datafile.block[i].out , "I am in APPEND" #1,f,None
-    datafile.Listoffset[datafile.block[i].op2] = datafile.Listoffset[datafile.block[i].op2] + 4  
-    pass
+    print datafile.block[i].op1 , datafile.block[i].op2 , datafile.block[i].out , "I am in APPEND"
+    reg = register.emptyregister(i)
+    if datafile.block[i].op2 in datafile.setofList:
+        datafile.blockout.append("mov " + reg + ", " + register.mem(datafile.block[i].op2))
+        datafile.blockout.append("add " + reg + ", " +str(datafile.Listoffset[datafile.block[i].op2]))
+    else:
+        datafile.blockout.append("lea " + reg + ", " + register.mem(datafile.block[i].op2))
+        datafile.blockout.append("sub " + reg + ", " + str(datafile.Listoffset[datafile.block[i].op2]))
+    reg1 = register.emptyregister(i,[reg])
+    try:
+        int(datafile.block[i].op1)
+        datafile.blockout.append("mov " + reg1 + ", " + datafile.block[i].op1)
+    except:
+        datafile.blockout.append("mov " + reg1 + ", " + register.mem(datafile.block[i].op1))
+    datafile.blockout.append("mov [" + reg + "]" + "," + reg1)
+    datafile.Listoffset[datafile.block[i].op2]  = datafile.Listoffset[datafile.block[i].op2] + 4
 
-OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'pusharg2': PUSH_ARG2, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL, 'printstr': PRINTSTR, 'print' : PRINT, 'read' : READ, 'fopen' : FOPEN, 'fread' : FREAD, 'ret1' : RETURN1, 'ret2' : RETURN2, '->': LOADARRAY, '<-->': DEFASSIGN, 'LIST' : LIST, 'append' : APPEND, 'deletetail' : DELETETAIL }
 
+def DELETETAIL(i):
+    print datafile.block[i].op1 , datafile.block[i].op2 , datafile.block[i].out , "I am in DELETETAIL"
+    datafile.Listoffset[datafile.block[i].op1]  = datafile.Listoffset[datafile.block[i].op1] - 4
+
+OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'pusharg2': PUSH_ARG2, 'pushaddr':PUSH_ADDR, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL, 'printstr': PRINTSTR, 'print' : PRINT, 'read' : READ, 'fopen' : FOPEN, 'fread' : FREAD, 'fwrite' : FWRITE, 'fclose' : FCLOSE, 'ret1' : RETURN1, 'ret2' : RETURN2, '->': LOADARRAY, '<-->': DEFASSIGN, 'LIST' : LIST, 'append' : APPEND, 'deletetail' : DELETETAIL }
