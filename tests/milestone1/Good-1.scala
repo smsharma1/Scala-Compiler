@@ -1,5 +1,6 @@
 object Good1 {
 	var f2 = new List[Int];
+	var f3 = new List[Int](10);
 	def t(a default 0 : Int, b : Int){
 		println(a);
 	} 
@@ -7,7 +8,9 @@ object Good1 {
 	var f1 = new Array[Int](10);
 	var f = new List[Int];
 	append(f,1,2,3);
+	append(f3,1,2,3);
 	deletetail(f);
+	deletetail(f3,1);
 	append(f,4);
 	println(f[2]);
 	var a : Int = 55;

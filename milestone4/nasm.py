@@ -997,26 +997,49 @@ def FCLOSE(i):
     datafile.blockout.append("add esp,8")
 
 def APPEND(i):
-    print datafile.block[i].op1 , datafile.block[i].op2 , datafile.block[i].out , "I am in APPEND"
-    reg = register.emptyregister(i)
-    if datafile.block[i].op2 in datafile.setofList:
-        datafile.blockout.append("mov " + reg + ", " + register.mem(datafile.block[i].op2))
-        datafile.blockout.append("add " + reg + ", " +str(datafile.Listoffset[datafile.block[i].op2]))
-    else:
-        datafile.blockout.append("lea " + reg + ", " + register.mem(datafile.block[i].op2))
-        datafile.blockout.append("sub " + reg + ", " + str(datafile.Listoffset[datafile.block[i].op2]))
-    reg1 = register.emptyregister(i,[reg])
+    print datafile.block[i].op1 , datafile.block[i].op2 , datafile.block[i].out , "I am in APPEND"#2,f3,1
     try:
-        int(datafile.block[i].op1)
-        datafile.blockout.append("mov " + reg1 + ", " + datafile.block[i].op1)
+        datafile.block[i].out
+        print "HEER ERERERERERERRRRRRRRRRRRRRRRRRRRRRRRR"
+        reg = register.emptyregister(i)
+        if datafile.block[i].op2 in datafile.setofList:
+            datafile.blockout.append("mov " + reg + ", " + register.mem(datafile.block[i].op2))
+            datafile.blockout.append("add " + reg + ", " +str(datafile.Listoffset[datafile.block[i].op2][datafile.block[i].out]))
+        else:
+            datafile.blockout.append("lea " + reg + ", " + register.mem(datafile.block[i].op2))
+            datafile.blockout.append("sub " + reg + ", " + str(datafile.Listoffset[datafile.block[i].op2][datafile.block[i].out]))
+        reg1 = register.emptyregister(i,[reg])
+        try:
+            int(datafile.block[i].op1)
+            datafile.blockout.append("mov " + reg1 + ", " + datafile.block[i].op1)
+        except:
+            datafile.blockout.append("mov " + reg1 + ", " + register.mem(datafile.block[i].op1))
+        datafile.blockout.append("mov [" + reg + "]" + "," + reg1)
+        datafile.Listoffset[datafile.block[i].op2][datafile.block[i].out]  = datafile.Listoffset[datafile.block[i].op2][datafile.block[i].out] + 4
+
     except:
-        datafile.blockout.append("mov " + reg1 + ", " + register.mem(datafile.block[i].op1))
-    datafile.blockout.append("mov [" + reg + "]" + "," + reg1)
-    datafile.Listoffset[datafile.block[i].op2]  = datafile.Listoffset[datafile.block[i].op2] + 4
+        reg = register.emptyregister(i)
+        if datafile.block[i].op2 in datafile.setofList:
+            datafile.blockout.append("mov " + reg + ", " + register.mem(datafile.block[i].op2))
+            datafile.blockout.append("add " + reg + ", " +str(datafile.Listoffset[datafile.block[i].op2]))
+        else:
+            datafile.blockout.append("lea " + reg + ", " + register.mem(datafile.block[i].op2))
+            datafile.blockout.append("sub " + reg + ", " + str(datafile.Listoffset[datafile.block[i].op2]))
+        reg1 = register.emptyregister(i,[reg])
+        try:
+            int(datafile.block[i].op1)
+            datafile.blockout.append("mov " + reg1 + ", " + datafile.block[i].op1)
+        except:
+            datafile.blockout.append("mov " + reg1 + ", " + register.mem(datafile.block[i].op1))
+        datafile.blockout.append("mov [" + reg + "]" + "," + reg1)
+        datafile.Listoffset[datafile.block[i].op2]  = datafile.Listoffset[datafile.block[i].op2] + 4
 
 
 def DELETETAIL(i):
-    print datafile.block[i].op1 , datafile.block[i].op2 , datafile.block[i].out , "I am in DELETETAIL"
-    datafile.Listoffset[datafile.block[i].op1]  = datafile.Listoffset[datafile.block[i].op1] - 4
+    print datafile.block[i].op1 , datafile.block[i].op2 , datafile.block[i].out , "I am in DELETETAIL"#f3 1 None I am in DELETETAIL
+    try:
+        datafile.Listoffset[datafile.block[i].op1][datafile.block[i].op2]  = datafile.Listoffset[datafile.block[i].op1][datafile.block[i].op2] - 4
+    except: 
+        datafile.Listoffset[datafile.block[i].op1]  = datafile.Listoffset[datafile.block[i].op1] - 4
 
 OperatorMap = {'jl': JL, 'je': JE, 'jg':JG, 'jle':JLE, 'jge':JGE, 'jne':JNE, 'pusharg':  PUSH_ARG, 'pusharg2': PUSH_ARG2, 'pushaddr':PUSH_ADDR, 'arg' : ARG, 'label:' : LABEL, 'get' : GET, 'cmp': COMPARE, '+' : ADD, '-' : SUB,'|' : OR, '&': AND, '^': XOR, '*' : MUL, '=' : ASSIGN, 'ret' : RETURN, '/' : DIV, '%' : MOD, '<-' : ARRAYLOAD, 'goto' : GOTO, 'ARRAY' : ARRAY , 'call' : CALL, 'printstr': PRINTSTR, 'print' : PRINT, 'read' : READ, 'fopen' : FOPEN, 'fread' : FREAD, 'fwrite' : FWRITE, 'fclose' : FCLOSE, 'ret1' : RETURN1, 'ret2' : RETURN2, '->': LOADARRAY, '<-->': DEFASSIGN, 'LIST' : LIST, 'append' : APPEND, 'deletetail' : DELETETAIL }

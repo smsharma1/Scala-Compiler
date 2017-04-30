@@ -99,15 +99,19 @@ if __name__ == "__main__" :
                                 # print currentScope.name, " this is currentscope name"
                                 # print node[2],"777777777777777777777777777777777777777777777"#, currentScope.LookUpVarSize(node[2])[1], " this is the type;;;;;;;;;;;;"
                                 if node[1] == "ARRAY":
-                                    try:
-                                        node[4]
+                                    if node[4] != None:
                                         locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])*int(node[3])*int(node[4])
-                                    except:
+                                    else:
                                         locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])*int(node[3])
                                 elif node[1] == "LIST":
+                                    if node[3] != None:
+                                        datafile.Listoffset[node[2]]  = {}
+                                        for m in range(0,int(node[3])):
+                                            datafile.Listoffset[node[2]][str(m)] = 0     
+                                    else:    
                                     # print "-/-/-/-/--/-/-/-/-/", currentScope.listdict[node[2]], "-/-/-/-/-/---/-/-/-/-/-/-/-"
-                                    locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])*int(currentScope.listdict[node[2]])
-                                    datafile.Listoffset[node[2]]  = 0
+                                        locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])*int(currentScope.listdict[node[2]])
+                                        datafile.Listoffset[node[2]]  = 0
                                 else:
                                     print node[i], "77777777777777777777777777777777777",currentScope.LookUpVarSize(node[i]),'88888888888888888888'
                                     locallength = locallength - Size(currentScope.LookUpVarSize(node[i])[1])
@@ -123,11 +127,24 @@ if __name__ == "__main__" :
                                 datafile.setofarray[node[i]] = size
                         elif node[1] == "LIST":
                             #  t = currentScope.LookUpVarSize(node[2])[1]
-                            print currentScope.LookUpVarSize(node[2]) , "I am here for List"
-                            size = Size(currentScope.LookUpVarSize(node[2])[1])
-                            scope = currentScope.LookUpListScope(node[2])
-                            datafile.Listoffset[node[2]]  = 0
-                            datafile.setofList[node[i]] = size * int(scope.listdict[node[2]])
+                            if node[3] != None:
+                                print currentScope.LookUpVarSize(node[2]) , "I am here",scope.listdict[node[2]],"for List",node
+                                size = Size(currentScope.LookUpVarSize(node[2])[1])
+                                scope = currentScope.LookUpListScope(node[2])
+                                datafile.Listoffset[node[2]]  = {}
+                                datafile.setofList[node[i]] = {}
+                                for m in range(0,int(node[3])):
+                                    datafile.Listoffset[node[2]][str(m)] = 0
+                                    if m == 0:
+                                        datafile.setofList[node[i]][str(m)] = size * int(scope.listdict[node[2]][str(m)])
+                                    else:    
+                                        datafile.setofList[node[i]][str(m)] = size * int(scope.listdict[node[2]][str(m)]) + datafile.setofList[node[i]][str(m-1)] 
+                            else:                                
+                                print currentScope.LookUpVarSize(node[2]) , "I am here for List",node
+                                size = Size(currentScope.LookUpVarSize(node[2])[1])
+                                scope = currentScope.LookUpListScope(node[2])
+                                datafile.Listoffset[node[2]]  = 0
+                                datafile.setofList[node[i]] = size * int(scope.listdict[node[2]])
                         else:
                             datafile.globalsection.add(node[i])
                     datafile.allvariables.add(node[i])
