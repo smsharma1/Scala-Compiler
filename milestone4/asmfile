@@ -4,6 +4,7 @@ formatin: db "%d", 0
 formatout: db "%d ", 0
 formatdouble: db "%lf", 0
 
+<<<<<<< HEAD
 str97 db 'w',0
 len_str97 equ $ - str97
 
@@ -16,6 +17,11 @@ len_str128 equ $ - str128
 str127 db 'data.txt',0
 len_str127 equ $ - str127
 a TIMES 40 DW  0
+=======
+str17 db 'Double quote (\") is escaped',0xa
+len_str17 equ $ - str17
+f2 TIMES 12 DW  0
+>>>>>>> 1aaf38f510f6dca91265bab76bf48dc0e8eb848d
 
 section .text
 	global main
@@ -324,6 +330,7 @@ ret
 func_1_scan:
 push ebp
 mov ebp, esp
+<<<<<<< HEAD
 sub esp, 36
 mov edx, 0
 mov ecx, 0
@@ -338,6 +345,19 @@ xor eax, eax
 mov eax, str127
 push eax
 call fopen
+=======
+sub esp, 60
+mov edx, 55
+push eax
+push ebx
+push ecx
+push edx
+mov edx,len_str17
+mov ecx,str17
+mov ebx,1
+mov eax,4
+int 0x80
+>>>>>>> 1aaf38f510f6dca91265bab76bf48dc0e8eb848d
 pop edx
 pop ecx
 pop ebx
@@ -358,6 +378,7 @@ push eax
 push formatin
 mov  eax, [-12 + ebp]
 push eax
+<<<<<<< HEAD
 call fscanf
 mov edx,4
 mov [-20 + ebp], eax
@@ -401,6 +422,10 @@ call func_1_quickSort
 mov  eax, 9
 push eax
 call func_1_print
+=======
+mov [-60 + ebp], edx
+call func_1_t
+>>>>>>> 1aaf38f510f6dca91265bab76bf48dc0e8eb848d
 mov esp, ebp
 pop ebp
 ret

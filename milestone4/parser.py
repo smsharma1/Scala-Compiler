@@ -358,7 +358,8 @@ def p_VariableDeclarator(p):
 def p_VariableInitializer(p):
 	'''VariableInitializer : ArrayInitializer
 							| Expression
-							| ClassInstanceCreationExpression'''
+							| ClassInstanceCreationExpression
+							| ListInitializer'''
 
 	p[0] = p[1]
 	print "VariableInitializer",p[1].type
@@ -371,6 +372,12 @@ def p_ArrayInitializer(p):
 		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8]],typelist =['ARRAY' + p[4].typelist[0], int(p[7])], order="lllcllll")
 	else:
 		p[0] = Node('ArrayInitializer',[p[4]],[p[1],p[2],p[3],p[5],p[6],p[7],p[8],p[9], p[10]],typelist=['ARRAYARRAY'+p[4].typelist[0], int(p[7]),int(p[9])], order="lllcllllll")
+
+def p_ListInitializer(p):
+	'''ListInitializer : R_NEW R_LIST LSQRB Type RSQRB '''
+	if len(p) == 6:
+		p[0] = Node('ListInitializer',[p[4]],[p[1],p[2],p[3],p[5]],typelist =['LIST' + p[4].typelist[0]], order="lllcl")
+
 
 def p_EndStatement(p):
 	'''EndStatement : SEMICOLON
@@ -632,7 +639,10 @@ def p_VariableDeclarationBody(p):
 				except:
 					code = ['ARRAY ' + p[1] + " " + str(p[3].typelist[1])]
 					currentScope.InsertVar(p[1],0,p[3].typelist[0], length= p[3].typelist[1])
-				
+			elif(p[3].typelist[0][0:4] == 'LIST'):
+				code = ['LIST ' + p[1]]
+				currentScope.InsertVar(p[1],0,p[3].typelist[0])
+				currentScope.listdict[p[1]] = 0
 			else:
 				code = ['= ' + p[1] + ' '+  p[3].place + ' '+ p[1]]
 				currentScope.InsertVar(p[1],0,p[3].typelist[0])
@@ -1334,6 +1344,26 @@ def p_MethodInvocation(p):
 	temp = None
 #	print p[1].name,"name",currentScope.name
 #	print p[3].type," ",p[3].typelist,"Method Invocation",currentScope.LookUpFunc(p[1].type, p[3].typelist)
+	if(p[1].type == "append"):
+		p[3].place = p[3].place.split(',,,')
+		for i in range(1, len(p[3].typelist)):
+			print p[3].typelist, "hey typelist"
+			if(p[3].typelist[i] == 'STRING'):
+				func_name = "appendstr"
+				code.append("appendstr " + p[3].place[i] + " " + p[3].place[0] )
+
+			elif(p[3].typelist[i] == 'INT'):
+				func_name = "append"
+				code.append("append " + p[3].place[i] + " " + p[3].place[0])
+				name = currentScope.LookUpListScope(p[3].place[0])
+				if name:
+					name.listdict[p[3].place[0]] = name.listdict[p[3].place[0]] + 1; 
+				else:
+					Error = Error + 1
+					print "Error List " + p[3].place[0] + " not declared"  
+
+		p[0] = Node("MethodInvocation", [p[1], p[3]], [] , order='cc',code=p[1].code + p[3].code + code)
+		return
 	if(p[1].type == "println"):
 		p[3].place = p[3].place.split(',,,')
 		for i in range(0, len(p[3].typelist)):
@@ -1629,6 +1659,8 @@ def p_AmbiguousName(p):
 		elif p[1] == 'fwrite':
 			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
 		elif p[1] == 'fclose':
+			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
+		elif p[1] == 'append':
 			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
 		else:
 			returnType = currentScope.LookUpSymbolType(p[1])

@@ -12,6 +12,7 @@ allvariables = set() #to store all the variables
 memorymap = dict() #to store the function act record
 meta = dict()
 setofarray = {}  #set of arrays
+setofList = {} #set of LIST
 setofString = {}
 numberofvariables = dict()  #length of variables in particular function
 numberofarguments = dict() #length of arguments 
@@ -27,5 +28,6 @@ lineno = 0
 L = None
 yprime = None 
 zprime = None
+Listoffset = {}
 
 blockout = [] #to store the output of block
