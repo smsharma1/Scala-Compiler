@@ -33,18 +33,11 @@ def blockasmgenerate():
 
 
 def asm():
-    print("section .data")
-    f.write("section .data\nmessage db \"Register = %d\", 10, 0\n")
+    f.write("section .data\nmessage db \"%d\", 10, 0\n")
     f.write("formatin: db \"%d\", 0\n")
     f.write("formatout: db \"%d \", 0\n")
     f.write("formatdouble: db \"%lf\", 0\n")
-    # f.write("fname: db \"data.txt\", 0 \n")
-    # for k,v in datafile.setofString.items() :
-    #     print('\n'+k+ ' db '  + "'" + v + "',0xa")
-    #     f.write('\n'+k+ ' db '  + "'" + v + "',0xa\n")
-    #     f.write("len_" + k + " equ $ - " + k + "\n")
     for k,v in datafile.setofString.items() :
-        print('\n'+k+ ' db '  + "'" + v + "'")
         f.write('\n'+k+ ' db '  + "'" + v + "',0\n")
         f.write("len_" + k + " equ $ - " + k + "\n")
     for data in datafile.globalsection:
@@ -66,14 +59,11 @@ def asm():
                 if(datafile.setofList[data][t] > max):
                     max = datafile.setofList[data][t]          
             f.write(data + " TIMES " + str(max) + " DW  0\n")
-    print("\nsection.text\n")
     f.write("\nsection .text\n\t")
     datafile.lineno = datafile.lineno + 3
 
-    print('global main\n\n')
     f.write('global main\nextern printf\nextern scanf\nextern fopen\nextern fscanf\nextern fprintf\nextern fclose\nextern sin\n')
     datafile.lineno = datafile.lineno + 3
-    print('main:')
     f.write('main:\n')
     datafile.lineno = datafile.lineno + 1
     f.write('call func_1_main\nmov  eax, 1\nint  0x80\n')
@@ -91,17 +81,13 @@ def asm():
         if i == 0:
             datafile.block = datafile.instruction[blockbreaker[i]:blockbreaker[i+1]]
         if datafile.instruction[blockbreaker[i]].type == 'label:':
-            print("\n{}:".format(datafile.instruction[blockbreaker[i]].out))
             f.write("\n{}:\n".format(datafile.instruction[blockbreaker[i]].out))
             datafile.lineno = datafile.lineno + 2
             datafile.block = datafile.instruction[blockbreaker[i] + 1 : blockbreaker[i+1]]
             if datafile.instruction[blockbreaker[i]].op1[0:4] =='func':
                 datafile.currentscope = datafile.instruction[blockbreaker[i]].op1
-                print("\t" + "push ebp")
                 f.write("push ebp\n")
-                print("\t" + "mov ebp, esp")
-                f.write("mov ebp, esp\n")
-                print("\t" + "add esp, {}".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
+                f.write("mov ebp, esp\n")              
                 f.write("sub esp, {}\n".format(datafile.numberofvariables[datafile.instruction[blockbreaker[i]].op1] - 4))
         else:
             datafile.block = datafile.instruction[blockbreaker[i]:blockbreaker[i+1]]
@@ -554,7 +540,6 @@ def LOADARRAY(i):
     else:
         datafile.blockout.append("sub " + reg + "," + register.mem(datafile.zprime))
     register.UpdateAddressDescriptor(l)
-    print datafile.registerdescriptor,"*******************************************",datafile.addressdescriptor
 
 def ARRAYLOAD(i):
     (l, y, z) = (datafile.block[i].out, datafile.block[i].op1, datafile.block[i].op2)

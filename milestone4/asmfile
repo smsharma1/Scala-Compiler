@@ -1,8 +1,11 @@
 section .data
-message db "Register = %d", 10, 0
+message db "%d", 10, 0
 formatin: db "%d", 0
 formatout: db "%d ", 0
 formatdouble: db "%lf", 0
+
+str34 db 'Please input for fibonacci:',0
+len_str34 equ $ - str34
 
 section .text
 	global main
@@ -18,104 +21,81 @@ call func_1_main
 mov  eax, 1
 int  0x80
 
-func_1_acker:
+func_1_fibo:
 push ebp
 mov ebp, esp
-sub esp, 48
+sub esp, 4060
 mov edx, 0
-mov ecx, 0
-mov ebx, 0
-mov eax, [12 + ebp]
-cmp eax,0
-mov [12 + ebp], eax
-mov [-12 + ebp], ebx
-mov [-8 + ebp], ecx
-mov [-4 + ebp], edx
-je t11
-mov edx, 0
-mov [-16 + ebp], edx
-jmp t12
+lea eax,[-4 + ebp]
+sub eax,0
+mov ebx,0
+mov [eax],ebx
+lea ebx,[-4 + ebp]
+sub ebx,4
+mov ecx,1
+mov [ebx],ecx
+mov edx, 2
+mov [-4008 + ebp], eax
+mov [-4012 + ebp], ebx
+mov [-4004 + ebp], edx
 
-t11:
-mov edx, 1
-mov [-16 + ebp], edx
+t34:
+mov eax, [-4004 + ebp]
+cmp eax,[8 + ebp]
+mov [-4004 + ebp], eax
+jg t36
+mov edx,4
+mov eax,[-4004 + ebp]
+imul edx
+lea ebx,[-4 + ebp]
+sub ebx,eax
+mov edx, [-4004 + ebp]
+sub edx, 1
+mov [-4024 + ebp], edx
+mov edx,4
+mov [-4016 + ebp], eax
+mov eax,[-4024 + ebp]
+imul edx
+lea ecx,[-4 + ebp]
+sub ecx,eax
+mov ecx, [ecx]
+mov edx, [-4004 + ebp]
+sub edx, 2
+mov [-4036 + ebp], edx
+mov edx,4
+mov [-4028 + ebp], eax
+mov eax,[-4036 + ebp]
+imul edx
+lea edx,[-4 + ebp]
+sub edx,eax
+mov edx, [edx]
+mov [-4032 + ebp], ecx
+mov ecx, [-4032 + ebp]
+add ecx, edx
+mov [ebx],ecx
+mov [-4040 + ebp], eax
+mov [-4020 + ebp], ebx
+mov [-4048 + ebp], ecx
+mov [-4044 + ebp], edx
 
-t12:
-mov eax, [-16 + ebp]
-cmp eax,0
-mov [-16 + ebp], eax
-je t19
-mov edx, [8 + ebp]
+t35:
+mov edx, [-4004 + ebp]
 add edx, 1
-mov ecx, edx
-mov [-4 + ebp], ecx
-mov [-20 + ebp], edx
-mov eax, [-4 + ebp]
-mov esp, ebp
-pop ebp
-ret
+mov [-4004 + ebp], edx
+jmp t34
 
-t19:
-mov eax, [8 + ebp]
-cmp eax,0
-mov [8 + ebp], eax
-je t22
-mov edx, 0
-mov [-24 + ebp], edx
-jmp t23
-
-t22:
-mov edx, 1
-mov [-24 + ebp], edx
-
-t23:
-mov eax, [-24 + ebp]
-cmp eax,0
-mov [-24 + ebp], eax
-je t37
-mov edx, [12 + ebp]
-sub edx, 1
-mov ecx, edx
-push ecx
-mov  eax, 1
-push eax
-mov [-8 + ebp], ecx
-mov [-28 + ebp], edx
-call func_1_acker
-mov edx, eax
-mov [-32 + ebp], eax
-mov [-4 + ebp], edx
-mov eax, [-4 + ebp]
-mov esp, ebp
-pop ebp
-ret
-
-t37:
-mov edx, [8 + ebp]
-sub edx, 1
-mov ecx, edx
-mov  eax, [12 + ebp]
-push eax
-push ecx
-mov [12 + ebp], eax
-mov [-8 + ebp], ecx
-mov [-36 + ebp], edx
-call func_1_acker
-mov edx, eax
-mov ecx, [12 + ebp]
-sub ecx, 1
-mov ebx, ecx
-push ebx
-push edx
-mov [-40 + ebp], eax
-mov [-8 + ebp], ebx
-mov [-44 + ebp], ecx
-mov [-12 + ebp], edx
-call func_1_acker
-mov edx, eax
-mov [-48 + ebp], eax
-mov [-4 + ebp], edx
-mov eax, [-4 + ebp]
+t36:
+mov edx,4
+mov eax,[8 + ebp]
+imul edx
+lea ebx,[-4 + ebp]
+sub ebx,eax
+mov ebx, [ebx]
+mov edx, ebx
+mov [-4052 + ebp], eax
+mov [-4056 + ebp], ebx
+mov [-4060 + ebp], edx
+mov eax, [-4060 + ebp]
 mov esp, ebp
 pop ebp
 ret
@@ -126,37 +106,34 @@ ret
 func_1_main:
 push ebp
 mov ebp, esp
-sub esp, 16
+sub esp, 8
 mov edx, 0
-mov ecx, 0
-mov ebx, 0
-mov edx, 0
-mov [-12 + ebp], ebx
-mov [-8 + ebp], ecx
-mov [-4 + ebp], edx
-
-t86:
-mov eax, [-4 + ebp]
-cmp eax,3
-mov [-4 + ebp], eax
-jg t88
-mov edx, 0
-mov [-8 + ebp], edx
-
-t83:
-mov eax, [-8 + ebp]
-cmp eax,9
-mov [-8 + ebp], eax
-jg t85
-mov  eax, [-4 + ebp]
 push eax
-mov  ebx, [-8 + ebp]
 push ebx
-mov [-4 + ebp], eax
-mov [-8 + ebp], ebx
-call func_1_acker
+push ecx
+push edx
+mov edx,len_str34
+mov ecx,str34
+mov ebx,1
+mov eax,4
+int 0x80
+pop edx
+pop ecx
+pop ebx
+pop eax
+push eax
+mov eax, esp
+push eax
+push formatin
+call scanf
+add esp, 8
+mov edx, [esp]
+pop eax
+push edx
+mov [-4 + ebp], edx
+call func_1_fibo
 mov edx, eax
-mov [-16 + ebp], eax
+mov [-8 + ebp], eax
 push eax
 push ebx
 push ecx
@@ -173,23 +150,7 @@ pop ecx
 pop ebx
 pop eax
 
-mov [-12 + ebp], edx
-
-t84:
-mov edx, [-8 + ebp]
-add edx, 1
-mov [-8 + ebp], edx
-jmp t83
-
-t85:
-
-t87:
-mov edx, [-4 + ebp]
-add edx, 1
 mov [-4 + ebp], edx
-jmp t86
-
-t88:
 mov esp, ebp
 pop ebp
 ret

@@ -1,7 +1,7 @@
 object Demo {
 	def main(args: Array[String]) {
 		var a : Int  = 3;	
-		var b : Int  = 1000000000;
+		var b : Int  = 100;
 		var d : Int  = 0;
 		var c : Int = a + b;
 	        var m : Int = 0;

@@ -5,15 +5,9 @@ object BinarySearch {
         while (l <= r)
         {
             var m : Int = l + (r - l)/2;
-		println(m);
-		println(l);
-		println(r);
-		println(f[m]);
-		println(x);
 	//    var m = 5;
             if (f[m] == x)
             { 
-		println(x);
                 return m;
             }   
             if (f[m] < x)
@@ -38,12 +32,13 @@ object BinarySearch {
 			//   println(i);
       	    }
             var k : Int = 0;
+ 	    println("Please enter the input to be searched:");
 		read(k);
             var result : Int = B(0, 9, k);
 	  //  var result : Int = 4;
             if  (result == -1){ 
                // println("Element is not present in array");
-		println(result);
+		println("This element is not present in array!");
             }
             else {
                // println("Element is present in array at");

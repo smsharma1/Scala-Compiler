@@ -1,3 +1,4 @@
+import ../tests/milestone4/extlib
 object Good1 {
 	var f2 = new List[Int];
 	var f3 = new List[Int](10);

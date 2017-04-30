@@ -19,7 +19,6 @@ object sort {
                  for ( j <- 0 until size )
 		 {
  		    t = a[i , j];
-                    println(t);
                 }
             }   
      }
@@ -40,7 +39,6 @@ object sort {
                  for ( j <- 0 until size )
 		 {
  		    t = b[i , j];
-                    println(t);
                 }
             } 
      }

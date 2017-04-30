@@ -5,6 +5,8 @@ import nasm
 import symboltable
 import pickle
 
+import removejumps
+
 def checkbranching(name) :
     if name in ['jump','print','append', 'call', 'goto', 'label:', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne','ret','ret1','ret2','printstr','pusharg2','pushaddr', 'fopen', 'fwrite', 'fread', 'fclose', 'deletetail']:
         return True
@@ -59,7 +61,8 @@ def checkvariable(name):
 if __name__ == "__main__" :
     filename = sys.argv[1]
     with open(filename) as f:
-        data = f.readlines()
+        # RESOLVES jumps to jumps
+        data = removejumps.removejumps(f.readlines())
     index = 0
     flag = 0
     scopefunc = 0
@@ -103,7 +106,6 @@ if __name__ == "__main__" :
                                         locallength = locallength - Size(currentScope.LookUpVarSize(node[2])[1])*int(currentScope.listdict[node[2]])
                                         datafile.Listoffset[node[2]]  = 0
                                 else:
-                                    print node[i], "77777777777777777777777777777777777",currentScope.LookUpVarSize(node[i]),'88888888888888888888'
                                     locallength = locallength - Size(currentScope.LookUpVarSize(node[i])[1])
                     else:
                         if node[1] == "ARRAY":
@@ -134,6 +136,7 @@ if __name__ == "__main__" :
                         else:
                             datafile.globalsection.add(node[i])
                     datafile.allvariables.add(node[i])
+
         if node[1] == 'label:' and node[2][0:4] == "func":
             flag = 1
             scopefunc = node[2]

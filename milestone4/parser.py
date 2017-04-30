@@ -106,6 +106,10 @@ def p_ImportDeclarations(p):
 
 def p_ImportDeclaration(p):
 	'''ImportDeclaration : R_IMPORT AmbiguousName'''
+	# f = open(p[1], "r")
+	# code = f.readlines()
+	# print data, 
+	
 	p[0] = Node("ImportDeclaration", [p[2]],[p[1]], order = "lc")
 
 def p_ClassObjectsList(p):
@@ -1260,7 +1264,6 @@ def p_MethodInvocation(p):
 				currentScope.itemcount = currentScope.itemcount + 1
 			activr.push(ebp)
 			ebp = esp
-			activr.printstack()
 			p[0] = Node("MethodInvocation", [p[1], p[3]], [ ],typelist = value.returnType , order='cc')
 			for idname in p[3].typelist:
 				if "ARRAY" in idname:
@@ -1419,6 +1422,8 @@ def p_AmbiguousName(p):
 			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
 		elif p[1] == 'deletetail':
 			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
+		elif p[1] == 'extlib.scala':
+			p[0] = Node(p[1], [], [], typelist = [], isLeaf=True)
 		else:
 			returnType = currentScope.LookUpSymbolType(p[1])
 			if(returnType):
@@ -1534,6 +1539,25 @@ if __name__ == "__main__" :
 	filename = sys.argv[1]
 	programfile = open(filename)
 	data = programfile.read()
+	data = data.strip()
+	linedata = data.split('\n')
+	appenddata = []
+	finaldata = []
+	index = 0
+	for line in linedata:
+		index += 1
+		if "import" in line:
+			filename = line.strip().split(' ')[1]
+			newfp = open(filename)
+			newdata = newfp.read().strip()
+			newlines = newdata.split('\n')
+			newlines = newlines[1:-1]
+			appenddata = appenddata + newlines
+		elif "object" in line:
+			finaldata = linedata[index-1:index] + appenddata + linedata[index:]
+			break
+	data = '\n'.join(finaldata)
+	print data
 	parser.parse(data)
 	import pickle
 	pickle.dump(rootScope , open( "rootScope.p", "wb" ) )

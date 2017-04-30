@@ -14,6 +14,7 @@ object Fibonacci {
     def main()
     {
             var k : Int = 0;
+	    println("Please input for fibonacci:");
 	    read(k);
 	    k = fibo(k);
             println(k);

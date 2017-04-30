@@ -24,13 +24,13 @@ label: t35
 + i 1 i
 goto t34
 label: t36
-* n 4 t40
+goto func_1_main
 <- f t40 t39
 = t t39 t
 ret2 t
 ret
 label: func_1_main
-= k 0 k
+goto func_1_fibo
 printstr Please input for fibonacci:
 read k
 pusharg k
