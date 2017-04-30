@@ -1365,8 +1365,8 @@ def p_MethodInvocation(p):
 		p[0] = Node("MethodInvocation", [p[1], p[3]], [] , order='cc',code=p[1].code + p[3].code + code)
 		return
 	if(p[1].type == "println"):
-		print p[3].place,"(((((((((((((((((((((((((())))))))))))))))))))))))))"
 		p[3].place = p[3].place.split(',,,')
+		# print p[3].typelist, "9999((((((((((((((((((((((((())))))))))))))))))))))))))))))((((((((((((((((()))))))"
 		for i in range(0, len(p[3].typelist)):
 			print p[3].typelist, "hey typelist"
 			if(p[3].typelist[i] == 'STRING'):

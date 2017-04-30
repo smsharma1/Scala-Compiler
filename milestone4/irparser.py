@@ -6,7 +6,7 @@ import symboltable
 import pickle
 
 def checkbranching(name) :
-    if name in ['jump', 'call', 'goto', 'label:', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne','ret','ret1','ret2','printstr','pusharg2','pushaddr', 'fopen', 'fwrite', 'fread', 'fclose']:
+    if name in ['jump','print','append', 'call', 'goto', 'label:', 'jg', 'jl', 'jle', 'jge' ,'je', 'jne','ret','ret1','ret2','printstr','pusharg2','pushaddr', 'fopen', 'fwrite', 'fread', 'fclose']:
         return True
     else:
         return False
@@ -38,7 +38,7 @@ def Size(type1):
     elif "ARRAY" in type1:
         return Size(type1.replace("ARRAY", ''))
     elif "LIST" in type1:
-        return Size(type1.replace("LIST", ''))
+        return Size(type1.replace("LIST@", ''))
     else:
         return 10
 
@@ -94,7 +94,7 @@ if __name__ == "__main__" :
                                 # print node[2], currentScope.LookUpVarSize(node[2])[1], " this is the type"
                                 # print datafile.memorymap[scopefunc][node[i+1]],"asdfg"
                                 arglength = arglength + Size(currentScope.LookUpVarSize(node[2])[1])
-                            elif (node[i] not in datafile.globalsection):
+                            elif (node[i] not in datafile.globalsection and  node[i] not in datafile.setofList and node[i] not in datafile.setofarray and node[i] not in datafile.setofString):
                                 datafile.memorymap[scopefunc][node[i]] = '['+ str(locallength) + ' + ebp]'
                                 # print currentScope.name, " this is currentscope name"
                                 # print node[2],"777777777777777777777777777777777777777777777"#, currentScope.LookUpVarSize(node[2])[1], " this is the type;;;;;;;;;;;;"
@@ -122,7 +122,8 @@ if __name__ == "__main__" :
                                 size = Size(currentScope.LookUpVarSize(node[2])[1])*int(node[3])
                                 datafile.setofarray[node[i]] = size
                         elif node[1] == "LIST":
-                            # t = currentScope.LookUpVarSize(node[2])[1]
+                            #  t = currentScope.LookUpVarSize(node[2])[1]
+                            print currentScope.LookUpVarSize(node[2]) , "I am here for List"
                             size = Size(currentScope.LookUpVarSize(node[2])[1])
                             scope = currentScope.LookUpListScope(node[2])
                             datafile.Listoffset[node[2]]  = 0
