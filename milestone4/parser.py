@@ -167,7 +167,6 @@ def p_Super(p):
 
 def p_ClassHeader(p):
 	'''ClassHeader : R_CLASS ID LPARAN FormalParameterLists RPARAN'''
-	
 	global currentScope
 	if p[4] != None:
 		if(currentScope.LookUpClass(p[2], p[4].typelist)):
